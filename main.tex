@@ -1,6 +1,6 @@
 % !TEX program = xelatex
 
-\documentclass[justified,draft]{tufte-book}
+\documentclass[a4paper,sfsidenotes,justified,draft]{tufte-book}
 % \documentclass[draft]{report}
 
 \usepackage{fontspec}
@@ -11,6 +11,18 @@
 % Set up the spacing using fontspec features
 \renewcommand\allcapsspacing[1]{{\addfontfeature{LetterSpace=15}#1}}
 \renewcommand\smallcapsspacing[1]{{\addfontfeature{LetterSpace=10}#1}}
+
+% Background for sidenotes
+\usepackage{tikzpagenodes}
+\usepackage{background}
+\backgroundsetup{
+scale=1,
+angle=0,
+contents={\tikz[remember picture,overlay]\fill[red!30] (current page marginpar area.north west) rectangle (current page marginpar area.south east);
+}}
+\makeatletter
+\global\let\tikz@ensure@dollar@catcode=\relax
+\makeatother
 
 \usepackage{amsmath}
 \usepackage{amssymb, amsfonts, stmaryrd}
