@@ -26,14 +26,15 @@
 \usepackage{xspace}
 %\usepackage[OT1]{fontenc}
 \usepackage{textcomp}
-\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc} %
+\usepackage[utf8x]{inputenc}
 \usepackage{newunicodechar}
 
 \newunicodechar{é}{\'{e}}
 \newunicodechar{λ}{\textlambda}
 \newunicodechar{φ}{\ensuremath{\phi}}
 \newunicodechar{∑}{\ensuremath{\sum}}
-\newunicodechar{Σ}{\textSigma}
+% \newunicodechar{Σ}{\textSigma}
 
 \usepackage{utfmacros}
 \usepackage[color]{coqdoc}
@@ -101,9 +102,8 @@ However, this would not allow me to really talk about the ``plugin''.
 
 ???
 
-% \include{ett-to-itt}
+\include{ett-to-itt}
 
-\bibliographystyle{plain}
 \bibliography{ref}
 
 \end{document}

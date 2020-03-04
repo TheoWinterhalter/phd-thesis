@@ -338,1058 +338,1058 @@ This ingredient is missing in Oury's work~\cite{oury2005extensionality},
 which prevents him from deducing an effective (\ie constructive and
 computable) translation from his theorem.
 
-% \section{Definitions of Extensional and Intensional Type Theories}
-% \label{sec:syntax-features}
-
-% This section presents the common syntax, typing and main properties of
-% ETT and ITT. Our type theories feature a universe hierarchy, dependent
-% products and sums as well as Martin Löf's identity types.
-
-% \subsection{Syntax of ETT and ITT}
-% \label{sec:ettsyntax}
-
-% The common syntax of ETT and ITT is given in Figure~\ref{fig:syntax}.
-% %
-% It features: dependent products $\Prod{x:A} B$, with (annotated)
-% $\lambda$-abstractions and (annotated) applications, negative dependent sums
-% $\Sum{x:A} B$ with (annotated) projections, sorts $\Ty{i}$, identity types
-% $\Eq{A}{u}{v}$ with reflection and elimination as well as terms
-% realising UIP and FunExt. Annotating terms with
-% otherwise computationally irrelevant typing information is a common
-% practice when studying the syntax of type theory precisely (see
-% \cite{streicher1993investigations} for a similar example).
-% %
-% We will write $A \to B$ for $\Prod{\_:A} B$ the non-dependent product /
-% function type.
-
-% We consider a fixed universe hierarchy without cumulativity, which
-% ensures in particular uniqueness of typing~\eqref{lem:uniq} which is
-% important for the translation.
-
-% \begin{figure*}
-%   \hrulefill
-%   \[
-%   \begin{array}{l@{~\,}r@{~\,}l@{\quad}l}
-%     s &\bnf& \Ty{i} ~(i \in \mathbb{N}) &\mbox{sorts (universes)} \\
-%     T,A,B,t,u,v &\bnf& x \bnfor \lam{x:A}{B} t \bnfor \app{t}{x:A}{B}{u}
-%     \bnfor \Prod{x:A} B \bnfor s
-%     &\mbox{dependent $\lambda$-calculus} \\
-%     &\bnfor& \pair{x:A}{B}{u}{v} \bnfor \pio{x:A}{B}{p} \bnfor \pit{x:A}{B}{p}
-%     \bnfor \Sum{x:A} B
-%     &\mbox{dependent pairs} \\
-%     &\bnfor& \refl{A} u \bnfor \J{A}{u}{x.e.P}{w}{v}{p} \bnfor \Eq{A}{u}{v}
-%     &\mbox{propositional equality} \\
-%     &\bnfor& \funext{x:A}{B}{f}{g}{e} \bnfor \uip{A}{u}{v}{p}{q}
-%     &\mbox{equality axioms} \\
-%     \Ga, \D &\bnf& \ctxempty \bnfor \Ga, x:A &\mbox{contexts}
-%   \end{array}
-%   \]
-%   \hrulefill
-%   \vspace{-2ex}
-%   \caption{Common syntax of ETT and ITT}
-%   \label{fig:syntax}
-% \end{figure*}
-
-% \paragraph{About Annotations.}
-% Although it may look like a technical detail, the use of annotation is more
-% fundamental in ETT than it is in ITT (where it is irrelevant and doesn't affect
-% the theory). And this is actually one of the main differences between our work
-% (and that of Martin \cite{hofmann1995conservativity} who has a similar
-% presentation) and the work of \cite{oury2005extensionality}.
-
-% Indeed, by using the standard model where types are interpreted as
-% cardinals rather than sets, it is possible to see that the equality
-% $\nat \to \nat = \nat \to \bool$ is independent from the theory, it is
-% thus possible to assume it (as an axiom, or for those that would still
-% not be convinced, simply under a $\lambda$ that would introduce this
-% equality).  In that context, the identity map $\lambda(x : \nat).\ x$
-% can be given the type $\nat \to \bool$ and we thus type
-% $(\lambda(x : \nat).\ x)\ \zero : \bool$.  Moreover, the
-% $\beta$-reduction of the non-annotated system used by Oury concludes
-% that this expression reduces to $\zero$, but cannot be given the type
-% $\bool$ (as we said, the equality $\nat \to \nat = \nat \to \bool$ is
-% independent from the theory, so the context is consistent). This means
-% we lack subject reduction in this case (or uniqueness of types,
-% depending on how we see the issue).  Our presentation has a blocked
-% $\beta$-reduction limited to matching annotations:
-% $\app{(\lam{x:A}{B}\ t)}{x:A}{B}{u} = t[x \sto u]$, from which subject
-% reduction and uniqueness of types follow.
-
-% Although subtle, this difference is responsible for Oury's need for an
-% extra axiom. Indeed, to treat the case of equality of applications in
-% his proof, he needs to assume the congruence rule for heterogeneous
-% equality of applications, which is not provable when formulated with
-% John Major equality (Fig.~\ref{fig:jmapp}). Thanks to annotations and
-% our notion of heterogeneous equality, we can prove this congruence
-% rule for applications.
-
-% \begin{figure}[h]
-%   \begin{mathpar}
-%     \infer[JMAPP]
-%     {\Heq{\forall (x : U_1). V_1}{f_1}{\forall (x : U_2). V_2}{f_2}\\
-%       \Heq{U_1}{u_1}{U_2}{u_2}}
-%     {\Heq{V_1[x \leftarrow u_1]}{f_1\ u_1}{V_2[x \leftarrow u_2]}{f_2\ u_2}}
-%     %
-%   \end{mathpar}
-%   \caption{Congruence of heterogeneous equality}
-%   \label{fig:jmapp}
-% \end{figure}
-
-% \subsection{The Typing Systems}
-
-% As usual in dependent type theory, we consider contexts which are
-% telescopes whose declarations may depend on any variable already
-% introduced. We note $\isterm{\Ga}{t}{A}$ to say that $t$ has type $A$
-% in context $\Ga$. $\istype{\Ga}{A}$ shall stand for
-% $\isterm{\Ga}{A}{s}$ for some sort $s$ and similarly
-% $\eqtype{\Ga}{A}{B}$ stands for $\eqtype{\Ga}{A}{B} : s$.
-
-% We use two relations $(s,s') \in \Ax$ (written $(s,s')$ for short)
-% and $(s,s',s'') \in \Rl$ (written $(s,s',s'')$) to constrain
-% the sorts in the typing rules for universes, dependent products and
-% dependent sums, as is done in any Pure Type System (PTS).
-% %
-% In our case, because we do not have cumulativity, the rules are as
-% follows:
-% %
-% \begin{mathpar}
-%   (\Ty{i}, \Ty{i+1}) \in \Ax
-
-%   (\Ty{i}, \Ty{j}, \Ty{\nmax{i}{j}}) \in \Rl
-% \end{mathpar}
-
-% \input{figty}
-
-% We give the typing rules of ITT in
-% Figure~\ref{fig:ty-rules}.
-% %
-% The rules are standard and we do not explain them.
-% %
-% Let us just point out the conversion rule, which says that $u:A$ can
-% be given the type $u:B$ when $A \equiv B$, \ie when $A$ and $B$ are
-% convertible.
-% %
-% As the notion of conversion is central in our work---the conversion of
-% ETT being translated to an equality in ITT---we provide an exhaustive
-% definition of it, with computational conversion rules (including
-% $\beta$-conversion or reduction of the elimination principle of
-% equality over reflexivity, see Figure~\ref{fig:conv-rules}), however
-% congruence conversion rules can be found in Appendix~\ref{sec:more-rules}
-% (Figure~\ref{fig:cong-rules}).
-% Note that we use Christine Paulin-Möhring's variant of the J rule rather than
-% Martin-Löf's original formulation.
-% %
-% Although pretty straightforward, being precise here is very important,
-% as for instance the congruence rule for $\lambda$-terms is the reason
-% why FunExt is derivable in ETT. Congruence of
-% equality terms is a standard extension of congruence to the new
-% principles we add (UIP and FunExt).
-
-
-% ETT is thus simply an extension of ITT (we write $\vdash_\exmark$ for
-% the associated typing judgment) with the reflection rule on equality,
-% which axiomatises that propositionally equal terms are convertible
-% (see Equation~\ref{eq:reflection}).
-% Note that, as already mentioned, in the presence of reflection and
-% $\mathsf{J}$, UIP is derivable so we could remove it from ETT, but
-% keeping it allows us to share a common syntax which makes the
-% statements of theorems simpler and does not affect the development.
-
-
-% \input{figconv}
-
-% \subsection{General Properties of ITT and ETT}
-
-% We now state the main properties of both ITT and ETT.
-% %
-% We do not detail their proof as they are standard and can be found
-% in the \Coq formalisation.
-
-% First, although not explicit in the typing system, weakening is
-% admissible in ETT and ITT.
-
-% \begin{lemma}[Weakening]
-%   \label{lem:weak}
-%   If $\isjg{\Ga}{J}$ and $\D$ extends $\Ga$ (possibly interleaving variables)
-%   then $\isjg{\D}{J}$.
-% \end{lemma}
-
-% Then, as mentioned above, the use of a non-cumulative hierarchy allows
-% us to prove that a term $t$ can be given at most one type in a
-% context $\Ga$, up-to conversion.
-
-% \begin{lemma}[Uniqueness of typing]
-%   \label{lem:uniq}
-%   If $\isterm{\Ga}{u}{T_1}$ and $\isterm{\Ga}{u}{T_2}$
-%   then $\eqtype{\Ga}{T_1}{T_2}$.
-% \end{lemma}
-
-% Finally, an important property of the typing system (seen as a mutual
-% inductive definition) is the possibility to deduce hypotheses from
-% their conclusion, thanks to inversion of typing. Note that it is
-% important here that our syntax is annotated for applications and
-% projections as it provides a richer inversion principle.
-
-% \begin{lemma}[Inversion of typing]
-%   \label{lem:inversion}
-%   \leavevmode
-%   \begin{enumerate}
-%     \item If $\isterm{\Ga}{x}{T}$ then $(x : A) \in \Ga$ and
-%     $\eqtype{\Ga}{A}{T}$.
-%     \item If $\isterm{\Ga}{\Ty{i}}{T}$ then $\eqtype{\Ga}{\Ty{i+1}}{T}$.
-%     \item If $\isterm{\Ga}{\Prod{x:A}{B}}{T}$ then $\isterm{\Ga}{A}{s}$ and
-%     $\isterm{\Ga, x:A}{B}{s'}$ and $\eqtype{\Ga}{s''}{T}$ for some $(s,s',s'')$.
-%     \item If $\isterm{\Ga}{\lam{x:A}{B} t}{T}$ then $\isterm{\Ga}{A}{s}$ and
-%     $\isterm{\Ga, x:A}{B}{s'}$ and $\isterm{\Ga, x:A}{t}{B}$ and
-%     $\eqtype{\Ga}{\Prod{x:A}{B}}{T}$.
-%     \item If $\isterm{\Ga}{\app{u}{x:A}{B}{v}}{T}$ then $\isterm{\Ga}{A}{s}$ and
-%     $\isterm{\Ga, x:A}{B}{s'}$ and $\isterm{\Ga}{u}{\Prod{x:A}{B}}$ and
-%     $\isterm{\Ga}{v}{A}$ and $\eqtype{\Ga}{B[ x \sto u]}{T}$.
-%     \item \ldots\ Analogous for the remaining term and type constructors.
-%   \end{enumerate}
-% \end{lemma}
-
-% \begin{proof}
-%   Each case is proven by induction on the derivation
-%   (which corresponds to any number of applications of the conversion rule
-%   following one introduction rule).
-% \end{proof}
-
-% \section{Relating Translated Expressions}
-% \label{sec:relation}
-
-% We want to define a relation on terms that equates two terms that are
-% the same up to transport.
-% %
-% This begs the question of what notion of transport is going to be
-% used.
-% %
-% Transport can be defined from elimination of equality as follows:
-% %
-% \begin{definition}[Transport]
-%   Given $\isterm{\Ga}{p}{\Eq{s}{T_1}{T_2}}$ and
-%   $\isterm{\Ga}{t}{T_1}$ we define the transport of $t$ along $p$, written
-%   $\transpo{p}\ t$, as
-%   $\app
-%     {\J
-%       {s}
-%       {T_1}
-%       {X.e.\ T_1 \to X}
-%       {\lam{x:T_1}{T_1} x}
-%       {T_2}
-%       {p}
-%     }
-%     {T_1}
-%     {T_2}
-%     {t}
-%   $ such that $\isterm{\Ga}{\transpo{p}\ t}{T_2}$.
-% \end{definition}
-% %
-% However, in order not to confuse the transports added by the
-% translation with the transports that were already present in the
-% source, we consider $\transpo{p}$ as part of the syntax in the
-% reasoning. It will be unfolded to its definition only after the
-% complete translation is performed.
-% %
-% This idea is not novel as Hofmann already had a $\mathsf{Subst}$ operator that
-% was part of his ITT (noted TT\textsubscript{I} in his
-% paper~\cite{hofmann1995conservativity}).
-
-% %
-% We first define the (purely syntactic) relation $\ir$ between ETT terms
-% and ITT terms in Figure~\ref{fig:ir-def} stating that the ITT term is
-% simply a decoration of the first term by transports. Its purpose is to
-% state how close to the original term its translation is. Then, we extend
-% this relation to a similarity relation $\sim$ on ETT terms by taking its
-% symmetric and transitive closure:
-% \begin{center}$\sim \coloneqq (\ir \cup \ir^{-1})^+$
-% \end{center}
-
-% \begin{lemma}[$\sim$ is an equivalence relation]
-%   \label{lem:sim-er}
-%   $\sim$ is reflexive, symmetric and transitive.
-% \end{lemma}
-
-% \begin{proof}
-%   For reflexivity we proceed by induction on the term.
-% \end{proof}
-
-% \input{figir}
-% %\input{figsim}
-
-% The goal is to prove that two terms in this relation, that are well-typed in the
-% target type theory, are heterogeneously equal. As for this notion, we recall
-% the definition we previously gave:
-% $\Heq{T}{t}{U}{u} := \Sum{p:\Eq{}{T}{U}} \Eq{}{\transpo{p}\ t}{u}$.
-% %
-% This definition of heterogeneous equality can be shown to be
-% reflexive, symmetric and transitive. Because of UIP, heterogeneous
-% equality collapses to equality when taken on the same type.
-
-% \begin{lemma}
-%   \label{lem:uip-cong}
-%   If $\isterm{\Ga}{e}{\Heq{A}{u}{A}{v}}$
-%   then there exists $p$ such that $\isterm{\Ga}{p}{\Eq{A}{u}{v}}$.
-% \end{lemma}
-
-% \begin{proof}
-%   This holds thanks to UIP on equality, which implies K, and so the
-%   proof of $A = A$ can be taken to be reflexivity.
-% \end{proof}
-
-% \begin{note}
-%   As a corollary, $\Heqs$ on types corresponds to equality.
-%   Indeed when we have $\isterm{\Ga}{e}{\Heq{s}{A}{s'}{B}}$ we have
-%   that $\Eq{}{s}{s'}$, which implies that $s$ and $s'$ have the same sort
-%   and thus are syntactically the same (by an inversion argument).
-% \end{note}
-
-% Before we can prove the fundamental lemma stating that two terms in relation
-% are heterogeneously equal, we need to consider another construction.
-% %
-% As explained in the introduction, when proving the property by
-% induction on terms, we introduce variables in the context that are
-% equal only up-to heterogeneous equality.
-% %
-% This phenomenon is similar to what happens in the parametricity
-% translation~\cite{bernardy2012proofs}.
-% %
-% Our fundamental lemma on the decoration relation $\sim$ assumes two
-% related terms of potentially different types $T1$ and $T2$ to produce an
-% heterogeneous equality between them. For induction to go through under
-% binders (e.g. for dependent products and abstractions), we hence need to
-% consider the two terms under different, but heterogeneously equal
-% contexts.
-% %
-% Therefore, the context we produce will not only be a telescope of
-% variables, but rather a telescope of triples consisting of two variables
-% of possibly different types, and a witness that they are heterogeneously
-% equal.
-% %
-% To make this precise, we define the following macro:
-% %
-% \[
-% \Pack{A_1}{A_2} := \Sum{x:A_1} \Sum{y:A_2} \Heq{}{x}{}{y}
-% \]
-% together with its projections
-% \begin{mathpar}
-%   \ProjO{p} := \pio{}{}{p}
-
-%   \ProjT{p} := \pio{}{}{\pit{}{}{p}}
-
-%   \ProjE{p} := \pit{}{}{\pit{}{}{p}}.
-% \end{mathpar}
-% %
-% We can then extend this notion canonically to contexts of the same
-% length that are well formed using the same sorts:
-% %
-% \[
-% \begin{array}{l}
-%     \Pack{(\Ga_1, x:A_1)}{(\Ga_2, x:A_2)} := \\
-%     (\Pack{\Ga_1}{\Ga_2}),
-%     x : \Pack{(\llift{\gamma}{}{A_1})}{(\rlift{\gamma}{}{A_2})} \\
-%     \\
-%     \Pack{\ctxempty}{\ctxempty} := \ctxempty.
-% \end{array}
-% \]
-% %
-% When we pack contexts, we also need to apply the correct projections for
-% the types in that context to still make sense. Assuming two contexts
-% $\Ga_1$ and $\Ga_2$ of the same length, we can define left and right
-% substitutions:
-% \[
-% \begin{array}{ll}
-%   \gamma_1 &:= [ x \leftarrow \ProjO{x}\ |\ (x : \_) \in \Ga_1 ] \\
-%   \gamma_2 &:= [ x \leftarrow \ProjT{x}\ |\ (x : \_) \in \Ga_2 ].
-% \end{array}
-% \]
-% These substitutions implement lifting of terms to packed contexts:
-% $\isterm{\Ga, \Pack{\Ga_1}{\Ga_2}}{\llift{\gamma}{}{t}}{\llift{\gamma}{}{A}}$
-% whenever $\isterm{\Ga, \Ga_1}{t}{A}$ (resp.
-% $\isterm{\Ga, \Pack{\Ga_1}{\Ga_2}}{\rlift{\gamma}{}{t}}{\rlift{\gamma}{}{A}}$
-% whenever $\isterm{\Ga, \Ga_2}{t}{A}$).
-
-% For readability, when $\Ga_1$ and $\Ga_2$ are understood we will write $\Gp$ for
-% $\Pack{\Ga_1}{\Ga_2}$.
-
-% Implicitly, whenever we use the notation $\Pack{\Ga_1}{\Ga_2}$ it means that
-% the two contexts are of the same length and well-formed with the same
-% sorts.
-% %
-% We can now state the fundamental lemma.
-
-% \begin{lemma}[Fundamental lemma]
-%   \label{lem:sim-cong}
-%   Let $t_1$ and $t_2$ be two terms. If $\isterm{\Ga, \Ga_1}{t_1}{T_1}$ and
-%   $\isterm{\Ga, \Ga_2}{t_2}{T_2}$ and $t_1 \sim t_2$ then there exists $p$ such
-%   that
-%   $\isterm{\Ga, \Pack{\Ga_1}{\Ga_2}}
-%           {p}
-%           {\Heq{\llift{\gamma}{}{T_1}}
-%                {\llift{\gamma}{}{t_1}}
-%                {\rlift{\gamma}{}{T_2}}
-%                {\rlift{\gamma}{}{t_2}}}$.
-% \end{lemma}
-
-% \begin{proof}
-%   The proof is by induction on the derivation of $t_1 \sim t_2$. We show
-%   the three most interesting cases:
-
-%   \begin{itemize}
-%   \item \textsc{Var}
-%     \[
-%       \infer[]
-%         { }
-%         {x \sim x}
-%       %
-%     \]
-%     If $x$ belongs to $\Ga$, we apply reflexivity---together with uniqueness of
-%     typing~\eqref{lem:uniq}---to conclude.
-%     Otherwise, $\ProjE{x}$ has the expected type (since
-%     $\llift{\gamma}{}{x} \equiv \ProjO{x}$ and $\rlift{\gamma}{}{x} \equiv \ProjT{x}$).
-
-%   \item \textsc{Application}
-%     \[
-%       \infer[]
-%         {t_1 \sim t_2 \\
-%          A_1 \sim A_2 \\
-%          B_1 \sim B_2 \\
-%          u_1 \sim u_2
-%         }
-%         {\app{t_1}{x:A_1}{B_1}{u_1} \sim \app{t_2}{x:A_2}{B_2}{u_2}}
-%       %
-%     \]
-%     We have $\isterm{\Ga, \Ga_1}{\app{t_1}{x:A_1}{B_1}{u_1}}{T_1}$ and
-%     $\isterm{\Ga, \Ga_2}{\app{t_2}{x:A_2}{B_2}{u_2}}{T_2}$ which means by
-%     inversion~\eqref{lem:inversion} that the subterms are well-typed.
-%     We apply the induction hypothesis and then conclude.
-%   \item \textsc{TransportLeft}
-%     \[
-%       \infer[]
-%         {t_1 \sim t_2}
-%         {\transpo{p}\ t_1 \sim t_2}
-%       %
-%     \]
-%     We have $\isterm{\Ga, \Ga_1}{\transpo{p}\ t_1}{T_1}$ and
-%     $\isterm{\Ga, \Ga_2}{t_2}{T_2}$.
-%     By inversion~\eqref{lem:inversion} we have
-%     $\isterm{\Ga, \Ga_1}{p}{\Eq{}{T_1'}{T_1}}$ and
-%     $\isterm{\Ga, \Ga_1}{t_1}{T_1'}$.
-%     By induction hypothesis we have $e$ such that
-%     $\isterm{\Ga, \Gp}{e}{\Heq{}{\llift{\gamma}{}{t_1}}{}{\rlift{\gamma}{}{t_2}}}$.
-%     From transitivity and symmetry we only need to provide a proof of
-%     $\Heq{}{\llift{\gamma}{}{t_1}}{}{\transpo{\llift{\gamma}{}{p}}\ \llift{\gamma}{}{t_1}}$ which is inhabited by
-%     $\pair{\_}{\_}{\llift{\gamma}{}{p}}{\refl{} (\transpo{\llift{\gamma}{}{p}}\ \llift{\gamma}{}{t_1})}$.
-%   \end{itemize}
-
-%   The complete proof can be found in Appendix~\ref{sec:proof-fund-lemma}.
-% \end{proof}
-
-% We can also prove that $\sim$ preserves substitution.
-
-% \begin{lemma}
-%   If $t_1 \sim t_2$ and $u_1 \sim u_2$ then
-%   $t_1[x \sto u_1] \sim t_2[x \sto u_2]$.
-% \end{lemma}
-
-% \begin{proof}
-%   We proceed by induction on the derivation of $t_1 \sim t_2$.
-% \end{proof}
-
-% \section{Translating ETT to ITT}
-% \label{sec:translation}
-
-% \subsection{The Translation}
-% \label{sec:the-translation}
-
-% We now define the translations (let us stress the plural here) of an
-% extensional judgment. We extend $\ir$ canonically to contexts
-% ($\Ga \ir \Gb$ when they bind the same variables and the types are in
-% relation for $\ir$).
-
-% Before defining the translation, we define a set
-% $\trans{\xisterm{\Ga}{t}{A}}$ of typing judgments
-% in ITT associated to a typing judgment $\xisterm{\Ga}{t}{A}$ in ETT.
-% %
-% The idea is that this set describes all the possible translations that
-% lead to the expected property. When
-% $\isterm{\Gb}{\tb}{\Ab} \in \trans{\xisterm{\Ga}{t}{A}}$, we say that
-% $\isterm{\Gb}{\tb}{\Ab}$ realises $\xisterm{\Ga}{t}{A}$. The
-% translation will be given by showing that this set is inhabited by
-% induction on the derivation.
-
-% \begin{definition}[Characterisation of possible translations]
-%   \leavevmode
-%   \begin{itemize}
-%     \item For any $\xisctx{\Ga}$ we define $\trans{\xisctx{\Ga}}$ as a set of
-%     valid judgments (in ITT) such that
-%     $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$ if and only if $\Ga \ir \Gb$.
-
-%     \item Similarly, $\isterm{\Gb}{\tb}{\Ab} \in \trans{\xisterm{\Ga}{t}{A}}$ iff
-%     $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$ and $A \ir \Ab$ and $t \ir \tb$.
-%   \end{itemize}
-% \end{definition}
-
-% In order to better master the shape of the produced realiser, we state the
-% following lemma which shows that it has the same head
-% type constructor as the type it realises.
-% %
-% This is important for instance for the case of an application, where we
-% do not know a priori if the translated function has a dependent product
-% type, which is required to be able to use the typing rule for application.
-
-% \begin{lemma}
-%   \label{lem:choose}
-%   We can always \emph{choose} types $\Tb$ that have the same head constructor
-%   as $T$.
-% \end{lemma}
-
-% \begin{proof}
-%   Assume we have $\isterm{\Gb}{\tb}{\Tb} \in \trans{\xisterm{\Ga}{t}{T}}$.
-%   By definition of $\ir$,
-%   $T \ir \Tb$ means that $\Tb$ is shaped
-%   $\transpo{p}\ \transpo{q}\ ...\ \transpo{r}\ \Tb'$ with $\Tb'$ having
-%   the same head constructor as $T$. By inversion~\eqref{lem:inversion}, the
-%   subterms are typable, including $\Tb'$. Actually, from inversion, we
-%   even get that the type of $\Tb'$ is a universe. Then,
-%   using lemma~\ref{lem:sim-cong} and lemma~
-%   \ref{lem:uip-cong}, we get $\isterm{\Gb}{e}{\Eq{}{\Tb}{\Tb'}}$.
-%   We conclude with
-%   $\isterm{\Gb}{\transpo{e}\ \tb}{\Tb'} \in \trans{\xisterm{\Ga}{t}{T}}$.
-% \end{proof}
-
-% Finally, in order for the induction to go through, we need to know
-% that when we have a realiser of a derivation $\xisterm{\Ga}{t}{T}$, we can
-% pick an arbitrary other type realising $\xistype{\Ga}{T}$ and still
-% get a new derivation realising $\xisterm{\Ga}{t}{T}$ with that type.
-% %
-% This is important for instance for the case of an application, where
-% the type of the domain of the translated function may differ from the
-% type of the translated argument. So we need to be able to change it \textit{a
-% posteriori}.
-
-
-% \begin{lemma}
-%   \label{lem:change-type}
-%   When we have $\isterm{\Gb}{\tb}{\Tb} \in \trans{\xisterm{\Ga}{t}{T}}$
-%   and $\istype{\Gb}{\Tb'} \in \trans{\xistype{\Ga}{T}}$ then we also have
-%   $\isterm{\Gb}{\tb'}{\Tb'} \in \trans{\xisterm{\Ga}{t}{T}}$ for some $\tb'$.
-% \end{lemma}
-
-% \begin{proof}
-%   By definition we have $T \ir \Tb$ and $T \ir \Tb'$ and thus $T \sim \Tb$ and
-%   $T \sim \Tb'$, implying $\Tb \sim \Tb'$ by transitivity~\eqref{lem:sim-er}.
-%   By lemma~\ref{lem:sim-cong}
-%   (in the case $\Ga_1 \equiv \Ga_2 \equiv \ctxempty$) we get
-%   $\isterm{\Gb}{p}{\Heq{}{\Tb}{}{\Tb'}}$ for some $p$.
-%   By lemma~\ref{lem:uip-cong} (and lemma~\ref{lem:choose} to give
-%   universes as types to $\Tb$ and $\Tb'$) we can assume
-%   $\isterm{\Gb}{p}{\Eq{}{\Tb}{\Tb'}}$. Then
-%   $\isterm{\Gb}{\transpo{p}\ \tb}{\Tb'}$ is still a translation since $\ir$
-%   ignores transports.
-% \end{proof}
-
-% We can now define the translation. This is done by mutual induction on
-% context well-formedness, typing and conversion derivations. Indeed,
-% in order to be able to produce a realiser by induction, we need to show
-% that every conversion in ETT is translated as an heterogeneous equality
-% in ITT.
-
-% \begin{theorem}[Translation]
-%   \label{thm:translation}
-%   \leavevmode
-%   \begin{itemize}
-%     \item If\,\,\,$\xisctx{\Ga}$ then there exists
-%     $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$,
-
-%     \item If\,\,\,$\xisterm{\Ga}{t}{T}$ then for any
-%     $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$ there exist $\tb$ and $\Tb$ such
-%     that $\isterm{\Gb}{\tb}{\Tb} \in \trans{\xisterm{\Ga}{t}{T}}$,
-
-%     \item If\,\,\,$\xeqterm{\Ga}{u}{v}{A}$ then for any
-%     $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$ there exist
-%     $A \ir \Ab, A \ir \Ab', u \ir \ub, v \ir \vb$ and $\eb$ such that
-%     $\isterm{\Gb}{\eb}{\Heq{\Ab}{\ub}{\Ab'}{\vb}}$.
-%   \end{itemize}
-% \end{theorem}
-
-% \begin{proof}
-%   We prove the theorem by induction on the derivation in the
-%   extensional type theory. We only show the two most interesting cases
-%   of application and conversion.
-%   The complete proof is given in Appendix~\ref{sec:corr-transl}.
-
-%   \begin{itemize}
-%     \item \textsc{Application}
-%     \[
-%       \infer[]
-%         {\xisterm{\Ga}{A}{s} \\
-%          \xisterm{\Ga,x:A}{B}{s'} \\
-%          \xisterm{\Ga}{t}{\Prod{x:A} B} \\
-%          \xisterm{\Ga}{u}{A}
-%         }
-%         {\xisterm{\Ga}{\app{t}{x:A}{B}{u}}{B[x \sto u]}}
-%       %
-%     \]
-%     Using IH together with lemmata~\ref{lem:choose} and~\ref{lem:change-type}
-%     we get $\isterm{\Gb}{\Ab}{s}$ and $\isterm{\Gb,x:\Ab}{\Bb}{s'}$ and
-%     $\isterm{\Gb}{\tb}{\Prod{x:\Ab} \Bb}$ and $\isterm{\Gb}{\ub}{\Ab}$
-%     meaning we can conclude
-%     $\isterm{\Gb}{\app{\tb}{x:\Ab}{\Bb}{\ub}}{\Bb[x \sto \ub]}
-%     \in \trans{\xisterm{\Ga}{\app{t}{x:A}{B}{u}}{B[x \sto u]}}$.
-
-%     \item \textsc{Conversion}
-%     \[
-%       \infer[]
-%         {\xisterm{\Ga}{u}{A} \\
-%          \xeqtype{\Ga}{A}{B}
-%         }
-%         {\xisterm{\Ga}{u}{B}}
-%       %
-%     \]
-%     By IH and lemma~\ref{lem:uip-cong} we have
-%     $\isterm{\Gb}{\eb}{\Eq{}{\Ab}{\Bb}}$ which implies
-%     $\istype{\Gb}{\Ab} \in \trans{\xistype{\Ga}{A}}$ by
-%     inversion~\eqref{lem:inversion}, thus, from lemma~\ref{lem:change-type}
-%     and IH we get $\isterm{\Gb}{\ub}{\Ab}$, yielding
-%     $\isterm{\Gb}{\transpo{\eb}\ \ub}{\Bb} \in \trans{\xisterm{\Ga}{u}{B}}$.
-%   \end{itemize}
-
-% \end{proof}
-
-
-% \subsection{Meta-theoretical Consequences}
-% \label{sec:meta-consequences}
-
-% We can check that all ETT theorems whose type are typable in ITT have
-% proofs in ITT as well:
-
-% \begin{corollary}[Preservation of ITT]
-%   \label{cor:preservation}
-%   If $\xisterm{}{t}{T}$ and $\istype{}{T}$ then there exist $\tb$ such that
-%     $\isterm{}{\tb}{T} \in \trans{\xisterm{}{t}{T}}$.
-% \end{corollary}
-% \begin{proof}
-%   Since $\isctx{\ctxempty} \in \trans{\xisctx{\ctxempty}}$, by
-%   Theorem~\eqref{thm:translation}, there exists $\tb$ and $\Tb$ such
-%   that
-%   $\isterm{}{\tb}{\Tb} \in \trans{\xisterm{}{t}{T}}$
-%   But as $\istype{}{T}$, we have
-%   $\istype{}{T} \in \trans{\xistype{}{T}}$, and,
-%   using Lemma~\ref{lem:change-type}, we obtain
-%   $\isterm{}{\tb}{T} \in \trans{\xisterm{}{t}{T}}$.
-% \end{proof}
-
-% \begin{corollary}[Relative consistency]
-%   \label{cor:consistency}
-%   Assuming ITT is consistent, there is no term $t$ such that
-%   $\xisterm{}{t}{\Prod{A:\Ty{0}}{A}}$.
-% \end{corollary}
-
-% \begin{proof}
-%   Assume such a $t$ exists. By the Corollary~\ref{cor:preservation},
-%   because $\istype{}{\Prod{A:\Ty{0}}{A}}$,
-%   there exists $\tb$ such that $\isterm{}{\tb}{\Prod{A:\Ty{0}}{A}}$ which
-%   contradicts the assumed consistency of ITT.
-% \end{proof}
-
-% \subsection{Optimisations}
-% \label{sec:optim}
-
-% Up until now, we remained silent about one thing: the size of the
-% translated terms. Indeed, the translated term is a decoration of the
-% initial one by transports which appear in many locations. For example,
-% at each application we use a transport by lemma \ref{lem:choose} to
-% ensure that the term in function position is given a function type. In
-% most cases---in particular when translating ITT terms---this produces
-% unnecessary transports (often by reflexivity) that we wish to avoid.
-
-% In order to limit the size explosion, in the above we use a different version of
-% transport, namely $\mathsf{transport}'$ such that
-% %
-% \begin{align*}
-%   \otransport{A_1}{A_2}{p}{t} &= t &\text{ when } A_1 =_\alpha A_2 \\
-%   &= \transpo{p}{t} &\text{ otherwise.}
-% \end{align*}
-% %
-% The idea is that we avoid \emph{trivially} unnecessary transports (we do not
-% deal with $\beta$-conversion for instance).
-% We extend this technique to the different constructors of equality (symmetry,
-% transitivity, \dots) so that they reduce to reflexivity whenever possible.
-% Take transitivity for instance:
-% %
-% \begin{align*}
-%   \otransitivity{\refl{} u}{q} &= q \\
-%   \otransitivity{p}{\refl{} u} &= p \\
-%   \otransitivity{p}{q} &= \transitivity{p}{q}.
-% \end{align*}
-% %
-% We show these \emph{defined terms} enjoy the same typing rules as their
-% counterparts and use them instead.
-% In practice it is enough to recover the exact same term when it is typed in ITT.
-
-% \section{Formalisation with Template-Coq}
-% \label{sec:form-with-templ}
-
-% We have formalised the translation
-% in the setting of \TemplateCoq~\cite{DBLP:conf/itp/AnandBCST18} in order to have
-% a more precise proof, but also to evidence the fact that the translation is
-% indeed constructive and can be used to perform computations.
-
-% \TemplateCoq is a \Coq library that has a representation of \Coq terms
-% as they are in \Coq's kernel (in particular using de Bruijn indices for
-% variables) and a (partial) implementation of the type checking algorithm
-% (not checking guardedness of fixpoints or positivity of inductive types).
-% %
-% It comes with a \Coq plugin that permits to quote \Coq terms into their
-% representations, and to produce \Coq terms from their representation
-% (if they indeed denote well-typed terms).
-% %
-% We have integrated our formalisation within that framework in order to
-% ensure our presentations of ETT and ITT are close to \Coq, but also to
-% take advantage of the quoting mechanism to produce terms using
-% the interactive mode (in particular we get to use tactics).
-% %
-% Note that we also rely on Mangin and Sozeau's
-% \Equations{}~\cite{DBLP:conf/itp/Sozeau10} plugin to derive nice
-% dependent induction principles.
-
-% Our formalisation takes full advantage of its easy interfacing with \TemplateCoq:
-% we define two theories, namely ETT and ITT, but ITT enjoys a lot of syntactic
-% sugar by having things such as transport, heterogeneous equality and packing as
-% part of the syntax. The operations regarding these constructors---in particular
-% the tedious ones---are written in \Coq and then quoted to finally be
-% \emph{realised} in the translation from ITT to \TemplateCoq.
-
-% \paragraph{Interoperability with \TemplateCoq.}
-% The translation we define from ITT to \TemplateCoq is not proven
-% correct, but it is not really important as it can just be seen as a
-% feature to observe the produced terms in a nicer setting. In any case,
-% \TemplateCoq does not yet provide a complete formalisation of CIC rules,
-% as guard checking of recursive definitions and strict positivity of
-% inductive type declarations are not formalised yet.
-
-% Our formalised theorems however do not depend on \TemplateCoq itself and as such
-% there is no need to \emph{trust} the plugin.
-
-% We also provide a translation from \TemplateCoq to ETT that we will describe
-% more extensively with the examples (Section~\ref{sec:examples}).
-
-% \subsection{Quick Overview of the Formalisation}
-
-% The file \rpath{SAst.v} contains the definition of the (common) abstract syntax
-% of ETT and ITT in the form of an inductive definition with de Bruijn
-% indices for variables (like in \TemplateCoq).
-% Sorts are defined separately in \rpath{Sorts.v} and we will address them later
-% in Section~\ref{sec:sorts}.
-
-% \begin{coq}
-% Inductive sterm : Type :=
-% | sRel (n : nat)
-% | sSort (s : sort)
-% | sProd (nx : name) (A B : sterm)
-% | sLambda (nx : name) (A B t : sterm)
-% | sApp (u : sterm) (nx : name) (A B v : sterm)
-% | sEq (A u v : sterm)
-% | sRefl (A u : sterm)
-% | (* ... *) .
-% \end{coq}
-
-% The files \rpath{ITyping.v} and \rpath{XTyping.v} define respectively the
-% typing judgments for ITT and ETT, using mutual inductive types.
-% Then, most of the files are focused on the meta-theory of ITT and can be ignored
-% by readers who don't need to see yet another proof of subject reduction.
-
-% The most interesting files are obviously those where the fundamental lemma
-% and the translation are formalised: \rpath{FundamentalLemma.v} and
-% \rpath{Translation.v}.
-% For instance, here is the main theorem, as stated in our formalisation:
-% %
-% \begin{coq}
-% Theorem complete_translation Σ :
-%   type_glob Σ ->
-%   (forall Γ (h : XTyping.wf Σ Γ), ∑ Γ', Σ |--i Γ' # ⟦ Γ ⟧ ) *
-%   (forall Γ t A (h : Σ ;;; Γ |-x t : A)
-%    Γ' (hΓ : Σ |--i Γ' # ⟦ Γ ⟧),
-%     ∑ A' t', Σ ;;;; Γ' |--- [t'] : A' # ⟦ Γ |--- [t] : A ⟧) *
-%   (forall Γ u v A (h : Σ ;;; Γ |-x u = v : A)
-%    Γ' (hΓ : Σ |--i Γ' # ⟦ Γ ⟧),
-%     ∑ A' A'' u' v' p', eqtrans Σ Γ A u v Γ' A' A'' u' v' p').
-% \end{coq}
-% %
-% Herein \coqe{type_glob Σ} refers to the fact that some global
-% context is well-typed, its purpose is detailed in
-% Section~\ref{sec:inductives}.
-% The fact that the theorem holds in \Coq ensures we can actually
-% compute a translated term and type out of a derivation in ETT.
-
-% \subsection{Inductive Types and Recursion}
-% \label{sec:inductives}
-
-% In the proof of Section~\ref{sec:translation}, we didn't mention
-% anything about inductive types, pattern-matching or recursion as it is
-% a bit technical on paper.  In the formalisation, we offer a way to
-% still be able to use them, and we will even show how it works in
-% practice with the examples (Section\ref{sec:examples}).
-
-% The main guiding principle is that inductive types and induction are orthogonal
-% to the translation, they should more or less be translated to
-% themselves.
-% %
-% To realise that easily, we just treat an inductive definition as a way
-% to introduce new constants in the theory, one for the type, one for
-% each constructor, one for its elimination principle, and one equality
-% per computation rule.
-% %
-% For instance, the natural numbers can be represented by having the following
-% constants in the context:
-% %
-% \[
-% \begin{array}{l@{~}c@{~}l}
-%   \nat &:& \Ty{0} \\
-%   \zero &:& \nat \\
-%   \natsucc &:& \nat \to \nat \\
-%   \natrec &:& \forall P,\
-%   P\ \zero \to (\forall m,\ P\ m \to P\ (\natsucc\ m)) \to
-%   \forall n,\ P\ n \\
-%   \natrec_\zero &:& \forall P\ P_z\ P_s,\ \natrec\ P\ P_z\ P_s\ \zero = P_z \\
-%   \natrec_\natsucc &:& \forall P\ P_z\ P_s\ n,\\
-%   &&\natrec\ P\ P_z\ P_s\ (\natsucc\ n) = P_s\ n\ (\natrec\ P\ P_z\ P_s\ n)
-% \end{array}
-% \]
-% %
-% Here we rely on the reflection rule to obtain the computational behaviour of the
-% eliminator $\natrec$.
-
-% This means for instance that we do not consider inductive types that would only
-% make sense in ETT, but we deem this not to be a restriction and to the best of
-% our knowledge isn't something that is usually considered in the literature.
-% %
-% With that in mind, our translation features a global context of typed constants
-% with the restriction that the types of those constants should be well-formed
-% in ITT. Those constants are thus used as black boxes inside ETT.
-
-% With this we are able to recover what we were missing from
-% \Coq, without having to deal with the trouble of proving that the translation
-% doesn't break the guard condition of fixed points, and we are instead relying on
-% a more type-based approach.
-
-% \subsection{About Universes and Homotopy}
-% \label{sec:sorts}
-
-% The experienced reader might have noticed that our treatment of universes
-% (except perhaps for the absence of cumulativity) was really superficial and the
-% notion of sorts used is rather orthogonal to our main development.
-% This is even more apparent in the formalisation. Indeed, we didn't fix a
-% specific universe hierarchy, but instead specify what properties it should
-% have, in what is reminiscent to a (functional\footnote{Meaning the sort of a
-% sort, and the sort of a product are functions, necessary to the uniqueness of
-% types~\eqref{lem:uniq}.}) PTS formulation.
-% %
-% \begin{coq}
-% Class Sorts.notion := {
-%   sort : Type ;
-%   succ : sort -> sort ;
-%   prod_sort : sort -> sort -> sort ;
-%   sum_sort : sort -> sort -> sort ;
-%   eq_sort : sort -> sort ;
-%   eq_dec : forall s z : sort, {s = z} + {s <> z} ;
-%   succ_inj : forall s z, succ s = succ z -> s = z
-% }.
-% \end{coq}
-% %
-% From the notion of sorts, we require functions to get the sort of a sort,
-% the sort of a product from the sorts of its arguments, and (crucially) the sort
-% of an identity type.
-% We also require some measure of decidable equality and injectivity on those.
-
-% This allows us to instantiate this by a lot of different notions including the
-% one presented earlier in the paper or even its extension with a universe $\Prop$
-% of propositions (like CIC~\cite{bertot2004interactive}). We present here two
-% instances that have their own interest.
-
-% \paragraph{$\Type$ in $\Type$.}
-% One of the instances we provide is one with only one universe $\Type$, with the
-% inconsistent typing rule $\Type : \Type$.
-% Although inconsistent, this allows us to interface with \TemplateCoq, without
-% the---for the time being---very time-consuming universe constraint checking.
-
-% \paragraph{Homotopy Type System and Two-Level Type Theory.}
-% Another interesting application (or rather instance) of our formalisation
-% is a translation from Homotopy Type System (HTS)~\cite{hts-sota} to
-% Two-Level Type Theory
-% (2TT)~\cite{DBLP:journals/corr/AltenkirchCK16,DBLP:journals/corr/AnnenkovCK17}.
-
-% HTS and 2TT arise from the incompatibility between UIP---recall it is provable
-% in ETT---and univalence. The idea is to have two distinct notions of equality
-% in the theory, a \emph{strict} one satisfying UIP, and a \emph{fibrant} one
-% corresponding to the homotopy type theory equality, possibly satisfying
-% univalence. This actually induces a separation in the types of the theory:
-% some of them are called \emph{fibrant} and the fibrant or homotopic equality
-% can only be eliminated on those.
-% HTS can be seen as an extension of 2TT with reflection on the strict equality
-% just like ETT is an extension of ITT.
-
-% We can recover HTS and 2TT in our setting by taking $\F{i}$ and $\Un{i}$ as
-% respectively the fibrant and strict universes of those theories
-% (for $i \in \mathbb{N}$), along with the following PTS rules:
-% %
-% \[
-% \begin{array}{l@{~}c@{~}l@{\qquad}l@{~}c@{~}l}
-%   (\F{i}, \F{i+1}) &\in& \Ax &
-%   (\Un{i}, \Un{i+1}) &\in& \Ax \\
-%   (\F{i}, \F{j}, \F{\nmax{i}{j}}) &\in& \Rl &
-%   (\F{i}, \Un{j}, \Un{\nmax{i}{j}}) &\in& \Rl \\
-%   (\Un{i}, \F{j}, \Un{\nmax{i}{j}}) &\in& \Rl &
-%   (\Un{i}, \Un{j}, \Un{\nmax{i}{j}}) &\in& \Rl \\
-% \end{array}
-% \]
-% %
-% and the fact that the sort of the (strict) identity type on $A : s$ is
-% the \emph{strictified} version of $s$, \ie $\Un{i}$ for $s = \Un{i}$ or
-% $s = \F{i}$.
-% In order to have the fibrant equality, one simply needs to do as in
-% Section~\ref{sec:inductives}.
-
-% In short, the translation from HTS to 2TT is basically the same as the one
-% from ETT to ITT we presented in this paper, and this fact is factorised through
-% our formalisation.
-
-% \subsection{ETT-flavoured \Coq: Examples}
-% \label{sec:examples}
-
-% In this section we demonstrate how our translation can bring extensionality to
-% the world of \Coq in action. The examples can be found in
-% \rpath{plugin\_demo.v}.
-
-% \paragraph{First, a pedestrian approach.}
-% %
-% We would like to begin by showing how one can write an example step by step
-% before we show how it can be instrumented and automated as a plugin.
-% For this we use a self-contained example without any inductive
-% types or recursion, illustrating a very simple case of reflection.
-% The term we want to translate is our introductory example of transport:
-% \[
-%   \lambda\ A\ B\ e\ x.\ x : \Pi\ A\ B.\ A = B \to
-%   A \to B
-% \]
-% which relies on the equality $e : A = B$ and reflection to convert $x
-% : A$ to $x : B$.
-% %
-% Of course, this definition isn't accepted in \Coq because this
-% conversion is not valid in ITT.
-% %
-% \begin{coq}
-% Fail Definition pseudoid (A B : Type) (e : A = B) (x : A) : B := x.
-% \end{coq}
-% %
-% However, we still want to be able to write it \emph{in some way}, in order to
-% avoid manipulating de Bruijn indices directly.
-% For this, we use a little trick by first defining a \Coq axiom to represent
-% an ill-typed term:
-% %
-% \begin{coq}
-% Axiom candidate : forall A B (t : A), B.
-% \end{coq}
-% %
-% \coqe|candidate A B t| is a candidate \coqe|t| of type
-% \coqe|A| to inhabit type \coqe|B|.
-% We complete this by adding a notation that is reminiscent to
-% \Agda's~\cite{norell2007towards} hole mechanism.
-% %
-% \begin{coq}
-% Notation "'{!' t '!}'" := (candidate _ _ t).
-% \end{coq}
-
-% We can now write the ETT function within \Coq.
-% %
-% \begin{coq}
-% Definition pseudoid (A B : Type) (e : A = B) (x : A) : B := {! x !}.
-% \end{coq}
-% %
-% We can then quote the term and its type to \TemplateCoq thanks to the
-% \coqe|Quote Definition| command provided by the plugin.
-% %
-% \begin{coq}
-% Quote Definition pseudoid_term :=
-%   ltac:(let t := eval compute in pseudoid in exact t).
-% Quote Definition pseudoid_type :=
-%   ltac:(let T := type of pseudoid in exact T).
-% \end{coq}
-% %
-% The terms that we get are now \TemplateCoq terms, representing \Coq syntax.
-% We need to put them in ETT, meaning adding the annotations, and also removing
-% the \coqe|candidate| axiom.
-% This is the purpose of the \coqe|fullquote| function that we provide
-% in our formalisation.
-% %
-% \begin{coq}
-% Definition pretm_pseudoid :=
-%   Eval lazy in fullquote (2^18) Σ [] pseudoid_term empty empty nomap.
-% Definition tm_pseudoid :=
-%   Eval lazy in match pretm_pseudoid with
-%               | Success t => t
-%               | Error _ => sRel 0
-%               end.
-
-% Definition prety_pseudoid :=
-%   Eval lazy in fullquote (2^18) Σ [] pseudoid_type empty empty nomap.
-% Definition ty_pseudoid :=
-%   Eval lazy in match prety_pseudoid with
-%                | Success t => t
-%                | Error _ => sRel 0
-%                end.
-% \end{coq}
-% %
-% \coqe|tm_pseudoid| and \coqe|ty_pseudoid| correspond
-% respectively to the ETT representation of \coqe|pseudoid| and its
-% type.
-% We then produce, using our home-brewed Ltac type-checking tactic, the
-% corresponding ETT typing derivation (notice the use of reflection to typecheck).
-% %
-% \begin{coq}
-% Lemma type_pseudoid : Σi ;;; [] |-x tm_pseudoid : ty_pseudoid.
-% Proof.
-%   unfold tm_pseudoid, ty_pseudoid.
-%   ettcheck. cbn.
-%   eapply reflection with (e := sRel 1).
-%   ettcheck.
-% Defined.
-% \end{coq}
-% %
-% We can then translate this derivation, obtain the translated term and then
-% convert it to \TemplateCoq.
-% %
-% \begin{coq}
-% Definition itt_pseudoid : sterm :=
-%   Eval lazy in
-%   let '(_ ; t ; _) :=
-%     type_translation type_pseudoid istrans_nil
-%   in t.
-
-% Definition tc_pseudoid : tsl_result term :=
-%   Eval lazy in
-%   tsl_rec (2 ^ 18) Σ [] itt_pseudoid empty.
-% \end{coq}
-% %
-% Once we have it, we \emph{unquote} the term to obtain a \Coq term
-% (notice that the only use of reflection has been replaced by a transport).
-% %
-% \begin{coq}
-% fun (A B : Type) (e : A = B) (x : A) => transport e x
-%      : forall A B : Type, A = B -> A -> B
-% \end{coq}
-
-% \paragraph{Making a Plugin with \TemplateCoq.}
-% %
-% All of this work is pretty systematic. Fortunately for us,
-% \TemplateCoq also features a monad to reify \Coq commands which we can
-% use to \emph{program} the translation steps.
-% As such we have written a complete procedure, relying on type checkers we
-% wrote for ITT and ETT, which can generate equality obligations.
-
-% Thanks to this, the user doesn't have to know about the details of
-% implementation of the translation, and stay within the \Coq ecosystem.
+\section{Definitions of Extensional and Intensional Type Theories}
+\label{sec:syntax-features}
+
+This section presents the common syntax, typing and main properties of
+ETT and ITT. Our type theories feature a universe hierarchy, dependent
+products and sums as well as Martin Löf's identity types.
+
+\subsection{Syntax of ETT and ITT}
+\label{sec:ettsyntax}
+
+The common syntax of ETT and ITT is given in Figure~\ref{fig:syntax}.
+%
+It features: dependent products $\Prod{x:A} B$, with (annotated)
+$\lambda$-abstractions and (annotated) applications, negative dependent sums
+$\Sum{x:A} B$ with (annotated) projections, sorts $\Ty{i}$, identity types
+$\Eq{A}{u}{v}$ with reflection and elimination as well as terms
+realising UIP and FunExt. Annotating terms with
+otherwise computationally irrelevant typing information is a common
+practice when studying the syntax of type theory precisely (see
+\cite{streicher1993investigations} for a similar example).
+%
+We will write $A \to B$ for $\Prod{\_:A} B$ the non-dependent product /
+function type.
+
+We consider a fixed universe hierarchy without cumulativity, which
+ensures in particular uniqueness of typing~\eqref{lem:uniq} which is
+important for the translation.
+
+\begin{figure*}
+  \hrulefill
+  \[
+  \begin{array}{l@{~\,}r@{~\,}l@{\quad}l}
+    s &\bnf& \Ty{i} ~(i \in \mathbb{N}) &\mbox{sorts (universes)} \\
+    T,A,B,t,u,v &\bnf& x \bnfor \lam{x:A}{B} t \bnfor \app{t}{x:A}{B}{u}
+    \bnfor \Prod{x:A} B \bnfor s
+    &\mbox{dependent $\lambda$-calculus} \\
+    &\bnfor& \pair{x:A}{B}{u}{v} \bnfor \pio{x:A}{B}{p} \bnfor \pit{x:A}{B}{p}
+    \bnfor \Sum{x:A} B
+    &\mbox{dependent pairs} \\
+    &\bnfor& \refl{A} u \bnfor \J{A}{u}{x.e.P}{w}{v}{p} \bnfor \Eq{A}{u}{v}
+    &\mbox{propositional equality} \\
+    &\bnfor& \funext{x:A}{B}{f}{g}{e} \bnfor \uip{A}{u}{v}{p}{q}
+    &\mbox{equality axioms} \\
+    \Ga, \D &\bnf& \ctxempty \bnfor \Ga, x:A &\mbox{contexts}
+  \end{array}
+  \]
+  \hrulefill
+  \vspace{-2ex}
+  \caption{Common syntax of ETT and ITT}
+  \label{fig:syntax}
+\end{figure*}
+
+\paragraph{About Annotations.}
+Although it may look like a technical detail, the use of annotation is more
+fundamental in ETT than it is in ITT (where it is irrelevant and doesn't affect
+the theory). And this is actually one of the main differences between our work
+(and that of Martin \cite{hofmann1995conservativity} who has a similar
+presentation) and the work of \cite{oury2005extensionality}.
+
+Indeed, by using the standard model where types are interpreted as
+cardinals rather than sets, it is possible to see that the equality
+$\nat \to \nat = \nat \to \bool$ is independent from the theory, it is
+thus possible to assume it (as an axiom, or for those that would still
+not be convinced, simply under a $\lambda$ that would introduce this
+equality).  In that context, the identity map $\lambda(x : \nat).\ x$
+can be given the type $\nat \to \bool$ and we thus type
+$(\lambda(x : \nat).\ x)\ \zero : \bool$.  Moreover, the
+$\beta$-reduction of the non-annotated system used by Oury concludes
+that this expression reduces to $\zero$, but cannot be given the type
+$\bool$ (as we said, the equality $\nat \to \nat = \nat \to \bool$ is
+independent from the theory, so the context is consistent). This means
+we lack subject reduction in this case (or uniqueness of types,
+depending on how we see the issue).  Our presentation has a blocked
+$\beta$-reduction limited to matching annotations:
+$\app{(\lam{x:A}{B}\ t)}{x:A}{B}{u} = t[x \sto u]$, from which subject
+reduction and uniqueness of types follow.
+
+Although subtle, this difference is responsible for Oury's need for an
+extra axiom. Indeed, to treat the case of equality of applications in
+his proof, he needs to assume the congruence rule for heterogeneous
+equality of applications, which is not provable when formulated with
+John Major equality (Fig.~\ref{fig:jmapp}). Thanks to annotations and
+our notion of heterogeneous equality, we can prove this congruence
+rule for applications.
+
+\begin{figure}[h]
+  \begin{mathpar}
+    \infer[JMAPP]
+    {\Heq{\forall (x : U_1). V_1}{f_1}{\forall (x : U_2). V_2}{f_2}\\
+      \Heq{U_1}{u_1}{U_2}{u_2}}
+    {\Heq{V_1[x \leftarrow u_1]}{f_1\ u_1}{V_2[x \leftarrow u_2]}{f_2\ u_2}}
+    %
+  \end{mathpar}
+  \caption{Congruence of heterogeneous equality}
+  \label{fig:jmapp}
+\end{figure}
+
+\subsection{The Typing Systems}
+
+As usual in dependent type theory, we consider contexts which are
+telescopes whose declarations may depend on any variable already
+introduced. We note $\isterm{\Ga}{t}{A}$ to say that $t$ has type $A$
+in context $\Ga$. $\istype{\Ga}{A}$ shall stand for
+$\isterm{\Ga}{A}{s}$ for some sort $s$ and similarly
+$\eqtype{\Ga}{A}{B}$ stands for $\eqtype{\Ga}{A}{B} : s$.
+
+We use two relations $(s,s') \in \Ax$ (written $(s,s')$ for short)
+and $(s,s',s'') \in \Rl$ (written $(s,s',s'')$) to constrain
+the sorts in the typing rules for universes, dependent products and
+dependent sums, as is done in any Pure Type System (PTS).
+%
+In our case, because we do not have cumulativity, the rules are as
+follows:
+%
+\begin{mathpar}
+  (\Ty{i}, \Ty{i+1}) \in \Ax
+
+  (\Ty{i}, \Ty{j}, \Ty{\nmax{i}{j}}) \in \Rl
+\end{mathpar}
+
+\input{figty}
+
+We give the typing rules of ITT in
+Figure~\ref{fig:ty-rules}.
+%
+The rules are standard and we do not explain them.
+%
+Let us just point out the conversion rule, which says that $u:A$ can
+be given the type $u:B$ when $A \equiv B$, \ie when $A$ and $B$ are
+convertible.
+%
+As the notion of conversion is central in our work---the conversion of
+ETT being translated to an equality in ITT---we provide an exhaustive
+definition of it, with computational conversion rules (including
+$\beta$-conversion or reduction of the elimination principle of
+equality over reflexivity, see Figure~\ref{fig:conv-rules}), however
+congruence conversion rules can be found in Appendix~\ref{sec:more-rules}
+(Figure~\ref{fig:cong-rules}).
+Note that we use Christine Paulin-Möhring's variant of the J rule rather than
+Martin-Löf's original formulation.
+%
+Although pretty straightforward, being precise here is very important,
+as for instance the congruence rule for $\lambda$-terms is the reason
+why FunExt is derivable in ETT. Congruence of
+equality terms is a standard extension of congruence to the new
+principles we add (UIP and FunExt).
+
+
+ETT is thus simply an extension of ITT (we write $\vdash_\exmark$ for
+the associated typing judgment) with the reflection rule on equality,
+which axiomatises that propositionally equal terms are convertible
+(see Equation~\ref{eq:reflection}).
+Note that, as already mentioned, in the presence of reflection and
+$\mathsf{J}$, UIP is derivable so we could remove it from ETT, but
+keeping it allows us to share a common syntax which makes the
+statements of theorems simpler and does not affect the development.
+
+
+\input{figconv}
+
+\subsection{General Properties of ITT and ETT}
+
+We now state the main properties of both ITT and ETT.
+%
+We do not detail their proof as they are standard and can be found
+in the \Coq formalisation.
+
+First, although not explicit in the typing system, weakening is
+admissible in ETT and ITT.
+
+\begin{lemma}[Weakening]
+  \label{lem:weak}
+  If $\isjg{\Ga}{J}$ and $\D$ extends $\Ga$ (possibly interleaving variables)
+  then $\isjg{\D}{J}$.
+\end{lemma}
+
+Then, as mentioned above, the use of a non-cumulative hierarchy allows
+us to prove that a term $t$ can be given at most one type in a
+context $\Ga$, up-to conversion.
+
+\begin{lemma}[Uniqueness of typing]
+  \label{lem:uniq}
+  If $\isterm{\Ga}{u}{T_1}$ and $\isterm{\Ga}{u}{T_2}$
+  then $\eqtype{\Ga}{T_1}{T_2}$.
+\end{lemma}
+
+Finally, an important property of the typing system (seen as a mutual
+inductive definition) is the possibility to deduce hypotheses from
+their conclusion, thanks to inversion of typing. Note that it is
+important here that our syntax is annotated for applications and
+projections as it provides a richer inversion principle.
+
+\begin{lemma}[Inversion of typing]
+  \label{lem:inversion}
+  \leavevmode
+  \begin{enumerate}
+    \item If $\isterm{\Ga}{x}{T}$ then $(x : A) \in \Ga$ and
+    $\eqtype{\Ga}{A}{T}$.
+    \item If $\isterm{\Ga}{\Ty{i}}{T}$ then $\eqtype{\Ga}{\Ty{i+1}}{T}$.
+    \item If $\isterm{\Ga}{\Prod{x:A}{B}}{T}$ then $\isterm{\Ga}{A}{s}$ and
+    $\isterm{\Ga, x:A}{B}{s'}$ and $\eqtype{\Ga}{s''}{T}$ for some $(s,s',s'')$.
+    \item If $\isterm{\Ga}{\lam{x:A}{B} t}{T}$ then $\isterm{\Ga}{A}{s}$ and
+    $\isterm{\Ga, x:A}{B}{s'}$ and $\isterm{\Ga, x:A}{t}{B}$ and
+    $\eqtype{\Ga}{\Prod{x:A}{B}}{T}$.
+    \item If $\isterm{\Ga}{\app{u}{x:A}{B}{v}}{T}$ then $\isterm{\Ga}{A}{s}$ and
+    $\isterm{\Ga, x:A}{B}{s'}$ and $\isterm{\Ga}{u}{\Prod{x:A}{B}}$ and
+    $\isterm{\Ga}{v}{A}$ and $\eqtype{\Ga}{B[ x \sto u]}{T}$.
+    \item \ldots\ Analogous for the remaining term and type constructors.
+  \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+  Each case is proven by induction on the derivation
+  (which corresponds to any number of applications of the conversion rule
+  following one introduction rule).
+\end{proof}
+
+\section{Relating Translated Expressions}
+\label{sec:relation}
+
+We want to define a relation on terms that equates two terms that are
+the same up to transport.
+%
+This begs the question of what notion of transport is going to be
+used.
+%
+Transport can be defined from elimination of equality as follows:
+%
+\begin{definition}[Transport]
+  Given $\isterm{\Ga}{p}{\Eq{s}{T_1}{T_2}}$ and
+  $\isterm{\Ga}{t}{T_1}$ we define the transport of $t$ along $p$, written
+  $\transpo{p}\ t$, as
+  $\app
+    {\J
+      {s}
+      {T_1}
+      {X.e.\ T_1 \to X}
+      {\lam{x:T_1}{T_1} x}
+      {T_2}
+      {p}
+    }
+    {T_1}
+    {T_2}
+    {t}
+  $ such that $\isterm{\Ga}{\transpo{p}\ t}{T_2}$.
+\end{definition}
+%
+However, in order not to confuse the transports added by the
+translation with the transports that were already present in the
+source, we consider $\transpo{p}$ as part of the syntax in the
+reasoning. It will be unfolded to its definition only after the
+complete translation is performed.
+%
+This idea is not novel as Hofmann already had a $\mathsf{Subst}$ operator that
+was part of his ITT (noted TT\textsubscript{I} in his
+paper~\cite{hofmann1995conservativity}).
+
+%
+We first define the (purely syntactic) relation $\ir$ between ETT terms
+and ITT terms in Figure~\ref{fig:ir-def} stating that the ITT term is
+simply a decoration of the first term by transports. Its purpose is to
+state how close to the original term its translation is. Then, we extend
+this relation to a similarity relation $\sim$ on ETT terms by taking its
+symmetric and transitive closure:
+\begin{center}$\sim \coloneqq (\ir \cup \ir^{-1})^+$
+\end{center}
+
+\begin{lemma}[$\sim$ is an equivalence relation]
+  \label{lem:sim-er}
+  $\sim$ is reflexive, symmetric and transitive.
+\end{lemma}
+
+\begin{proof}
+  For reflexivity we proceed by induction on the term.
+\end{proof}
+
+\input{figir}
+%\input{figsim}
+
+The goal is to prove that two terms in this relation, that are well-typed in the
+target type theory, are heterogeneously equal. As for this notion, we recall
+the definition we previously gave:
+$\Heq{T}{t}{U}{u} := \Sum{p:\Eq{}{T}{U}} \Eq{}{\transpo{p}\ t}{u}$.
+%
+This definition of heterogeneous equality can be shown to be
+reflexive, symmetric and transitive. Because of UIP, heterogeneous
+equality collapses to equality when taken on the same type.
+
+\begin{lemma}
+  \label{lem:uip-cong}
+  If $\isterm{\Ga}{e}{\Heq{A}{u}{A}{v}}$
+  then there exists $p$ such that $\isterm{\Ga}{p}{\Eq{A}{u}{v}}$.
+\end{lemma}
+
+\begin{proof}
+  This holds thanks to UIP on equality, which implies K, and so the
+  proof of $A = A$ can be taken to be reflexivity.
+\end{proof}
+
+\begin{note}
+  As a corollary, $\Heqs$ on types corresponds to equality.
+  Indeed when we have $\isterm{\Ga}{e}{\Heq{s}{A}{s'}{B}}$ we have
+  that $\Eq{}{s}{s'}$, which implies that $s$ and $s'$ have the same sort
+  and thus are syntactically the same (by an inversion argument).
+\end{note}
+
+Before we can prove the fundamental lemma stating that two terms in relation
+are heterogeneously equal, we need to consider another construction.
+%
+As explained in the introduction, when proving the property by
+induction on terms, we introduce variables in the context that are
+equal only up-to heterogeneous equality.
+%
+This phenomenon is similar to what happens in the parametricity
+translation~\cite{bernardy2012proofs}.
+%
+Our fundamental lemma on the decoration relation $\sim$ assumes two
+related terms of potentially different types $T1$ and $T2$ to produce an
+heterogeneous equality between them. For induction to go through under
+binders (e.g. for dependent products and abstractions), we hence need to
+consider the two terms under different, but heterogeneously equal
+contexts.
+%
+Therefore, the context we produce will not only be a telescope of
+variables, but rather a telescope of triples consisting of two variables
+of possibly different types, and a witness that they are heterogeneously
+equal.
+%
+To make this precise, we define the following macro:
+%
+\[
+\Pack{A_1}{A_2} := \Sum{x:A_1} \Sum{y:A_2} \Heq{}{x}{}{y}
+\]
+together with its projections
+\begin{mathpar}
+  \ProjO{p} := \pio{}{}{p}
+
+  \ProjT{p} := \pio{}{}{\pit{}{}{p}}
+
+  \ProjE{p} := \pit{}{}{\pit{}{}{p}}.
+\end{mathpar}
+%
+We can then extend this notion canonically to contexts of the same
+length that are well formed using the same sorts:
+%
+\[
+\begin{array}{l}
+    \Pack{(\Ga_1, x:A_1)}{(\Ga_2, x:A_2)} := \\
+    (\Pack{\Ga_1}{\Ga_2}),
+    x : \Pack{(\llift{\gamma}{}{A_1})}{(\rlift{\gamma}{}{A_2})} \\
+    \\
+    \Pack{\ctxempty}{\ctxempty} := \ctxempty.
+\end{array}
+\]
+%
+When we pack contexts, we also need to apply the correct projections for
+the types in that context to still make sense. Assuming two contexts
+$\Ga_1$ and $\Ga_2$ of the same length, we can define left and right
+substitutions:
+\[
+\begin{array}{ll}
+  \gamma_1 &:= [ x \leftarrow \ProjO{x}\ |\ (x : \_) \in \Ga_1 ] \\
+  \gamma_2 &:= [ x \leftarrow \ProjT{x}\ |\ (x : \_) \in \Ga_2 ].
+\end{array}
+\]
+These substitutions implement lifting of terms to packed contexts:
+$\isterm{\Ga, \Pack{\Ga_1}{\Ga_2}}{\llift{\gamma}{}{t}}{\llift{\gamma}{}{A}}$
+whenever $\isterm{\Ga, \Ga_1}{t}{A}$ (resp.
+$\isterm{\Ga, \Pack{\Ga_1}{\Ga_2}}{\rlift{\gamma}{}{t}}{\rlift{\gamma}{}{A}}$
+whenever $\isterm{\Ga, \Ga_2}{t}{A}$).
+
+For readability, when $\Ga_1$ and $\Ga_2$ are understood we will write $\Gp$ for
+$\Pack{\Ga_1}{\Ga_2}$.
+
+Implicitly, whenever we use the notation $\Pack{\Ga_1}{\Ga_2}$ it means that
+the two contexts are of the same length and well-formed with the same
+sorts.
+%
+We can now state the fundamental lemma.
+
+\begin{lemma}[Fundamental lemma]
+  \label{lem:sim-cong}
+  Let $t_1$ and $t_2$ be two terms. If $\isterm{\Ga, \Ga_1}{t_1}{T_1}$ and
+  $\isterm{\Ga, \Ga_2}{t_2}{T_2}$ and $t_1 \sim t_2$ then there exists $p$ such
+  that
+  $\isterm{\Ga, \Pack{\Ga_1}{\Ga_2}}
+          {p}
+          {\Heq{\llift{\gamma}{}{T_1}}
+               {\llift{\gamma}{}{t_1}}
+               {\rlift{\gamma}{}{T_2}}
+               {\rlift{\gamma}{}{t_2}}}$.
+\end{lemma}
+
+\begin{proof}
+  The proof is by induction on the derivation of $t_1 \sim t_2$. We show
+  the three most interesting cases:
+
+  \begin{itemize}
+  \item \textsc{Var}
+    \[
+      \infer[]
+        { }
+        {x \sim x}
+      %
+    \]
+    If $x$ belongs to $\Ga$, we apply reflexivity---together with uniqueness of
+    typing~\eqref{lem:uniq}---to conclude.
+    Otherwise, $\ProjE{x}$ has the expected type (since
+    $\llift{\gamma}{}{x} \equiv \ProjO{x}$ and $\rlift{\gamma}{}{x} \equiv \ProjT{x}$).
+
+  \item \textsc{Application}
+    \[
+      \infer[]
+        {t_1 \sim t_2 \\
+         A_1 \sim A_2 \\
+         B_1 \sim B_2 \\
+         u_1 \sim u_2
+        }
+        {\app{t_1}{x:A_1}{B_1}{u_1} \sim \app{t_2}{x:A_2}{B_2}{u_2}}
+      %
+    \]
+    We have $\isterm{\Ga, \Ga_1}{\app{t_1}{x:A_1}{B_1}{u_1}}{T_1}$ and
+    $\isterm{\Ga, \Ga_2}{\app{t_2}{x:A_2}{B_2}{u_2}}{T_2}$ which means by
+    inversion~\eqref{lem:inversion} that the subterms are well-typed.
+    We apply the induction hypothesis and then conclude.
+  \item \textsc{TransportLeft}
+    \[
+      \infer[]
+        {t_1 \sim t_2}
+        {\transpo{p}\ t_1 \sim t_2}
+      %
+    \]
+    We have $\isterm{\Ga, \Ga_1}{\transpo{p}\ t_1}{T_1}$ and
+    $\isterm{\Ga, \Ga_2}{t_2}{T_2}$.
+    By inversion~\eqref{lem:inversion} we have
+    $\isterm{\Ga, \Ga_1}{p}{\Eq{}{T_1'}{T_1}}$ and
+    $\isterm{\Ga, \Ga_1}{t_1}{T_1'}$.
+    By induction hypothesis we have $e$ such that
+    $\isterm{\Ga, \Gp}{e}{\Heq{}{\llift{\gamma}{}{t_1}}{}{\rlift{\gamma}{}{t_2}}}$.
+    From transitivity and symmetry we only need to provide a proof of
+    $\Heq{}{\llift{\gamma}{}{t_1}}{}{\transpo{\llift{\gamma}{}{p}}\ \llift{\gamma}{}{t_1}}$ which is inhabited by
+    $\pair{\_}{\_}{\llift{\gamma}{}{p}}{\refl{} (\transpo{\llift{\gamma}{}{p}}\ \llift{\gamma}{}{t_1})}$.
+  \end{itemize}
+
+  The complete proof can be found in Appendix~\ref{sec:proof-fund-lemma}.
+\end{proof}
+
+We can also prove that $\sim$ preserves substitution.
+
+\begin{lemma}
+  If $t_1 \sim t_2$ and $u_1 \sim u_2$ then
+  $t_1[x \sto u_1] \sim t_2[x \sto u_2]$.
+\end{lemma}
+
+\begin{proof}
+  We proceed by induction on the derivation of $t_1 \sim t_2$.
+\end{proof}
+
+\section{Translating ETT to ITT}
+\label{sec:translation}
+
+\subsection{The Translation}
+\label{sec:the-translation}
+
+We now define the translations (let us stress the plural here) of an
+extensional judgment. We extend $\ir$ canonically to contexts
+($\Ga \ir \Gb$ when they bind the same variables and the types are in
+relation for $\ir$).
+
+Before defining the translation, we define a set
+$\trans{\xisterm{\Ga}{t}{A}}$ of typing judgments
+in ITT associated to a typing judgment $\xisterm{\Ga}{t}{A}$ in ETT.
+%
+The idea is that this set describes all the possible translations that
+lead to the expected property. When
+$\isterm{\Gb}{\tb}{\Ab} \in \trans{\xisterm{\Ga}{t}{A}}$, we say that
+$\isterm{\Gb}{\tb}{\Ab}$ realises $\xisterm{\Ga}{t}{A}$. The
+translation will be given by showing that this set is inhabited by
+induction on the derivation.
+
+\begin{definition}[Characterisation of possible translations]
+  \leavevmode
+  \begin{itemize}
+    \item For any $\xisctx{\Ga}$ we define $\trans{\xisctx{\Ga}}$ as a set of
+    valid judgments (in ITT) such that
+    $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$ if and only if $\Ga \ir \Gb$.
+
+    \item Similarly, $\isterm{\Gb}{\tb}{\Ab} \in \trans{\xisterm{\Ga}{t}{A}}$ iff
+    $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$ and $A \ir \Ab$ and $t \ir \tb$.
+  \end{itemize}
+\end{definition}
+
+In order to better master the shape of the produced realiser, we state the
+following lemma which shows that it has the same head
+type constructor as the type it realises.
+%
+This is important for instance for the case of an application, where we
+do not know a priori if the translated function has a dependent product
+type, which is required to be able to use the typing rule for application.
+
+\begin{lemma}
+  \label{lem:choose}
+  We can always \emph{choose} types $\Tb$ that have the same head constructor
+  as $T$.
+\end{lemma}
+
+\begin{proof}
+  Assume we have $\isterm{\Gb}{\tb}{\Tb} \in \trans{\xisterm{\Ga}{t}{T}}$.
+  By definition of $\ir$,
+  $T \ir \Tb$ means that $\Tb$ is shaped
+  $\transpo{p}\ \transpo{q}\ ...\ \transpo{r}\ \Tb'$ with $\Tb'$ having
+  the same head constructor as $T$. By inversion~\eqref{lem:inversion}, the
+  subterms are typable, including $\Tb'$. Actually, from inversion, we
+  even get that the type of $\Tb'$ is a universe. Then,
+  using lemma~\ref{lem:sim-cong} and lemma~
+  \ref{lem:uip-cong}, we get $\isterm{\Gb}{e}{\Eq{}{\Tb}{\Tb'}}$.
+  We conclude with
+  $\isterm{\Gb}{\transpo{e}\ \tb}{\Tb'} \in \trans{\xisterm{\Ga}{t}{T}}$.
+\end{proof}
+
+Finally, in order for the induction to go through, we need to know
+that when we have a realiser of a derivation $\xisterm{\Ga}{t}{T}$, we can
+pick an arbitrary other type realising $\xistype{\Ga}{T}$ and still
+get a new derivation realising $\xisterm{\Ga}{t}{T}$ with that type.
+%
+This is important for instance for the case of an application, where
+the type of the domain of the translated function may differ from the
+type of the translated argument. So we need to be able to change it \textit{a
+posteriori}.
+
+
+\begin{lemma}
+  \label{lem:change-type}
+  When we have $\isterm{\Gb}{\tb}{\Tb} \in \trans{\xisterm{\Ga}{t}{T}}$
+  and $\istype{\Gb}{\Tb'} \in \trans{\xistype{\Ga}{T}}$ then we also have
+  $\isterm{\Gb}{\tb'}{\Tb'} \in \trans{\xisterm{\Ga}{t}{T}}$ for some $\tb'$.
+\end{lemma}
+
+\begin{proof}
+  By definition we have $T \ir \Tb$ and $T \ir \Tb'$ and thus $T \sim \Tb$ and
+  $T \sim \Tb'$, implying $\Tb \sim \Tb'$ by transitivity~\eqref{lem:sim-er}.
+  By lemma~\ref{lem:sim-cong}
+  (in the case $\Ga_1 \equiv \Ga_2 \equiv \ctxempty$) we get
+  $\isterm{\Gb}{p}{\Heq{}{\Tb}{}{\Tb'}}$ for some $p$.
+  By lemma~\ref{lem:uip-cong} (and lemma~\ref{lem:choose} to give
+  universes as types to $\Tb$ and $\Tb'$) we can assume
+  $\isterm{\Gb}{p}{\Eq{}{\Tb}{\Tb'}}$. Then
+  $\isterm{\Gb}{\transpo{p}\ \tb}{\Tb'}$ is still a translation since $\ir$
+  ignores transports.
+\end{proof}
+
+We can now define the translation. This is done by mutual induction on
+context well-formedness, typing and conversion derivations. Indeed,
+in order to be able to produce a realiser by induction, we need to show
+that every conversion in ETT is translated as an heterogeneous equality
+in ITT.
+
+\begin{theorem}[Translation]
+  \label{thm:translation}
+  \leavevmode
+  \begin{itemize}
+    \item If\,\,\,$\xisctx{\Ga}$ then there exists
+    $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$,
+
+    \item If\,\,\,$\xisterm{\Ga}{t}{T}$ then for any
+    $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$ there exist $\tb$ and $\Tb$ such
+    that $\isterm{\Gb}{\tb}{\Tb} \in \trans{\xisterm{\Ga}{t}{T}}$,
+
+    \item If\,\,\,$\xeqterm{\Ga}{u}{v}{A}$ then for any
+    $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$ there exist
+    $A \ir \Ab, A \ir \Ab', u \ir \ub, v \ir \vb$ and $\eb$ such that
+    $\isterm{\Gb}{\eb}{\Heq{\Ab}{\ub}{\Ab'}{\vb}}$.
+  \end{itemize}
+\end{theorem}
+
+\begin{proof}
+  We prove the theorem by induction on the derivation in the
+  extensional type theory. We only show the two most interesting cases
+  of application and conversion.
+  The complete proof is given in Appendix~\ref{sec:corr-transl}.
+
+  \begin{itemize}
+    \item \textsc{Application}
+    \[
+      \infer[]
+        {\xisterm{\Ga}{A}{s} \\
+         \xisterm{\Ga,x:A}{B}{s'} \\
+         \xisterm{\Ga}{t}{\Prod{x:A} B} \\
+         \xisterm{\Ga}{u}{A}
+        }
+        {\xisterm{\Ga}{\app{t}{x:A}{B}{u}}{B[x \sto u]}}
+      %
+    \]
+    Using IH together with lemmata~\ref{lem:choose} and~\ref{lem:change-type}
+    we get $\isterm{\Gb}{\Ab}{s}$ and $\isterm{\Gb,x:\Ab}{\Bb}{s'}$ and
+    $\isterm{\Gb}{\tb}{\Prod{x:\Ab} \Bb}$ and $\isterm{\Gb}{\ub}{\Ab}$
+    meaning we can conclude
+    $\isterm{\Gb}{\app{\tb}{x:\Ab}{\Bb}{\ub}}{\Bb[x \sto \ub]}
+    \in \trans{\xisterm{\Ga}{\app{t}{x:A}{B}{u}}{B[x \sto u]}}$.
+
+    \item \textsc{Conversion}
+    \[
+      \infer[]
+        {\xisterm{\Ga}{u}{A} \\
+         \xeqtype{\Ga}{A}{B}
+        }
+        {\xisterm{\Ga}{u}{B}}
+      %
+    \]
+    By IH and lemma~\ref{lem:uip-cong} we have
+    $\isterm{\Gb}{\eb}{\Eq{}{\Ab}{\Bb}}$ which implies
+    $\istype{\Gb}{\Ab} \in \trans{\xistype{\Ga}{A}}$ by
+    inversion~\eqref{lem:inversion}, thus, from lemma~\ref{lem:change-type}
+    and IH we get $\isterm{\Gb}{\ub}{\Ab}$, yielding
+    $\isterm{\Gb}{\transpo{\eb}\ \ub}{\Bb} \in \trans{\xisterm{\Ga}{u}{B}}$.
+  \end{itemize}
+
+\end{proof}
+
+
+\subsection{Meta-theoretical Consequences}
+\label{sec:meta-consequences}
+
+We can check that all ETT theorems whose type are typable in ITT have
+proofs in ITT as well:
+
+\begin{corollary}[Preservation of ITT]
+  \label{cor:preservation}
+  If $\xisterm{}{t}{T}$ and $\istype{}{T}$ then there exist $\tb$ such that
+    $\isterm{}{\tb}{T} \in \trans{\xisterm{}{t}{T}}$.
+\end{corollary}
+\begin{proof}
+  Since $\isctx{\ctxempty} \in \trans{\xisctx{\ctxempty}}$, by
+  Theorem~\eqref{thm:translation}, there exists $\tb$ and $\Tb$ such
+  that
+  $\isterm{}{\tb}{\Tb} \in \trans{\xisterm{}{t}{T}}$
+  But as $\istype{}{T}$, we have
+  $\istype{}{T} \in \trans{\xistype{}{T}}$, and,
+  using Lemma~\ref{lem:change-type}, we obtain
+  $\isterm{}{\tb}{T} \in \trans{\xisterm{}{t}{T}}$.
+\end{proof}
+
+\begin{corollary}[Relative consistency]
+  \label{cor:consistency}
+  Assuming ITT is consistent, there is no term $t$ such that
+  $\xisterm{}{t}{\Prod{A:\Ty{0}}{A}}$.
+\end{corollary}
+
+\begin{proof}
+  Assume such a $t$ exists. By the Corollary~\ref{cor:preservation},
+  because $\istype{}{\Prod{A:\Ty{0}}{A}}$,
+  there exists $\tb$ such that $\isterm{}{\tb}{\Prod{A:\Ty{0}}{A}}$ which
+  contradicts the assumed consistency of ITT.
+\end{proof}
+
+\subsection{Optimisations}
+\label{sec:optim}
+
+Up until now, we remained silent about one thing: the size of the
+translated terms. Indeed, the translated term is a decoration of the
+initial one by transports which appear in many locations. For example,
+at each application we use a transport by lemma \ref{lem:choose} to
+ensure that the term in function position is given a function type. In
+most cases---in particular when translating ITT terms---this produces
+unnecessary transports (often by reflexivity) that we wish to avoid.
+
+In order to limit the size explosion, in the above we use a different version of
+transport, namely $\mathsf{transport}'$ such that
+%
+\begin{align*}
+  \otransport{A_1}{A_2}{p}{t} &= t &\text{ when } A_1 =_\alpha A_2 \\
+  &= \transpo{p}{t} &\text{ otherwise.}
+\end{align*}
+%
+The idea is that we avoid \emph{trivially} unnecessary transports (we do not
+deal with $\beta$-conversion for instance).
+We extend this technique to the different constructors of equality (symmetry,
+transitivity, \dots) so that they reduce to reflexivity whenever possible.
+Take transitivity for instance:
+%
+\begin{align*}
+  \otransitivity{\refl{} u}{q} &= q \\
+  \otransitivity{p}{\refl{} u} &= p \\
+  \otransitivity{p}{q} &= \transitivity{p}{q}.
+\end{align*}
+%
+We show these \emph{defined terms} enjoy the same typing rules as their
+counterparts and use them instead.
+In practice it is enough to recover the exact same term when it is typed in ITT.
+
+\section{Formalisation with Template-Coq}
+\label{sec:form-with-templ}
+
+We have formalised the translation
+in the setting of \TemplateCoq~\cite{DBLP:conf/itp/AnandBCST18} in order to have
+a more precise proof, but also to evidence the fact that the translation is
+indeed constructive and can be used to perform computations.
+
+\TemplateCoq is a \Coq library that has a representation of \Coq terms
+as they are in \Coq's kernel (in particular using de Bruijn indices for
+variables) and a (partial) implementation of the type checking algorithm
+(not checking guardedness of fixpoints or positivity of inductive types).
+%
+It comes with a \Coq plugin that permits to quote \Coq terms into their
+representations, and to produce \Coq terms from their representation
+(if they indeed denote well-typed terms).
+%
+We have integrated our formalisation within that framework in order to
+ensure our presentations of ETT and ITT are close to \Coq, but also to
+take advantage of the quoting mechanism to produce terms using
+the interactive mode (in particular we get to use tactics).
+%
+Note that we also rely on Mangin and Sozeau's
+\Equations{}~\cite{DBLP:conf/itp/Sozeau10} plugin to derive nice
+dependent induction principles.
+
+Our formalisation takes full advantage of its easy interfacing with \TemplateCoq:
+we define two theories, namely ETT and ITT, but ITT enjoys a lot of syntactic
+sugar by having things such as transport, heterogeneous equality and packing as
+part of the syntax. The operations regarding these constructors---in particular
+the tedious ones---are written in \Coq and then quoted to finally be
+\emph{realised} in the translation from ITT to \TemplateCoq.
+
+\paragraph{Interoperability with \TemplateCoq.}
+The translation we define from ITT to \TemplateCoq is not proven
+correct, but it is not really important as it can just be seen as a
+feature to observe the produced terms in a nicer setting. In any case,
+\TemplateCoq does not yet provide a complete formalisation of CIC rules,
+as guard checking of recursive definitions and strict positivity of
+inductive type declarations are not formalised yet.
+
+Our formalised theorems however do not depend on \TemplateCoq itself and as such
+there is no need to \emph{trust} the plugin.
+
+We also provide a translation from \TemplateCoq to ETT that we will describe
+more extensively with the examples (Section~\ref{sec:examples}).
+
+\subsection{Quick Overview of the Formalisation}
+
+The file \rpath{SAst.v} contains the definition of the (common) abstract syntax
+of ETT and ITT in the form of an inductive definition with de Bruijn
+indices for variables (like in \TemplateCoq).
+Sorts are defined separately in \rpath{Sorts.v} and we will address them later
+in Section~\ref{sec:sorts}.
+
+\begin{coq}
+Inductive sterm : Type :=
+| sRel (n : nat)
+| sSort (s : sort)
+| sProd (nx : name) (A B : sterm)
+| sLambda (nx : name) (A B t : sterm)
+| sApp (u : sterm) (nx : name) (A B v : sterm)
+| sEq (A u v : sterm)
+| sRefl (A u : sterm)
+| (* ... *) .
+\end{coq}
+
+The files \rpath{ITyping.v} and \rpath{XTyping.v} define respectively the
+typing judgments for ITT and ETT, using mutual inductive types.
+Then, most of the files are focused on the meta-theory of ITT and can be ignored
+by readers who don't need to see yet another proof of subject reduction.
+
+The most interesting files are obviously those where the fundamental lemma
+and the translation are formalised: \rpath{FundamentalLemma.v} and
+\rpath{Translation.v}.
+For instance, here is the main theorem, as stated in our formalisation:
+%
+\begin{coq}
+Theorem complete_translation Σ :
+  type_glob Σ ->
+  (forall Γ (h : XTyping.wf Σ Γ), ∑ Γ', Σ |--i Γ' # ⟦ Γ ⟧ ) *
+  (forall Γ t A (h : Σ ;;; Γ |-x t : A)
+   Γ' (hΓ : Σ |--i Γ' # ⟦ Γ ⟧),
+    ∑ A' t', Σ ;;;; Γ' |--- [t'] : A' # ⟦ Γ |--- [t] : A ⟧) *
+  (forall Γ u v A (h : Σ ;;; Γ |-x u = v : A)
+   Γ' (hΓ : Σ |--i Γ' # ⟦ Γ ⟧),
+    ∑ A' A'' u' v' p', eqtrans Σ Γ A u v Γ' A' A'' u' v' p').
+\end{coq}
+%
+Herein \coqe{type_glob Σ} refers to the fact that some global
+context is well-typed, its purpose is detailed in
+Section~\ref{sec:inductives}.
+The fact that the theorem holds in \Coq ensures we can actually
+compute a translated term and type out of a derivation in ETT.
+
+\subsection{Inductive Types and Recursion}
+\label{sec:inductives}
+
+In the proof of Section~\ref{sec:translation}, we didn't mention
+anything about inductive types, pattern-matching or recursion as it is
+a bit technical on paper.  In the formalisation, we offer a way to
+still be able to use them, and we will even show how it works in
+practice with the examples (Section\ref{sec:examples}).
+
+The main guiding principle is that inductive types and induction are orthogonal
+to the translation, they should more or less be translated to
+themselves.
+%
+To realise that easily, we just treat an inductive definition as a way
+to introduce new constants in the theory, one for the type, one for
+each constructor, one for its elimination principle, and one equality
+per computation rule.
+%
+For instance, the natural numbers can be represented by having the following
+constants in the context:
+%
+\[
+\begin{array}{l@{~}c@{~}l}
+  \nat &:& \Ty{0} \\
+  \zero &:& \nat \\
+  \natsucc &:& \nat \to \nat \\
+  \natrec &:& \forall P,\
+  P\ \zero \to (\forall m,\ P\ m \to P\ (\natsucc\ m)) \to
+  \forall n,\ P\ n \\
+  \natrec_\zero &:& \forall P\ P_z\ P_s,\ \natrec\ P\ P_z\ P_s\ \zero = P_z \\
+  \natrec_\natsucc &:& \forall P\ P_z\ P_s\ n,\\
+  &&\natrec\ P\ P_z\ P_s\ (\natsucc\ n) = P_s\ n\ (\natrec\ P\ P_z\ P_s\ n)
+\end{array}
+\]
+%
+Here we rely on the reflection rule to obtain the computational behaviour of the
+eliminator $\natrec$.
+
+This means for instance that we do not consider inductive types that would only
+make sense in ETT, but we deem this not to be a restriction and to the best of
+our knowledge isn't something that is usually considered in the literature.
+%
+With that in mind, our translation features a global context of typed constants
+with the restriction that the types of those constants should be well-formed
+in ITT. Those constants are thus used as black boxes inside ETT.
+
+With this we are able to recover what we were missing from
+\Coq, without having to deal with the trouble of proving that the translation
+doesn't break the guard condition of fixed points, and we are instead relying on
+a more type-based approach.
+
+\subsection{About Universes and Homotopy}
+\label{sec:sorts}
+
+The experienced reader might have noticed that our treatment of universes
+(except perhaps for the absence of cumulativity) was really superficial and the
+notion of sorts used is rather orthogonal to our main development.
+This is even more apparent in the formalisation. Indeed, we didn't fix a
+specific universe hierarchy, but instead specify what properties it should
+have, in what is reminiscent to a (functional\footnote{Meaning the sort of a
+sort, and the sort of a product are functions, necessary to the uniqueness of
+types~\eqref{lem:uniq}.}) PTS formulation.
+%
+\begin{coq}
+Class Sorts.notion := {
+  sort : Type ;
+  succ : sort -> sort ;
+  prod_sort : sort -> sort -> sort ;
+  sum_sort : sort -> sort -> sort ;
+  eq_sort : sort -> sort ;
+  eq_dec : forall s z : sort, {s = z} + {s <> z} ;
+  succ_inj : forall s z, succ s = succ z -> s = z
+}.
+\end{coq}
+%
+From the notion of sorts, we require functions to get the sort of a sort,
+the sort of a product from the sorts of its arguments, and (crucially) the sort
+of an identity type.
+We also require some measure of decidable equality and injectivity on those.
+
+This allows us to instantiate this by a lot of different notions including the
+one presented earlier in the paper or even its extension with a universe $\Prop$
+of propositions (like CIC~\cite{bertot2004interactive}). We present here two
+instances that have their own interest.
+
+\paragraph{$\Type$ in $\Type$.}
+One of the instances we provide is one with only one universe $\Type$, with the
+inconsistent typing rule $\Type : \Type$.
+Although inconsistent, this allows us to interface with \TemplateCoq, without
+the---for the time being---very time-consuming universe constraint checking.
+
+\paragraph{Homotopy Type System and Two-Level Type Theory.}
+Another interesting application (or rather instance) of our formalisation
+is a translation from Homotopy Type System (HTS)~\cite{hts-sota} to
+Two-Level Type Theory
+(2TT)~\cite{DBLP:journals/corr/AltenkirchCK16,DBLP:journals/corr/AnnenkovCK17}.
+
+HTS and 2TT arise from the incompatibility between UIP---recall it is provable
+in ETT---and univalence. The idea is to have two distinct notions of equality
+in the theory, a \emph{strict} one satisfying UIP, and a \emph{fibrant} one
+corresponding to the homotopy type theory equality, possibly satisfying
+univalence. This actually induces a separation in the types of the theory:
+some of them are called \emph{fibrant} and the fibrant or homotopic equality
+can only be eliminated on those.
+HTS can be seen as an extension of 2TT with reflection on the strict equality
+just like ETT is an extension of ITT.
+
+We can recover HTS and 2TT in our setting by taking $\F{i}$ and $\Un{i}$ as
+respectively the fibrant and strict universes of those theories
+(for $i \in \mathbb{N}$), along with the following PTS rules:
+%
+\[
+\begin{array}{l@{~}c@{~}l@{\qquad}l@{~}c@{~}l}
+  (\F{i}, \F{i+1}) &\in& \Ax &
+  (\Un{i}, \Un{i+1}) &\in& \Ax \\
+  (\F{i}, \F{j}, \F{\nmax{i}{j}}) &\in& \Rl &
+  (\F{i}, \Un{j}, \Un{\nmax{i}{j}}) &\in& \Rl \\
+  (\Un{i}, \F{j}, \Un{\nmax{i}{j}}) &\in& \Rl &
+  (\Un{i}, \Un{j}, \Un{\nmax{i}{j}}) &\in& \Rl \\
+\end{array}
+\]
+%
+and the fact that the sort of the (strict) identity type on $A : s$ is
+the \emph{strictified} version of $s$, \ie $\Un{i}$ for $s = \Un{i}$ or
+$s = \F{i}$.
+In order to have the fibrant equality, one simply needs to do as in
+Section~\ref{sec:inductives}.
+
+In short, the translation from HTS to 2TT is basically the same as the one
+from ETT to ITT we presented in this paper, and this fact is factorised through
+our formalisation.
+
+\subsection{ETT-flavoured \Coq: Examples}
+\label{sec:examples}
+
+In this section we demonstrate how our translation can bring extensionality to
+the world of \Coq in action. The examples can be found in
+\rpath{plugin\_demo.v}.
+
+\paragraph{First, a pedestrian approach.}
+%
+We would like to begin by showing how one can write an example step by step
+before we show how it can be instrumented and automated as a plugin.
+For this we use a self-contained example without any inductive
+types or recursion, illustrating a very simple case of reflection.
+The term we want to translate is our introductory example of transport:
+\[
+  \lambda\ A\ B\ e\ x.\ x : \Pi\ A\ B.\ A = B \to
+  A \to B
+\]
+which relies on the equality $e : A = B$ and reflection to convert $x
+: A$ to $x : B$.
+%
+Of course, this definition isn't accepted in \Coq because this
+conversion is not valid in ITT.
+%
+\begin{coq}
+Fail Definition pseudoid (A B : Type) (e : A = B) (x : A) : B := x.
+\end{coq}
+%
+However, we still want to be able to write it \emph{in some way}, in order to
+avoid manipulating de Bruijn indices directly.
+For this, we use a little trick by first defining a \Coq axiom to represent
+an ill-typed term:
+%
+\begin{coq}
+Axiom candidate : forall A B (t : A), B.
+\end{coq}
+%
+\coqe|candidate A B t| is a candidate \coqe|t| of type
+\coqe|A| to inhabit type \coqe|B|.
+We complete this by adding a notation that is reminiscent to
+\Agda's~\cite{norell2007towards} hole mechanism.
+%
+\begin{coq}
+Notation "'{!' t '!}'" := (candidate _ _ t).
+\end{coq}
+
+We can now write the ETT function within \Coq.
+%
+\begin{coq}
+Definition pseudoid (A B : Type) (e : A = B) (x : A) : B := {! x !}.
+\end{coq}
+%
+We can then quote the term and its type to \TemplateCoq thanks to the
+\coqe|Quote Definition| command provided by the plugin.
+%
+\begin{coq}
+Quote Definition pseudoid_term :=
+  ltac:(let t := eval compute in pseudoid in exact t).
+Quote Definition pseudoid_type :=
+  ltac:(let T := type of pseudoid in exact T).
+\end{coq}
+%
+The terms that we get are now \TemplateCoq terms, representing \Coq syntax.
+We need to put them in ETT, meaning adding the annotations, and also removing
+the \coqe|candidate| axiom.
+This is the purpose of the \coqe|fullquote| function that we provide
+in our formalisation.
+%
+\begin{coq}
+Definition pretm_pseudoid :=
+  Eval lazy in fullquote (2^18) Σ [] pseudoid_term empty empty nomap.
+Definition tm_pseudoid :=
+  Eval lazy in match pretm_pseudoid with
+              | Success t => t
+              | Error _ => sRel 0
+              end.
+
+Definition prety_pseudoid :=
+  Eval lazy in fullquote (2^18) Σ [] pseudoid_type empty empty nomap.
+Definition ty_pseudoid :=
+  Eval lazy in match prety_pseudoid with
+               | Success t => t
+               | Error _ => sRel 0
+               end.
+\end{coq}
+%
+\coqe|tm_pseudoid| and \coqe|ty_pseudoid| correspond
+respectively to the ETT representation of \coqe|pseudoid| and its
+type.
+We then produce, using our home-brewed Ltac type-checking tactic, the
+corresponding ETT typing derivation (notice the use of reflection to typecheck).
+%
+\begin{coq}
+Lemma type_pseudoid : Σi ;;; [] |-x tm_pseudoid : ty_pseudoid.
+Proof.
+  unfold tm_pseudoid, ty_pseudoid.
+  ettcheck. cbn.
+  eapply reflection with (e := sRel 1).
+  ettcheck.
+Defined.
+\end{coq}
+%
+We can then translate this derivation, obtain the translated term and then
+convert it to \TemplateCoq.
+%
+\begin{coq}
+Definition itt_pseudoid : sterm :=
+  Eval lazy in
+  let '(_ ; t ; _) :=
+    type_translation type_pseudoid istrans_nil
+  in t.
+
+Definition tc_pseudoid : tsl_result term :=
+  Eval lazy in
+  tsl_rec (2 ^ 18) Σ [] itt_pseudoid empty.
+\end{coq}
+%
+Once we have it, we \emph{unquote} the term to obtain a \Coq term
+(notice that the only use of reflection has been replaced by a transport).
+%
+\begin{coq}
+fun (A B : Type) (e : A = B) (x : A) => transport e x
+     : forall A B : Type, A = B -> A -> B
+\end{coq}
+
+\paragraph{Making a Plugin with \TemplateCoq.}
+%
+All of this work is pretty systematic. Fortunately for us,
+\TemplateCoq also features a monad to reify \Coq commands which we can
+use to \emph{program} the translation steps.
+As such we have written a complete procedure, relying on type checkers we
+wrote for ITT and ETT, which can generate equality obligations.
+
+Thanks to this, the user doesn't have to know about the details of
+implementation of the translation, and stay within the \Coq ecosystem.
 
 % For instance, our previous example now becomes:
 % %
