@@ -1083,7 +1083,7 @@ indices for variables (like in \TemplateCoq).
 Sorts are defined separately in \rpath{Sorts.v} and we will address them later
 in Section~\ref{sec:sorts}.
 
-\begin{coq}
+\begin{minted}{coq}
 Inductive sterm : Type :=
 | sRel (n : nat)
 | sSort (s : sort)
@@ -1093,7 +1093,7 @@ Inductive sterm : Type :=
 | sEq (A u v : sterm)
 | sRefl (A u : sterm)
 | (* ... *) .
-\end{coq}
+\end{minted}
 
 The files \rpath{ITyping.v} and \rpath{XTyping.v} define respectively the
 typing judgments for ITT and ETT, using mutual inductive types.
@@ -1105,7 +1105,7 @@ and the translation are formalised: \rpath{FundamentalLemma.v} and
 \rpath{Translation.v}.
 For instance, here is the main theorem, as stated in our formalisation:
 %
-\begin{coq}
+\begin{minted}{coq}
 Theorem complete_translation Σ :
   type_glob Σ ->
   (forall Γ (h : XTyping.wf Σ Γ), ∑ Γ', Σ |--i Γ' # ⟦ Γ ⟧ ) *
@@ -1115,9 +1115,9 @@ Theorem complete_translation Σ :
   (forall Γ u v A (h : Σ ;;; Γ |-x u = v : A)
    Γ' (hΓ : Σ |--i Γ' # ⟦ Γ ⟧),
     ∑ A' A'' u' v' p', eqtrans Σ Γ A u v Γ' A' A'' u' v' p').
-\end{coq}
+\end{minted}
 %
-Herein \coqe{type_glob Σ} refers to the fact that some global
+Herein \mintinline{coq}{type_glob Σ} refers to the fact that some global
 context is well-typed, its purpose is detailed in
 Section~\ref{sec:inductives}.
 The fact that the theorem holds in \Coq ensures we can actually
@@ -1186,7 +1186,7 @@ have, in what is reminiscent to a (functional\footnote{Meaning the sort of a
 sort, and the sort of a product are functions, necessary to the uniqueness of
 types~\eqref{lem:uniq}.}) PTS formulation.
 %
-\begin{coq}
+\begin{minted}{coq}
 Class Sorts.notion := {
   sort : Type ;
   succ : sort -> sort ;
@@ -1196,7 +1196,7 @@ Class Sorts.notion := {
   eq_dec : forall s z : sort, {s = z} + {s <> z} ;
   succ_inj : forall s z, succ s = succ z -> s = z
 }.
-\end{coq}
+\end{minted}
 %
 From the notion of sorts, we require functions to get the sort of a sort,
 the sort of a product from the sorts of its arguments, and (crucially) the sort
@@ -1279,51 +1279,51 @@ which relies on the equality $e : A = B$ and reflection to convert $x
 Of course, this definition isn't accepted in \Coq because this
 conversion is not valid in ITT.
 %
-\begin{coq}
+\begin{minted}{coq}
 Fail Definition pseudoid (A B : Type) (e : A = B) (x : A) : B := x.
-\end{coq}
+\end{minted}
 %
 However, we still want to be able to write it \emph{in some way}, in order to
 avoid manipulating de Bruijn indices directly.
 For this, we use a little trick by first defining a \Coq axiom to represent
 an ill-typed term:
 %
-\begin{coq}
+\begin{minted}{coq}
 Axiom candidate : forall A B (t : A), B.
-\end{coq}
+\end{minted}
 %
-\coqe|candidate A B t| is a candidate \coqe|t| of type
-\coqe|A| to inhabit type \coqe|B|.
+\mintinline{coq}|candidate A B t| is a candidate \mintinline{coq}|t| of type
+\mintinline{coq}|A| to inhabit type \mintinline{coq}|B|.
 We complete this by adding a notation that is reminiscent to
 \Agda's~\cite{norell2007towards} hole mechanism.
 %
-\begin{coq}
+\begin{minted}{coq}
 Notation "'{!' t '!}'" := (candidate _ _ t).
-\end{coq}
+\end{minted}
 
 We can now write the ETT function within \Coq.
 %
-\begin{coq}
+\begin{minted}{coq}
 Definition pseudoid (A B : Type) (e : A = B) (x : A) : B := {! x !}.
-\end{coq}
+\end{minted}
 %
 We can then quote the term and its type to \TemplateCoq thanks to the
-\coqe|Quote Definition| command provided by the plugin.
+\mintinline{coq}|Quote Definition| command provided by the plugin.
 %
-\begin{coq}
+\begin{minted}{coq}
 Quote Definition pseudoid_term :=
   ltac:(let t := eval compute in pseudoid in exact t).
 Quote Definition pseudoid_type :=
   ltac:(let T := type of pseudoid in exact T).
-\end{coq}
+\end{minted}
 %
 The terms that we get are now \TemplateCoq terms, representing \Coq syntax.
 We need to put them in ETT, meaning adding the annotations, and also removing
-the \coqe|candidate| axiom.
-This is the purpose of the \coqe|fullquote| function that we provide
+the \mintinline{coq}|candidate| axiom.
+This is the purpose of the \mintinline{coq}|fullquote| function that we provide
 in our formalisation.
 %
-\begin{coq}
+\begin{minted}{coq}
 Definition pretm_pseudoid :=
   Eval lazy in fullquote (2^18) Σ [] pseudoid_term empty empty nomap.
 Definition tm_pseudoid :=
@@ -1339,15 +1339,15 @@ Definition ty_pseudoid :=
                | Success t => t
                | Error _ => sRel 0
                end.
-\end{coq}
+\end{minted}
 %
-\coqe|tm_pseudoid| and \coqe|ty_pseudoid| correspond
-respectively to the ETT representation of \coqe|pseudoid| and its
+\mintinline{coq}|tm_pseudoid| and \mintinline{coq}|ty_pseudoid| correspond
+respectively to the ETT representation of \mintinline{coq}|pseudoid| and its
 type.
 We then produce, using our home-brewed Ltac type-checking tactic, the
 corresponding ETT typing derivation (notice the use of reflection to typecheck).
 %
-\begin{coq}
+\begin{minted}{coq}
 Lemma type_pseudoid : Σi ;;; [] |-x tm_pseudoid : ty_pseudoid.
 Proof.
   unfold tm_pseudoid, ty_pseudoid.
@@ -1355,12 +1355,12 @@ Proof.
   eapply reflection with (e := sRel 1).
   ettcheck.
 Defined.
-\end{coq}
+\end{minted}
 %
 We can then translate this derivation, obtain the translated term and then
 convert it to \TemplateCoq.
 %
-\begin{coq}
+\begin{minted}{coq}
 Definition itt_pseudoid : sterm :=
   Eval lazy in
   let '(_ ; t ; _) :=
@@ -1370,15 +1370,15 @@ Definition itt_pseudoid : sterm :=
 Definition tc_pseudoid : tsl_result term :=
   Eval lazy in
   tsl_rec (2 ^ 18) Σ [] itt_pseudoid empty.
-\end{coq}
+\end{minted}
 %
 Once we have it, we \emph{unquote} the term to obtain a \Coq term
 (notice that the only use of reflection has been replaced by a transport).
 %
-\begin{coq}
+\begin{minted}{coq}
 fun (A B : Type) (e : A = B) (x : A) => transport e x
      : forall A B : Type, A = B -> A -> B
-\end{coq}
+\end{minted}
 
 \paragraph{Making a Plugin with \TemplateCoq.}
 %
@@ -1391,56 +1391,56 @@ wrote for ITT and ETT, which can generate equality obligations.
 Thanks to this, the user doesn't have to know about the details of
 implementation of the translation, and stay within the \Coq ecosystem.
 
-% For instance, our previous example now becomes:
-% %
-% \begin{coq}
-% Definition pseudoid (A B : Type) (e : A = B) (x : A) : B := {! x !}.
+For instance, our previous example now becomes:
+%
+\begin{minted}{coq}
+Definition pseudoid (A B : Type) (e : A = B) (x : A) : B := {! x !}.
 
-% Run TemplateProgram (Translate ε "pseudoid").
-% \end{coq}
-% %
-% This produces a \Coq term \coqe{pseudoid'} corresponding to the
-% translation (\coqe|ε| is the empty translation
-% context, see the next example to understand the need for a
-% translation context).
-% Notice how the user doesn't even have to provide any proof of equality or
-% derivations of any sort. The derivation part is handled by our own typechecker
-% while the obligation part is solved automatically by the \Coq obligation mechanism.
+Run TemplateProgram (Translate ε "pseudoid").
+\end{minted}
+%
+This produces a \Coq term \mintinline{coq}{pseudoid'} corresponding to the
+translation (\mintinline{coq}{ε} is the empty translation
+context, see the next example to understand the need for a
+translation context).
+Notice how the user doesn't even have to provide any proof of equality or
+derivations of any sort. The derivation part is handled by our own typechecker
+while the obligation part is solved automatically by the \Coq obligation mechanism.
 
-% \paragraph{About inductive types.}
-% %
-% As we promised, our translation is able to handle inductive types.
-% For this consider the inductive type of vectors (or length-indexed lists) below,
-% together with a simple definition (we will remain in ITT for simplicity).
-% %
-% \begin{coq}
-% Inductive vec A : nat -> Type :=
-% | vnil : vec A 0
-% | vcons : A -> forall n, vec A n -> vec A (S n).
+\paragraph{About inductive types.}
+%
+As we promised, our translation is able to handle inductive types.
+For this consider the inductive type of vectors (or length-indexed lists) below,
+together with a simple definition (we will remain in ITT for simplicity).
+%
+\begin{minted}{coq}
+Inductive vec A : nat -> Type :=
+| vnil : vec A 0
+| vcons : A -> forall n, vec A n -> vec A (S n).
 
-% Arguments vnil {_}.
-% Arguments vcons {_} _ _ _.
+Arguments vnil {_}.
+Arguments vcons {_} _ _ _.
 
-% Definition vv := vcons 1 _ vnil.
-% \end{coq}
-% %
-% This time, in order to apply the translation we need to extend the translation
-% context with \coqe|nat| and \coqe|vec|.
-% %
-% \begin{coq}
-% Run TemplateProgram (
-%     Θ <- TranslateConstant ε "nat" ;;
-%     Θ <- TranslateConstant Θ "vec" ;;
-%     Translate Θ "vv"
-% ).
-% \end{coq}
-% %
-% The command \coqe|TranslateConstant| enriches the current
-% translation context with the types of the inductive type and of its
-% constructors. The translation context then also contains associative
-% tables between our own representation of constants and those of \Coq.
-% Unsurprisingly, the translated \Coq term is the same as the original
-% term.
+Definition vv := vcons 1 _ vnil.
+\end{minted}
+%
+This time, in order to apply the translation we need to extend the translation
+context with \mintinline{coq}|nat| and \mintinline{coq}|vec|.
+%
+\begin{minted}{coq}
+Run TemplateProgram (
+    Θ <- TranslateConstant ε "nat" ;;
+    Θ <- TranslateConstant Θ "vec" ;;
+    Translate Θ "vv"
+).
+\end{minted}
+%
+The command \mintinline{coq}|TranslateConstant| enriches the current
+translation context with the types of the inductive type and of its
+constructors. The translation context then also contains associative
+tables between our own representation of constants and those of \Coq.
+Unsurprisingly, the translated \Coq term is the same as the original
+term.
 
 % \paragraph{Reversal of vectors.}
 % %
@@ -1448,22 +1448,22 @@ implementation of the translation, and stay within the \Coq ecosystem.
 % Indeed, implementing this operation the same way it can
 % be done on lists ends up in the following conversion problem:
 % %
-% \begin{coq}
+% \begin{minted}{coq}
 % Fail Definition vrev {A n m} (v : vec A n) (acc : vec A m)
 % : vec A (n + m) :=
 %   vec_rect A (fun n _ => forall m, vec A m -> vec A (n + m))
 %            (fun m acc => acc)
 %            (fun a n _ rv m acc => rv _ (vcons a m acc))
 %            n v m acc.
-% \end{coq}
+% \end{minted}
 % %
-% The recursive call returns a vector of length \coqe|n + S m|
-% where the context expects one of length \coqe|S n + m|. In ITT, these
+% The recursive call returns a vector of length \mintinline{coq}|n + S m|
+% where the context expects one of length \mintinline{coq}|S n + m|. In ITT, these
 % types are not convertible. This example is thus a perfect fit for ETT where we
 % can use the fact that these two expressions always compute to the same thing
 % when instantiated with concrete numbers.
 % %
-% \begin{coq}
+% \begin{minted}{coq}
 % Definition vrev {A n m} (v : vec A n) (acc : vec A m)
 % : vec A (n + m) :=
 %   vec_rect A (fun n _ => forall m, vec A m -> vec A (n + m))
@@ -1478,17 +1478,17 @@ implementation of the translation, and stay within the \Coq ecosystem.
 %     Θ <- TranslateConstant Θ "vec_rect" ;;
 %     Translate Θ "vrev"
 % ).
-% \end{coq}
+% \end{minted}
 % %
 % This generates four obligations that are all solved automatically. One of
-% them contains a proof of \coqe|S n + m = n + S m| while the remaining
+% them contains a proof of \mintinline{coq}|S n + m = n + S m| while the remaining
 % three correspond to the computation rules of addition (as mentioned before,
-% \coqe|add| is simply a constant and does not compute in our
+% \mintinline{coq}|add| is simply a constant and does not compute in our
 % representation, hence the need for equalities).
 % %
 % The returned term is the following, with only one transport remaining
 % (remember our interpretation map removes unnecessary transports).
-% \begin{coq}
+% \begin{minted}{coq}
 % fun (A : Type) (n m : nat) (v : vec A n) (acc : vec A m) =>
 % vec_rect A
 %   (fun n _ => forall m, vec A m -> vec A (n + m))
@@ -1497,7 +1497,7 @@ implementation of the translation, and stay within the \Coq ecosystem.
 %     transport (vrev_obligation_3 A n m v acc a n₀ v₀ rv m₀ acc₀)
 %       (rv (S m₀) (vcons a m₀ acc₀))) n v m acc
 % : forall A n m, vec A n -> vec A m -> vec A (n + m)
-% \end{coq}
+% \end{minted}
 
 % \subsection{Towards an Interfacing between \Andromeda and \Coq}
 
@@ -1598,7 +1598,7 @@ implementation of the translation, and stay within the \Coq ecosystem.
 % but only to witness UIP and function extensionality in the translation to
 % \Coq.
 % The translation only relies on one axiom, called
-% \coqe|conv_trans_AXIOM| in the formalisation, stating that conversion
+% \mintinline{coq}|conv_trans_AXIOM| in the formalisation, stating that conversion
 % of ITT is transitive.
 % %
 % The proof of this property basically sums up to the confluence of the
@@ -1606,14 +1606,14 @@ implementation of the translation, and stay within the \Coq ecosystem.
 % recently been formalised in Agda~\cite{Abel:2017:DCT:3177123.3158111} (in a
 % simpler setting with only one universe).
 % Regardless, this axiom inhabits a proposition (the type of conversion is in
-% \coqe|Prop|) and is thus irrelevant for computation. Actually no
+% \mintinline{coq}|Prop|) and is thus irrelevant for computation. Actually no
 % information about the derivation leaks to the production of the ITT term.
 
-% On a different note, the \coqe|candidate| axiom allows us to derive
-% \coqe|False| but is merely used to write ill-typed terms in \Coq.
+% On a different note, the \mintinline{coq}|candidate| axiom allows us to derive
+% \mintinline{coq}|False| but is merely used to write ill-typed terms in \Coq.
 % The translated term will never make us of it and one can always check if a
 % term is relying on unsafe assumptions thanks to the
-% \coqe|Print Assumptions| command.
+% \mintinline{coq}|Print Assumptions| command.
 
 % \section{Related Works and Conclusion}
 % \label{sec:related-works}

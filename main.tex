@@ -3,14 +3,15 @@
 % \documentclass{tufte-book}
 \documentclass[draft]{report}
 
-% \usepackage{fontspec}
-% \setmainfont[Ligatures=TeX]{Georgia}
+\usepackage{fontspec}
+\setmainfont[Ligatures=TeX]{Noto Serif}
 % \setsansfont[Ligatures=TeX]{Arial}
 
 \usepackage{amsmath}
 \usepackage{amssymb, amsfonts, stmaryrd}
 \usepackage{mathrsfs}
 \usepackage{amsthm}
+\usepackage{mathtools}
 
 \newtheorem{theorem}[chapter]{Theorem}
 \newtheorem{corollary}[chapter]{Corollary}
@@ -20,44 +21,15 @@
 
 \usepackage{xcolor}
 
-% Coq related packages and definitions.
-\usepackage{abbrevs}
-\usepackage{qsymbols}
+\usepackage{mathpartir}
+
+% Necessary?
 \usepackage{xspace}
-%\usepackage[OT1]{fontenc}
-\usepackage{textcomp}
-\usepackage[T1]{fontenc} %
-\usepackage[utf8x]{inputenc}
-\usepackage{newunicodechar}
-
-\newunicodechar{é}{\'{e}}
-\newunicodechar{λ}{\textlambda}
-\newunicodechar{φ}{\ensuremath{\phi}}
-\newunicodechar{∑}{\ensuremath{\sum}}
-% \newunicodechar{Σ}{\textSigma}
-
-\usepackage{utfmacros}
-\usepackage[color]{coqdoc}
-\usepackage{coq}
-\usepackage[all]{xy}
-\usepackage{amsmath}
-\usepackage{amsthm}
-\usepackage{listings}
-\usepackage{mdframed}
-\usepackage{centernot}
-\usepackage{mathtools}
-\usepackage{multirow}
-\usepackage{xparse}
-\usepackage{mathpartir}  % for \mathpar
-
-\definecolor{darkblue}{rgb}{0.0, 0.0, 0.55}
-\definecolor{darkgreen}{rgb}{0.0, 0.55, 0.13}
-\definecolor{darkred}{rgb}{0.55, 0.0, 0.0}
-\definecolor{darkviolet}{rgb}{0.58, 0.0, 0.83}
-\definecolor{lightblue}{rgb}{0.68, 0.85, 0.9}
-\usepackage{lstcoq}
 
 \usepackage{hyperref}
+
+% For coq higlighting
+\usepackage{minted}
 
 \include{macros}
 
