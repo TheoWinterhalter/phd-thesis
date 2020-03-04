@@ -1,11 +1,64 @@
 % !TEX program = xelatex
 
 % \documentclass{tufte-book}
-\documentclass{report}
+\documentclass[draft]{report}
 
 % \usepackage{fontspec}
 % \setmainfont[Ligatures=TeX]{Georgia}
 % \setsansfont[Ligatures=TeX]{Arial}
+
+\usepackage{amsmath}
+\usepackage{amssymb, amsfonts, stmaryrd}
+\usepackage{mathrsfs}
+\usepackage{amsthm}
+
+\newtheorem{theorem}[chapter]{Theorem}
+\newtheorem{corollary}[chapter]{Corollary}
+\newtheorem{lemma}[chapter]{Lemma}
+\newtheorem{definition}[chapter]{Definition}
+\newtheorem{note}[chapter]{Note}
+
+\usepackage{xcolor}
+
+% Coq related packages and definitions.
+\usepackage{abbrevs}
+\usepackage{qsymbols}
+\usepackage{xspace}
+%\usepackage[OT1]{fontenc}
+\usepackage{textcomp}
+\usepackage[utf8]{inputenc}
+\usepackage{newunicodechar}
+
+\newunicodechar{é}{\'{e}}
+\newunicodechar{λ}{\textlambda}
+\newunicodechar{φ}{\ensuremath{\phi}}
+\newunicodechar{∑}{\ensuremath{\sum}}
+\newunicodechar{Σ}{\textSigma}
+
+\usepackage{utfmacros}
+\usepackage[color]{coqdoc}
+\usepackage{coq}
+\usepackage[all]{xy}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{listings}
+\usepackage{mdframed}
+\usepackage{centernot}
+\usepackage{mathtools}
+\usepackage{multirow}
+\usepackage{xparse}
+\usepackage{mathpartir}  % for \mathpar
+
+\definecolor{darkblue}{rgb}{0.0, 0.0, 0.55}
+\definecolor{darkgreen}{rgb}{0.0, 0.55, 0.13}
+\definecolor{darkred}{rgb}{0.55, 0.0, 0.0}
+\definecolor{darkviolet}{rgb}{0.58, 0.0, 0.83}
+\definecolor{lightblue}{rgb}{0.68, 0.85, 0.9}
+\usepackage{lstcoq}
+
+\usepackage{hyperref}
+
+\include{macros}
 
 \title{Formalisation and Meta-Theory of Type Theory}
 
@@ -47,5 +100,10 @@ However, this would not allow me to really talk about the ``plugin''.
 \paragraph{Outline}
 
 ???
+
+% \include{ett-to-itt}
+
+\bibliographystyle{plain}
+\bibliography{ref}
 
 \end{document}

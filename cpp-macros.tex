@@ -1,0 +1,195 @@
+%%% General
+
+\newcommand{\inv}{^{-1}}
+
+\newcommand{\eg}{e.g.\ }
+\newcommand{\ie}{\emph{i.e.,}\xspace}
+
+\newcommand{\paradot}[1]{\paragraph{#1.}}
+
+\newcommand{\exmark}{\ensuremath{\mathsf{x}}}
+
+%% Proof by cases
+\newenvironment{caselist}{%
+  \begin{list}{{\it Case}}{}%
+}{\end{list}%
+}
+\newenvironment{subcaselist}{%
+  \begin{list}{{\it Subcase}}{}%
+}{\end{list}%
+}
+\newenvironment{subsubcaselist}{%
+  \begin{list}{{\it Subsubcase}}{}%
+}{\end{list}%
+}
+
+\newcommand{\nextcase}{\item~}
+
+%%% Type theory
+
+% Meta
+\newcommand{\Ax}{\mathsf{Ax}}
+\newcommand{\Rl}{\mathsf{R}}
+
+% Generic entities
+\newcommand{\Ga}{\Gamma}   % a context
+\newcommand{\D}{\Delta}   % another context
+\newcommand{\E}{\Xi}      % another context
+\newcommand{\sbs}{\sigma} % a substitution
+\newcommand{\sbt}{\theta} % another substitution
+\newcommand{\sbr}{\rho}   % a third substitution
+
+%% Syntax
+\newcommand{\bnf}{\ \mathrel{{:}{:}{=}}\ }
+\newcommand{\bnfor}{\ \mid\ \ }
+
+%% Contexts
+\newcommand{\ctxempty}{\bullet} % empty context
+% \newcommand{\ctxextend}[2]{#1, #2} % extended context
+
+%\newcommand{\ctxdom}[1]{\mathsf{dom}(#1)} % the domain of a context
+
+%% Substitution
+
+\newcommand{\sto}{\mathop{\leftarrow}}
+
+%% Marker
+\newcommand{\st}[1]{#1^{\mathsf{s}}}
+\newcommand{\fm}[1]{#1^{\mathsf{f}}}
+
+
+% Type formers
+\newcommand{\Prod}[1]{\mathop{\Pi(#1).\ }}                 % dependent product
+\newcommand{\Sum}[1]{\mathop{\Sigma(#1).}}               % dependent sum
+\newcommand{\Eq}[3]{#2 =_{#1} #3}                        % fibrant equality
+\newcommand{\Eqs}[3]{#2 \overset{\mathsf{s}}{=}_{#1} #3} % strict equality
+\newcommand{\Ty}[1]{\square_{#1}}
+\newcommand{\Un}[1]{\mathsf{U}_{#1}}                      % strict universe
+\newcommand{\F}[1]{\mathsf{F}_{#1}}                      % fibrant universe
+\newcommand{\Type}{\mathsf{Type}}
+% \newcommand{\Prop}{\mathsf{Prop}}
+\newcommand{\nat}{\mathsf{nat}}
+% \newcommand{\zero}{\mathsf{zero}}
+\newcommand{\zero}{0}
+% \newcommand{\natsucc}{\mathsf{succ}}
+\newcommand{\natsucc}{\mathbf{S}}
+\newcommand{\natrec}{\mathsf{natrec}}
+\newcommand{\bool}{\mathsf{bool}}
+
+% Inductive types
+\newcommand{\Ical}{\mathcal{I}}
+\newcommand{\at}[1]{\{#1\}}
+
+% Terms
+\newcommand{\lam}[2]{\lambda (#1). #2 .}                        % abstraction
+\newcommand{\aapp}[4]{#1\mathbin{@_{#2.#3}} #4}                  % application
+\newcommand{\pair}[4]{\langle #3 ; #4 \rangle_{#1.#2}}          % pair
+\newcommand{\pio}[3]{\pi_1^{#1.#2}\ #3}                         % first proj
+\newcommand{\pit}[3]{\pi_2^{#1.#2}\ #3}                         % second proj
+\newcommand{\idpath}[1]{{\mathsf{idpath}_{#1}}\ }               % identity path
+\newcommand{\refl}[1]{{\mathsf{refl}}_{#1}\ }                   % reflexivity
+\newcommand{\funexts}[5]
+  {\st{\mathsf{funext}}(#1,#2,#3,#4,#5)}                        % strict funext
+\newcommand{\funext}[5]
+  {\mathsf{funext}(#1,#2,#3,#4,#5)}                             % fibrant funext
+\newcommand{\uip}[5]{\mathsf{uip}(#1,#2,#3,#4,#5)}              % uip
+\newcommand{\J}[6]{\mathsf{J}(#1,#2,#3,#4,#5,#6)}               % the J elim
+\newcommand{\Js}[6]{\mathsf{J}^{\mathsf{s}}(#1,#2,#3,#4,#5,#6)} % the J elim
+
+% Pattern-matching
+\newcommand{\matchs}{\mathsf{match}}
+\newcommand{\patt}[2]{\mid #1 \Longrightarrow #2}
+\newcommand{\match}[3]{%
+  \begin{array}{l}%
+    \matchs\ #1 \\ \mathsf{return}\ #2\ \mathsf{with} \\ #3 \\ \mathsf{end}%
+  \end{array}%
+}
+
+% Vectors
+\newcommand{\av}{\vec{a}}
+\newcommand{\bv}{\vec{b}}
+\newcommand{\iv}{\vec{i}}
+\newcommand{\pv}{\vec{p}}
+\newcommand{\sv}{\vec{s}}
+\newcommand{\Av}{\vec{A}}
+\newcommand{\Iv}{\vec{I}}
+\newcommand{\Nv}{\vec{N}}
+\newcommand{\Pv}{\vec{P}}
+\newcommand{\Vv}{\vec{V}}
+\newcommand{\Xv}{\vec{X}}
+\newcommand{\Yv}{\vec{Y}}
+
+% Judgments
+\newcommand{\isctx}[1]{\vdash #1}          % well formed context
+\newcommand{\istype}[2]{#1 \vdash #2}      % well formed type
+\newcommand{\isterm}[3]{#1 \vdash #2 : #3} % well formed term
+
+\newcommand{\eqtype}[3]{#1 \vdash #2 \equiv #3}      % equal types
+\newcommand{\eqterm}[4]{#1 \vdash #2 \equiv #3 : #4} % equal terms
+
+\newcommand{\isjg}[2]{#1 \vdash \mathcal{#2}} % arbitrary judgment
+
+% Ext. judgments
+\newcommand{\xisctx}[1]{\vdash_{\exmark} #1}          % well formed context
+\newcommand{\xistype}[2]{#1 \vdash_{\exmark} #2}      % well formed type
+\newcommand{\xisterm}[3]{#1 \vdash_{\exmark} #2 : #3} % well formed term
+
+\newcommand{\xeqtype}[3]{#1 \vdash_{\exmark} #2 \equiv #3}      % equal types
+\newcommand{\xeqterm}[4]{#1 \vdash_{\exmark} #2 \equiv #3 : #4} % equal terms
+
+% Translation
+\newcommand{\trans}[1]{\llbracket #1 \rrbracket}
+\newcommand{\So}{\mathsf{S}}
+\newcommand{\HTS}{\mathsf{HTS}}
+\newcommand{\Gb}{\overline{\Ga}}
+\newcommand{\Db}{\overline{\D}}
+\newcommand{\Ab}{\overline{A}}
+\newcommand{\Bb}{\overline{B}}
+\newcommand{\Tb}{\overline{T}}
+\newcommand{\Pb}{\overline{P}}
+\newcommand{\eb}{\overline{e}}
+\newcommand{\jg}{\mathcal{J}}
+\newcommand{\jgb}{\overline{\jg}}
+\newcommand{\ub}{\overline{u}}
+\newcommand{\vb}{\overline{v}}
+\newcommand{\wb}{\overline{w}}
+\newcommand{\pb}{\overline{p}}
+\newcommand{\tb}{\overline{t}}
+\newcommand{\fb}{\overline{f}}
+\newcommand{\gb}{\overline{g}}
+
+\newcommand{\transpo}[1]{#1_*}
+\newcommand{\otransport}[4]{\mathsf{transport}'_{#1,#2}(#3,#4)}
+
+\newcommand{\transitivity}[2]{\mathsf{transitivity}(#1,#2)}
+\newcommand{\otransitivity}[2]{\mathsf{transitivity}'(#1,#2)}
+
+% Operations
+\newcommand{\nmax}[2]{\mathsf{max}(#1,#2)}
+
+% Notations
+\newcommand{\Heqs}{\cong}
+\newcommand{\Heq}[4]{#2 \mathrel{{}_{#1}{\Heqs}_{#3}} #4}
+\newcommand{\ir}{\sqsubset}
+\newcommand{\Pack}[2]{\mathsf{Pack}\ #1\ #2}
+% \newcommand{\ProjO}[3]{\mathsf{Proj}_1\ #1\ #2\ #3}
+% \newcommand{\ProjT}[3]{\mathsf{Proj}_2\ #1\ #2\ #3}
+% \newcommand{\ProjE}[3]{\mathsf{Proj}_e\ #1\ #2\ #3}
+\newcommand{\ProjO}[1]{\mathsf{Proj}_1\ #1}
+\newcommand{\ProjT}[1]{\mathsf{Proj}_2\ #1}
+\newcommand{\ProjE}[1]{\mathsf{Proj}_\mathsf{e}\ #1}
+\newcommand{\llift}[3]{#3 {[#1_1]}^{#2}}
+\newcommand{\rlift}[3]{#3 {[#1_2]}^{#2}}
+% \newcommand{\lo}[1]{\llift{}{}{#1}}
+% \newcommand{\ro}[1]{\rlift{}{}{#1}}
+\newcommand{\lo}[1]{#1 \upharpoonleft}
+\newcommand{\ro}[1]{#1 \upharpoonright}
+\newcommand{\Gp}{\Ga_\mathsf{p}}
+
+
+% Links to the repository
+
+% For anonymity we should remove the links
+\newcommand{\repoURL}{https://github.com/TheoWinterhalter/ett-to-itt/blob/master/theories/}
+\newcommand{\rpath}[1]{\href{{\repoURL #1}}{#1}}
+% \newcommand{\rpath}[1]{\path{#1}}

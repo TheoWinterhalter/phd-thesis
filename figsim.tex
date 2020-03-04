@@ -1,0 +1,137 @@
+\begin{figure}[htbp]
+  \flushleft
+  \hrulefill
+
+  \begin{mathpar}
+    \infer[]
+      { }
+      {x \sim x}
+    %
+
+    \infer[]
+      {t_1 \sim t_2}
+      {\transpo{p}\ t_1 \sim t_2}
+    %
+
+    \infer[]
+      {t_1 \sim t_2}
+      {t_1 \sim \transpo{p}\ t_2}
+    %
+
+    \infer[]
+      {A_1 \sim A_2 \\
+       B_1 \sim B_2
+      }
+      {\Prod{x:A_1} B_1 \sim \Prod{x:A_2} B_2}
+    %
+
+    \infer[]
+      {A_1 \sim A_2 \\
+       B_1 \sim B_2
+      }
+      {\Sum{x:A_1} B_1 \sim \Sum{x:A_2} B_2}
+    %
+
+    \infer[]
+      {A_1 \sim A_2 \\
+       u_1 \sim u_2 \\
+       v_1 \sim v_2
+      }
+      {\Eq{A_1}{u_1}{v_1} \sim \Eq{A_2}{u_2}{v_2}}
+    %
+
+    \infer[]
+      { }
+      {s \sim s}
+    %
+
+    \infer[]
+      {A_1 \sim A_2 \\
+       B_1 \sim B_2 \\
+       t_1 \sim t_2
+      }
+      {\lam{x:A_1}{B_1} t_1 \sim \lam{x:A_2}{B_2} t_2}
+    %
+
+    \infer[]
+      {t_1 \sim t_2 \\
+       A_1 \sim A_2 \\
+       B_1 \sim B_2 \\
+       u_1 \sim u_2
+      }
+      {\app{t_1}{x:A_1}{B_1}{u_1} \sim \app{t_2}{x:A_2}{B_2}{u_2}}
+    %
+
+    \infer[]
+      {A_1 \sim A_2 \\
+       B_1 \sim B_2 \\
+       t_1 \sim t_2 \\
+       u_1 \sim u_2
+      }
+      {\pair{x:A_1}{B_1}{t_1}{u_1} \sim \pair{x:A_2}{B_2}{t_2}{u_2}}
+    %
+
+    \infer[]
+      {A_1 \sim A_2 \\
+       B_1 \sim B_2 \\
+       p_1 \sim p_2
+      }
+      {\pio{x:A_1}{B_1}{p_1} \sim \pio{x:A_2}{B_1}{p_2}}
+    %
+
+    \infer[]
+      {A_1 \sim A_2 \\
+       B_1 \sim B_2 \\
+       p_1 \sim p_2
+      }
+      {\pit{x:A_1}{B_1}{p_1} \sim \pit{x:A_2}{B_2}{p_2}}
+    %
+
+    \infer[]
+      {A_1 \sim A_2 \\
+       u_1 \sim u_2
+      }
+      {\refl{A_1} u_1 \sim \refl{A_2} u_2}
+    %
+
+    \infer[]
+      {A_1 \sim A_2 \\
+       B_1 \sim B_2 \\
+       f_1 \sim f_2 \\
+       g_1 \sim g_2 \\
+       e_1 \sim e_2
+      }
+      {\funext{x:A_1}{B_1}{f_1}{g_1}{e_1}
+       \sim \funext{x:A_2}{B_2}{f_2}{g_2}{e_2}
+      }
+    %
+
+    \infer[]
+      {A_1 \sim A_2 \\
+       u_1 \sim u_2 \\
+       v_1 \sim v_2 \\
+       p_1 \sim p_2 \\
+       q_1 \sim q_2
+      }
+      {\uip{A_1}{u_1}{v_1}{p_1}{q_1} \sim \uip{A_2}{u_2}{v_2}{p_2}{q_2}}
+    %
+
+    \infer[]
+      {A_1 \sim A_2 \\
+       u_1 \sim u_2 \\
+       P_1 \sim P_2 \\
+       w_1 \sim w_2 \\
+       v_1 \sim v_2 \\
+       p_1 \sim p_2
+      }
+      {\J{A_1}{u_1}{x.e.P_1}{w_1}{v_1}{p_1} \sim
+       \J{A_2}{u_2}{x.e.P_2}{w_2}{v_2}{p_2}
+      }
+    %
+  \end{mathpar}
+
+  \hrulefill
+  \vspace{-2ex}
+  \caption{Relation $\sim$}
+  \label{fig:sim-def}
+\end{figure}

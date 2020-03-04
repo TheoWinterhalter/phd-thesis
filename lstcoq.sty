@@ -1,0 +1,307 @@
+%=======================================================================
+% Définit le style ssr Gallina pour les listings (Assia Mahboubi 2007)
+\lstdefinelanguage{Coq}{ 
+%
+% Anything betweeen $ becomes LaTeX math mode
+mathescape=true,
+%
+% Comments may or not include Latex commands
+texcl=false, 
+%
+%
+% Vernacular commands
+morekeywords=[1]{
+Section, Module, End, Require, Import, Export,
+Variable, Variables, Parameter, Parameters, Axiom, Hypothesis, Hypotheses,
+Notation, Local, Tactic, Reserved, Scope, Open, Close, Bind, Delimit,
+Definition, Let, Ltac, Fixpoint, CoFixpoint, Morphism, Relation, Check,
+Implicit, Arguments, Unset, Contextual, Strict, Prenex, Implicits,
+Inductive, CoInductive, Record, Structure, Canonical, Coercion,
+Context, Class, Global, Instance, Program, Equations, Infix,
+Theorem, Conjecture, Lemma, Corollary, Proposition, Fact, Remark, Example,
+Proof, Goal, Save, Qed, Defined, Hint, Resolve, Rewrite, View,
+Search, Show, Print, Printing, All, Graph, Projections, inside, outside},
+%
+% Gallina
+morekeywords=[2]{forall, exists, exists2, fun, fix, cofix, struct,
+      match, with, end, as, in, return, let, if, is, then, else,
+      for, of, nosimpl, when},
+%
+% Sorts
+morekeywords=[3]{Type, Prop,SProp,HProp, HSet, Set, S, O, IConst,IPlus},
+%
+% Various tactics, some are std Coq subsumed by ssr, for the manual purpose
+morekeywords=[4]{
+         pose, set, move, case, elim, apply, clear, 
+            hnf, intro, intros, generalize, rename, pattern, after,
+destruct, induction, using, refine, inversion, injection,
+         rewrite, congr, unlock, compute, ring, field, fourier,
+            replace, fold, unfold, change, cutrewrite, simpl,
+         have, suff, wlog, suffices, without, loss, nat_norm,
+            assert, cut, trivial, revert, bool_congr, nat_congr,
+ symmetry, transitivity, auto, split, autorewrite},
+% symmetry, transitivity, auto, split, left, right, autorewrite},
+%
+% Terminators
+morekeywords=[5]{
+         by, done, exact, reflexivity, tauto, romega, omega,
+         assumption, solve, contradiction, discriminate},
+%
+% Control
+morekeywords=[6]{do, last, first, try, idtac, repeat},
+%
+% Various symbols
+% For the ssr manual we turn off the prettyprint of formulas
+% literate=
+% {->}{{$\rightarrow\,$}}2
+% {->}{{\tt ->}}3
+% {<-}{{$\leftarrow\,$}}2
+% {<-}{{\tt <-}}2
+% {>->}{{$\mapsto$}}3
+% {<=}{{$\leq$}}1
+% {>=}{{$\geq$}}1
+% {<>}{{$\neq$}}1
+% {/\\}{{$\wedge$}}2
+% {\\/}{{$\vee$}}2
+% {<->}{{$\leftrightarrow\;$}}3
+% {<=>}{{$\Leftrightarrow\;$}}3
+% {:nat}{{$~\in\mathbb{N}$}}3
+% {fforall\ }{{$\forall_f\,$}}1
+% {forall\ }{{$\forall\,$}}1
+% {exists\ }{{$\exists\,$}}1
+% {negb}{{$\neg$}}1
+% {spp}{{:*:\,}}1
+% {~}{{$\sim$}}1
+% {\\in}{{$\in\;$}}1
+% {/\\}{$\land\,$}1
+% {:*:}{{$*$}}2
+% {=>}{{$\,\Rightarrow\ $}}1
+% {=>}{{\tt =>}}2
+% {:=}{{{\tt:=}\,\,}}2
+% {==}{{$\equiv$}\,}2
+% {!=}{{$\neq$}\,}2
+% {^-1}{{$^{-1}$}}1
+% {elt'}{elt'}1
+% {=}{{\tt=}\,\,}2
+% {+}{{\tt+}\,\,}2,
+%
+% Comments delimiters, we do turn this off for the manual
+morecomment=[s]{(**}{**)},
+morecomment=[s]{(*}{*)},
+%
+% Spaces are not displayed as a special character
+showstringspaces=false,
+%
+% String delimiters
+morestring=[b]",
+morestring=[d],
+%
+% Size of tabulations
+tabsize=3,
+%
+% Enables ASCII chars 128 to 255
+extendedchars=false,
+%
+% Case sensitivity
+sensitive=true,
+%
+% Automatic breaking of long lines
+breaklines=true,
+%
+% Default style fors listings
+basicstyle=\normalsize,
+%
+% Position of captions is bottom
+captionpos=b,
+%
+% Full flexible columns
+columns=[l]fullflexible,
+keepspaces=true,
+%
+% Style for (listings') identifiers
+identifierstyle={\ttfamily\color{black}},
+% Note : highlighting of Coq identifiers is done through a new
+% delimiter definition through an lstset at the begining of the
+% document. Don't know how to do better.
+%
+% Style for declaration keywords
+keywordstyle=[1]{\ttfamily\color{darkviolet}},
+% Style for gallina keywords
+keywordstyle=[2]{\ttfamily\color{darkgreen}},
+% Style for sorts keywords
+keywordstyle=[3]{\ttfamily\color{darkblue}},
+% Style for tactics keywords
+keywordstyle=[4]{\ttfamily\color{darkblue}},
+% Style for terminators keywords
+keywordstyle=[5]{\ttfamily\color{darkred}},
+%Style for iterators
+%keywordstyle=[6]{\ttfamily\color{dkpink}},
+% Style for strings
+stringstyle=\ttfamily,
+% Style for comments
+commentstyle={\ttfamily\color{darkred} \normalsize},
+%
+%
+moredelim=**[is][\ttfamily\color{red}]{/&}{&/},
+%litterate
+literate=
+    {/\\}{{$\wedge$}}1
+    {<=}{{$\leq$}}1
+    {>=}{{$\geq$}}1
+    {`}{{`}}1
+    {\\equiv}{{$\leftrightarrow\,$}}3
+    {==>}{{$\Rightarrow$}}1 
+    {-->}{{{\color{blue}$\longrightarrow$}}}1
+    {b_to_c}{f$_{bc}$}1 
+    {c_to_b}{{f$_{cb}$}}1 
+    {c_to_a}{{f$_{ca}$}}1 
+    {prop_b}{{P$_{b}$}}1 
+    {prop_c}{{P$_{c}$}}1 
+    {is_equiv_b_to_c}{{is\_equiv$_{\text{f}_{bc}}$}}1
+    {prop_c_to_a}{{P$_{\text{f}_{ca}}$}}1 
+    {dp_a}{{dec$_{A}$}}1 
+    {dp_b}{{dec$_{B}$}}1
+    {dp_c}{{dec$_{C}$}}1
+    {hp_p}{{hpr$_{P}$}}1
+    {spl_to_idx}{{f$_{si}$}}1
+    {idx_to_spl}{{f$_{is}$}}1
+    {check_p}{{check$_P$}}1 
+    {=>}{{$\Rightarrow$}}1
+    {>->}{{$\rightarrowtail$}}2
+    {->}{{$\rightarrow\,$}}2
+    {LRA}{{$\leftrightarrow$}}1
+    {->>}{{{\color{purple}$\rightharpoonup\,$}}}2
+    {<-}{{$\leftarrow\,$}}2
+    {:>}{{$: >$}}2
+    {++}{{$\cup$}}1
+    {<==}{{$\subseteq$}}1
+    {|-}{{$\vdash$}}1
+    {forall}{{$\forall$}}1
+    {Gamma}{{$\Gamma$}}1
+    {Delta}{{$\Delta$}}1
+    {Gamma1}{{$\Gamma_1$}}1
+    {Gamma1'}{{$\Gamma^\prime_1$}}1
+    {Gamma'}{{$\Gamma^\prime$}}1
+    {Delta'}{{$\Delta^\prime$}}1
+    {s'}{{$\mathtt{s}^\prime$}}1
+    {Delta1}{{$\Delta_1$}}1
+    {Sigma}{{$\Sigma$}}1
+    {a0}{{$\mathtt{a}_0$}}1
+    {b0}{{$\mathtt{b}_0$}}1
+    {t0}{{$\mathtt{t}_0$}}1
+    {d0}{{$\mathtt{d}_0$}}1
+    {p0}{{$\mathtt{p}_0$}}1
+    {M0}{{$\mathtt{M}_0$}}1
+    {N0}{{$\mathtt{N}_0$}}1
+    {args0}{{$\mathtt{args}_0$}}1
+    {brs0}{{$\mathtt{brs}_0$}}1
+    {args1}{{$\mathtt{args}_1$}}1
+    {a1}{{$\mathtt{a}_1$}}1
+    {b1}{{$\mathtt{b}_1$}}1
+    {t1}{{$\mathtt{t}_1$}}1
+    {d1}{{$\mathtt{d}_1$}}1
+    {M1}{{$\mathtt{M}_1$}}1
+    {N1}{{$\mathtt{N}_1$}}1
+    {phi}{{$\varphi$}}1
+    {rho}{{$\rho$}}1
+    {exists}{{$\exists$}}1
+    {RED}{{$\rightsquigarrow$}}1
+    {PARARED}{{$\paraRed$}}1
+    {ERASE}{{$\mathcal{E}$}}1
+    {=o=}{{$\circeq$}}1
+    {\\fun}{{$\lambda$}}1
+    {|>}{{$\rhd$}}1
+    {\\oplus}{{$\oplus$}}1
+    {\\tab}{{\quad}}1
+    {\\_}{{ }}1
+    {||}{{$\parallel$}}1
+    {\\bool}{{$\mathbb{B}$}}1
+    {\\data}{{$\mathbb{T}$}}1
+    {\\times}{{$\times$}}1
+    {\\xorb}{{$\oplus$}}1
+    {\\andb}{{$\wedge$}}1
+    {nat}{{$\mathbb{N}$}}1
+    {bool}{{$\mathbb{B}$}}1
+    {^-1}{{$^{\mbox{-} 1}$}}1
+    {relS}{{$\preceq$}}1
+    {nnot}{{$\neg$}}1
+    {compk}{{$\circ_K$}}1
+    {compV}{{$\circ_V$}}1
+    {compH}{{$\circ_H$}}1
+    {assoc}{{$\alpha$}}1
+    {associated}{{$\mathtt{associated}$}}1
+    {_pp}{{$_\bot$}}1
+    {bot}{{$\bot$}}1
+    {SQ}{{$||$}}1
+    {projT1}{{$\pi_1$}}1
+    {projT2}{{$\pi_2$}}1
+    {simeq}{{$\simeq$}}1
+    {assocK}{{$\alpha$}}1
+    {psimeq}{{{\color{purple}$\simeq^?$}}}1
+    {psimeqk}{{{\color{purple}$\simeq^?_K$}}}1
+    {DI}{{\texttt{DepEquiv}}}1
+    {apK}{{$\mathtt{ap}_K$}}1
+    {natK}{{$\mathtt{nat}_K$}}1
+    {dpq}{{{\color{purple}$\approx$}}}1
+    {1}{{$\mathtt{1}$}}1
+    {_0}{{$_0$}}1
+    {_1}{{$_1$}}1
+    {_2}{{$_2$}}1
+    {_3}{{$_3$}}1
+    {_n}{{$_n$}}1
+    {_nat}{{$_{\mathbb{N}}$}}1
+    {_param}{{$\mathtt{\_param}$}}1
+    {_prop}{{$\mathtt{\_prop}$}}1
+    {_pow}{{$\mathtt{\_pow}$}}1
+    % {_list}{{$\mathtt{\_list}$$}}1
+    % {_l}{{$_l$}}1
+    {<~>}{{$\Eqr$}}1
+    {_(n-1)}{{$_{n \mathunderscore 1}$}}1
+    {_(n+1)}{{$_{n \myplus 1}$}}1
+    {NList}{{$\mathtt{List}_\mathbb{N}$}}1
+    {NVec}{{$\mathtt{Vec}_\mathbb{N}$}}1
+    {Expr_non_univ}{{\texttt{Expr}}}1
+    {I_non_univ}{{\texttt{I}}}1
+    {B_non_univ}{{\texttt{B}}}1
+    {Add_non_univ}{{\texttt{Add}}}1
+    {Mul_non_univ}{{\texttt{Mul}}}1
+    {Eq_non_univ}{{\texttt{Eq}}}1
+    {Expr_univ}{{$\mathtt{Expr}_{≃}$}}1
+    {I_univ}{{$\mathtt{I}_{≃}$}}1
+    {B_univ}{{$\mathtt{B}_{≃}$}}1
+    {Add_univ}{{$\mathtt{Add}_{≃}$}}1
+    {Mul_univ}{{$\mathtt{Mul}_{≃}$}}1
+    {Eq_univ}{{$\mathtt{Eq}_{≃}$}}1
+    {map_compose}{{\texttt{map\_compose}}}1
+    {eq_nat}{{\texttt{eq\_nat}}}1
+    {eq_nat_refl}{{\texttt{eq\_nat\_refl}}}1
+    {UR_list_nil}{{\texttt{UR\_list\_nil}}}1
+    {UR_list_cons}{{\texttt{UR\_list\_cons}}}1
+    {Equiv_N_nat}{{\texttt{Equiv\_N\_nat}}}1
+    {UR_nat_N}{{\texttt{UR\_nat\_N}}}1
+    {N.of_nat}{{\texttt{N.of\_nat}}}1
+    {N.to_nat}{{\texttt{N.to\_nat}}}1
+    {SimParam}{{$\approx_p$}}1
+    {conversion}{{$\equiv$}}1
+    {vass}{$:_a$}1
+    {vdef}{$:_d$}1
+    {_vass}{$_a$}1
+    {_vdef}{$_d$}1
+    % {_empty}{$_{[]}$}1
+    {Canonical_Univalent_Relation}{{\texttt{Canonical\_Univalent\_Relation}}}1
+    {;;}{;}1
+    {;;;}{;}1
+    {,,}{,}1
+    {,,,}{++}1
+%
+}[keywords,strings]
+
+\lstnewenvironment{coq}{\lstset{language=Coq,
+    basicstyle=\normalsize}}{}
+
+
+% pour inliner dans le texte
+\def\coqinline{\lstinline[language=Coq, basicstyle=\footnotesize]}
+% pour inliner dans les tableaux / displaymath...
+\def\coqinlines{\lstinline[language=Coq]}
+\def\coqe{\lstinline[language=Coq, basicstyle=\normalsize,escapechar=*]}
