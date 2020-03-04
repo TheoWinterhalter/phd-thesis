@@ -1442,925 +1442,909 @@ tables between our own representation of constants and those of \Coq.
 Unsurprisingly, the translated \Coq term is the same as the original
 term.
 
-% \paragraph{Reversal of vectors.}
-% %
-% Next, we tackle a motivating example: reversal on vectors.
-% Indeed, implementing this operation the same way it can
-% be done on lists ends up in the following conversion problem:
-% %
-% \begin{minted}{coq}
-% Fail Definition vrev {A n m} (v : vec A n) (acc : vec A m)
-% : vec A (n + m) :=
-%   vec_rect A (fun n _ => forall m, vec A m -> vec A (n + m))
-%            (fun m acc => acc)
-%            (fun a n _ rv m acc => rv _ (vcons a m acc))
-%            n v m acc.
-% \end{minted}
-% %
-% The recursive call returns a vector of length \mintinline{coq}|n + S m|
-% where the context expects one of length \mintinline{coq}|S n + m|. In ITT, these
-% types are not convertible. This example is thus a perfect fit for ETT where we
-% can use the fact that these two expressions always compute to the same thing
-% when instantiated with concrete numbers.
-% %
-% \begin{minted}{coq}
-% Definition vrev {A n m} (v : vec A n) (acc : vec A m)
-% : vec A (n + m) :=
-%   vec_rect A (fun n _ => forall m, vec A m -> vec A (n + m))
-%            (fun m acc => acc)
-%            (fun a n _ rv m acc => {! rv _ (vcons a m acc) !})
-%            n v m acc.
+\paragraph{Reversal of vectors.}
+%
+Next, we tackle a motivating example: reversal on vectors.
+Indeed, implementing this operation the same way it can
+be done on lists ends up in the following conversion problem:
+%
+\begin{minted}{coq}
+Fail Definition vrev {A n m} (v : vec A n) (acc : vec A m)
+: vec A (n + m) :=
+  vec_rect A (fun n _ => forall m, vec A m -> vec A (n + m))
+           (fun m acc => acc)
+           (fun a n _ rv m acc => rv _ (vcons a m acc))
+           n v m acc.
+\end{minted}
+%
+The recursive call returns a vector of length \mintinline{coq}|n + S m|
+where the context expects one of length \mintinline{coq}|S n + m|. In ITT, these
+types are not convertible. This example is thus a perfect fit for ETT where we
+can use the fact that these two expressions always compute to the same thing
+when instantiated with concrete numbers.
+%
+\begin{minted}{coq}
+Definition vrev {A n m} (v : vec A n) (acc : vec A m)
+: vec A (n + m) :=
+  vec_rect A (fun n _ => forall m, vec A m -> vec A (n + m))
+           (fun m acc => acc)
+           (fun a n _ rv m acc => {! rv _ (vcons a m acc) !})
+           n v m acc.
 
-% Run TemplateProgram (
-%     Θ <- TranslateConstant ε "nat" ;;
-%     Θ <- TranslateConstant Θ "vec" ;;
-%     Θ <- TranslateConstant Θ "Nat.add" ;;
-%     Θ <- TranslateConstant Θ "vec_rect" ;;
-%     Translate Θ "vrev"
-% ).
-% \end{minted}
-% %
-% This generates four obligations that are all solved automatically. One of
-% them contains a proof of \mintinline{coq}|S n + m = n + S m| while the remaining
-% three correspond to the computation rules of addition (as mentioned before,
-% \mintinline{coq}|add| is simply a constant and does not compute in our
-% representation, hence the need for equalities).
-% %
-% The returned term is the following, with only one transport remaining
-% (remember our interpretation map removes unnecessary transports).
-% \begin{minted}{coq}
-% fun (A : Type) (n m : nat) (v : vec A n) (acc : vec A m) =>
-% vec_rect A
-%   (fun n _ => forall m, vec A m -> vec A (n + m))
-%   (fun m acc => acc)
-%   (fun a n₀ v₀ rv m₀ acc₀ =>
-%     transport (vrev_obligation_3 A n m v acc a n₀ v₀ rv m₀ acc₀)
-%       (rv (S m₀) (vcons a m₀ acc₀))) n v m acc
-% : forall A n m, vec A n -> vec A m -> vec A (n + m)
-% \end{minted}
+Run TemplateProgram (
+    Θ <- TranslateConstant ε "nat" ;;
+    Θ <- TranslateConstant Θ "vec" ;;
+    Θ <- TranslateConstant Θ "Nat.add" ;;
+    Θ <- TranslateConstant Θ "vec_rect" ;;
+    Translate Θ "vrev"
+).
+\end{minted}
+%
+This generates four obligations that are all solved automatically. One of
+them contains a proof of \mintinline{coq}|S n + m = n + S m| while the remaining
+three correspond to the computation rules of addition (as mentioned before,
+\mintinline{coq}|add| is simply a constant and does not compute in our
+representation, hence the need for equalities).
+%
+The returned term is the following, with only one transport remaining
+(remember our interpretation map removes unnecessary transports).
+\begin{minted}{coq}
+fun (A : Type) (n m : nat) (v : vec A n) (acc : vec A m) =>
+vec_rect A
+  (fun n _ => forall m, vec A m -> vec A (n + m))
+  (fun m acc => acc)
+  (fun a n₀ v₀ rv m₀ acc₀ =>
+    transport (vrev_obligation_3 A n m v acc a n₀ v₀ rv m₀ acc₀)
+      (rv (S m₀) (vcons a m₀ acc₀))) n v m acc
+: forall A n m, vec A n -> vec A m -> vec A (n + m)
+\end{minted}
 
-% \subsection{Towards an Interfacing between \Andromeda and \Coq}
+\subsection{Towards an Interfacing between \Andromeda and \Coq}
 
-% \Andromeda~\cite{andromeda} is a proof assistant implementing ETT in a sense
-% that is really close to our formalisation. Aside from a concise nucleus with
-% a basic type theory, most things happen with the declaration of constants
-% with given types, including equalities to define the computational behaviour
-% of eliminators for instance.
-% This is essentially what we do in our formalisation.
-% Furthermore, their theory relies on $\Type : \Type$, meaning, our modular
-% handling of universes can accommodate for this as well.
+\Andromeda~\cite{andromeda} is a proof assistant implementing ETT in a sense
+that is really close to our formalisation. Aside from a concise nucleus with
+a basic type theory, most things happen with the declaration of constants
+with given types, including equalities to define the computational behaviour
+of eliminators for instance.
+This is essentially what we do in our formalisation.
+Furthermore, their theory relies on $\Type : \Type$, meaning, our modular
+handling of universes can accommodate for this as well.
 
-% All in all, it should be possible in the near future to use our translation
-% to produce \Coq terms out of \Andromeda developments.
-% %
-% Note that this would not suffer from the difficulties in generating typing
-% derivations since \Andromeda generates them.
+All in all, it should be possible in the near future to use our translation
+to produce \Coq terms out of \Andromeda developments.
+%
+Note that this would not suffer from the difficulties in generating typing
+derivations since \Andromeda generates them.
 
-% \subsection{Composition with other Translations}
+\subsection{Composition with other Translations}
 
-% This translation also enables the formalisation of translations that
-% target ETT rather than ITT and still get mechanised proofs of (relative)
-% consistency by composition with this ETT to ITT translation.  This could
-% also be used to implement plugins based on the composition of
-% translations. In particular, supposing we have a theory which forms a
-% subset of ETT and whose conversion is decidable. Using this translation,
-% we could formalise it as an embedded domain-specific type theory and
-% provide an automatic translation of well-typed terms into witnesses in
-% \Coq. This would make it possible to extend conversion with the theory
-% of lists for example.
+This translation also enables the formalisation of translations that
+target ETT rather than ITT and still get mechanised proofs of (relative)
+consistency by composition with this ETT to ITT translation.  This could
+also be used to implement plugins based on the composition of
+translations. In particular, supposing we have a theory which forms a
+subset of ETT and whose conversion is decidable. Using this translation,
+we could formalise it as an embedded domain-specific type theory and
+provide an automatic translation of well-typed terms into witnesses in
+\Coq. This would make it possible to extend conversion with the theory
+of lists for example.
 
-% This would provide a simple way to justify the consistency of
-% CoqMT~\cite{DBLP:conf/lpar/JouannaudS17} for example, seeing it as an
-% extensional type theory where reflection is restricted to equalities
-% on a specific domain whose theory is decidable.
+This would provide a simple way to justify the consistency of
+CoqMT~\cite{DBLP:conf/lpar/JouannaudS17} for example, seeing it as an
+extensional type theory where reflection is restricted to equalities
+on a specific domain whose theory is decidable.
 
 
 % \begin{comment}
-% \section{Extension: Translating HTS to 2TT}
-% \label{sec:extens-transl-hts}
+\section{Extension: Translating HTS to 2TT}
+\label{sec:extens-transl-hts}
 
-% \tw{Keep it as an easy extension? If so, we need to say more as this is no
-% longer a direct application.}
+\tw{Keep it as an easy extension? If so, we need to say more as this is no
+longer a direct application.}
 
-% As we mentioned earlier, one of the interesting special cases covered by this
-% translation is the translation from 2-level type theory with reflection
-% (arguably a variant of Homotopy Type System~\cite{hts-sota} (HTS) to 2-level
-% type theory~\cite{altenkirch2016extending} (2TT).
-% %
-% We thus use two hierarchies $(\F{i})_{i \in \mathbb{N}}$, universes of fibrant
-% types, and $(\Un{i})_{i \in \mathbb{N}}$, universes of strict types.
-% We give the following axioms for the sorts:
-% %
-% \begin{align*}
-%   (\F{i}, \F{i+1}) &\in \Ax \\
-%   (\Un{i}, \Un{i+1}) &\in \Ax \\
-%   (\F{i}, \F{j}, \F{\nmax{i}{j}}) &\in \Rl \\
-%   (\F{i}, \Un{j}, \Un{\nmax{i}{j}}) &\in \Rl \\
-%   (\Un{i}, \F{j}, \Un{\nmax{i}{j}}) &\in \Rl \\
-%   (\Un{i}, \Un{j}, \Un{\nmax{i}{j}}) &\in \Rl
-% \end{align*}
-% %
-% We then equip our theory with a fibrant equality type defined as an inductive
-% type and the proof takes care of it. We can also add any inductive type that we
-% like, as for instance the natural numbers, the unit and empty types.
+As we mentioned earlier, one of the interesting special cases covered by this
+translation is the translation from 2-level type theory with reflection
+(arguably a variant of Homotopy Type System~\cite{hts-sota} (HTS) to 2-level
+type theory~\cite{altenkirch2016extending} (2TT).
+%
+We thus use two hierarchies $(\F{i})_{i \in \mathbb{N}}$, universes of fibrant
+types, and $(\Un{i})_{i \in \mathbb{N}}$, universes of strict types.
+We give the following axioms for the sorts:
+%
+\begin{align*}
+  (\F{i}, \F{i+1}) &\in \Ax \\
+  (\Un{i}, \Un{i+1}) &\in \Ax \\
+  (\F{i}, \F{j}, \F{\nmax{i}{j}}) &\in \Rl \\
+  (\F{i}, \Un{j}, \Un{\nmax{i}{j}}) &\in \Rl \\
+  (\Un{i}, \F{j}, \Un{\nmax{i}{j}}) &\in \Rl \\
+  (\Un{i}, \Un{j}, \Un{\nmax{i}{j}}) &\in \Rl
+\end{align*}
+%
+We then equip our theory with a fibrant equality type defined as an inductive
+type and the proof takes care of it. We can also add any inductive type that we
+like, as for instance the natural numbers, the unit and empty types.
 % \end{comment}
 
-% \section{Limitations and Axioms}
-% \label{sec:axioms}
+\section{Limitations and Axioms}
+\label{sec:axioms}
 
-% Currently, the representation of terms and derivations and the
-% computational content of the proof only allow us to deal with the
-% translation of relatively small terms but we hope to improve that in
-% the future. As we have seen, the actual translation involves the
-% computational content of lemmata of inversion, substitution, weakening
-% and equational reasoning and thus cannot be presented as a simple
-% recursive definition on derivations.
+Currently, the representation of terms and derivations and the
+computational content of the proof only allow us to deal with the
+translation of relatively small terms but we hope to improve that in
+the future. As we have seen, the actual translation involves the
+computational content of lemmata of inversion, substitution, weakening
+and equational reasoning and thus cannot be presented as a simple
+recursive definition on derivations.
 
 
-% As we already mentioned, the axioms K and FunExt are both
-% necessary in ITT if we want the translation to be conservative as they are
-% provable in ETT~\cite{hofmann1995conservativity}.
-% However, one might still be concerned about having axioms
-% as they can for instance hinder canonicity of the system.
-% In that respect, K isn't really a restriction since it preserves canonicity.
-% The best proof of that is probably \Agda itself which natively features K---in
-% fact, one needs to explicitly deactivate it with a flag if they wish to work
-% without.
+As we already mentioned, the axioms K and FunExt are both
+necessary in ITT if we want the translation to be conservative as they are
+provable in ETT~\cite{hofmann1995conservativity}.
+However, one might still be concerned about having axioms
+as they can for instance hinder canonicity of the system.
+In that respect, K isn't really a restriction since it preserves canonicity.
+The best proof of that is probably \Agda itself which natively features K---in
+fact, one needs to explicitly deactivate it with a flag if they wish to work
+without.
 
-% The case of FunExt is trickier. It should be possible to realise
-% the axiom by composing our translation with a setoid
-% interpretation~\cite{altenkirch99} which validates it, or by going into a
-% system featuring it, for instance by implementing Observational Type
-% Theory~\cite{altenkirch2007observational} like
-% \Epigram~\cite{mcbride2004epigram}.
+The case of FunExt is trickier. It should be possible to realise
+the axiom by composing our translation with a setoid
+interpretation~\cite{altenkirch99} which validates it, or by going into a
+system featuring it, for instance by implementing Observational Type
+Theory~\cite{altenkirch2007observational} like
+\Epigram~\cite{mcbride2004epigram}.
 
-% However, these two axioms are not used to define the translation itself,
-% but only to witness UIP and function extensionality in the translation to
-% \Coq.
-% The translation only relies on one axiom, called
-% \mintinline{coq}|conv_trans_AXIOM| in the formalisation, stating that conversion
-% of ITT is transitive.
-% %
-% The proof of this property basically sums up to the confluence of the
-% reduction rules of ITT which is out of scope for this paper and has
-% recently been formalised in Agda~\cite{Abel:2017:DCT:3177123.3158111} (in a
-% simpler setting with only one universe).
-% Regardless, this axiom inhabits a proposition (the type of conversion is in
-% \mintinline{coq}|Prop|) and is thus irrelevant for computation. Actually no
-% information about the derivation leaks to the production of the ITT term.
+However, these two axioms are not used to define the translation itself,
+but only to witness UIP and function extensionality in the translation to
+\Coq.
+The translation only relies on one axiom, called
+\mintinline{coq}|conv_trans_AXIOM| in the formalisation, stating that conversion
+of ITT is transitive.
+%
+The proof of this property basically sums up to the confluence of the
+reduction rules of ITT which is out of scope for this paper and has
+recently been formalised in Agda~\cite{Abel:2017:DCT:3177123.3158111} (in a
+simpler setting with only one universe).
+Regardless, this axiom inhabits a proposition (the type of conversion is in
+\mintinline{coq}|Prop|) and is thus irrelevant for computation. Actually no
+information about the derivation leaks to the production of the ITT term.
 
-% On a different note, the \mintinline{coq}|candidate| axiom allows us to derive
-% \mintinline{coq}|False| but is merely used to write ill-typed terms in \Coq.
-% The translated term will never make us of it and one can always check if a
-% term is relying on unsafe assumptions thanks to the
-% \mintinline{coq}|Print Assumptions| command.
+On a different note, the \mintinline{coq}|candidate| axiom allows us to derive
+\mintinline{coq}|False| but is merely used to write ill-typed terms in \Coq.
+The translated term will never make us of it and one can always check if a
+term is relying on unsafe assumptions thanks to the
+\mintinline{coq}|Print Assumptions| command.
 
-% \section{Related Works and Conclusion}
-% \label{sec:related-works}
+\section{Related Works and Conclusion}
+\label{sec:related-works}
 
-% The seminal works on the precise connection between ETT and ITT go
-% back to \cite{streicher1993investigations} and
-% \cite{hofmann1995conservativity,HofmannPhD}.
-% %
-% In particular, the work of Hofmann provides a categorical answer to
-% the question of consistency and conservativity of ETT over ITT with
-% UIP and FunExt.
-% %
-% Ten years later, \cite{oury2005extensionality,Oury2006} provided
-% a translation from ETT to ITT with
-% UIP and FunExt and other axioms (mainly due to
-% technical difficulties).
-% %
-% Although a first step towards a move from categorical semantics to a
-% syntactic translation, his work does not stress any constructive
-% aspect of the proof and shows that there merely exist translations in
-% ITT to a typed term in ETT.
+The seminal works on the precise connection between ETT and ITT go
+back to \cite{streicher1993investigations} and
+\cite{hofmann1995conservativity,HofmannPhD}.
+%
+In particular, the work of Hofmann provides a categorical answer to
+the question of consistency and conservativity of ETT over ITT with
+UIP and FunExt.
+%
+Ten years later, \cite{oury2005extensionality,Oury2006} provided
+a translation from ETT to ITT with
+UIP and FunExt and other axioms (mainly due to
+technical difficulties).
+%
+Although a first step towards a move from categorical semantics to a
+syntactic translation, his work does not stress any constructive
+aspect of the proof and shows that there merely exist translations in
+ITT to a typed term in ETT.
 
-% \cite{van2013explicit} have later proposed and
-% formalised a similar translation between a PTS with and without explicit
-% conversion. This does not entail anything about ETT to ITT but we can
-% find similarities in that there is a witness of conversion between any
-% term and itself under an explicit conversion, which internalises
-% irrelevance of explicit conversions. This morally corresponds to a
-% Uniqueness of Conversions principle.
+\cite{van2013explicit} have later proposed and
+formalised a similar translation between a PTS with and without explicit
+conversion. This does not entail anything about ETT to ITT but we can
+find similarities in that there is a witness of conversion between any
+term and itself under an explicit conversion, which internalises
+irrelevance of explicit conversions. This morally corresponds to a
+Uniqueness of Conversions principle.
 
-% The Program \cite{sozeau:icfp07} extension of \Coq performs a
-% related coercion insertion algorithm, between objects in subsets on the
-% same carrier or in different instances of the same inductive family,
-% assuming a proof-irrelevance axiom. Inserting coercions locally is not
-% as general as the present translation from ETT to ITT which can insert
-% transports in any context.
+The Program \cite{sozeau:icfp07} extension of \Coq performs a
+related coercion insertion algorithm, between objects in subsets on the
+same carrier or in different instances of the same inductive family,
+assuming a proof-irrelevance axiom. Inserting coercions locally is not
+as general as the present translation from ETT to ITT which can insert
+transports in any context.
 
-% In this paper we provide the first effective translation from ETT to ITT
-% with UIP and FunExt. The translation has been
-% formalised in \Coq using \TemplateCoq, a meta-programming plugin of
-% \Coq. This translation is also effective in the sense that we can
-% produce in the end a \Coq term using the \TemplateCoq denotation
-% machinery.
-% %
-% With ongoing work to extend the translation to the inductive fragment
-% of \Coq, we are paving the way to an extensional version of the \Coq
-% proof assistant which could be translated back to its intensional
-% version, allowing the user to navigate between the two modes, and in
-% the end produce a proof term checkable in the intensional fragment.
-
-% \begin{comment}
-% \item Hofmann and Oury of course
-% \item Floris and Geuvers~\cite{van2013explicit}
-% \item Maybe more about Streicher~\cite
-% \item Translations~\cite{boulier17:_next_syntac_model_type_theor}?
-%   % \item Maybe we should talk about the intuition of Andrej that annotations
-%   %   are needed. His example was the Cardinal model in which it was safe to
-%   %   assume equality nat -> nat = nat -> bool from which you can derive 3 : bool
-%   %   (if you don't annotate application and then allow reduction) but no
-%   %   contradiction that we could find.
-% \item We should somewhere talk about Oury's extra axiom. But maybe the place
-%   for it is not the introduction.
-% \item Uniqueness of typing and lack of cumulativity that doesn't represent
-%   a restriction?
-% \end{comment}
+In this paper we provide the first effective translation from ETT to ITT
+with UIP and FunExt. The translation has been
+formalised in \Coq using \TemplateCoq, a meta-programming plugin of
+\Coq. This translation is also effective in the sense that we can
+produce in the end a \Coq term using the \TemplateCoq denotation
+machinery.
+%
+With ongoing work to extend the translation to the inductive fragment
+of \Coq, we are paving the way to an extensional version of the \Coq
+proof assistant which could be translated back to its intensional
+version, allowing the user to navigate between the two modes, and in
+the end produce a proof term checkable in the intensional fragment.
 
 % \begin{acks}
-%   We would like to thank Andrej Bauer and Philipp Haselwarter with whom we had
-%   fruitful discussions on the subject, prior to this work.
-%   We also would like to thank the attendees of the Aarhus EUTypes 2018 meeting
-%   for their insightful feedback on the plugin stemming from the translation.
+  We would like to thank Andrej Bauer and Philipp Haselwarter with whom we had
+  fruitful discussions on the subject, prior to this work.
+  We also would like to thank the attendees of the Aarhus EUTypes 2018 meeting
+  for their insightful feedback on the plugin stemming from the translation.
 % \end{acks}
 
-% % \newpage
-% % \clearpage
-
 % \newpage
-% \onecolumn
-% \appendix
+% \clearpage
 
-% \section{Complementary rules}
-% \label{sec:more-rules}
+\newpage
+\onecolumn
+\appendix
 
-% \input{figcong}
+\section{Complementary rules}
+\label{sec:more-rules}
+
+\input{figcong}
 
 
-% \section{Proof of the fundamental lemma}
-% \label{sec:proof-fund-lemma}
+\section{Proof of the fundamental lemma}
+\label{sec:proof-fund-lemma}
 
-% \begin{lemma}[Fundamental lemma]
-%   Let $t_1$ and $t_2$ be two terms. If $\isterm{\Ga, \Ga_1}{t_1}{T_1}$ and
-%   $\isterm{\Ga, \Ga_2}{t_2}{T_2}$ and $t_1 \sim t_2$ then there exists $p$ such
-%   that
-%   $\isterm{\Ga, \Pack{\Ga_1}{\Ga_2}}
-%           {p}
-%           {\Heq{\llift{\gamma}{}{T_1}}
-%                {\llift{\gamma}{}{t_1}}
-%                {\rlift{\gamma}{}{T_2}}
-%                {\rlift{\gamma}{}{t_2}}}$.
-% \end{lemma}
+\begin{lemma}[Fundamental lemma]
+  Let $t_1$ and $t_2$ be two terms. If $\isterm{\Ga, \Ga_1}{t_1}{T_1}$ and
+  $\isterm{\Ga, \Ga_2}{t_2}{T_2}$ and $t_1 \sim t_2$ then there exists $p$ such
+  that
+  $\isterm{\Ga, \Pack{\Ga_1}{\Ga_2}}
+          {p}
+          {\Heq{\llift{\gamma}{}{T_1}}
+               {\llift{\gamma}{}{t_1}}
+               {\rlift{\gamma}{}{T_2}}
+               {\rlift{\gamma}{}{t_2}}}$.
+\end{lemma}
 
-% For readability we will abbreviate the left and right substitutions
-% $\llift{\gamma}{}{\_}$ and $\rlift{\gamma}{}{\_}$ by $\upharpoonleft$
-% and $\upharpoonright$ respectively.
+For readability we will abbreviate the left and right substitutions
+$\llift{\gamma}{}{\_}$ and $\rlift{\gamma}{}{\_}$ by $\upharpoonleft$
+and $\upharpoonright$ respectively.
 
-% \begin{proof}
-%   We prove it by induction on the derivation of $t_1 \sim t_2$.
+\begin{proof}
+  We prove it by induction on the derivation of $t_1 \sim t_2$.
 
-%   \begin{itemize}
-%     \item \textsc{Var}
-%     \[
-%       \infer[]
-%         { }
-%         {x \sim x}
-%       %
-%     \]
-%     If $x$ belongs to $\Ga$, we apply reflexivity---together with uniqueness of
-%     typing~\eqref{lem:uniq}---to conclude.
-%     Otherwise, $\ProjE{x}$ has the expected type (since
-%     $\llift{\gamma}{}{x} \equiv \ProjO{x}$ and $\rlift{\gamma}{}{x} \equiv \ProjT{x}$).
+  \begin{itemize}
+    \item \textsc{Var}
+    \[
+      \infer[]
+        { }
+        {x \sim x}
+      %
+    \]
+    If $x$ belongs to $\Ga$, we apply reflexivity---together with uniqueness of
+    typing~\eqref{lem:uniq}---to conclude.
+    Otherwise, $\ProjE{x}$ has the expected type (since
+    $\llift{\gamma}{}{x} \equiv \ProjO{x}$ and $\rlift{\gamma}{}{x} \equiv \ProjT{x}$).
 
-%     \item \textsc{TransportLeft}
-%     \[
-%       \infer[]
-%         {t_1 \sim t_2}
-%         {\transpo{p}\ t_1 \sim t_2}
-%       %
-%     \]
-%     We have $\isterm{\Ga, \Ga_1}{\transpo{p}\ t_1}{T_1}$ and
-%     $\isterm{\Ga, \Ga_2}{t_2}{T_2}$.
-%     By inversion~\eqref{lem:inversion} we have
-%     $\isterm{\Ga, \Ga_1}{p}{\Eq{}{T_1'}{T_1}}$ and
-%     $\isterm{\Ga, \Ga_1}{t_1}{T_1'}$.
-%     Then by induction hypothesis we have $e$ such that
-%     $\isterm{\Ga, \Gp}{e}{\Heq{}{\lo{t_1}}{}{\ro{t_2}}}$.
-%     From transitivity and symmetry we only need to provide a proof of
-%     $\Heq{}{\lo{t_1}}{}{\transpo{\lo{p}}\ \lo{t_1}}$ which is inhabited by
-%     $\pair{\_}{\_}{\lo{p}}{\refl{} (\transpo{\lo{p}}\ \lo{t_1})}$.
+    \item \textsc{TransportLeft}
+    \[
+      \infer[]
+        {t_1 \sim t_2}
+        {\transpo{p}\ t_1 \sim t_2}
+      %
+    \]
+    We have $\isterm{\Ga, \Ga_1}{\transpo{p}\ t_1}{T_1}$ and
+    $\isterm{\Ga, \Ga_2}{t_2}{T_2}$.
+    By inversion~\eqref{lem:inversion} we have
+    $\isterm{\Ga, \Ga_1}{p}{\Eq{}{T_1'}{T_1}}$ and
+    $\isterm{\Ga, \Ga_1}{t_1}{T_1'}$.
+    Then by induction hypothesis we have $e$ such that
+    $\isterm{\Ga, \Gp}{e}{\Heq{}{\lo{t_1}}{}{\ro{t_2}}}$.
+    From transitivity and symmetry we only need to provide a proof of
+    $\Heq{}{\lo{t_1}}{}{\transpo{\lo{p}}\ \lo{t_1}}$ which is inhabited by
+    $\pair{\_}{\_}{\lo{p}}{\refl{} (\transpo{\lo{p}}\ \lo{t_1})}$.
 
-%     \item \textsc{TransportRight}
-%     \[
-%       \infer[]
-%         {t_1 \sim t_2}
-%         {t_1 \sim \transpo{p}\ t_2}
-%       %
-%     \]
-%     Similarly.
+    \item \textsc{TransportRight}
+    \[
+      \infer[]
+        {t_1 \sim t_2}
+        {t_1 \sim \transpo{p}\ t_2}
+      %
+    \]
+    Similarly.
 
-%     \item \textsc{Product}
-%     \[
-%       \infer[]
-%         {A_1 \sim A_2 \\
-%          B_1 \sim B_2
-%         }
-%         {\Prod{x:A_1} B_1 \sim \Prod{x:A_2} B_2}
-%       %
-%     \]
-%     We have $\isterm{\Ga, \Ga_1}{\Prod{x:A_1} B_1}{T_1}$ and
-%     $\isterm{\Ga, \Ga_2}{\Prod{x:A_2} B_2}{T_2}$ so by
-%     inversion~\eqref{lem:inversion} we have $\isterm{\Ga, \Ga_1}{A_1}{s_1}$ and
-%     $\isterm{\Ga, \Ga_1, x:A_1}{B_1}{s'_1}$ and
-%     $\eqtype{\Ga, \Ga_1}{s''_1}{T_1}$ for $(s_1,s'_1,s''_1) \in \Rl$
-%     (and similarly with $2$s).
-%     By induction hypothesis we have
-%     $\isterm{\Ga, \Gp}{p_A}{\Heq{}{\lo{A_1}}{}{\ro{A_2}}}$ and
-%     $\isterm
-%       {\Ga, \Gp, x : \Pack{A_1}{A_2}}
-%       {p_B}
-%       {\Heq{}{\lo{B_1}}{}{\ro{B_2}}}
-%     $
-%     hence the result (using UIP and FunExt, refer to the
-%     formalisation and especially to the file \rpath{Quotes.v} for more details
-%     on how to realise this equality).
+    \item \textsc{Product}
+    \[
+      \infer[]
+        {A_1 \sim A_2 \\
+         B_1 \sim B_2
+        }
+        {\Prod{x:A_1} B_1 \sim \Prod{x:A_2} B_2}
+      %
+    \]
+    We have $\isterm{\Ga, \Ga_1}{\Prod{x:A_1} B_1}{T_1}$ and
+    $\isterm{\Ga, \Ga_2}{\Prod{x:A_2} B_2}{T_2}$ so by
+    inversion~\eqref{lem:inversion} we have $\isterm{\Ga, \Ga_1}{A_1}{s_1}$ and
+    $\isterm{\Ga, \Ga_1, x:A_1}{B_1}{s'_1}$ and
+    $\eqtype{\Ga, \Ga_1}{s''_1}{T_1}$ for $(s_1,s'_1,s''_1) \in \Rl$
+    (and similarly with $2$s).
+    By induction hypothesis we have
+    $\isterm{\Ga, \Gp}{p_A}{\Heq{}{\lo{A_1}}{}{\ro{A_2}}}$ and
+    $\isterm
+      {\Ga, \Gp, x : \Pack{A_1}{A_2}}
+      {p_B}
+      {\Heq{}{\lo{B_1}}{}{\ro{B_2}}}
+    $
+    hence the result (using UIP and FunExt, refer to the
+    formalisation and especially to the file \rpath{Quotes.v} for more details
+    on how to realise this equality).
 
-%     \item \textsc{Equality}
-%     \[
-%       \infer[]
-%         {A_1 \sim A_2 \\
-%          u_1 \sim u_2 \\
-%          v_1 \sim v_2
-%         }
-%         {\Eq{A_1}{u_1}{v_1} \sim \Eq{A_2}{u_2}{v_2}}
-%       %
-%     \]
-%     We have $\isterm{\Ga, \Ga_1}{\Eq{A_1}{u_1}{v_1}}{T_1}$ and
-%     $\isterm{\Ga, \Ga_2}{\Eq{A_2}{u_2}{v_2}}{T_2}$ so, by
-%     inversion~\eqref{lem:inversion}, we have
-%     $\isterm{\Ga, \Ga_1}{A_1}{s_1}$ and $\isterm{\Ga, \Ga_1}{u_1}{A_1}$ and
-%     $\isterm{\Ga, \Ga_1}{v_1}{A_1}$ as well as $\eqtype{\Ga, \Ga_1}{s_1}{T_1}$
-%     (and the same with $2$s). By induction hypothesis we thus have
-%     $\isterm{\Ga, \Gp}{p_{A}}{\Heq{}{A_1}{}{A_2}}$ and
-%     $\isterm{\Ga, \Gp}{p_u}{\Heq{}{u_1}{}{u_2}}$ and
-%     $\isterm{\Ga, \Gp}{p_v}{\Heq{}{v_1}{}{v_2}}$.
-%     We can thus conclude.
+    \item \textsc{Equality}
+    \[
+      \infer[]
+        {A_1 \sim A_2 \\
+         u_1 \sim u_2 \\
+         v_1 \sim v_2
+        }
+        {\Eq{A_1}{u_1}{v_1} \sim \Eq{A_2}{u_2}{v_2}}
+      %
+    \]
+    We have $\isterm{\Ga, \Ga_1}{\Eq{A_1}{u_1}{v_1}}{T_1}$ and
+    $\isterm{\Ga, \Ga_2}{\Eq{A_2}{u_2}{v_2}}{T_2}$ so, by
+    inversion~\eqref{lem:inversion}, we have
+    $\isterm{\Ga, \Ga_1}{A_1}{s_1}$ and $\isterm{\Ga, \Ga_1}{u_1}{A_1}$ and
+    $\isterm{\Ga, \Ga_1}{v_1}{A_1}$ as well as $\eqtype{\Ga, \Ga_1}{s_1}{T_1}$
+    (and the same with $2$s). By induction hypothesis we thus have
+    $\isterm{\Ga, \Gp}{p_{A}}{\Heq{}{A_1}{}{A_2}}$ and
+    $\isterm{\Ga, \Gp}{p_u}{\Heq{}{u_1}{}{u_2}}$ and
+    $\isterm{\Ga, \Gp}{p_v}{\Heq{}{v_1}{}{v_2}}$.
+    We can thus conclude.
 
-%     \item \textsc{Reflexivity}
-%     \[
-%       \infer[]
-%         { }
-%         {s \sim s}
-%       %
-%     \]
-%     This one holds by reflexivity and uniqueness of typing~\eqref{lem:uniq}
-%     (indeed, $\lo{s} \equiv s$ and $\ro{s} \equiv s$).
+    \item \textsc{Reflexivity}
+    \[
+      \infer[]
+        { }
+        {s \sim s}
+      %
+    \]
+    This one holds by reflexivity and uniqueness of typing~\eqref{lem:uniq}
+    (indeed, $\lo{s} \equiv s$ and $\ro{s} \equiv s$).
 
-%     \item \textsc{Lambda}
-%     \[
-%       \infer[]
-%         {A_1 \sim A_2 \\
-%          B_1 \sim B_2 \\
-%          t_1 \sim t_2
-%         }
-%         {\lam{x:A_1}{B_1} t_1 \sim \lam{x:A_2}{B_2} t_2}
-%       %
-%     \]
-%     We have $\isterm{\Ga, \Ga_1}{\lam{x:A_1}{B_1} t_1}{T_1}$ and
-%     $\isterm{\Ga, \Ga_2}{\lam{x:A_2}{B_2} t_2}{T_2}$, thus, by
-%     inversion~\ref{lem:inversion} the subterms are well-typed and we can
-%     apply induction hypothesis. The conclusion follows similarly to the $\Pi$
-%     case.
+    \item \textsc{Lambda}
+    \[
+      \infer[]
+        {A_1 \sim A_2 \\
+         B_1 \sim B_2 \\
+         t_1 \sim t_2
+        }
+        {\lam{x:A_1}{B_1} t_1 \sim \lam{x:A_2}{B_2} t_2}
+      %
+    \]
+    We have $\isterm{\Ga, \Ga_1}{\lam{x:A_1}{B_1} t_1}{T_1}$ and
+    $\isterm{\Ga, \Ga_2}{\lam{x:A_2}{B_2} t_2}{T_2}$, thus, by
+    inversion~\ref{lem:inversion} the subterms are well-typed and we can
+    apply induction hypothesis. The conclusion follows similarly to the $\Pi$
+    case.
 
-%     \item \textsc{Application}
-%     \[
-%       \infer[]
-%         {t_1 \sim t_2 \\
-%          A_1 \sim A_2 \\
-%          B_1 \sim B_2 \\
-%          u_1 \sim u_2
-%         }
-%         {\app{t_1}{x:A_1}{B_1}{u_1} \sim \app{t_2}{x:A_2}{B_2}{u_2}}
-%       %
-%     \]
-%     We have $\isterm{\Ga, \Ga_1}{\app{t_1}{x:A_1}{B_1}{u_1}}{T_1}$ and
-%     $\isterm{\Ga, \Ga_2}{\app{t_2}{x:A_2}{B_2}{u_2}}{T_2}$ which means by
-%     inversion~\eqref{lem:inversion} that the subterms are well-typed.
-%     We apply the induction hypothesis and then conclude.
+    \item \textsc{Application}
+    \[
+      \infer[]
+        {t_1 \sim t_2 \\
+         A_1 \sim A_2 \\
+         B_1 \sim B_2 \\
+         u_1 \sim u_2
+        }
+        {\app{t_1}{x:A_1}{B_1}{u_1} \sim \app{t_2}{x:A_2}{B_2}{u_2}}
+      %
+    \]
+    We have $\isterm{\Ga, \Ga_1}{\app{t_1}{x:A_1}{B_1}{u_1}}{T_1}$ and
+    $\isterm{\Ga, \Ga_2}{\app{t_2}{x:A_2}{B_2}{u_2}}{T_2}$ which means by
+    inversion~\eqref{lem:inversion} that the subterms are well-typed.
+    We apply the induction hypothesis and then conclude.
 
-%     \item \textsc{Reflexivity}
-%     \[
-%       \infer[]
-%         {A_1 \sim A_2 \\
-%          u_1 \sim u_2
-%         }
-%         {\refl{A_1} u_1 \sim \refl{A_2} u_2}
-%       %
-%     \]
-%     We have $\isterm{\Ga, \Ga_1}{\refl{A_1} u_1}{T_1}$ and
-%     $\isterm{\Ga, \Ga_2}{\refl{A_2} u_2}{T_2}$ so by
-%     inversion~\eqref{lem:inversion} we have $\isterm{\Ga, \Ga_1}{A_1}{s_1}$ and
-%     $\isterm{\Ga, \Ga_1}{u_1}{A_1}$
-%     (same with $2$s). By IH we have $\Heq{}{\lo{A_1}}{}{\ro{A_2}}$ and
-%     $\Heq{\lo{A_1}}{\lo{u_1}}{\ro{A_2}}{\ro{u_2}}$.
-%     The proof follows easily.
+    \item \textsc{Reflexivity}
+    \[
+      \infer[]
+        {A_1 \sim A_2 \\
+         u_1 \sim u_2
+        }
+        {\refl{A_1} u_1 \sim \refl{A_2} u_2}
+      %
+    \]
+    We have $\isterm{\Ga, \Ga_1}{\refl{A_1} u_1}{T_1}$ and
+    $\isterm{\Ga, \Ga_2}{\refl{A_2} u_2}{T_2}$ so by
+    inversion~\eqref{lem:inversion} we have $\isterm{\Ga, \Ga_1}{A_1}{s_1}$ and
+    $\isterm{\Ga, \Ga_1}{u_1}{A_1}$
+    (same with $2$s). By IH we have $\Heq{}{\lo{A_1}}{}{\ro{A_2}}$ and
+    $\Heq{\lo{A_1}}{\lo{u_1}}{\ro{A_2}}{\ro{u_2}}$.
+    The proof follows easily.
 
-%     \item \textsc{Funext}
-%     \[
-%       \infer[]
-%         {A_1 \sim A_2 \\
-%          B_1 \sim B_2 \\
-%          f_1 \sim f_2 \\
-%          g_1 \sim g_2 \\
-%          e_1 \sim e_2
-%         }
-%         {\funext{x:A_1}{B_1}{f_1}{g_1}{e_1}
-%          \sim \funext{x:A_2}{B_2}{f_2}{g_2}{e_2}
-%         }
-%       %
-%     \]
-%     Similar.
+    \item \textsc{Funext}
+    \[
+      \infer[]
+        {A_1 \sim A_2 \\
+         B_1 \sim B_2 \\
+         f_1 \sim f_2 \\
+         g_1 \sim g_2 \\
+         e_1 \sim e_2
+        }
+        {\funext{x:A_1}{B_1}{f_1}{g_1}{e_1}
+         \sim \funext{x:A_2}{B_2}{f_2}{g_2}{e_2}
+        }
+      %
+    \]
+    Similar.
 
-%     \item \textsc{UIP}
-%     \[
-%       \infer[]
-%         {A_1 \sim A_2 \\
-%          u_1 \sim u_2 \\
-%          v_1 \sim v_2 \\
-%          p_1 \sim p_2 \\
-%          q_1 \sim q_2
-%         }
-%         {\uip{A_1}{u_1}{v_1}{p_1}{q_1} \sim \uip{A_2}{u_2}{v_2}{p_2}{q_2}}
-%       %
-%     \]
-%     Similar.
+    \item \textsc{UIP}
+    \[
+      \infer[]
+        {A_1 \sim A_2 \\
+         u_1 \sim u_2 \\
+         v_1 \sim v_2 \\
+         p_1 \sim p_2 \\
+         q_1 \sim q_2
+        }
+        {\uip{A_1}{u_1}{v_1}{p_1}{q_1} \sim \uip{A_2}{u_2}{v_2}{p_2}{q_2}}
+      %
+    \]
+    Similar.
 
-%     \item \textsc{J}
-%     \[
-%       \infer[]
-%         {A_1 \sim A_2 \\
-%          u_1 \sim u_2 \\
-%          P_1 \sim P_2 \\
-%          w_1 \sim w_2 \\
-%          v_1 \sim v_2 \\
-%          p_1 \sim p_2
-%         }
-%         {\J{A_1}{u_1}{x.e.P_1}{w_1}{v_1}{p_1} \sim
-%          \J{A_2}{u_2}{x.e.P_2}{w_2}{v_2}{p_2}
-%         }
-%       %
-%     \]
-%     Similar.
-%   \end{itemize}
-% \end{proof}
+    \item \textsc{J}
+    \[
+      \infer[]
+        {A_1 \sim A_2 \\
+         u_1 \sim u_2 \\
+         P_1 \sim P_2 \\
+         w_1 \sim w_2 \\
+         v_1 \sim v_2 \\
+         p_1 \sim p_2
+        }
+        {\J{A_1}{u_1}{x.e.P_1}{w_1}{v_1}{p_1} \sim
+         \J{A_2}{u_2}{x.e.P_2}{w_2}{v_2}{p_2}
+        }
+      %
+    \]
+    Similar.
+  \end{itemize}
+\end{proof}
 
-% \section{Correctness of the translation}
-% \label{sec:corr-transl}
-% \begin{theorem}[Translation]
-%   \leavevmode
-%   \begin{itemize}
-%     \item If $\xisctx{\Ga}$ then there exists
-%     $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$,
+\section{Correctness of the translation}
+\label{sec:corr-transl}
+\begin{theorem}[Translation]
+  \leavevmode
+  \begin{itemize}
+    \item If $\xisctx{\Ga}$ then there exists
+    $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$,
 
-%     \item If $\xisterm{\Ga}{t}{T}$ then for any
-%     $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$ there exist $\tb$ and $\Tb$ such that
-%     $\isterm{\Gb}{\tb}{\Tb} \in \trans{\xisterm{\Ga}{t}{T}}$,
+    \item If $\xisterm{\Ga}{t}{T}$ then for any
+    $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$ there exist $\tb$ and $\Tb$ such that
+    $\isterm{\Gb}{\tb}{\Tb} \in \trans{\xisterm{\Ga}{t}{T}}$,
 
-%     \item If $\xeqterm{\Ga}{u}{v}{A}$ then for any
-%     $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$ there exist
-%     $A \ir \Ab, A \ir \Ab', u \ir \ub, v \ir \vb$ and $\eb$ such that
-%     $\isterm{\Gb}{\eb}{\Heq{\Ab}{\ub}{\Ab'}{\vb}}$.
-%   \end{itemize}
-% \end{theorem}
+    \item If $\xeqterm{\Ga}{u}{v}{A}$ then for any
+    $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$ there exist
+    $A \ir \Ab, A \ir \Ab', u \ir \ub, v \ir \vb$ and $\eb$ such that
+    $\isterm{\Gb}{\eb}{\Heq{\Ab}{\ub}{\Ab'}{\vb}}$.
+  \end{itemize}
+\end{theorem}
 
-% \begin{proof}
-%   We prove the theorem by induction on the derivation in the extensional
-%   type theory. In most cases we need to assume some $\Gb$, translation of the
-%   context, we will implicitly refer to $\Gb$ in such cases as the one given as
-%   hypothesis.
-%   \leavevmode
-%   \begin{itemize}
-%     \item \textsc{Empty}
-%     \[
-%       \infer[]
-%         { }
-%         {\xisctx{\ctxempty}}
-%       %
-%     \]
-%     We have $\isctx{\ctxempty} \in \trans{\xisctx{\ctxempty}}$.
+\begin{proof}
+  We prove the theorem by induction on the derivation in the extensional
+  type theory. In most cases we need to assume some $\Gb$, translation of the
+  context, we will implicitly refer to $\Gb$ in such cases as the one given as
+  hypothesis.
+  \leavevmode
+  \begin{itemize}
+    \item \textsc{Empty}
+    \[
+      \infer[]
+        { }
+        {\xisctx{\ctxempty}}
+      %
+    \]
+    We have $\isctx{\ctxempty} \in \trans{\xisctx{\ctxempty}}$.
 
-%     \item \textsc{Extend}
-%     \[
-%       \infer[]
-%         {\xisctx{\Ga} \\
-%          \xistype{\Ga}{A}
-%         }
-%         {\xisctx{\Ga, x:A}}
-%       (x \notin \Ga)
-%     \]
-%     By IH we have $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$ and, using $\Gb$
-%     as well as lemma~\ref{lem:choose},
-%     $\isterm{\Gb}{\Ab}{s} \in \trans{\xisterm{\Ga}{A}{s}}$.
-%     Thus $\isctx{\Gb, x:\Ab} \in \trans{\xisctx{\Ga, x:A}}$.
+    \item \textsc{Extend}
+    \[
+      \infer[]
+        {\xisctx{\Ga} \\
+         \xistype{\Ga}{A}
+        }
+        {\xisctx{\Ga, x:A}}
+      (x \notin \Ga)
+    \]
+    By IH we have $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$ and, using $\Gb$
+    as well as lemma~\ref{lem:choose},
+    $\isterm{\Gb}{\Ab}{s} \in \trans{\xisterm{\Ga}{A}{s}}$.
+    Thus $\isctx{\Gb, x:\Ab} \in \trans{\xisctx{\Ga, x:A}}$.
 
-%     \item \textsc{Sort}
-%     \[
-%       \infer[]
-%         {\xisctx{\Ga}}
-%         {\xisterm{\Ga}{s}{s'}}
-%       (s,s')
-%     \]
-%     We have $\isterm{\Gb}{s}{s'} \in \trans{\xisterm{\Ga}{s}{s'}}$.
+    \item \textsc{Sort}
+    \[
+      \infer[]
+        {\xisctx{\Ga}}
+        {\xisterm{\Ga}{s}{s'}}
+      (s,s')
+    \]
+    We have $\isterm{\Gb}{s}{s'} \in \trans{\xisterm{\Ga}{s}{s'}}$.
 
-%     \item \textsc{Product}
-%     \[
-%       \infer[]
-%         {\xisterm{\Ga}{A}{s} \\
-%          \xisterm{\Ga,x:A}{B}{s'}
-%         }
-%         {\xisterm{\Ga}{\Prod{x:A} B}{s''}}
-%       (s,s',s'')
-%     \]
-%     By IH and lemma~\ref{lem:choose} we have $\isterm{\Gb}{\Ab}{s}$,
-%     meaning $\isctx{\Gb,x:\Ab} \in \trans{\xisctx{\Ga, x:A}}$,
-%     and then $\isterm{\Gb,x:\Ab}{\Bb}{s'}$.
-%     We thus conclude
-%     $\isterm{\Gb}{\Prod{x:\Ab} \Bb}{s''} \in
-%     \trans{\xisterm{\Ga}{\Prod{x:A} B}{s''}}$.
+    \item \textsc{Product}
+    \[
+      \infer[]
+        {\xisterm{\Ga}{A}{s} \\
+         \xisterm{\Ga,x:A}{B}{s'}
+        }
+        {\xisterm{\Ga}{\Prod{x:A} B}{s''}}
+      (s,s',s'')
+    \]
+    By IH and lemma~\ref{lem:choose} we have $\isterm{\Gb}{\Ab}{s}$,
+    meaning $\isctx{\Gb,x:\Ab} \in \trans{\xisctx{\Ga, x:A}}$,
+    and then $\isterm{\Gb,x:\Ab}{\Bb}{s'}$.
+    We thus conclude
+    $\isterm{\Gb}{\Prod{x:\Ab} \Bb}{s''} \in
+    \trans{\xisterm{\Ga}{\Prod{x:A} B}{s''}}$.
 
-%     \item \textsc{Sigma}
-%     \[
-%       \infer[]
-%         {\xisterm{\Ga}{A}{s} \\
-%          \xisterm{\Ga,x:A}{B}{s'}
-%         }
-%         {\xisterm{\Ga}{\Sum{x:A} B}{s''}}
-%       (s,s',s'')
-%     \]
-%     Similar.
+    \item \textsc{Sigma}
+    \[
+      \infer[]
+        {\xisterm{\Ga}{A}{s} \\
+         \xisterm{\Ga,x:A}{B}{s'}
+        }
+        {\xisterm{\Ga}{\Sum{x:A} B}{s''}}
+      (s,s',s'')
+    \]
+    Similar.
 
-%     \item \textsc{Equality}
-%     \[
-%       \infer[]
-%         {\xisterm{\Ga}{A}{s} \\
-%          \xisterm{\Ga}{u}{A} \\
-%          \xisterm{\Ga}{v}{A}
-%         }
-%         {\xisterm{\Ga}{\Eq{A}{u}{v}}{s}}
-%       %
-%     \]
-%     By IH and lemma~\ref{lem:choose} we have $\isterm{\Gb}{\Ab}{s}$,
-%     and---using lemma~\ref{lem:change-type}---we also have
-%     $\isterm{\Gb}{\ub}{\Ab}$ and $\isterm{\Gb}{\vb}{\Ab}$.
-%     Then
-%     $\isterm{\Gb}{\Eq{\Ab}{\ub}{\vb}}{s} \in
-%     \trans{\xisterm{\Ga}{\Eq{A}{u}{v}}{s}}$.
+    \item \textsc{Equality}
+    \[
+      \infer[]
+        {\xisterm{\Ga}{A}{s} \\
+         \xisterm{\Ga}{u}{A} \\
+         \xisterm{\Ga}{v}{A}
+        }
+        {\xisterm{\Ga}{\Eq{A}{u}{v}}{s}}
+      %
+    \]
+    By IH and lemma~\ref{lem:choose} we have $\isterm{\Gb}{\Ab}{s}$,
+    and---using lemma~\ref{lem:change-type}---we also have
+    $\isterm{\Gb}{\ub}{\Ab}$ and $\isterm{\Gb}{\vb}{\Ab}$.
+    Then
+    $\isterm{\Gb}{\Eq{\Ab}{\ub}{\vb}}{s} \in
+    \trans{\xisterm{\Ga}{\Eq{A}{u}{v}}{s}}$.
 
-%     \item \textsc{Variable}
-%     \[
-%       \infer[]
-%         {\xisctx{\Ga} \\
-%          (x : A) \in \Ga
-%         }
-%         {\xisterm{\Ga}{x}{A}}
-%       %
-%     \]
-%     We have $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$ (as we assumed, this is not
-%     an instance of the induction hypothesis) and $(x : A) \in \Ga$.
-%     By definition of $\Ga \ir \Gb$ we also have some $(x : \Ab) \in \Gb$
-%     with $A \ir \Ab$, thus
-%     $\isterm{\Gb}{x}{\Ab} \in \trans{\xisterm{\Ga}{x}{A}}$.
+    \item \textsc{Variable}
+    \[
+      \infer[]
+        {\xisctx{\Ga} \\
+         (x : A) \in \Ga
+        }
+        {\xisterm{\Ga}{x}{A}}
+      %
+    \]
+    We have $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$ (as we assumed, this is not
+    an instance of the induction hypothesis) and $(x : A) \in \Ga$.
+    By definition of $\Ga \ir \Gb$ we also have some $(x : \Ab) \in \Gb$
+    with $A \ir \Ab$, thus
+    $\isterm{\Gb}{x}{\Ab} \in \trans{\xisterm{\Ga}{x}{A}}$.
 
-%     \item \textsc{Conversion}
-%     \[
-%       \infer[]
-%         {\xisterm{\Ga}{u}{A} \\
-%          \xeqtype{\Ga}{A}{B}
-%         }
-%         {\xisterm{\Ga}{u}{B}}
-%       %
-%     \]
-%     By IH and lemma~\ref{lem:uip-cong} we have
-%     $\isterm{\Gb}{\eb}{\Eq{}{\Ab}{\Bb}}$ which implies
-%     $\istype{\Gb}{\Ab} \in \trans{\xistype{\Ga}{A}}$ by
-%     inversion~\eqref{lem:inversion}, thus, from lemma~\ref{lem:change-type}
-%     and IH we get $\isterm{\Gb}{\ub}{\Ab}$, yielding
-%     $\isterm{\Gb}{\transpo{\eb}\ \ub}{\Bb} \in \trans{\xisterm{\Ga}{u}{B}}$.
+    \item \textsc{Conversion}
+    \[
+      \infer[]
+        {\xisterm{\Ga}{u}{A} \\
+         \xeqtype{\Ga}{A}{B}
+        }
+        {\xisterm{\Ga}{u}{B}}
+      %
+    \]
+    By IH and lemma~\ref{lem:uip-cong} we have
+    $\isterm{\Gb}{\eb}{\Eq{}{\Ab}{\Bb}}$ which implies
+    $\istype{\Gb}{\Ab} \in \trans{\xistype{\Ga}{A}}$ by
+    inversion~\eqref{lem:inversion}, thus, from lemma~\ref{lem:change-type}
+    and IH we get $\isterm{\Gb}{\ub}{\Ab}$, yielding
+    $\isterm{\Gb}{\transpo{\eb}\ \ub}{\Bb} \in \trans{\xisterm{\Ga}{u}{B}}$.
 
-%     \item \textsc{Lambda}
-%     \[
-%       \infer[]
-%         {\xisterm{\Ga}{A}{s} \\
-%          \xisterm{\Ga,x:A}{B}{s'} \\
-%          \xisterm{\Ga,x:A}{t}{B}
-%         }
-%         {\xisterm{\Ga}{\lam{x:A}{B} t}{\Prod{x:A} B}}
-%       %
-%     \]
-%     By IH and lemma~\ref{lem:choose} we have $\isterm{\Gb}{\Ab}{s}$ and thus
-%     $\isctx{\Gb, x:\Ab} \in \trans{\xisctx{\Ga,x:A}}$, meaning we can apply IH
-%     and lemma~\ref{lem:choose} to the second hypothesis to get
-%     $\isterm{\Gb,x:\Ab}{\Bb}{s'} \in \trans{\xisterm{\Ga,x:A}{B}{s'}}$ and then
-%     IH and lemma~\ref{lem:change-type} to get
-%     $\isterm{\Gb,x:\Ab}{\tb}{\Bb} \in \trans{\xisterm{\Ga,x:A}{t}{B}}$.
-%     All of this yields
-%     $\isterm{\Gb}{\lam{x:\Ab}{\Bb} \tb}{\Prod{x:\Ab} \Bb}
-%     \in \trans{\xisterm{\Ga}{\lam{x:A}{B} t}{\Prod{x:A} B}}$.
+    \item \textsc{Lambda}
+    \[
+      \infer[]
+        {\xisterm{\Ga}{A}{s} \\
+         \xisterm{\Ga,x:A}{B}{s'} \\
+         \xisterm{\Ga,x:A}{t}{B}
+        }
+        {\xisterm{\Ga}{\lam{x:A}{B} t}{\Prod{x:A} B}}
+      %
+    \]
+    By IH and lemma~\ref{lem:choose} we have $\isterm{\Gb}{\Ab}{s}$ and thus
+    $\isctx{\Gb, x:\Ab} \in \trans{\xisctx{\Ga,x:A}}$, meaning we can apply IH
+    and lemma~\ref{lem:choose} to the second hypothesis to get
+    $\isterm{\Gb,x:\Ab}{\Bb}{s'} \in \trans{\xisterm{\Ga,x:A}{B}{s'}}$ and then
+    IH and lemma~\ref{lem:change-type} to get
+    $\isterm{\Gb,x:\Ab}{\tb}{\Bb} \in \trans{\xisterm{\Ga,x:A}{t}{B}}$.
+    All of this yields
+    $\isterm{\Gb}{\lam{x:\Ab}{\Bb} \tb}{\Prod{x:\Ab} \Bb}
+    \in \trans{\xisterm{\Ga}{\lam{x:A}{B} t}{\Prod{x:A} B}}$.
 
-%     \item \textsc{Application}
-%     \[
-%       \infer[]
-%         {\xisterm{\Ga}{A}{s} \\
-%          \xisterm{\Ga,x:A}{B}{s'} \\
-%          \xisterm{\Ga}{t}{\Prod{x:A} B} \\
-%          \xisterm{\Ga}{u}{A}
-%         }
-%         {\xisterm{\Ga}{\app{t}{x:A}{B}{u}}{B[x \sto u]}}
-%       %
-%     \]
-%     Using IH together with lemmata~\ref{lem:choose} and~\ref{lem:change-type}
-%     we get $\isterm{\Gb}{\Ab}{s}$ and $\isterm{\Gb,x:\Ab}{\Bb}{s'}$ and
-%     $\isterm{\Gb}{\tb}{\Prod{x:\Ab} \Bb}$ and $\isterm{\Gb}{\ub}{\Ab}$
-%     meaning we can conclude
-%     $\isterm{\Gb}{\app{\tb}{x:\Ab}{\Bb}{\ub}}{\Bb[x \sto \ub]}
-%     \in \trans{\xisterm{\Ga}{\app{t}{x:A}{B}{u}}{B[x \sto u]}}$.
+    \item \textsc{Application}
+    \[
+      \infer[]
+        {\xisterm{\Ga}{A}{s} \\
+         \xisterm{\Ga,x:A}{B}{s'} \\
+         \xisterm{\Ga}{t}{\Prod{x:A} B} \\
+         \xisterm{\Ga}{u}{A}
+        }
+        {\xisterm{\Ga}{\app{t}{x:A}{B}{u}}{B[x \sto u]}}
+      %
+    \]
+    Using IH together with lemmata~\ref{lem:choose} and~\ref{lem:change-type}
+    we get $\isterm{\Gb}{\Ab}{s}$ and $\isterm{\Gb,x:\Ab}{\Bb}{s'}$ and
+    $\isterm{\Gb}{\tb}{\Prod{x:\Ab} \Bb}$ and $\isterm{\Gb}{\ub}{\Ab}$
+    meaning we can conclude
+    $\isterm{\Gb}{\app{\tb}{x:\Ab}{\Bb}{\ub}}{\Bb[x \sto \ub]}
+    \in \trans{\xisterm{\Ga}{\app{t}{x:A}{B}{u}}{B[x \sto u]}}$.
 
-%     \item \textsc{Pair}
-%     \[
-%       \infer[]
-%         {\xisterm{\Ga}{u}{A} \\
-%          \xisterm{\Ga}{A}{s} \\
-%          \xisterm{\Ga,x:A}{B}{s'} \\
-%          \xisterm{\Ga}{v}{B[x \sto u]}
-%         }
-%         {\xisterm{\Ga}{\pair{x:A}{B}{u}{v}}{\Sum{x:A}{B}}}
-%       %
-%     \]
-%     Using IH with lemmata~\ref{lem:choose} and~\ref{lem:change-type} we
-%     translate all the hypotheses to conclude
-%     $\isterm{\Gb}{\pair{x:\Ab}{\Bb}{\ub}{\vb}}{\Sum{x:\Ab}{\Bb}}
-%     \in \trans{\xisterm{\Ga}{\pair{x:A}{B}{u}{v}}{\Sum{x:A}{B}}}$.
+    \item \textsc{Pair}
+    \[
+      \infer[]
+        {\xisterm{\Ga}{u}{A} \\
+         \xisterm{\Ga}{A}{s} \\
+         \xisterm{\Ga,x:A}{B}{s'} \\
+         \xisterm{\Ga}{v}{B[x \sto u]}
+        }
+        {\xisterm{\Ga}{\pair{x:A}{B}{u}{v}}{\Sum{x:A}{B}}}
+      %
+    \]
+    Using IH with lemmata~\ref{lem:choose} and~\ref{lem:change-type} we
+    translate all the hypotheses to conclude
+    $\isterm{\Gb}{\pair{x:\Ab}{\Bb}{\ub}{\vb}}{\Sum{x:\Ab}{\Bb}}
+    \in \trans{\xisterm{\Ga}{\pair{x:A}{B}{u}{v}}{\Sum{x:A}{B}}}$.
 
-%     \item \textsc{Proj$_1$}
-%     \[
-%       \infer[]
-%         {\xisterm{\Ga}{p}{\Sum{x:A}{B}}}
-%         {\xisterm{\Ga}{\pio{x:A}{B}{p}}{A}}
-%       %
-%     \]
-%     Similar.
+    \item \textsc{Proj$_1$}
+    \[
+      \infer[]
+        {\xisterm{\Ga}{p}{\Sum{x:A}{B}}}
+        {\xisterm{\Ga}{\pio{x:A}{B}{p}}{A}}
+      %
+    \]
+    Similar.
 
-%     \item \textsc{Proj$_2$}
-%     \[
-%       \infer[]
-%         {\xisterm{\Ga}{p}{\Sum{x:A}{B}}}
-%         {\xisterm{\Ga}{\pit{x:A}{B}{p}}{B[x \sto \pio{x:A}{B}{p}]}}
-%       %
-%     \]
-%     Similar.
+    \item \textsc{Proj$_2$}
+    \[
+      \infer[]
+        {\xisterm{\Ga}{p}{\Sum{x:A}{B}}}
+        {\xisterm{\Ga}{\pit{x:A}{B}{p}}{B[x \sto \pio{x:A}{B}{p}]}}
+      %
+    \]
+    Similar.
 
-%     \item \textsc{Reflexivity}
-%     \[
-%       \infer[]
-%         {\xisterm{\Ga}{A}{s} \\
-%          \xisterm{\Ga}{u}{A}
-%         }
-%         {\xisterm{\Ga}{\refl{A} u}{\Eq{A}{u}{u}}}
-%       %
-%     \]
-%     By IH we have $\isterm{\Gb}{\ub}{\Ab}$ and thus
-%     $\isterm{\Gb}{\refl{\Ab} \ub}{\Eq{\Ab}{\ub}{\ub}} \in
-%     \trans{\xisterm{\Ga}{\refl{A} u}{\Eq{A}{u}{u}}}$.
+    \item \textsc{Reflexivity}
+    \[
+      \infer[]
+        {\xisterm{\Ga}{A}{s} \\
+         \xisterm{\Ga}{u}{A}
+        }
+        {\xisterm{\Ga}{\refl{A} u}{\Eq{A}{u}{u}}}
+      %
+    \]
+    By IH we have $\isterm{\Gb}{\ub}{\Ab}$ and thus
+    $\isterm{\Gb}{\refl{\Ab} \ub}{\Eq{\Ab}{\ub}{\ub}} \in
+    \trans{\xisterm{\Ga}{\refl{A} u}{\Eq{A}{u}{u}}}$.
 
-%     \item \textsc{J}
-%     \[
-%       \infer[]
-%         {\xisterm{\Ga}{A}{s} \\
-%          \xisterm{\Ga}{u,v}{A} \\
-%          \xisterm{\Ga, x:A, e:\Eq{A}{u}{x}}{P}{s'} \\
-%          \xisterm{\Ga}{p}{\Eq{A}{u}{v}} \\
-%          \xisterm{\Ga}{w}{P[x \sto u, e \sto \refl{A} u]}
-%         }
-%         {\xisterm
-%           {\Ga}
-%           {\J{A}{u}{x.e.P}{w}{v}{p}}
-%           {P[x \sto v, e \sto p]}
-%         }
-%       %
-%     \]
-%     By IH and lemma~\ref{lem:choose} we have $\isterm{\Gb}{\Ab}{s}$.
-%     From this and IH and lemma~\ref{lem:change-type} we have
-%     $\isterm{\Gb}{\ub,\vb}{\Ab}$. We can thus deduce
-%     $\isctx{\Gb,x:\Ab,e:\Eq{\Ab}{\ub}{x}} \in \trans{\Ga, x:A, e:\Eq{A}{u}{x}}$
-%     which in turn gives us
-%     $\isterm{\Gb, x:\Ab,e:\Eq{\Ab}{\ub}{x}}{\Pb}{s'}$.
-%     Similarly we also get $\isterm{\Gb}{\pb}{\Eq{\Ab}{\ub}{\vb}}$ and
-%     $\isterm{\Gb}{\wb}{\Pb[x \sto \ub, e \sto \refl{\Ab} \ub]}$.
-%     All of this allows us to conclude
-%     $\isterm
-%       {\Gb}
-%       {\J{\Ab}{\ub}{x.e.\Pb}{\wb}{\vb}{\pb}}
-%       {\Pb[x \sto \vb, e \sto \pb]}
-%     \in
-%     \trans{
-%       \xisterm
-%         {\Ga}
-%         {\J{A}{u}{x.e.P}{w}{v}{p}}
-%         {P[x \sto v, e \sto p]}
-%     }$.
+    \item \textsc{J}
+    \[
+      \infer[]
+        {\xisterm{\Ga}{A}{s} \\
+         \xisterm{\Ga}{u,v}{A} \\
+         \xisterm{\Ga, x:A, e:\Eq{A}{u}{x}}{P}{s'} \\
+         \xisterm{\Ga}{p}{\Eq{A}{u}{v}} \\
+         \xisterm{\Ga}{w}{P[x \sto u, e \sto \refl{A} u]}
+        }
+        {\xisterm
+          {\Ga}
+          {\J{A}{u}{x.e.P}{w}{v}{p}}
+          {P[x \sto v, e \sto p]}
+        }
+      %
+    \]
+    By IH and lemma~\ref{lem:choose} we have $\isterm{\Gb}{\Ab}{s}$.
+    From this and IH and lemma~\ref{lem:change-type} we have
+    $\isterm{\Gb}{\ub,\vb}{\Ab}$. We can thus deduce
+    $\isctx{\Gb,x:\Ab,e:\Eq{\Ab}{\ub}{x}} \in \trans{\Ga, x:A, e:\Eq{A}{u}{x}}$
+    which in turn gives us
+    $\isterm{\Gb, x:\Ab,e:\Eq{\Ab}{\ub}{x}}{\Pb}{s'}$.
+    Similarly we also get $\isterm{\Gb}{\pb}{\Eq{\Ab}{\ub}{\vb}}$ and
+    $\isterm{\Gb}{\wb}{\Pb[x \sto \ub, e \sto \refl{\Ab} \ub]}$.
+    All of this allows us to conclude
+    $\isterm
+      {\Gb}
+      {\J{\Ab}{\ub}{x.e.\Pb}{\wb}{\vb}{\pb}}
+      {\Pb[x \sto \vb, e \sto \pb]}
+    \in
+    \trans{
+      \xisterm
+        {\Ga}
+        {\J{A}{u}{x.e.P}{w}{v}{p}}
+        {P[x \sto v, e \sto p]}
+    }$.
 
-%     \item \textsc{Funext}
-%     \[
-%       \infer[]
-%         {\isterm{\Ga}{f,g}{\Prod{x:A} B} \\
-%          \isterm
-%            {\Ga}
-%            {e}
-%            {\Prod{x:A} \Eq{B}{\app{f}{x:A}{B}{x}}{\app{g}{x:A}{B}{x}}}
-%         }
-%         {\isterm{\Ga}{\funext{x:A}{B}{f}{g}{e}}{\Eq{}{f}{g}}}
-%       %
-%     \]
-%     Similar.
+    \item \textsc{Funext}
+    \[
+      \infer[]
+        {\isterm{\Ga}{f,g}{\Prod{x:A} B} \\
+         \isterm
+           {\Ga}
+           {e}
+           {\Prod{x:A} \Eq{B}{\app{f}{x:A}{B}{x}}{\app{g}{x:A}{B}{x}}}
+        }
+        {\isterm{\Ga}{\funext{x:A}{B}{f}{g}{e}}{\Eq{}{f}{g}}}
+      %
+    \]
+    Similar.
 
-%     \item \textsc{UIP}
-%     \[
-%       \infer[]
-%         {\xisterm{\Ga}{e_1,e_2}{\Eq{A}{u}{v}}}
-%         {\xisterm{\Ga}{\uip{A}{u}{v}{e_1}{e_2}}{\Eq{}{e_1}{e_2}}}
-%       %
-%     \]
-%     Similar.
+    \item \textsc{UIP}
+    \[
+      \infer[]
+        {\xisterm{\Ga}{e_1,e_2}{\Eq{A}{u}{v}}}
+        {\xisterm{\Ga}{\uip{A}{u}{v}{e_1}{e_2}}{\Eq{}{e_1}{e_2}}}
+      %
+    \]
+    Similar.
 
-%     \item \textsc{Beta}
-%     \[
-%       \infer[]
-%         {\xisterm{\Ga}{A}{s} \\
-%          \xisterm{\Ga,x:A}{B}{s'} \\
-%          \xisterm{\Ga,x:A}{t}{B} \\
-%          \xisterm{\Ga}{u}{A}
-%         }
-%         {\xeqterm
-%           {\Ga}
-%           {\app
-%             {(\lam{x:A}{B} t)}
-%             {x:A}
-%             {B}
-%             {u}
-%           }
-%           {t[x \sto u]}
-%           {B[x \sto u]}
-%         }
-%       %
-%     \]
-%     From IH and the lemmata, we even get the conversion, we conclude using
-%     reflexivity.
+    \item \textsc{Beta}
+    \[
+      \infer[]
+        {\xisterm{\Ga}{A}{s} \\
+         \xisterm{\Ga,x:A}{B}{s'} \\
+         \xisterm{\Ga,x:A}{t}{B} \\
+         \xisterm{\Ga}{u}{A}
+        }
+        {\xeqterm
+          {\Ga}
+          {\app
+            {(\lam{x:A}{B} t)}
+            {x:A}
+            {B}
+            {u}
+          }
+          {t[x \sto u]}
+          {B[x \sto u]}
+        }
+      %
+    \]
+    From IH and the lemmata, we even get the conversion, we conclude using
+    reflexivity.
 
-%     \item \textsc{Proj$_1$-Red}
-%     \[
-%       \infer[]
-%         {\xisterm{\Ga}{A}{s} \\
-%          \xisterm{\Ga}{u}{A} \\
-%          \xisterm{\Ga,x:A}{B}{s'} \\
-%          \xisterm{\Ga}{v}{B[x \sto u]}
-%         }
-%         {\xeqterm
-%           {\Ga}
-%           {\pio{x:A}{B}{\pair{x:A}{B}{u}{v}}}
-%           {u}
-%           {A}
-%         }
-%       %
-%     \]
-%     Likewise.
+    \item \textsc{Proj$_1$-Red}
+    \[
+      \infer[]
+        {\xisterm{\Ga}{A}{s} \\
+         \xisterm{\Ga}{u}{A} \\
+         \xisterm{\Ga,x:A}{B}{s'} \\
+         \xisterm{\Ga}{v}{B[x \sto u]}
+        }
+        {\xeqterm
+          {\Ga}
+          {\pio{x:A}{B}{\pair{x:A}{B}{u}{v}}}
+          {u}
+          {A}
+        }
+      %
+    \]
+    Likewise.
 
-%     \item \textsc{Proj$_2$-Red}
-%     \[
-%       \infer[]
-%         {\xisterm{\Ga}{A}{s} \\
-%          \xisterm{\Ga}{u}{A} \\
-%          \xisterm{\Ga,x:A}{B}{s'} \\
-%          \xisterm{\Ga}{v}{B[x \sto u]}
-%         }
-%         {\xeqterm
-%           {\Ga}
-%           {\pit{x:A}{B}{\pair{x:A}{B}{u}{v}}}
-%           {v}
-%           {B[x \sto u]}
-%         }
-%       %
-%     \]
-%     Likewise.
+    \item \textsc{Proj$_2$-Red}
+    \[
+      \infer[]
+        {\xisterm{\Ga}{A}{s} \\
+         \xisterm{\Ga}{u}{A} \\
+         \xisterm{\Ga,x:A}{B}{s'} \\
+         \xisterm{\Ga}{v}{B[x \sto u]}
+        }
+        {\xeqterm
+          {\Ga}
+          {\pit{x:A}{B}{\pair{x:A}{B}{u}{v}}}
+          {v}
+          {B[x \sto u]}
+        }
+      %
+    \]
+    Likewise.
 
-%     \item \textsc{J-Red}
-%     \[
-%       \infer[]
-%         {\xisterm{\Ga}{A}{\Un{i}} \\
-%          \xisterm{\Ga}{u}{A} \\
-%          \xisterm{\Ga, x:A, e:\Eq{A}{u}{x}}{P}{\Un{j}} \\
-%          \xisterm{\Ga}{w}{P[x \sto u, e \sto \refl{A} u]}
-%         }
-%         {\xeqterm
-%           {\Ga}
-%           {\J{A}{u}{x.e.P}{w}{u}{\refl{A} u}}
-%           {w}
-%           {P[x \sto u, e \sto \refl{A} u]}
-%         }
-%       %
-%     \]
-%     Likewise.
+    \item \textsc{J-Red}
+    \[
+      \infer[]
+        {\xisterm{\Ga}{A}{\Un{i}} \\
+         \xisterm{\Ga}{u}{A} \\
+         \xisterm{\Ga, x:A, e:\Eq{A}{u}{x}}{P}{\Un{j}} \\
+         \xisterm{\Ga}{w}{P[x \sto u, e \sto \refl{A} u]}
+        }
+        {\xeqterm
+          {\Ga}
+          {\J{A}{u}{x.e.P}{w}{u}{\refl{A} u}}
+          {w}
+          {P[x \sto u, e \sto \refl{A} u]}
+        }
+      %
+    \]
+    Likewise.
 
-%     \item \textsc{Conv-Refl}
-%     \[
-%       \infer[]
-%         {\xisterm{\Ga}{u}{A}}
-%         {\xeqterm{\Ga}{u}{u}{A}}
-%       %
-%     \]
-%     We conclude from IH and reflexivity of $\Heqs$.
+    \item \textsc{Conv-Refl}
+    \[
+      \infer[]
+        {\xisterm{\Ga}{u}{A}}
+        {\xeqterm{\Ga}{u}{u}{A}}
+      %
+    \]
+    We conclude from IH and reflexivity of $\Heqs$.
 
-%     \item \textsc{Conv-Sym}
-%     \[
-%       \infer[]
-%         {\xeqterm{\Ga}{u}{v}{A}}
-%         {\xeqterm{\Ga}{v}{u}{A}}
-%       %
-%     \]
-%     We conclude from IH and symmetry of $\Heqs$.
+    \item \textsc{Conv-Sym}
+    \[
+      \infer[]
+        {\xeqterm{\Ga}{u}{v}{A}}
+        {\xeqterm{\Ga}{v}{u}{A}}
+      %
+    \]
+    We conclude from IH and symmetry of $\Heqs$.
 
-%     \item \textsc{Conv-Trans}
-%     \[
-%       \infer[]
-%         {\xeqterm{\Ga}{u}{v}{A} \\
-%          \xeqterm{\Ga}{v}{w}{A}
-%         }
-%         {\xeqterm{\Ga}{u}{w}{A}}
-%       %
-%     \]
-%     We conclude from IH and transitivity of $\Heqs$.
+    \item \textsc{Conv-Trans}
+    \[
+      \infer[]
+        {\xeqterm{\Ga}{u}{v}{A} \\
+         \xeqterm{\Ga}{v}{w}{A}
+        }
+        {\xeqterm{\Ga}{u}{w}{A}}
+      %
+    \]
+    We conclude from IH and transitivity of $\Heqs$.
 
-%     % \item \textsc{}
-%     % \[
-%     %   \infer[]
-%     %     {\xisterm{\Ga}{A}{s} \\
-%     %      \xisterm{\Ga, x:A}{B}{s'} \\
-%     %      \xisterm{\Ga}{f}{\Prod{x:A} B}
-%     %     }
-%     %     {\xeqterm
-%     %       {\Ga}
-%     %       {\lam{x:A}{B} \app{f}{x:A}{B}{x}}
-%     %       {f}
-%     %       {\Prod{x:A} B}
-%     %     }
-%     %   %
-%     % \]
-%     % This works like the computation cases.
+    % \item \textsc{}
+    % \[
+    %   \infer[]
+    %     {\xisterm{\Ga}{A}{s} \\
+    %      \xisterm{\Ga, x:A}{B}{s'} \\
+    %      \xisterm{\Ga}{f}{\Prod{x:A} B}
+    %     }
+    %     {\xeqterm
+    %       {\Ga}
+    %       {\lam{x:A}{B} \app{f}{x:A}{B}{x}}
+    %       {f}
+    %       {\Prod{x:A} B}
+    %     }
+    %   %
+    % \]
+    % This works like the computation cases.
 
-%     \item \textsc{Conv-Conv}
-%     \[
-%       \infer[]
-%         {\xeqterm{\Ga}{t_1}{t_2}{T_1} \\
-%          \xeqtype{\Ga}{T_1}{T_2}
-%         }
-%         {\xeqterm{\Ga}{t_1}{t_2}{T_2}}
-%       %
-%     \]
-%     By IH (and lemma~\ref{lem:uip-cong}) we have
-%     $\isterm{\Gb}{\eb}{\Heq{\Tb_1}{\tb_1}{\Tb'_1}{\tb_2}}$ and
-%     $\isterm{\Gb}{p}{\Eq{}{\Tb''_1}{\Tb_2}}$. Also from
-%     lemmata~\ref{lem:sim-cong} and~\ref{lem:uip-cong} we have
-%     $\Eq{}{\Tb'_1}{\Tb''_1}$ and $\Eq{}{\Tb_1}{\Tb''_1}$, meaning we get
-%     $\Eq{}{\Tb'_1}{\Tb_2}$ and $\Eq{}{\Tb_1}{\Tb_2}$.
-%     This allows us to conclude by transporting along the aforementioned
-%     equalities.
+    \item \textsc{Conv-Conv}
+    \[
+      \infer[]
+        {\xeqterm{\Ga}{t_1}{t_2}{T_1} \\
+         \xeqtype{\Ga}{T_1}{T_2}
+        }
+        {\xeqterm{\Ga}{t_1}{t_2}{T_2}}
+      %
+    \]
+    By IH (and lemma~\ref{lem:uip-cong}) we have
+    $\isterm{\Gb}{\eb}{\Heq{\Tb_1}{\tb_1}{\Tb'_1}{\tb_2}}$ and
+    $\isterm{\Gb}{p}{\Eq{}{\Tb''_1}{\Tb_2}}$. Also from
+    lemmata~\ref{lem:sim-cong} and~\ref{lem:uip-cong} we have
+    $\Eq{}{\Tb'_1}{\Tb''_1}$ and $\Eq{}{\Tb_1}{\Tb''_1}$, meaning we get
+    $\Eq{}{\Tb'_1}{\Tb_2}$ and $\Eq{}{\Tb_1}{\Tb_2}$.
+    This allows us to conclude by transporting along the aforementioned
+    equalities.
 
-%     \item \textsc{Conv-Prod}
-%     \[
-%       \infer[]
-%         {\xeqterm{\Ga}{A_1}{A_2}{s} \\
-%          \xeqterm{\Ga,x:A_1}{B_1}{B_2}{s'}
-%         }
-%         {\xeqterm{\Ga}{\Prod{x:A_1} B_1}{\Prod{x:A_2} B_2}{s''}}
-%       (s,s',s'')
-%     \]
-%     We conclude exactly like we did in the proof of lemma~\ref{lem:sim-cong}.
+    \item \textsc{Conv-Prod}
+    \[
+      \infer[]
+        {\xeqterm{\Ga}{A_1}{A_2}{s} \\
+         \xeqterm{\Ga,x:A_1}{B_1}{B_2}{s'}
+        }
+        {\xeqterm{\Ga}{\Prod{x:A_1} B_1}{\Prod{x:A_2} B_2}{s''}}
+      (s,s',s'')
+    \]
+    We conclude exactly like we did in the proof of lemma~\ref{lem:sim-cong}.
 
-%     \item All congruences hold like in proof of
-%     lemma~\ref{lem:sim-cong}.
+    \item All congruences hold like in proof of
+    lemma~\ref{lem:sim-cong}.
 
-%     \item \textsc{Conv-Eq}
-%     \[
-%       \infer[]
-%         {\xisterm{\Ga}{e}{\Eq{A}{u}{v}}}
-%         {\xeqterm{\Ga}{u}{v}{A}}
-%       %
-%     \]
-%     By IH and lemma~\ref{lem:choose} we have
-%     $\isterm{\Gb}{\eb}{\Eq{\Ab}{\ub}{\vb}}
-%     \in \trans{\xisterm{\Ga}{e}{\Eq{A}{u}{v}}}$ which yields the conclusion we
-%     wanted.
-%   \end{itemize}
-% \end{proof}
+    \item \textsc{Conv-Eq}
+    \[
+      \infer[]
+        {\xisterm{\Ga}{e}{\Eq{A}{u}{v}}}
+        {\xeqterm{\Ga}{u}{v}{A}}
+      %
+    \]
+    By IH and lemma~\ref{lem:choose} we have
+    $\isterm{\Gb}{\eb}{\Eq{\Ab}{\ub}{\vb}}
+    \in \trans{\xisterm{\Ga}{e}{\Eq{A}{u}{v}}}$ which yields the conclusion we
+    wanted.
+  \end{itemize}
+\end{proof}
