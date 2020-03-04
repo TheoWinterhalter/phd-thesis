@@ -1,37 +1,20 @@
 % !TEX program = xelatex
 
-\documentclass[a4paper,sfsidenotes,justified,draft]{tufte-book}
+\documentclass[draft]{kaobook}
 % \documentclass[draft]{report}
 
 \usepackage{fontspec}
 % \setmainfont[Ligatures=TeX]{Noto Serif}
 % \setsansfont[Ligatures=TeX]{Arial}
 
-% Needed for tufte to work with XeLaTeX
-% Set up the spacing using fontspec features
-\renewcommand\allcapsspacing[1]{{\addfontfeature{LetterSpace=15}#1}}
-\renewcommand\smallcapsspacing[1]{{\addfontfeature{LetterSpace=10}#1}}
+\usepackage{styles/mdftheorems}
 
-\usepackage{amsmath}
-\usepackage{amssymb, amsfonts, stmaryrd}
-\usepackage{mathrsfs}
-\usepackage{amsthm}
-\usepackage{mathtools}
-
-\newtheorem{theorem}[chapter]{Theorem}
-\newtheorem{corollary}[chapter]{Corollary}
-\newtheorem{lemma}[chapter]{Lemma}
-\newtheorem{definition}[chapter]{Definition}
-\newtheorem{note}[chapter]{Note}
-
-\usepackage{xcolor}
+% \usepackage{xcolor}
 
 \usepackage{mathpartir}
 
 % Necessary?
 \usepackage{xspace}
-
-\usepackage{hyperref}
 
 % For coq higlighting
 \usepackage{minted}

@@ -2,9 +2,9 @@
 
 \chapter{Eliminating Reflection from Type Theory}
 
-\tw{Taken from the CPP article (for now as is).}
+\todo{Taken from the CPP article (for now as is).}
 
-\tw{Cite paper and authors}
+\todo{Cite paper and authors}
 
 % \begin{abstract}
   Type theories with equality reflection, such as extensional type
@@ -92,10 +92,10 @@ translated into a typecheckable term of ITT.
 And indeed, it is well know that one can find a corresponding term of
 the same type in ITT by \emph{explicitly} transporting the term $x$
 of type $A$ using the elimination of internal equality on the witness
-of equality $e$, noted $\transpo{e}$:
+of equality $e$, noted $\translpo{e}$:
 %
 \[
-  \lambda\ A\ B \ (e:A = B)\ (x:A).\ \transpo{e}\ x
+  \lambda\ A\ B \ (e:A = B)\ (x:A).\ \translpo{e}\ x
   : \Pi\ A\ B.\ A = B \to A \to B.
 \]
 %
@@ -285,7 +285,7 @@ equality} introduced by \cite{mcbride2000dependently}.
 However, to avoid adding additional axioms to ITT as done by
 \cite{oury2005extensionality}, we prefer to encode this
 heterogeneous equality using the following dependent sums:
-$$\Heq{T}{t}{U}{u} := \Sum{p:\Eq{}{T}{U}} \Eq{}{\transpo{p}\ t}{u}.$$
+$$\Heq{T}{t}{U}{u} := \Sum{p:\Eq{}{T}{U}} \Eq{}{\translpo{p}\ t}{u}.$$
 %
 
 During the translation, the same term occurring twice can be
@@ -568,7 +568,7 @@ Transport can be defined from elimination of equality as follows:
 \begin{definition}[Transport]
   Given $\isterm{\Ga}{p}{\Eq{s}{T_1}{T_2}}$ and
   $\isterm{\Ga}{t}{T_1}$ we define the transport of $t$ along $p$, written
-  $\transpo{p}\ t$, as
+  $\translpo{p}\ t$, as
   $\app
     {\J
       {s}
@@ -581,12 +581,12 @@ Transport can be defined from elimination of equality as follows:
     {T_1}
     {T_2}
     {t}
-  $ such that $\isterm{\Ga}{\transpo{p}\ t}{T_2}$.
+  $ such that $\isterm{\Ga}{\translpo{p}\ t}{T_2}$.
 \end{definition}
 %
 However, in order not to confuse the transports added by the
 translation with the transports that were already present in the
-source, we consider $\transpo{p}$ as part of the syntax in the
+source, we consider $\translpo{p}$ as part of the syntax in the
 reasoning. It will be unfolded to its definition only after the
 complete translation is performed.
 %
@@ -619,7 +619,7 @@ symmetric and transitive closure:
 The goal is to prove that two terms in this relation, that are well-typed in the
 target type theory, are heterogeneously equal. As for this notion, we recall
 the definition we previously gave:
-$\Heq{T}{t}{U}{u} := \Sum{p:\Eq{}{T}{U}} \Eq{}{\transpo{p}\ t}{u}$.
+$\Heq{T}{t}{U}{u} := \Sum{p:\Eq{}{T}{U}} \Eq{}{\translpo{p}\ t}{u}$.
 %
 This definition of heterogeneous equality can be shown to be
 reflexive, symmetric and transitive. Because of UIP, heterogeneous
@@ -636,12 +636,12 @@ equality collapses to equality when taken on the same type.
   proof of $A = A$ can be taken to be reflexivity.
 \end{proof}
 
-\begin{note}
+\begin{remark}
   As a corollary, $\Heqs$ on types corresponds to equality.
   Indeed when we have $\isterm{\Ga}{e}{\Heq{s}{A}{s'}{B}}$ we have
   that $\Eq{}{s}{s'}$, which implies that $s$ and $s'$ have the same sort
   and thus are syntactically the same (by an inversion argument).
-\end{note}
+\end{remark}
 
 Before we can prove the fundamental lemma stating that two terms in relation
 are heterogeneously equal, we need to consider another construction.
@@ -766,10 +766,10 @@ We can now state the fundamental lemma.
     \[
       \infer[]
         {t_1 \sim t_2}
-        {\transpo{p}\ t_1 \sim t_2}
+        {\translpo{p}\ t_1 \sim t_2}
       %
     \]
-    We have $\isterm{\Ga, \Ga_1}{\transpo{p}\ t_1}{T_1}$ and
+    We have $\isterm{\Ga, \Ga_1}{\translpo{p}\ t_1}{T_1}$ and
     $\isterm{\Ga, \Ga_2}{t_2}{T_2}$.
     By inversion~\eqref{lem:inversion} we have
     $\isterm{\Ga, \Ga_1}{p}{\Eq{}{T_1'}{T_1}}$ and
@@ -777,8 +777,8 @@ We can now state the fundamental lemma.
     By induction hypothesis we have $e$ such that
     $\isterm{\Ga, \Gp}{e}{\Heq{}{\llift{\gamma}{}{t_1}}{}{\rlift{\gamma}{}{t_2}}}$.
     From transitivity and symmetry we only need to provide a proof of
-    $\Heq{}{\llift{\gamma}{}{t_1}}{}{\transpo{\llift{\gamma}{}{p}}\ \llift{\gamma}{}{t_1}}$ which is inhabited by
-    $\pair{\_}{\_}{\llift{\gamma}{}{p}}{\refl{} (\transpo{\llift{\gamma}{}{p}}\ \llift{\gamma}{}{t_1})}$.
+    $\Heq{}{\llift{\gamma}{}{t_1}}{}{\translpo{\llift{\gamma}{}{p}}\ \llift{\gamma}{}{t_1}}$ which is inhabited by
+    $\pair{\_}{\_}{\llift{\gamma}{}{p}}{\refl{} (\translpo{\llift{\gamma}{}{p}}\ \llift{\gamma}{}{t_1})}$.
   \end{itemize}
 
   The complete proof can be found in Appendix~\ref{sec:proof-fund-lemma}.
@@ -807,12 +807,12 @@ extensional judgment. We extend $\ir$ canonically to contexts
 relation for $\ir$).
 
 Before defining the translation, we define a set
-$\trans{\xisterm{\Ga}{t}{A}}$ of typing judgments
+$\transl{\xisterm{\Ga}{t}{A}}$ of typing judgments
 in ITT associated to a typing judgment $\xisterm{\Ga}{t}{A}$ in ETT.
 %
 The idea is that this set describes all the possible translations that
 lead to the expected property. When
-$\isterm{\Gb}{\tb}{\Ab} \in \trans{\xisterm{\Ga}{t}{A}}$, we say that
+$\isterm{\Gb}{\tb}{\Ab} \in \transl{\xisterm{\Ga}{t}{A}}$, we say that
 $\isterm{\Gb}{\tb}{\Ab}$ realises $\xisterm{\Ga}{t}{A}$. The
 translation will be given by showing that this set is inhabited by
 induction on the derivation.
@@ -820,12 +820,12 @@ induction on the derivation.
 \begin{definition}[Characterisation of possible translations]
   \leavevmode
   \begin{itemize}
-    \item For any $\xisctx{\Ga}$ we define $\trans{\xisctx{\Ga}}$ as a set of
+    \item For any $\xisctx{\Ga}$ we define $\transl{\xisctx{\Ga}}$ as a set of
     valid judgments (in ITT) such that
-    $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$ if and only if $\Ga \ir \Gb$.
+    $\isctx{\Gb} \in \transl{\xisctx{\Ga}}$ if and only if $\Ga \ir \Gb$.
 
-    \item Similarly, $\isterm{\Gb}{\tb}{\Ab} \in \trans{\xisterm{\Ga}{t}{A}}$ iff
-    $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$ and $A \ir \Ab$ and $t \ir \tb$.
+    \item Similarly, $\isterm{\Gb}{\tb}{\Ab} \in \transl{\xisterm{\Ga}{t}{A}}$ iff
+    $\isctx{\Gb} \in \transl{\xisctx{\Ga}}$ and $A \ir \Ab$ and $t \ir \tb$.
   \end{itemize}
 \end{definition}
 
@@ -844,17 +844,17 @@ type, which is required to be able to use the typing rule for application.
 \end{lemma}
 
 \begin{proof}
-  Assume we have $\isterm{\Gb}{\tb}{\Tb} \in \trans{\xisterm{\Ga}{t}{T}}$.
+  Assume we have $\isterm{\Gb}{\tb}{\Tb} \in \transl{\xisterm{\Ga}{t}{T}}$.
   By definition of $\ir$,
   $T \ir \Tb$ means that $\Tb$ is shaped
-  $\transpo{p}\ \transpo{q}\ ...\ \transpo{r}\ \Tb'$ with $\Tb'$ having
+  $\translpo{p}\ \translpo{q}\ ...\ \translpo{r}\ \Tb'$ with $\Tb'$ having
   the same head constructor as $T$. By inversion~\eqref{lem:inversion}, the
   subterms are typable, including $\Tb'$. Actually, from inversion, we
   even get that the type of $\Tb'$ is a universe. Then,
   using lemma~\ref{lem:sim-cong} and lemma~
   \ref{lem:uip-cong}, we get $\isterm{\Gb}{e}{\Eq{}{\Tb}{\Tb'}}$.
   We conclude with
-  $\isterm{\Gb}{\transpo{e}\ \tb}{\Tb'} \in \trans{\xisterm{\Ga}{t}{T}}$.
+  $\isterm{\Gb}{\translpo{e}\ \tb}{\Tb'} \in \transl{\xisterm{\Ga}{t}{T}}$.
 \end{proof}
 
 Finally, in order for the induction to go through, we need to know
@@ -870,9 +870,9 @@ posteriori}.
 
 \begin{lemma}
   \label{lem:change-type}
-  When we have $\isterm{\Gb}{\tb}{\Tb} \in \trans{\xisterm{\Ga}{t}{T}}$
-  and $\istype{\Gb}{\Tb'} \in \trans{\xistype{\Ga}{T}}$ then we also have
-  $\isterm{\Gb}{\tb'}{\Tb'} \in \trans{\xisterm{\Ga}{t}{T}}$ for some $\tb'$.
+  When we have $\isterm{\Gb}{\tb}{\Tb} \in \transl{\xisterm{\Ga}{t}{T}}$
+  and $\istype{\Gb}{\Tb'} \in \transl{\xistype{\Ga}{T}}$ then we also have
+  $\isterm{\Gb}{\tb'}{\Tb'} \in \transl{\xisterm{\Ga}{t}{T}}$ for some $\tb'$.
 \end{lemma}
 
 \begin{proof}
@@ -884,7 +884,7 @@ posteriori}.
   By lemma~\ref{lem:uip-cong} (and lemma~\ref{lem:choose} to give
   universes as types to $\Tb$ and $\Tb'$) we can assume
   $\isterm{\Gb}{p}{\Eq{}{\Tb}{\Tb'}}$. Then
-  $\isterm{\Gb}{\transpo{p}\ \tb}{\Tb'}$ is still a translation since $\ir$
+  $\isterm{\Gb}{\translpo{p}\ \tb}{\Tb'}$ is still a translation since $\ir$
   ignores transports.
 \end{proof}
 
@@ -899,14 +899,14 @@ in ITT.
   \leavevmode
   \begin{itemize}
     \item If\,\,\,$\xisctx{\Ga}$ then there exists
-    $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$,
+    $\isctx{\Gb} \in \transl{\xisctx{\Ga}}$,
 
     \item If\,\,\,$\xisterm{\Ga}{t}{T}$ then for any
-    $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$ there exist $\tb$ and $\Tb$ such
-    that $\isterm{\Gb}{\tb}{\Tb} \in \trans{\xisterm{\Ga}{t}{T}}$,
+    $\isctx{\Gb} \in \transl{\xisctx{\Ga}}$ there exist $\tb$ and $\Tb$ such
+    that $\isterm{\Gb}{\tb}{\Tb} \in \transl{\xisterm{\Ga}{t}{T}}$,
 
     \item If\,\,\,$\xeqterm{\Ga}{u}{v}{A}$ then for any
-    $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$ there exist
+    $\isctx{\Gb} \in \transl{\xisctx{\Ga}}$ there exist
     $A \ir \Ab, A \ir \Ab', u \ir \ub, v \ir \vb$ and $\eb$ such that
     $\isterm{\Gb}{\eb}{\Heq{\Ab}{\ub}{\Ab'}{\vb}}$.
   \end{itemize}
@@ -935,7 +935,7 @@ in ITT.
     $\isterm{\Gb}{\tb}{\Prod{x:\Ab} \Bb}$ and $\isterm{\Gb}{\ub}{\Ab}$
     meaning we can conclude
     $\isterm{\Gb}{\app{\tb}{x:\Ab}{\Bb}{\ub}}{\Bb[x \sto \ub]}
-    \in \trans{\xisterm{\Ga}{\app{t}{x:A}{B}{u}}{B[x \sto u]}}$.
+    \in \transl{\xisterm{\Ga}{\app{t}{x:A}{B}{u}}{B[x \sto u]}}$.
 
     \item \textsc{Conversion}
     \[
@@ -948,10 +948,10 @@ in ITT.
     \]
     By IH and lemma~\ref{lem:uip-cong} we have
     $\isterm{\Gb}{\eb}{\Eq{}{\Ab}{\Bb}}$ which implies
-    $\istype{\Gb}{\Ab} \in \trans{\xistype{\Ga}{A}}$ by
+    $\istype{\Gb}{\Ab} \in \transl{\xistype{\Ga}{A}}$ by
     inversion~\eqref{lem:inversion}, thus, from lemma~\ref{lem:change-type}
     and IH we get $\isterm{\Gb}{\ub}{\Ab}$, yielding
-    $\isterm{\Gb}{\transpo{\eb}\ \ub}{\Bb} \in \trans{\xisterm{\Ga}{u}{B}}$.
+    $\isterm{\Gb}{\translpo{\eb}\ \ub}{\Bb} \in \transl{\xisterm{\Ga}{u}{B}}$.
   \end{itemize}
 
 \end{proof}
@@ -966,17 +966,17 @@ proofs in ITT as well:
 \begin{corollary}[Preservation of ITT]
   \label{cor:preservation}
   If $\xisterm{}{t}{T}$ and $\istype{}{T}$ then there exist $\tb$ such that
-    $\isterm{}{\tb}{T} \in \trans{\xisterm{}{t}{T}}$.
+    $\isterm{}{\tb}{T} \in \transl{\xisterm{}{t}{T}}$.
 \end{corollary}
 \begin{proof}
-  Since $\isctx{\ctxempty} \in \trans{\xisctx{\ctxempty}}$, by
+  Since $\isctx{\ctxempty} \in \transl{\xisctx{\ctxempty}}$, by
   Theorem~\eqref{thm:translation}, there exists $\tb$ and $\Tb$ such
   that
-  $\isterm{}{\tb}{\Tb} \in \trans{\xisterm{}{t}{T}}$
+  $\isterm{}{\tb}{\Tb} \in \transl{\xisterm{}{t}{T}}$
   But as $\istype{}{T}$, we have
-  $\istype{}{T} \in \trans{\xistype{}{T}}$, and,
+  $\istype{}{T} \in \transl{\xistype{}{T}}$, and,
   using Lemma~\ref{lem:change-type}, we obtain
-  $\isterm{}{\tb}{T} \in \trans{\xisterm{}{t}{T}}$.
+  $\isterm{}{\tb}{T} \in \transl{\xisterm{}{t}{T}}$.
 \end{proof}
 
 \begin{corollary}[Relative consistency]
@@ -1008,7 +1008,7 @@ transport, namely $\mathsf{transport}'$ such that
 %
 \begin{align*}
   \otransport{A_1}{A_2}{p}{t} &= t &\text{ when } A_1 =_\alpha A_2 \\
-  &= \transpo{p}{t} &\text{ otherwise.}
+  &= \translpo{p}{t} &\text{ otherwise.}
 \end{align*}
 %
 The idea is that we avoid \emph{trivially} unnecessary transports (we do not
@@ -1020,7 +1020,7 @@ Take transitivity for instance:
 \begin{align*}
   \otransitivity{\refl{} u}{q} &= q \\
   \otransitivity{p}{\refl{} u} &= p \\
-  \otransitivity{p}{q} &= \transitivity{p}{q}.
+  \otransitivity{p}{q} &= \translitivity{p}{q}.
 \end{align*}
 %
 We show these \emph{defined terms} enjoy the same typing rules as their
@@ -1538,7 +1538,7 @@ on a specific domain whose theory is decidable.
 \section{Extension: Translating HTS to 2TT}
 \label{sec:extens-transl-hts}
 
-\tw{Keep it as an easy extension? If so, we need to say more as this is no
+\todo{Keep it as an easy extension? If so, we need to say more as this is no
 longer a direct application.}
 
 As we mentioned earlier, one of the interesting special cases covered by this
@@ -1722,10 +1722,10 @@ and $\upharpoonright$ respectively.
     \[
       \infer[]
         {t_1 \sim t_2}
-        {\transpo{p}\ t_1 \sim t_2}
+        {\translpo{p}\ t_1 \sim t_2}
       %
     \]
-    We have $\isterm{\Ga, \Ga_1}{\transpo{p}\ t_1}{T_1}$ and
+    We have $\isterm{\Ga, \Ga_1}{\translpo{p}\ t_1}{T_1}$ and
     $\isterm{\Ga, \Ga_2}{t_2}{T_2}$.
     By inversion~\eqref{lem:inversion} we have
     $\isterm{\Ga, \Ga_1}{p}{\Eq{}{T_1'}{T_1}}$ and
@@ -1733,14 +1733,14 @@ and $\upharpoonright$ respectively.
     Then by induction hypothesis we have $e$ such that
     $\isterm{\Ga, \Gp}{e}{\Heq{}{\lo{t_1}}{}{\ro{t_2}}}$.
     From transitivity and symmetry we only need to provide a proof of
-    $\Heq{}{\lo{t_1}}{}{\transpo{\lo{p}}\ \lo{t_1}}$ which is inhabited by
-    $\pair{\_}{\_}{\lo{p}}{\refl{} (\transpo{\lo{p}}\ \lo{t_1})}$.
+    $\Heq{}{\lo{t_1}}{}{\translpo{\lo{p}}\ \lo{t_1}}$ which is inhabited by
+    $\pair{\_}{\_}{\lo{p}}{\refl{} (\translpo{\lo{p}}\ \lo{t_1})}$.
 
     \item \textsc{TransportRight}
     \[
       \infer[]
         {t_1 \sim t_2}
-        {t_1 \sim \transpo{p}\ t_2}
+        {t_1 \sim \translpo{p}\ t_2}
       %
     \]
     Similarly.
@@ -1906,14 +1906,14 @@ and $\upharpoonright$ respectively.
   \leavevmode
   \begin{itemize}
     \item If $\xisctx{\Ga}$ then there exists
-    $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$,
+    $\isctx{\Gb} \in \transl{\xisctx{\Ga}}$,
 
     \item If $\xisterm{\Ga}{t}{T}$ then for any
-    $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$ there exist $\tb$ and $\Tb$ such that
-    $\isterm{\Gb}{\tb}{\Tb} \in \trans{\xisterm{\Ga}{t}{T}}$,
+    $\isctx{\Gb} \in \transl{\xisctx{\Ga}}$ there exist $\tb$ and $\Tb$ such that
+    $\isterm{\Gb}{\tb}{\Tb} \in \transl{\xisterm{\Ga}{t}{T}}$,
 
     \item If $\xeqterm{\Ga}{u}{v}{A}$ then for any
-    $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$ there exist
+    $\isctx{\Gb} \in \transl{\xisctx{\Ga}}$ there exist
     $A \ir \Ab, A \ir \Ab', u \ir \ub, v \ir \vb$ and $\eb$ such that
     $\isterm{\Gb}{\eb}{\Heq{\Ab}{\ub}{\Ab'}{\vb}}$.
   \end{itemize}
@@ -1933,7 +1933,7 @@ and $\upharpoonright$ respectively.
         {\xisctx{\ctxempty}}
       %
     \]
-    We have $\isctx{\ctxempty} \in \trans{\xisctx{\ctxempty}}$.
+    We have $\isctx{\ctxempty} \in \transl{\xisctx{\ctxempty}}$.
 
     \item \textsc{Extend}
     \[
@@ -1944,10 +1944,10 @@ and $\upharpoonright$ respectively.
         {\xisctx{\Ga, x:A}}
       (x \notin \Ga)
     \]
-    By IH we have $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$ and, using $\Gb$
+    By IH we have $\isctx{\Gb} \in \transl{\xisctx{\Ga}}$ and, using $\Gb$
     as well as lemma~\ref{lem:choose},
-    $\isterm{\Gb}{\Ab}{s} \in \trans{\xisterm{\Ga}{A}{s}}$.
-    Thus $\isctx{\Gb, x:\Ab} \in \trans{\xisctx{\Ga, x:A}}$.
+    $\isterm{\Gb}{\Ab}{s} \in \transl{\xisterm{\Ga}{A}{s}}$.
+    Thus $\isctx{\Gb, x:\Ab} \in \transl{\xisctx{\Ga, x:A}}$.
 
     \item \textsc{Sort}
     \[
@@ -1956,7 +1956,7 @@ and $\upharpoonright$ respectively.
         {\xisterm{\Ga}{s}{s'}}
       (s,s')
     \]
-    We have $\isterm{\Gb}{s}{s'} \in \trans{\xisterm{\Ga}{s}{s'}}$.
+    We have $\isterm{\Gb}{s}{s'} \in \transl{\xisterm{\Ga}{s}{s'}}$.
 
     \item \textsc{Product}
     \[
@@ -1968,11 +1968,11 @@ and $\upharpoonright$ respectively.
       (s,s',s'')
     \]
     By IH and lemma~\ref{lem:choose} we have $\isterm{\Gb}{\Ab}{s}$,
-    meaning $\isctx{\Gb,x:\Ab} \in \trans{\xisctx{\Ga, x:A}}$,
+    meaning $\isctx{\Gb,x:\Ab} \in \transl{\xisctx{\Ga, x:A}}$,
     and then $\isterm{\Gb,x:\Ab}{\Bb}{s'}$.
     We thus conclude
     $\isterm{\Gb}{\Prod{x:\Ab} \Bb}{s''} \in
-    \trans{\xisterm{\Ga}{\Prod{x:A} B}{s''}}$.
+    \transl{\xisterm{\Ga}{\Prod{x:A} B}{s''}}$.
 
     \item \textsc{Sigma}
     \[
@@ -2000,7 +2000,7 @@ and $\upharpoonright$ respectively.
     $\isterm{\Gb}{\ub}{\Ab}$ and $\isterm{\Gb}{\vb}{\Ab}$.
     Then
     $\isterm{\Gb}{\Eq{\Ab}{\ub}{\vb}}{s} \in
-    \trans{\xisterm{\Ga}{\Eq{A}{u}{v}}{s}}$.
+    \transl{\xisterm{\Ga}{\Eq{A}{u}{v}}{s}}$.
 
     \item \textsc{Variable}
     \[
@@ -2011,11 +2011,11 @@ and $\upharpoonright$ respectively.
         {\xisterm{\Ga}{x}{A}}
       %
     \]
-    We have $\isctx{\Gb} \in \trans{\xisctx{\Ga}}$ (as we assumed, this is not
+    We have $\isctx{\Gb} \in \transl{\xisctx{\Ga}}$ (as we assumed, this is not
     an instance of the induction hypothesis) and $(x : A) \in \Ga$.
     By definition of $\Ga \ir \Gb$ we also have some $(x : \Ab) \in \Gb$
     with $A \ir \Ab$, thus
-    $\isterm{\Gb}{x}{\Ab} \in \trans{\xisterm{\Ga}{x}{A}}$.
+    $\isterm{\Gb}{x}{\Ab} \in \transl{\xisterm{\Ga}{x}{A}}$.
 
     \item \textsc{Conversion}
     \[
@@ -2028,10 +2028,10 @@ and $\upharpoonright$ respectively.
     \]
     By IH and lemma~\ref{lem:uip-cong} we have
     $\isterm{\Gb}{\eb}{\Eq{}{\Ab}{\Bb}}$ which implies
-    $\istype{\Gb}{\Ab} \in \trans{\xistype{\Ga}{A}}$ by
+    $\istype{\Gb}{\Ab} \in \transl{\xistype{\Ga}{A}}$ by
     inversion~\eqref{lem:inversion}, thus, from lemma~\ref{lem:change-type}
     and IH we get $\isterm{\Gb}{\ub}{\Ab}$, yielding
-    $\isterm{\Gb}{\transpo{\eb}\ \ub}{\Bb} \in \trans{\xisterm{\Ga}{u}{B}}$.
+    $\isterm{\Gb}{\translpo{\eb}\ \ub}{\Bb} \in \transl{\xisterm{\Ga}{u}{B}}$.
 
     \item \textsc{Lambda}
     \[
@@ -2044,14 +2044,14 @@ and $\upharpoonright$ respectively.
       %
     \]
     By IH and lemma~\ref{lem:choose} we have $\isterm{\Gb}{\Ab}{s}$ and thus
-    $\isctx{\Gb, x:\Ab} \in \trans{\xisctx{\Ga,x:A}}$, meaning we can apply IH
+    $\isctx{\Gb, x:\Ab} \in \transl{\xisctx{\Ga,x:A}}$, meaning we can apply IH
     and lemma~\ref{lem:choose} to the second hypothesis to get
-    $\isterm{\Gb,x:\Ab}{\Bb}{s'} \in \trans{\xisterm{\Ga,x:A}{B}{s'}}$ and then
+    $\isterm{\Gb,x:\Ab}{\Bb}{s'} \in \transl{\xisterm{\Ga,x:A}{B}{s'}}$ and then
     IH and lemma~\ref{lem:change-type} to get
-    $\isterm{\Gb,x:\Ab}{\tb}{\Bb} \in \trans{\xisterm{\Ga,x:A}{t}{B}}$.
+    $\isterm{\Gb,x:\Ab}{\tb}{\Bb} \in \transl{\xisterm{\Ga,x:A}{t}{B}}$.
     All of this yields
     $\isterm{\Gb}{\lam{x:\Ab}{\Bb} \tb}{\Prod{x:\Ab} \Bb}
-    \in \trans{\xisterm{\Ga}{\lam{x:A}{B} t}{\Prod{x:A} B}}$.
+    \in \transl{\xisterm{\Ga}{\lam{x:A}{B} t}{\Prod{x:A} B}}$.
 
     \item \textsc{Application}
     \[
@@ -2069,7 +2069,7 @@ and $\upharpoonright$ respectively.
     $\isterm{\Gb}{\tb}{\Prod{x:\Ab} \Bb}$ and $\isterm{\Gb}{\ub}{\Ab}$
     meaning we can conclude
     $\isterm{\Gb}{\app{\tb}{x:\Ab}{\Bb}{\ub}}{\Bb[x \sto \ub]}
-    \in \trans{\xisterm{\Ga}{\app{t}{x:A}{B}{u}}{B[x \sto u]}}$.
+    \in \transl{\xisterm{\Ga}{\app{t}{x:A}{B}{u}}{B[x \sto u]}}$.
 
     \item \textsc{Pair}
     \[
@@ -2085,7 +2085,7 @@ and $\upharpoonright$ respectively.
     Using IH with lemmata~\ref{lem:choose} and~\ref{lem:change-type} we
     translate all the hypotheses to conclude
     $\isterm{\Gb}{\pair{x:\Ab}{\Bb}{\ub}{\vb}}{\Sum{x:\Ab}{\Bb}}
-    \in \trans{\xisterm{\Ga}{\pair{x:A}{B}{u}{v}}{\Sum{x:A}{B}}}$.
+    \in \transl{\xisterm{\Ga}{\pair{x:A}{B}{u}{v}}{\Sum{x:A}{B}}}$.
 
     \item \textsc{Proj$_1$}
     \[
@@ -2116,7 +2116,7 @@ and $\upharpoonright$ respectively.
     \]
     By IH we have $\isterm{\Gb}{\ub}{\Ab}$ and thus
     $\isterm{\Gb}{\refl{\Ab} \ub}{\Eq{\Ab}{\ub}{\ub}} \in
-    \trans{\xisterm{\Ga}{\refl{A} u}{\Eq{A}{u}{u}}}$.
+    \transl{\xisterm{\Ga}{\refl{A} u}{\Eq{A}{u}{u}}}$.
 
     \item \textsc{J}
     \[
@@ -2137,7 +2137,7 @@ and $\upharpoonright$ respectively.
     By IH and lemma~\ref{lem:choose} we have $\isterm{\Gb}{\Ab}{s}$.
     From this and IH and lemma~\ref{lem:change-type} we have
     $\isterm{\Gb}{\ub,\vb}{\Ab}$. We can thus deduce
-    $\isctx{\Gb,x:\Ab,e:\Eq{\Ab}{\ub}{x}} \in \trans{\Ga, x:A, e:\Eq{A}{u}{x}}$
+    $\isctx{\Gb,x:\Ab,e:\Eq{\Ab}{\ub}{x}} \in \transl{\Ga, x:A, e:\Eq{A}{u}{x}}$
     which in turn gives us
     $\isterm{\Gb, x:\Ab,e:\Eq{\Ab}{\ub}{x}}{\Pb}{s'}$.
     Similarly we also get $\isterm{\Gb}{\pb}{\Eq{\Ab}{\ub}{\vb}}$ and
@@ -2148,7 +2148,7 @@ and $\upharpoonright$ respectively.
       {\J{\Ab}{\ub}{x.e.\Pb}{\wb}{\vb}{\pb}}
       {\Pb[x \sto \vb, e \sto \pb]}
     \in
-    \trans{
+    \transl{
       \xisterm
         {\Ga}
         {\J{A}{u}{x.e.P}{w}{v}{p}}
@@ -2343,7 +2343,7 @@ and $\upharpoonright$ respectively.
     \]
     By IH and lemma~\ref{lem:choose} we have
     $\isterm{\Gb}{\eb}{\Eq{\Ab}{\ub}{\vb}}
-    \in \trans{\xisterm{\Ga}{e}{\Eq{A}{u}{v}}}$ which yields the conclusion we
+    \in \transl{\xisterm{\Ga}{e}{\Eq{A}{u}{v}}}$ which yields the conclusion we
     wanted.
   \end{itemize}
 \end{proof}
