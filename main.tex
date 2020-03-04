@@ -1,11 +1,16 @@
 % !TEX program = xelatex
 
-% \documentclass{tufte-book}
-\documentclass[draft]{report}
+\documentclass[justified,draft]{tufte-book}
+% \documentclass[draft]{report}
 
-% \usepackage{fontspec}
+\usepackage{fontspec}
 % \setmainfont[Ligatures=TeX]{Noto Serif}
 % \setsansfont[Ligatures=TeX]{Arial}
+
+% Needed for tufte to work with XeLaTeX
+% Set up the spacing using fontspec features
+\renewcommand\allcapsspacing[1]{{\addfontfeature{LetterSpace=15}#1}}
+\renewcommand\smallcapsspacing[1]{{\addfontfeature{LetterSpace=10}#1}}
 
 \usepackage{amsmath}
 \usepackage{amssymb, amsfonts, stmaryrd}
