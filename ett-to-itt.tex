@@ -58,8 +58,8 @@ silently replaced by one another in any term.
 Several variants of ETT have been considered and implemented, for
 example in \NuPRL\sidenote{Although the reflection rule is provable in \NuPRL,
 its calculus is based on realisability rather than on intensional type theory
-plus reflection.}~\cite{DBLP:conf/cade/AllenCEKL00} and more recently in
-\Andromeda~\cite{andromeda}.
+plus reflection.}~\sidecite{DBLP:conf/cade/AllenCEKL00} and more recently in
+\Andromeda~\sidecite{andromeda}.
 %
 The prototypical example of the use of equality reflection is the
 definition of a coercion function between two types $A$ and $B$ that
@@ -108,7 +108,7 @@ the corresponding ITT term can be seen as a compact witness of the
 derivation tree of the original ETT term.
 
 This result has first been investigated categorically in the
-pioneering work of \cite{hofmann1995conservativity,HofmannPhD},
+pioneering work of \sidecite{hofmann1995conservativity,HofmannPhD},
 %
 by showing that the term model of ITT can be turned into a model of ETT by
 quotienting this model with propositional equality.
@@ -118,7 +118,7 @@ to an explicit and constructive translation from a derivation in ETT to
 a term of ITT.
 %
 In 2005, this result has been investigated more syntactically by
-\cite{oury2005extensionality}. However, his presentation does not give
+\sidecite{oury2005extensionality}. However, his presentation does not give
 rise to an effective translation.
 %
 By an \emph{effective} translation we mean that it is entirely
@@ -158,11 +158,11 @@ the reflection in the entire development.
 
 This translation can be seen as a way to build a syntactical model of
 ETT from a model of ITT as described more generally
-in~\cite{boulier17:next-syntac-model-type-theor} and has been entirely
+in~\sidecite{boulier17:next-syntac-model-type-theor} and has been entirely
 programmed and
 formalised in
-\Coq~\cite{coq}. For this, we rely on
-\TemplateCoq\sidenote{\url{https://metacoq.github.io/metacoq/}}~\cite{DBLP:conf/itp/AnandBCST18},
+\Coq~\sidecite{coq}. For this, we rely on
+\TemplateCoq\sidenote{\url{https://metacoq.github.io/metacoq/}}~\sidecite{DBLP:conf/itp/AnandBCST18},
 which provides a reifier for \Coq terms as represented in \Coq's kernel
 as well as a formalisation of the type system of \Coq.
 %
@@ -214,7 +214,7 @@ $$
 The first axiom says that any two proofs of the same equality are
 equal, and the other one says that two (dependent) functions are equal
 whenever they are pointwise equal\sidenote{In Homotopy Type
-  Theory (HoTT)~\cite{hottbook}, FunExt is
+  Theory (HoTT)~\sidecite{hottbook}, FunExt is
   stated in a more complete way, using the notion of adjoint
   equivalences, but this more complete way collapses to our simpler
   statement in presence of UIP.}.
@@ -254,13 +254,13 @@ Therefore, applying our translation to the proofs of those theorems in ETT
 gives corresponding proofs of the same theorems in ITT.
 %
 However, UIP is independent from ITT, as first shown by Hofmann and
-Streicher using the groupoid model~\cite{groupoid-interp}, which has
+Streicher using the groupoid model~\sidecite{groupoid-interp}, which has
 recently been extended in the setting of univalent type theory using
-the simplicial or cubical models~\cite{kapulkin2012simplicial,coquand:cubical}.
+the simplicial or cubical models~\sidecite{kapulkin2012simplicial,coquand:cubical}.
 %
 Similarly, FunExt is independent from ITT,
 it is folklore but has recently been formalised by Boulier \emph{et al.} using a
-simple syntactical translation~\cite{boulier17:next-syntac-model-type-theor}.
+simple syntactical translation~\sidecite{boulier17:next-syntac-model-type-theor}.
 
 Therefore, our translation provides proofs of axioms independent from
 ITT, which means that the target of the translation already needs to
@@ -281,10 +281,10 @@ But this means that two terms of two convertible types that were comparable
 in ETT become comparable in ITT only up-to the equality between the
 two types. One possible solution to this problem is to consider a
 native heterogeneous equality, such as \emph{John Major
-equality} introduced by \cite{mcbride2000dependently}.
+equality} introduced by \sidecite{mcbride2000dependently}.
 %
 However, to avoid adding additional axioms to ITT as done by
-\cite{oury2005extensionality}, we prefer to encode this
+\sidecite{oury2005extensionality}, we prefer to encode this
 heterogeneous equality using the following dependent sums:
 $$\Heq{T}{t}{U}{u} := \Sum{p:\Eq{}{T}{U}} \Eq{}{\translpo{p}\ t}{u}.$$
 %
@@ -315,8 +315,8 @@ heterogeneously equal.
 %
 This mechanism is similar to what happens in the (relational) internal
 parametricity translation in ITT introduced by
-\cite{bernardy2012proofs} and recently rephrased in the setting of
-\TemplateCoq~\cite{DBLP:conf/itp/AnandBCST18}. Namely, a context is not
+\sidecite{bernardy2012proofs} and recently rephrased in the setting of
+\TemplateCoq~\sidecite{DBLP:conf/itp/AnandBCST18}. Namely, a context is not
 translated as a telescope of variables, but as a telescope of triples
 consisting of two variables plus a witness that they are in the
 parametric relation.
@@ -334,7 +334,7 @@ in order to get an effective translation, because it is necessary to
 keep track of the evolution of contexts when doing the translation on
 open terms.
 %
-This ingredient is missing in Oury's work~\cite{oury2005extensionality},
+This ingredient is missing in Oury's work~\sidecite{oury2005extensionality},
 which prevents him from deducing an effective (\ie constructive and
 computable) translation from his theorem.
 
@@ -357,7 +357,7 @@ $\Eq{A}{u}{v}$ with reflection and elimination as well as terms
 realising UIP and FunExt. Annotating terms with
 otherwise computationally irrelevant typing information is a common
 practice when studying the syntax of type theory precisely (see
-\cite{streicher1993investigations} for a similar example).
+\sidecite{streicher1993investigations} for a similar example).
 %
 We will write $A \to B$ for $\Prod{\_:A} B$ the non-dependent product /
 function type.
@@ -394,8 +394,8 @@ important for the translation.
 Although it may look like a technical detail, the use of annotation is more
 fundamental in ETT than it is in ITT (where it is irrelevant and doesn't affect
 the theory). And this is actually one of the main differences between our work
-(and that of Martin \cite{hofmann1995conservativity} who has a similar
-presentation) and the work of \cite{oury2005extensionality}.
+(and that of Martin \sidecite{hofmann1995conservativity} who has a similar
+presentation) and the work of \sidecite{oury2005extensionality}.
 
 Indeed, by using the standard model where types are interpreted as
 cardinals rather than sets, it is possible to see that the equality
@@ -593,7 +593,7 @@ complete translation is performed.
 %
 This idea is not novel as Hofmann already had a $\mathsf{Subst}$ operator that
 was part of his ITT (noted TT\textsubscript{I} in his
-paper~\cite{hofmann1995conservativity}).
+paper~\sidecite{hofmann1995conservativity}).
 
 %
 We first define the (purely syntactic) relation $\ir$ between ETT terms
@@ -652,7 +652,7 @@ induction on terms, we introduce variables in the context that are
 equal only up-to heterogeneous equality.
 %
 This phenomenon is similar to what happens in the parametricity
-translation~\cite{bernardy2012proofs}.
+translation~\sidecite{bernardy2012proofs}.
 %
 Our fundamental lemma on the decoration relation $\sim$ assumes two
 related terms of potentially different types $T1$ and $T2$ to produce an
@@ -1032,7 +1032,7 @@ In practice it is enough to recover the exact same term when it is typed in ITT.
 \label{sec:form-with-templ}
 
 We have formalised the translation
-in the setting of \TemplateCoq~\cite{DBLP:conf/itp/AnandBCST18} in order to have
+in the setting of \TemplateCoq~\sidecite{DBLP:conf/itp/AnandBCST18} in order to have
 a more precise proof, but also to evidence the fact that the translation is
 indeed constructive and can be used to perform computations.
 
@@ -1051,7 +1051,7 @@ take advantage of the quoting mechanism to produce terms using
 the interactive mode (in particular we get to use tactics).
 %
 Note that we also rely on Mangin and Sozeau's
-\Equations{}~\cite{DBLP:conf/itp/Sozeau10} plugin to derive nice
+\Equations{}~\sidecite{DBLP:conf/itp/Sozeau10} plugin to derive nice
 dependent induction principles.
 
 Our formalisation takes full advantage of its easy interfacing with \TemplateCoq:
@@ -1205,7 +1205,7 @@ We also require some measure of decidable equality and injectivity on those.
 
 This allows us to instantiate this by a lot of different notions including the
 one presented earlier in the paper or even its extension with a universe $\Prop$
-of propositions (like CIC~\cite{bertot2004interactive}). We present here two
+of propositions (like CIC~\sidecite{bertot2004interactive}). We present here two
 instances that have their own interest.
 
 \paragraph{$\Type$ in $\Type$.}
@@ -1216,9 +1216,9 @@ the---for the time being---very time-consuming universe constraint checking.
 
 \paragraph{Homotopy Type System and Two-Level Type Theory.}
 Another interesting application (or rather instance) of our formalisation
-is a translation from Homotopy Type System (HTS)~\cite{hts-sota} to
+is a translation from Homotopy Type System (HTS)~\sidecite{hts-sota} to
 Two-Level Type Theory
-(2TT)~\cite{DBLP:journals/corr/AltenkirchCK16,DBLP:journals/corr/AnnenkovCK17}.
+(2TT)~\sidecite{DBLP:journals/corr/AltenkirchCK16,DBLP:journals/corr/AnnenkovCK17}.
 
 HTS and 2TT arise from the incompatibility between UIP---recall it is provable
 in ETT---and univalence. The idea is to have two distinct notions of equality
@@ -1295,7 +1295,7 @@ Axiom candidate : forall A B (t : A), B.
 \mintinline{coq}|candidate A B t| is a candidate \mintinline{coq}|t| of type
 \mintinline{coq}|A| to inhabit type \mintinline{coq}|B|.
 We complete this by adding a notation that is reminiscent to
-\Agda's~\cite{norell2007towards} hole mechanism.
+\Agda's~\sidecite{norell2007towards} hole mechanism.
 %
 \begin{minted}{coq}
 Notation "'{!' t '!}'" := (candidate _ _ t).
@@ -1501,7 +1501,7 @@ vec_rect A
 
 \subsection{Towards an Interfacing between \Andromeda and \Coq}
 
-\Andromeda~\cite{andromeda} is a proof assistant implementing ETT in a sense
+\Andromeda~\sidecite{andromeda} is a proof assistant implementing ETT in a sense
 that is really close to our formalisation. Aside from a concise nucleus with
 a basic type theory, most things happen with the declaration of constants
 with given types, including equalities to define the computational behaviour
@@ -1530,7 +1530,7 @@ provide an automatic translation of well-typed terms into witnesses in
 of lists for example.
 
 This would provide a simple way to justify the consistency of
-CoqMT~\cite{DBLP:conf/lpar/JouannaudS17} for example, seeing it as an
+CoqMT~\sidecite{DBLP:conf/lpar/JouannaudS17} for example, seeing it as an
 extensional type theory where reflection is restricted to equalities
 on a specific domain whose theory is decidable.
 
@@ -1544,8 +1544,8 @@ longer a direct application.}
 
 As we mentioned earlier, one of the interesting special cases covered by this
 translation is the translation from 2-level type theory with reflection
-(arguably a variant of Homotopy Type System~\cite{hts-sota} (HTS) to 2-level
-type theory~\cite{altenkirch2016extending} (2TT).
+(arguably a variant of Homotopy Type System~\sidecite{hts-sota} (HTS) to 2-level
+type theory~\sidecite{altenkirch2016extending} (2TT).
 %
 We thus use two hierarchies $(\F{i})_{i \in \mathbb{N}}$, universes of fibrant
 types, and $(\Un{i})_{i \in \mathbb{N}}$, universes of strict types.
@@ -1579,7 +1579,7 @@ recursive definition on derivations.
 
 As we already mentioned, the axioms K and FunExt are both
 necessary in ITT if we want the translation to be conservative as they are
-provable in ETT~\cite{hofmann1995conservativity}.
+provable in ETT~\sidecite{hofmann1995conservativity}.
 However, one might still be concerned about having axioms
 as they can for instance hinder canonicity of the system.
 In that respect, K isn't really a restriction since it preserves canonicity.
@@ -1589,10 +1589,10 @@ without.
 
 The case of FunExt is trickier. It should be possible to realise
 the axiom by composing our translation with a setoid
-interpretation~\cite{altenkirch99} which validates it, or by going into a
+interpretation~\sidecite{altenkirch99} which validates it, or by going into a
 system featuring it, for instance by implementing Observational Type
-Theory~\cite{altenkirch2007observational} like
-\Epigram~\cite{mcbride2004epigram}.
+Theory~\sidecite{altenkirch2007observational} like
+\Epigram~\sidecite{mcbride2004epigram}.
 
 However, these two axioms are not used to define the translation itself,
 but only to witness UIP and function extensionality in the translation to
@@ -1603,7 +1603,7 @@ of ITT is transitive.
 %
 The proof of this property basically sums up to the confluence of the
 reduction rules of ITT which is out of scope for this paper and has
-recently been formalised in Agda~\cite{Abel:2017:DCT:3177123.3158111} (in a
+recently been formalised in Agda~\sidecite{Abel:2017:DCT:3177123.3158111} (in a
 simpler setting with only one universe).
 Regardless, this axiom inhabits a proposition (the type of conversion is in
 \mintinline{coq}|Prop|) and is thus irrelevant for computation. Actually no
@@ -1619,14 +1619,14 @@ term is relying on unsafe assumptions thanks to the
 \label{sec:related-works}
 
 The seminal works on the precise connection between ETT and ITT go
-back to \cite{streicher1993investigations} and
-\cite{hofmann1995conservativity,HofmannPhD}.
+back to \sidecite{streicher1993investigations} and
+\sidecite{hofmann1995conservativity,HofmannPhD}.
 %
 In particular, the work of Hofmann provides a categorical answer to
 the question of consistency and conservativity of ETT over ITT with
 UIP and FunExt.
 %
-Ten years later, \cite{oury2005extensionality,Oury2006} provided
+Ten years later, \sidecite{oury2005extensionality,Oury2006} provided
 a translation from ETT to ITT with
 UIP and FunExt and other axioms (mainly due to
 technical difficulties).
@@ -1636,7 +1636,7 @@ syntactic translation, his work does not stress any constructive
 aspect of the proof and shows that there merely exist translations in
 ITT to a typed term in ETT.
 
-\cite{van2013explicit} have later proposed and
+\sidecite{van2013explicit} have later proposed and
 formalised a similar translation between a PTS with and without explicit
 conversion. This does not entail anything about ETT to ITT but we can
 find similarities in that there is a witness of conversion between any
@@ -1644,7 +1644,7 @@ term and itself under an explicit conversion, which internalises
 irrelevance of explicit conversions. This morally corresponds to a
 Uniqueness of Conversions principle.
 
-The Program \cite{sozeau:icfp07} extension of \Coq performs a
+The Program \sidecite{sozeau:icfp07} extension of \Coq performs a
 related coercion insertion algorithm, between objects in subsets on the
 same carrier or in different instances of the same inductive family,
 assuming a proof-irrelevance axiom. Inserting coercions locally is not
@@ -1670,681 +1670,3 @@ the end produce a proof term checkable in the intensional fragment.
   We also would like to thank the attendees of the Aarhus EUTypes 2018 meeting
   for their insightful feedback on the plugin stemming from the translation.
 % \end{acks}
-
-% \newpage
-% \clearpage
-
-\newpage
-\onecolumn
-\appendix
-
-\section{Complementary rules}
-\label{sec:more-rules}
-
-\input{figcong}
-
-
-\section{Proof of the fundamental lemma}
-\label{sec:proof-fund-lemma}
-
-\begin{lemma}[Fundamental lemma]
-  Let $t_1$ and $t_2$ be two terms. If $\isterm{\Ga, \Ga_1}{t_1}{T_1}$ and
-  $\isterm{\Ga, \Ga_2}{t_2}{T_2}$ and $t_1 \sim t_2$ then there exists $p$ such
-  that
-  $\isterm{\Ga, \Pack{\Ga_1}{\Ga_2}}
-          {p}
-          {\Heq{\llift{\gamma}{}{T_1}}
-               {\llift{\gamma}{}{t_1}}
-               {\rlift{\gamma}{}{T_2}}
-               {\rlift{\gamma}{}{t_2}}}$.
-\end{lemma}
-
-For readability we will abbreviate the left and right substitutions
-$\llift{\gamma}{}{\_}$ and $\rlift{\gamma}{}{\_}$ by $\upharpoonleft$
-and $\upharpoonright$ respectively.
-
-\begin{proof}
-  We prove it by induction on the derivation of $t_1 \sim t_2$.
-
-  \begin{itemize}
-    \item \textsc{Var}
-    \[
-      \infer[]
-        { }
-        {x \sim x}
-      %
-    \]
-    If $x$ belongs to $\Ga$, we apply reflexivity---together with uniqueness of
-    typing~\eqref{lem:uniq}---to conclude.
-    Otherwise, $\ProjE{x}$ has the expected type (since
-    $\llift{\gamma}{}{x} \equiv \ProjO{x}$ and $\rlift{\gamma}{}{x} \equiv \ProjT{x}$).
-
-    \item \textsc{TransportLeft}
-    \[
-      \infer[]
-        {t_1 \sim t_2}
-        {\translpo{p}\ t_1 \sim t_2}
-      %
-    \]
-    We have $\isterm{\Ga, \Ga_1}{\translpo{p}\ t_1}{T_1}$ and
-    $\isterm{\Ga, \Ga_2}{t_2}{T_2}$.
-    By inversion~\eqref{lem:inversion} we have
-    $\isterm{\Ga, \Ga_1}{p}{\Eq{}{T_1'}{T_1}}$ and
-    $\isterm{\Ga, \Ga_1}{t_1}{T_1'}$.
-    Then by induction hypothesis we have $e$ such that
-    $\isterm{\Ga, \Gp}{e}{\Heq{}{\lo{t_1}}{}{\ro{t_2}}}$.
-    From transitivity and symmetry we only need to provide a proof of
-    $\Heq{}{\lo{t_1}}{}{\translpo{\lo{p}}\ \lo{t_1}}$ which is inhabited by
-    $\pair{\_}{\_}{\lo{p}}{\refl{} (\translpo{\lo{p}}\ \lo{t_1})}$.
-
-    \item \textsc{TransportRight}
-    \[
-      \infer[]
-        {t_1 \sim t_2}
-        {t_1 \sim \translpo{p}\ t_2}
-      %
-    \]
-    Similarly.
-
-    \item \textsc{Product}
-    \[
-      \infer[]
-        {A_1 \sim A_2 \\
-         B_1 \sim B_2
-        }
-        {\Prod{x:A_1} B_1 \sim \Prod{x:A_2} B_2}
-      %
-    \]
-    We have $\isterm{\Ga, \Ga_1}{\Prod{x:A_1} B_1}{T_1}$ and
-    $\isterm{\Ga, \Ga_2}{\Prod{x:A_2} B_2}{T_2}$ so by
-    inversion~\eqref{lem:inversion} we have $\isterm{\Ga, \Ga_1}{A_1}{s_1}$ and
-    $\isterm{\Ga, \Ga_1, x:A_1}{B_1}{s'_1}$ and
-    $\eqtype{\Ga, \Ga_1}{s''_1}{T_1}$ for $(s_1,s'_1,s''_1) \in \Rl$
-    (and similarly with $2$s).
-    By induction hypothesis we have
-    $\isterm{\Ga, \Gp}{p_A}{\Heq{}{\lo{A_1}}{}{\ro{A_2}}}$ and
-    $\isterm
-      {\Ga, \Gp, x : \Pack{A_1}{A_2}}
-      {p_B}
-      {\Heq{}{\lo{B_1}}{}{\ro{B_2}}}
-    $
-    hence the result (using UIP and FunExt, refer to the
-    formalisation and especially to the file \rpath{Quotes.v} for more details
-    on how to realise this equality).
-
-    \item \textsc{Equality}
-    \[
-      \infer[]
-        {A_1 \sim A_2 \\
-         u_1 \sim u_2 \\
-         v_1 \sim v_2
-        }
-        {\Eq{A_1}{u_1}{v_1} \sim \Eq{A_2}{u_2}{v_2}}
-      %
-    \]
-    We have $\isterm{\Ga, \Ga_1}{\Eq{A_1}{u_1}{v_1}}{T_1}$ and
-    $\isterm{\Ga, \Ga_2}{\Eq{A_2}{u_2}{v_2}}{T_2}$ so, by
-    inversion~\eqref{lem:inversion}, we have
-    $\isterm{\Ga, \Ga_1}{A_1}{s_1}$ and $\isterm{\Ga, \Ga_1}{u_1}{A_1}$ and
-    $\isterm{\Ga, \Ga_1}{v_1}{A_1}$ as well as $\eqtype{\Ga, \Ga_1}{s_1}{T_1}$
-    (and the same with $2$s). By induction hypothesis we thus have
-    $\isterm{\Ga, \Gp}{p_{A}}{\Heq{}{A_1}{}{A_2}}$ and
-    $\isterm{\Ga, \Gp}{p_u}{\Heq{}{u_1}{}{u_2}}$ and
-    $\isterm{\Ga, \Gp}{p_v}{\Heq{}{v_1}{}{v_2}}$.
-    We can thus conclude.
-
-    \item \textsc{Reflexivity}
-    \[
-      \infer[]
-        { }
-        {s \sim s}
-      %
-    \]
-    This one holds by reflexivity and uniqueness of typing~\eqref{lem:uniq}
-    (indeed, $\lo{s} \equiv s$ and $\ro{s} \equiv s$).
-
-    \item \textsc{Lambda}
-    \[
-      \infer[]
-        {A_1 \sim A_2 \\
-         B_1 \sim B_2 \\
-         t_1 \sim t_2
-        }
-        {\lam{x:A_1}{B_1} t_1 \sim \lam{x:A_2}{B_2} t_2}
-      %
-    \]
-    We have $\isterm{\Ga, \Ga_1}{\lam{x:A_1}{B_1} t_1}{T_1}$ and
-    $\isterm{\Ga, \Ga_2}{\lam{x:A_2}{B_2} t_2}{T_2}$, thus, by
-    inversion~\ref{lem:inversion} the subterms are well-typed and we can
-    apply induction hypothesis. The conclusion follows similarly to the $\Pi$
-    case.
-
-    \item \textsc{Application}
-    \[
-      \infer[]
-        {t_1 \sim t_2 \\
-         A_1 \sim A_2 \\
-         B_1 \sim B_2 \\
-         u_1 \sim u_2
-        }
-        {\app{t_1}{x:A_1}{B_1}{u_1} \sim \app{t_2}{x:A_2}{B_2}{u_2}}
-      %
-    \]
-    We have $\isterm{\Ga, \Ga_1}{\app{t_1}{x:A_1}{B_1}{u_1}}{T_1}$ and
-    $\isterm{\Ga, \Ga_2}{\app{t_2}{x:A_2}{B_2}{u_2}}{T_2}$ which means by
-    inversion~\eqref{lem:inversion} that the subterms are well-typed.
-    We apply the induction hypothesis and then conclude.
-
-    \item \textsc{Reflexivity}
-    \[
-      \infer[]
-        {A_1 \sim A_2 \\
-         u_1 \sim u_2
-        }
-        {\refl{A_1} u_1 \sim \refl{A_2} u_2}
-      %
-    \]
-    We have $\isterm{\Ga, \Ga_1}{\refl{A_1} u_1}{T_1}$ and
-    $\isterm{\Ga, \Ga_2}{\refl{A_2} u_2}{T_2}$ so by
-    inversion~\eqref{lem:inversion} we have $\isterm{\Ga, \Ga_1}{A_1}{s_1}$ and
-    $\isterm{\Ga, \Ga_1}{u_1}{A_1}$
-    (same with $2$s). By IH we have $\Heq{}{\lo{A_1}}{}{\ro{A_2}}$ and
-    $\Heq{\lo{A_1}}{\lo{u_1}}{\ro{A_2}}{\ro{u_2}}$.
-    The proof follows easily.
-
-    \item \textsc{Funext}
-    \[
-      \infer[]
-        {A_1 \sim A_2 \\
-         B_1 \sim B_2 \\
-         f_1 \sim f_2 \\
-         g_1 \sim g_2 \\
-         e_1 \sim e_2
-        }
-        {\funext{x:A_1}{B_1}{f_1}{g_1}{e_1}
-         \sim \funext{x:A_2}{B_2}{f_2}{g_2}{e_2}
-        }
-      %
-    \]
-    Similar.
-
-    \item \textsc{UIP}
-    \[
-      \infer[]
-        {A_1 \sim A_2 \\
-         u_1 \sim u_2 \\
-         v_1 \sim v_2 \\
-         p_1 \sim p_2 \\
-         q_1 \sim q_2
-        }
-        {\uip{A_1}{u_1}{v_1}{p_1}{q_1} \sim \uip{A_2}{u_2}{v_2}{p_2}{q_2}}
-      %
-    \]
-    Similar.
-
-    \item \textsc{J}
-    \[
-      \infer[]
-        {A_1 \sim A_2 \\
-         u_1 \sim u_2 \\
-         P_1 \sim P_2 \\
-         w_1 \sim w_2 \\
-         v_1 \sim v_2 \\
-         p_1 \sim p_2
-        }
-        {\J{A_1}{u_1}{x.e.P_1}{w_1}{v_1}{p_1} \sim
-         \J{A_2}{u_2}{x.e.P_2}{w_2}{v_2}{p_2}
-        }
-      %
-    \]
-    Similar.
-  \end{itemize}
-\end{proof}
-
-\section{Correctness of the translation}
-\label{sec:corr-transl}
-\begin{theorem}[Translation]
-  \leavevmode
-  \begin{itemize}
-    \item If $\xisctx{\Ga}$ then there exists
-    $\isctx{\Gb} \in \transl{\xisctx{\Ga}}$,
-
-    \item If $\xisterm{\Ga}{t}{T}$ then for any
-    $\isctx{\Gb} \in \transl{\xisctx{\Ga}}$ there exist $\tb$ and $\Tb$ such that
-    $\isterm{\Gb}{\tb}{\Tb} \in \transl{\xisterm{\Ga}{t}{T}}$,
-
-    \item If $\xeqterm{\Ga}{u}{v}{A}$ then for any
-    $\isctx{\Gb} \in \transl{\xisctx{\Ga}}$ there exist
-    $A \ir \Ab, A \ir \Ab', u \ir \ub, v \ir \vb$ and $\eb$ such that
-    $\isterm{\Gb}{\eb}{\Heq{\Ab}{\ub}{\Ab'}{\vb}}$.
-  \end{itemize}
-\end{theorem}
-
-\begin{proof}
-  We prove the theorem by induction on the derivation in the extensional
-  type theory. In most cases we need to assume some $\Gb$, translation of the
-  context, we will implicitly refer to $\Gb$ in such cases as the one given as
-  hypothesis.
-  \leavevmode
-  \begin{itemize}
-    \item \textsc{Empty}
-    \[
-      \infer[]
-        { }
-        {\xisctx{\ctxempty}}
-      %
-    \]
-    We have $\isctx{\ctxempty} \in \transl{\xisctx{\ctxempty}}$.
-
-    \item \textsc{Extend}
-    \[
-      \infer[]
-        {\xisctx{\Ga} \\
-         \xistype{\Ga}{A}
-        }
-        {\xisctx{\Ga, x:A}}
-      (x \notin \Ga)
-    \]
-    By IH we have $\isctx{\Gb} \in \transl{\xisctx{\Ga}}$ and, using $\Gb$
-    as well as lemma~\ref{lem:choose},
-    $\isterm{\Gb}{\Ab}{s} \in \transl{\xisterm{\Ga}{A}{s}}$.
-    Thus $\isctx{\Gb, x:\Ab} \in \transl{\xisctx{\Ga, x:A}}$.
-
-    \item \textsc{Sort}
-    \[
-      \infer[]
-        {\xisctx{\Ga}}
-        {\xisterm{\Ga}{s}{s'}}
-      (s,s')
-    \]
-    We have $\isterm{\Gb}{s}{s'} \in \transl{\xisterm{\Ga}{s}{s'}}$.
-
-    \item \textsc{Product}
-    \[
-      \infer[]
-        {\xisterm{\Ga}{A}{s} \\
-         \xisterm{\Ga,x:A}{B}{s'}
-        }
-        {\xisterm{\Ga}{\Prod{x:A} B}{s''}}
-      (s,s',s'')
-    \]
-    By IH and lemma~\ref{lem:choose} we have $\isterm{\Gb}{\Ab}{s}$,
-    meaning $\isctx{\Gb,x:\Ab} \in \transl{\xisctx{\Ga, x:A}}$,
-    and then $\isterm{\Gb,x:\Ab}{\Bb}{s'}$.
-    We thus conclude
-    $\isterm{\Gb}{\Prod{x:\Ab} \Bb}{s''} \in
-    \transl{\xisterm{\Ga}{\Prod{x:A} B}{s''}}$.
-
-    \item \textsc{Sigma}
-    \[
-      \infer[]
-        {\xisterm{\Ga}{A}{s} \\
-         \xisterm{\Ga,x:A}{B}{s'}
-        }
-        {\xisterm{\Ga}{\Sum{x:A} B}{s''}}
-      (s,s',s'')
-    \]
-    Similar.
-
-    \item \textsc{Equality}
-    \[
-      \infer[]
-        {\xisterm{\Ga}{A}{s} \\
-         \xisterm{\Ga}{u}{A} \\
-         \xisterm{\Ga}{v}{A}
-        }
-        {\xisterm{\Ga}{\Eq{A}{u}{v}}{s}}
-      %
-    \]
-    By IH and lemma~\ref{lem:choose} we have $\isterm{\Gb}{\Ab}{s}$,
-    and---using lemma~\ref{lem:change-type}---we also have
-    $\isterm{\Gb}{\ub}{\Ab}$ and $\isterm{\Gb}{\vb}{\Ab}$.
-    Then
-    $\isterm{\Gb}{\Eq{\Ab}{\ub}{\vb}}{s} \in
-    \transl{\xisterm{\Ga}{\Eq{A}{u}{v}}{s}}$.
-
-    \item \textsc{Variable}
-    \[
-      \infer[]
-        {\xisctx{\Ga} \\
-         (x : A) \in \Ga
-        }
-        {\xisterm{\Ga}{x}{A}}
-      %
-    \]
-    We have $\isctx{\Gb} \in \transl{\xisctx{\Ga}}$ (as we assumed, this is not
-    an instance of the induction hypothesis) and $(x : A) \in \Ga$.
-    By definition of $\Ga \ir \Gb$ we also have some $(x : \Ab) \in \Gb$
-    with $A \ir \Ab$, thus
-    $\isterm{\Gb}{x}{\Ab} \in \transl{\xisterm{\Ga}{x}{A}}$.
-
-    \item \textsc{Conversion}
-    \[
-      \infer[]
-        {\xisterm{\Ga}{u}{A} \\
-         \xeqtype{\Ga}{A}{B}
-        }
-        {\xisterm{\Ga}{u}{B}}
-      %
-    \]
-    By IH and lemma~\ref{lem:uip-cong} we have
-    $\isterm{\Gb}{\eb}{\Eq{}{\Ab}{\Bb}}$ which implies
-    $\istype{\Gb}{\Ab} \in \transl{\xistype{\Ga}{A}}$ by
-    inversion~\eqref{lem:inversion}, thus, from lemma~\ref{lem:change-type}
-    and IH we get $\isterm{\Gb}{\ub}{\Ab}$, yielding
-    $\isterm{\Gb}{\translpo{\eb}\ \ub}{\Bb} \in \transl{\xisterm{\Ga}{u}{B}}$.
-
-    \item \textsc{Lambda}
-    \[
-      \infer[]
-        {\xisterm{\Ga}{A}{s} \\
-         \xisterm{\Ga,x:A}{B}{s'} \\
-         \xisterm{\Ga,x:A}{t}{B}
-        }
-        {\xisterm{\Ga}{\lam{x:A}{B} t}{\Prod{x:A} B}}
-      %
-    \]
-    By IH and lemma~\ref{lem:choose} we have $\isterm{\Gb}{\Ab}{s}$ and thus
-    $\isctx{\Gb, x:\Ab} \in \transl{\xisctx{\Ga,x:A}}$, meaning we can apply IH
-    and lemma~\ref{lem:choose} to the second hypothesis to get
-    $\isterm{\Gb,x:\Ab}{\Bb}{s'} \in \transl{\xisterm{\Ga,x:A}{B}{s'}}$ and then
-    IH and lemma~\ref{lem:change-type} to get
-    $\isterm{\Gb,x:\Ab}{\tb}{\Bb} \in \transl{\xisterm{\Ga,x:A}{t}{B}}$.
-    All of this yields
-    $\isterm{\Gb}{\lam{x:\Ab}{\Bb} \tb}{\Prod{x:\Ab} \Bb}
-    \in \transl{\xisterm{\Ga}{\lam{x:A}{B} t}{\Prod{x:A} B}}$.
-
-    \item \textsc{Application}
-    \[
-      \infer[]
-        {\xisterm{\Ga}{A}{s} \\
-         \xisterm{\Ga,x:A}{B}{s'} \\
-         \xisterm{\Ga}{t}{\Prod{x:A} B} \\
-         \xisterm{\Ga}{u}{A}
-        }
-        {\xisterm{\Ga}{\app{t}{x:A}{B}{u}}{B[x \sto u]}}
-      %
-    \]
-    Using IH together with lemmata~\ref{lem:choose} and~\ref{lem:change-type}
-    we get $\isterm{\Gb}{\Ab}{s}$ and $\isterm{\Gb,x:\Ab}{\Bb}{s'}$ and
-    $\isterm{\Gb}{\tb}{\Prod{x:\Ab} \Bb}$ and $\isterm{\Gb}{\ub}{\Ab}$
-    meaning we can conclude
-    $\isterm{\Gb}{\app{\tb}{x:\Ab}{\Bb}{\ub}}{\Bb[x \sto \ub]}
-    \in \transl{\xisterm{\Ga}{\app{t}{x:A}{B}{u}}{B[x \sto u]}}$.
-
-    \item \textsc{Pair}
-    \[
-      \infer[]
-        {\xisterm{\Ga}{u}{A} \\
-         \xisterm{\Ga}{A}{s} \\
-         \xisterm{\Ga,x:A}{B}{s'} \\
-         \xisterm{\Ga}{v}{B[x \sto u]}
-        }
-        {\xisterm{\Ga}{\pair{x:A}{B}{u}{v}}{\Sum{x:A}{B}}}
-      %
-    \]
-    Using IH with lemmata~\ref{lem:choose} and~\ref{lem:change-type} we
-    translate all the hypotheses to conclude
-    $\isterm{\Gb}{\pair{x:\Ab}{\Bb}{\ub}{\vb}}{\Sum{x:\Ab}{\Bb}}
-    \in \transl{\xisterm{\Ga}{\pair{x:A}{B}{u}{v}}{\Sum{x:A}{B}}}$.
-
-    \item \textsc{Proj$_1$}
-    \[
-      \infer[]
-        {\xisterm{\Ga}{p}{\Sum{x:A}{B}}}
-        {\xisterm{\Ga}{\pio{x:A}{B}{p}}{A}}
-      %
-    \]
-    Similar.
-
-    \item \textsc{Proj$_2$}
-    \[
-      \infer[]
-        {\xisterm{\Ga}{p}{\Sum{x:A}{B}}}
-        {\xisterm{\Ga}{\pit{x:A}{B}{p}}{B[x \sto \pio{x:A}{B}{p}]}}
-      %
-    \]
-    Similar.
-
-    \item \textsc{Reflexivity}
-    \[
-      \infer[]
-        {\xisterm{\Ga}{A}{s} \\
-         \xisterm{\Ga}{u}{A}
-        }
-        {\xisterm{\Ga}{\refl{A} u}{\Eq{A}{u}{u}}}
-      %
-    \]
-    By IH we have $\isterm{\Gb}{\ub}{\Ab}$ and thus
-    $\isterm{\Gb}{\refl{\Ab} \ub}{\Eq{\Ab}{\ub}{\ub}} \in
-    \transl{\xisterm{\Ga}{\refl{A} u}{\Eq{A}{u}{u}}}$.
-
-    \item \textsc{J}
-    \[
-      \infer[]
-        {\xisterm{\Ga}{A}{s} \\
-         \xisterm{\Ga}{u,v}{A} \\
-         \xisterm{\Ga, x:A, e:\Eq{A}{u}{x}}{P}{s'} \\
-         \xisterm{\Ga}{p}{\Eq{A}{u}{v}} \\
-         \xisterm{\Ga}{w}{P[x \sto u, e \sto \refl{A} u]}
-        }
-        {\xisterm
-          {\Ga}
-          {\J{A}{u}{x.e.P}{w}{v}{p}}
-          {P[x \sto v, e \sto p]}
-        }
-      %
-    \]
-    By IH and lemma~\ref{lem:choose} we have $\isterm{\Gb}{\Ab}{s}$.
-    From this and IH and lemma~\ref{lem:change-type} we have
-    $\isterm{\Gb}{\ub,\vb}{\Ab}$. We can thus deduce
-    $\isctx{\Gb,x:\Ab,e:\Eq{\Ab}{\ub}{x}} \in \transl{\Ga, x:A, e:\Eq{A}{u}{x}}$
-    which in turn gives us
-    $\isterm{\Gb, x:\Ab,e:\Eq{\Ab}{\ub}{x}}{\Pb}{s'}$.
-    Similarly we also get $\isterm{\Gb}{\pb}{\Eq{\Ab}{\ub}{\vb}}$ and
-    $\isterm{\Gb}{\wb}{\Pb[x \sto \ub, e \sto \refl{\Ab} \ub]}$.
-    All of this allows us to conclude
-    $\isterm
-      {\Gb}
-      {\J{\Ab}{\ub}{x.e.\Pb}{\wb}{\vb}{\pb}}
-      {\Pb[x \sto \vb, e \sto \pb]}
-    \in
-    \transl{
-      \xisterm
-        {\Ga}
-        {\J{A}{u}{x.e.P}{w}{v}{p}}
-        {P[x \sto v, e \sto p]}
-    }$.
-
-    \item \textsc{Funext}
-    \[
-      \infer[]
-        {\isterm{\Ga}{f,g}{\Prod{x:A} B} \\
-         \isterm
-           {\Ga}
-           {e}
-           {\Prod{x:A} \Eq{B}{\app{f}{x:A}{B}{x}}{\app{g}{x:A}{B}{x}}}
-        }
-        {\isterm{\Ga}{\funext{x:A}{B}{f}{g}{e}}{\Eq{}{f}{g}}}
-      %
-    \]
-    Similar.
-
-    \item \textsc{UIP}
-    \[
-      \infer[]
-        {\xisterm{\Ga}{e_1,e_2}{\Eq{A}{u}{v}}}
-        {\xisterm{\Ga}{\uip{A}{u}{v}{e_1}{e_2}}{\Eq{}{e_1}{e_2}}}
-      %
-    \]
-    Similar.
-
-    \item \textsc{Beta}
-    \[
-      \infer[]
-        {\xisterm{\Ga}{A}{s} \\
-         \xisterm{\Ga,x:A}{B}{s'} \\
-         \xisterm{\Ga,x:A}{t}{B} \\
-         \xisterm{\Ga}{u}{A}
-        }
-        {\xeqterm
-          {\Ga}
-          {\app
-            {(\lam{x:A}{B} t)}
-            {x:A}
-            {B}
-            {u}
-          }
-          {t[x \sto u]}
-          {B[x \sto u]}
-        }
-      %
-    \]
-    From IH and the lemmata, we even get the conversion, we conclude using
-    reflexivity.
-
-    \item \textsc{Proj$_1$-Red}
-    \[
-      \infer[]
-        {\xisterm{\Ga}{A}{s} \\
-         \xisterm{\Ga}{u}{A} \\
-         \xisterm{\Ga,x:A}{B}{s'} \\
-         \xisterm{\Ga}{v}{B[x \sto u]}
-        }
-        {\xeqterm
-          {\Ga}
-          {\pio{x:A}{B}{\pair{x:A}{B}{u}{v}}}
-          {u}
-          {A}
-        }
-      %
-    \]
-    Likewise.
-
-    \item \textsc{Proj$_2$-Red}
-    \[
-      \infer[]
-        {\xisterm{\Ga}{A}{s} \\
-         \xisterm{\Ga}{u}{A} \\
-         \xisterm{\Ga,x:A}{B}{s'} \\
-         \xisterm{\Ga}{v}{B[x \sto u]}
-        }
-        {\xeqterm
-          {\Ga}
-          {\pit{x:A}{B}{\pair{x:A}{B}{u}{v}}}
-          {v}
-          {B[x \sto u]}
-        }
-      %
-    \]
-    Likewise.
-
-    \item \textsc{J-Red}
-    \[
-      \infer[]
-        {\xisterm{\Ga}{A}{\Un{i}} \\
-         \xisterm{\Ga}{u}{A} \\
-         \xisterm{\Ga, x:A, e:\Eq{A}{u}{x}}{P}{\Un{j}} \\
-         \xisterm{\Ga}{w}{P[x \sto u, e \sto \refl{A} u]}
-        }
-        {\xeqterm
-          {\Ga}
-          {\J{A}{u}{x.e.P}{w}{u}{\refl{A} u}}
-          {w}
-          {P[x \sto u, e \sto \refl{A} u]}
-        }
-      %
-    \]
-    Likewise.
-
-    \item \textsc{Conv-Refl}
-    \[
-      \infer[]
-        {\xisterm{\Ga}{u}{A}}
-        {\xeqterm{\Ga}{u}{u}{A}}
-      %
-    \]
-    We conclude from IH and reflexivity of $\Heqs$.
-
-    \item \textsc{Conv-Sym}
-    \[
-      \infer[]
-        {\xeqterm{\Ga}{u}{v}{A}}
-        {\xeqterm{\Ga}{v}{u}{A}}
-      %
-    \]
-    We conclude from IH and symmetry of $\Heqs$.
-
-    \item \textsc{Conv-Trans}
-    \[
-      \infer[]
-        {\xeqterm{\Ga}{u}{v}{A} \\
-         \xeqterm{\Ga}{v}{w}{A}
-        }
-        {\xeqterm{\Ga}{u}{w}{A}}
-      %
-    \]
-    We conclude from IH and transitivity of $\Heqs$.
-
-    % \item \textsc{}
-    % \[
-    %   \infer[]
-    %     {\xisterm{\Ga}{A}{s} \\
-    %      \xisterm{\Ga, x:A}{B}{s'} \\
-    %      \xisterm{\Ga}{f}{\Prod{x:A} B}
-    %     }
-    %     {\xeqterm
-    %       {\Ga}
-    %       {\lam{x:A}{B} \app{f}{x:A}{B}{x}}
-    %       {f}
-    %       {\Prod{x:A} B}
-    %     }
-    %   %
-    % \]
-    % This works like the computation cases.
-
-    \item \textsc{Conv-Conv}
-    \[
-      \infer[]
-        {\xeqterm{\Ga}{t_1}{t_2}{T_1} \\
-         \xeqtype{\Ga}{T_1}{T_2}
-        }
-        {\xeqterm{\Ga}{t_1}{t_2}{T_2}}
-      %
-    \]
-    By IH (and lemma~\ref{lem:uip-cong}) we have
-    $\isterm{\Gb}{\eb}{\Heq{\Tb_1}{\tb_1}{\Tb'_1}{\tb_2}}$ and
-    $\isterm{\Gb}{p}{\Eq{}{\Tb''_1}{\Tb_2}}$. Also from
-    lemmata~\ref{lem:sim-cong} and~\ref{lem:uip-cong} we have
-    $\Eq{}{\Tb'_1}{\Tb''_1}$ and $\Eq{}{\Tb_1}{\Tb''_1}$, meaning we get
-    $\Eq{}{\Tb'_1}{\Tb_2}$ and $\Eq{}{\Tb_1}{\Tb_2}$.
-    This allows us to conclude by transporting along the aforementioned
-    equalities.
-
-    \item \textsc{Conv-Prod}
-    \[
-      \infer[]
-        {\xeqterm{\Ga}{A_1}{A_2}{s} \\
-         \xeqterm{\Ga,x:A_1}{B_1}{B_2}{s'}
-        }
-        {\xeqterm{\Ga}{\Prod{x:A_1} B_1}{\Prod{x:A_2} B_2}{s''}}
-      (s,s',s'')
-    \]
-    We conclude exactly like we did in the proof of lemma~\ref{lem:sim-cong}.
-
-    \item All congruences hold like in proof of
-    lemma~\ref{lem:sim-cong}.
-
-    \item \textsc{Conv-Eq}
-    \[
-      \infer[]
-        {\xisterm{\Ga}{e}{\Eq{A}{u}{v}}}
-        {\xeqterm{\Ga}{u}{v}{A}}
-      %
-    \]
-    By IH and lemma~\ref{lem:choose} we have
-    $\isterm{\Gb}{\eb}{\Eq{\Ab}{\ub}{\vb}}
-    \in \transl{\xisterm{\Ga}{e}{\Eq{A}{u}{v}}}$ which yields the conclusion we
-    wanted.
-  \end{itemize}
-\end{proof}
