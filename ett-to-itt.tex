@@ -1,5 +1,6 @@
 \input{cpp-macros}
 
+\setchapterpreamble[u]{\margintoc}
 \chapter{Eliminating Reflection from Type Theory}
 
 \todo{Taken from the CPP article (for now as is).}
@@ -55,7 +56,7 @@ that $u$ and $v$ are convertible in the theory---and can thus be
 silently replaced by one another in any term.
 %
 Several variants of ETT have been considered and implemented, for
-example in \NuPRL\footnote{Although the reflection rule is provable in \NuPRL,
+example in \NuPRL\sidenote{Although the reflection rule is provable in \NuPRL,
 its calculus is based on realisability rather than on intensional type theory
 plus reflection.}~\cite{DBLP:conf/cade/AllenCEKL00} and more recently in
 \Andromeda~\cite{andromeda}.
@@ -161,7 +162,7 @@ in~\cite{boulier17:next-syntac-model-type-theor} and has been entirely
 programmed and
 formalised in
 \Coq~\cite{coq}. For this, we rely on
-\TemplateCoq\footnote{\url{https://metacoq.github.io/metacoq/}}~\cite{DBLP:conf/itp/AnandBCST18},
+\TemplateCoq\sidenote{\url{https://metacoq.github.io/metacoq/}}~\cite{DBLP:conf/itp/AnandBCST18},
 which provides a reifier for \Coq terms as represented in \Coq's kernel
 as well as a formalisation of the type system of \Coq.
 %
@@ -212,7 +213,7 @@ $$
 %
 The first axiom says that any two proofs of the same equality are
 equal, and the other one says that two (dependent) functions are equal
-whenever they are pointwise equal\footnote{In Homotopy Type
+whenever they are pointwise equal\sidenote{In Homotopy Type
   Theory (HoTT)~\cite{hottbook}, FunExt is
   stated in a more complete way, using the notion of adjoint
   equivalences, but this more complete way collapses to our simpler
@@ -1181,7 +1182,7 @@ The experienced reader might have noticed that our treatment of universes
 notion of sorts used is rather orthogonal to our main development.
 This is even more apparent in the formalisation. Indeed, we didn't fix a
 specific universe hierarchy, but instead specify what properties it should
-have, in what is reminiscent to a (functional\footnote{Meaning the sort of a
+have, in what is reminiscent to a (functional\sidenote{Meaning the sort of a
 sort, and the sort of a product are functions, necessary to the uniqueness of
 types~\eqref{lem:uniq}.}) PTS formulation.
 %
