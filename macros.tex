@@ -1,7 +1,11 @@
 % Reminder box
 \newcommand\reminder[3][0pt]{%
   \marginnote[#1]{
-    \begin{kaobox}[frametitle=Reminder: #2]
+    \begin{kaobox}[
+      frametitle=Reminder: #2,
+      backgroundcolor=YellowGreen!25!White,
+      frametitlebackgroundcolor=YellowGreen!25!White
+    ]
       #3
     \end{kaobox}
   }
