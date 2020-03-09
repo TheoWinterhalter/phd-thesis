@@ -1,5 +1,11 @@
-% Meta comment
-\newcommand\meta[1]{\noindent\textcolor{blue}{\emph{#1}}}
+% Reminder box
+\newcommand\reminder[3][0pt]{%
+  \marginnote[#1]{
+    \begin{kaobox}[frametitle=Reminder: #2]
+      #3
+    \end{kaobox}
+  }
+}
 
 % Names
 \def\name#1{\textsf{#1}\xspace}

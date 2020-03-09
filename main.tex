@@ -44,6 +44,7 @@
 \usepackage{minted}
 
 \include{macros}
+\input{cpp-macros} % TODO Integrate into macros and factorise
 
 %----------------------------------------------------------------------------------------
 
@@ -205,6 +206,8 @@ Also it's not clear I want a foreword before every part.}
 \pagelayout{wide} % No margins
 \addpart{Elimination of Reflection}
 \pagelayout{margin} % Restore margins
+
+\input{chapters/elim-reflection-intro.tex}
 
 \input{ett-to-itt}
 
