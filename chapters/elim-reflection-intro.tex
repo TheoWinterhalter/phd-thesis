@@ -6,7 +6,6 @@ We presented earlier \acrshort{ETT} and its defining reflection rule.
 %
 \reminder[-1.0cm]{Reflection rule}{
   \begin{equation*}
-    \label{eq:reflection}
     \infer[]
       {\xisterm{\Ga}{e}{\Eq{A}{u}{v}}}
       {\xeqterm{\Ga}{u}{v}{A}}
@@ -37,3 +36,49 @@ eliminate reflection from type theory.
 Assume we have such a translation given by \(\transl{.}\) and \([.]\) such that
 whenever \(\xisterm{\Gamma}{t}{A}\) we have
 \(\isterm{\transl{\Gamma}}{[t]}{\transl{A}}\) in the target type theory.
+Now let's say we have an inconsistent context in \acrshort{ETT}: \(\Gamma_\bot\)
+(one can for instance assume \(0 = 1\) or \(\forall A, A\)), in such a context
+anything can have any type because conversion has become trivial.
+%
+\marginnote[1.4cm]{
+  Since \(\Gamma_\bot\) is inconsistent, anything can be proved from it,
+  including the equality between the two types \(\mathbb{N}\) and \(\bot\).
+  We then use reflection and conversion.
+}
+\begin{mathpar}
+  \infer
+    {
+      \infer
+        {\vdots}
+        {\xisterm{\Gamma_\bot}{0}{\mathbb{N}}}
+      \\
+      \infer
+        {
+          \infer
+            {\vdots}
+            {\xisterm{\Gamma_\bot}{\_}{\mathbb{N} = \bot}}
+          %
+        }
+        {\xeqterm{\Gamma_\bot}{\mathbb{N}}{\bot}{\Type}}
+    }
+    {\xisterm{\Gamma_\bot}{0}{\bot}}
+  %
+\end{mathpar}
+%
+It thus follows that in the target you have
+\( \isterm{\transl{\Gamma_\bot}}{[0]}{\transl{\bot}} \).
+Similarly you would have
+\( \isterm{\transl{\Gamma_\bot}}{[0]}{\transl{\mathbb{N}}} \). This means
+that both \(\bot\) and \(\mathbb{N}\) should be translated to similar things
+(to convertible types in case the target theory has uniqueness of type), without
+being able to exploit the knowledge that \(\Gamma_\bot\) is inconsistent
+because of the syntactical nature of the translation.
+
+\todo{Make things clearer}
+Even worse, translations should preserve falsehood meaning in particular that
+the translation of \(0\) should imply a proof of \(\bot\) in the target.
+This is not a concrete proof that it is impossible but rather an argument
+to see that such a translation would not behave well. One of the reasons is
+that it would translate terms, types and contexts independently when it cannot.
+Another is that an \acrshort{ETT} term does not contain any hints with respect
+to the uses of reflection.
