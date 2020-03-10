@@ -23,11 +23,17 @@ focused on translating \acrshort{ETT} to \acrshort{ITT}.
 However, with Simon Boulier we worked on another version translating directly to
 \acrshort{WTT} which I'm going to present here.
 
-\section{What kind of translation is possible}
+\section{No syntactical translation}
 
 \todo{Have reminders clickable to refer to actual definition.}
 \todo{Use the notation table to include the notation of typing etc. especially
 the ETT mark.}
 
 First of all we have to wonder about what kind of translation is possible.
-We presented earlier~\misref
+We presented earlier~\misref{} the notion of syntactical translation.
+Unfortunately it is not possible to devise a syntactical translation to
+eliminate reflection from type theory.
+
+Assume we have such a translation given by \(\transl{.}\) and \([.]\) such that
+whenever \(\xisterm{\Gamma}{t}{A}\) we have
+\(\isterm{\transl{\Gamma}}{[t]}{\transl{A}}\) in the target type theory.
