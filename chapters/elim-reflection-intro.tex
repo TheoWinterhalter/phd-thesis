@@ -128,14 +128,30 @@ from \acrshort{ETT} to \acrshort{ITT} as well as one from \acrshort{ITT} to
 \marginnote[-0.5cm]{In both cases we exploit the fact that \acrshort{ETT} extends
 \acrshort{ITT} which in turn extends \acrshort{WTT}.}
 
+Note that in both cases, we're not dealing with arbitrary notions of
+\acrshort{ITT} and \acrshort{WTT} but ones extended with some principles on
+equality that will be describe in~\misref.
+
 \section{Goal of the translation}
 
-\todo{Motivations should come first, but it's hard to do it without saying
-what we're motivating...}
+Why would we want to eliminate reflection? The first interest is that it
+justfies that adding the reflection rule preserves consistency.
+The main take-away however comes from the fact that we can show that
+\acrshort{ETT} is conservative over both \acrshort{ITT} and \acrshort{WTT},
+meaning that in order to prove a statement in one of those, it is enough
+to prove it using the refleciton rule.
+%
+\reminder[-2.3cm]{Conservativity (roughly)}{
+  A theory \(\mathcal{S}\) is said to be \emph{conservative} over a
+  theory \(\mathcal{T}\) when every statement in \(\mathcal{T}\) that
+  is provable in \(\mathcal{S}\) is also provable in \(\mathcal{T}\).
+}
+%
 
-\todo{Consistency of course, but mainly conservativity, and why not some
-practical uses in the future? Probably after coming up with a proper notion
-of proof in ETT.}
-\todo{Talk about what it teaches us with respect to computation}
+This can have practical use when proving theorems in a proof assistant like \Coq
+which doesn't have reflection. If the translation is constructive, it gives
+rise to an algorithm to transform a proof using reflection into a proof without.
 
-Why would we want to eliminate reflection?
+The deduced \acrshort{ITT} to \acrshort{WTT} even teaches us that computation
+is more of a commodity than a necessity as proofs can be transformed not to
+exploit any computational behaviour.
