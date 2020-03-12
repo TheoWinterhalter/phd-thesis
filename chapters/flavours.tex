@@ -107,3 +107,20 @@ symmetric, transitive closure of reduction.
 \marginnote[-0.4cm]{
   \(t \equiv u\) is defined as \(t \mathop{(\redl . \red)^\star} u\)
 }
+
+When talking about \acrshort{ITT} we usually mean an extension of this with
+more concepts like some base types~\misref{} and computation rules on their
+eliminators (pattern-matching). The conversion rule is also not always strictly
+derived from the reduction alone, it often includes \(\eta\)-rules, the most
+common being \(\eta\)-expansion of functions.
+\[
+  f \equiv_\eta \lambda (x:A). f\ x
+\]
+For it to make sense expansion has to be limited to functions which requires
+type information\sidenote{Also, the \(A\)---domain of the function---has to
+be sumrised somehow.}, this is why is certain contexts---like \Agda---the
+conversion is also typed.
+The relation between typed and untyped conversion has been explored at several
+occasions~\misref.
+\Coq manages to verify \(\eta\)-conversion for functions and records without
+relying on a typed-conversion as we will see later~\misref.
