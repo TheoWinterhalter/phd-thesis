@@ -43,6 +43,8 @@
 % For coq higlighting
 \usepackage{minted}
 
+\usepackage{stmaryrd}
+
 \include{macros}
 \input{cpp-macros} % TODO Integrate into macros and factorise
 
@@ -199,9 +201,7 @@
 \addpart{Proofs, Types and Programs}
 \pagelayout{margin} % Restore margins
 
-This is some introductory text to the part. Does it make sense?
-\todo{The title is pending, and there may be more parts before the next.
-Also it's not clear I want a foreword before every part.}
+\input{chapters/flavours.tex}
 
 \pagelayout{wide} % No margins
 \addpart{Elimination of Reflection}
@@ -268,6 +268,9 @@ Also it's not clear I want a foreword before every part.}
 \newacronym{ETT}{ETT}{Extensional Type Theory}
 \newacronym{ITT}{ITT}{Intensional Type Theory}
 \newacronym{WTT}{WTT}{Weak Type Theory}
+\newacronym[longplural={Pure Type Systems}]{PTS}{PTS}{Pure Type System}
+\newacronym{PCUIC}{PCUIC}{Predicative Calculus of Cumulative Inductive Constructions}
+\newacronym{MLTT}{MLTT}{Martin-Löf Type Theory}
 
 \setglossarystyle{listgroup} % Set the style of the glossary (see https://en.wikibooks.org/wiki/LaTeX/Glossary for a reference)
 \printglossary[title=Special Terms, toctitle=List of Terms] % Output the glossary, 'title' is the chapter heading for the glossary, toctitle is the table of contents heading

@@ -1,0 +1,109 @@
+% \setchapterpreamble[u]{\margintoc}
+\chapter{Flavours of type theory}
+\labch{flavours}
+
+Type theory comes in many different flavours and shapes, different formulations
+and properties. I will not try to be exhaustive but I will try to cover the
+main kind of dependent type theories I have encountered.
+I will not attempt to define properly the notion of \emph{type theory},
+there is work on this~\misref{} but it is still a bit early to grasp the
+concept fully.
+
+\section{Computation and type theory}
+
+The first prism in which to see type theory through can be that of computation.
+Indeed, not all type theories feature it to the same extent. Though for some
+people in computation resides the essence of type theory, it is still worth
+it to investigate theories where conversion is defined differently.
+
+\subsection{Intensional Type Theory}
+
+\acrfull{ITT} is the name given to a wide range of type theories actually.
+Those could be described in the setting of \acrlongpl{PTS}.
+The theories behind the proof assistans \Coq and \Agda---respectively
+\acrfull{PCUIC} and \acrfull{MLTT}\sidenote{Note that \acrshort{MLTT} also
+have various forms.}---are variants of \acrshort{ITT}.
+
+A \acrshort{PTS} is a pretty basic type theory, it is parametrised by a
+collection of sorts \(\mathcal{S}\), with so called \emph{rules}
+(\Rl) and \emph{axioms} (\Ax).
+Its syntax features \(\lambda\)-abstractions, applications, variables,
+\(\Pi\)-types and sorts.
+%
+\[
+  \begin{array}{lrl}
+    s &\in& \mathcal{S} \\
+    T,A,B,t,u,v &\bnf& x \bnfor \lambda (x:A). t \bnfor t\ u
+    \bnfor \Pi (x : A). B \bnfor s \\
+    \Ga, \D &\bnf& \ctxempty \bnfor \Ga, x:A
+  \end{array}
+\]
+
+Their computational behaviour is defined by a reduction relation (\(\red\))
+which is the contextual closure of the \(\beta\)-reduction.
+\[
+  (\lambda (x:A). t)\ u \red_\beta t[x \sto u]
+\]
+\marginnote[-0.9cm]{
+  For instance
+  \(\lambda (x : A). (\lambda (y : B) y x)\ t \red \lambda (x : A). t x\)
+}
+
+The typing rules involve the rules and axioms we mentioned earlier.
+%
+\begin{mathpar}
+  \infer
+    {(s,s') \in \Ax}
+    {\isterm{\Ga}{s}{s'}}
+  %
+
+  \infer
+    {
+      \isterm{\Ga}{A}{s_1} \\
+      \isterm{\Ga, x : A}{B}{s_2} \\
+      (s_1, s_2, s_3) \in \Rl
+    }
+    {\isterm{\Ga}{\Pi (x:A). B}{s_3}}
+  %
+
+  \infer
+    {(x : A) \in \Ga}
+    {\isterm{\Ga}{x}{A}}
+  %
+
+  \infer
+    {
+      \isterm{\Ga, x:A}{t}{B} \\
+      \isterm{\Ga}{\Pi (x:A).B}{s}
+    }
+    {\isterm{\Ga}{\lambda (x:A).t}{\Pi (x:A).B}}
+  %
+
+  \infer
+    {
+      \isterm{\Ga}{t}{\Pi (x:A). B} \\
+      \isterm{\Ga}{u}{A}
+    }
+    {\isterm{\Ga}{t\ u}{B[x \sto u]}}
+  %
+
+  \infer
+    {
+      \isterm{\Ga}{t}{A} \\
+      A \equiv B \\
+      \isterm{\Ga}{B}{s}
+    }
+    {\isterm{\Ga}{t}{B}}
+  %
+\end{mathpar}
+%
+Axioms determine typing of sorts, and rules what dependent products are allowed.
+The last rule is the conversion rule, it is the rule that involves computation:
+basically you can exchange two computationally equal types in a typing
+judgement. The \(\isterm{\Ga}{B}{s}\) bit is to make sure the type we want
+to substitute still makes sense.
+In this case, conversion (\(\equiv\)) is defined as the reflexivie,
+symmetric, transitive closure of reduction.
+\marginnote[-0.4cm]{
+  \(t \equiv u\) is defined as \(t \mathop{(\redl . \red)^\star} u\)
+}
