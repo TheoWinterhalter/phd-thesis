@@ -180,3 +180,27 @@ in the second part.}
 drawbacks the main of which being that type-checking is not decidable as we
 shall see later~\misref. We will also explore the relation between
 \acrshort{ETT} and \acrshort{ITT}~\misref.
+
+\subsection{Weak Type Theory}
+
+A \acrfull{WTT} is on the other end of the spectrum: instead of extending
+conversion with everything that can be proven equal, conversion is removed
+altogether. Computation (like \(\beta\)-reduction) is now handled by
+propositional equality alone, and conversion of types is done using transports
+of said equality.
+
+This time it's a bit hard to advertise it for practical use in a proof
+assistant, it's nonetheless interesting. For one, its meta-theory is that much
+simpler, an even more attractive fact once combined with a translation from
+\acrshort{ITT} (or \acrshort{ETT}) to \acrshort{WTT} as is the object of
+\refpart{elim-reflection}.
+Another point worth mentioning is that it really crystallises the notion that
+proofs are really just terms and do not require extra machinery to make sure
+they are indeed proofs (even when conversion is decidable, it might takes
+eons before you get this knowlegde)~\misref.
+
+One might also be tempted to call it minimal, but in order to simulate the
+congruence aspect of conversion, we have to extend the theory with principles
+to allow equalities under binders, and this has to be done for each binder
+(once for \(\lambda\)-abstractions---the usual functional extensionality---and
+once for \(\Pi\)-types---much less standard---at least).
