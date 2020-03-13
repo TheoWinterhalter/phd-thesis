@@ -163,17 +163,23 @@ These two principles are valid statements of \acrshort{ITT} and \acrshort{WTT}
 which are provable in \acrshort{ETT}, to show \acrshort{ETT} is a conservative
 extension of the target, it must be provable in it; as it isn't the case we need
 to extend the target with those principles.
+\reminder[-3.6cm]{\acrshort{UIP}}{
+\[ \Pi\ x \ y\ (e \ e' : x = y).\ e = e' \]
+}
+\reminder[-2.1cm]{Funext}{
+\[ \Pi\ f \ g .\ (\Pi x.\ f\ x = g\ x) \to f = g \]
+}
 
 For \acrshort{UIP} it can be show equivalent to Streicher's axiom K
 \[
 \begin{array}{rcl}
-  \mathtt{K} & : & \Prod{A: \Ty{i}} \Prod{x :A} \Prod{e : x = x} e = \refl{x} \\
+  \mathtt{K} & : & \Prod{A: s} \Prod{x :A} \Prod{e : x = x} e = \refl{x} \\
 \end{array}
 \]
-using the elimination on the identity type.
+where \(s\) is a sort, using the elimination on the identity type.
 K is provable in \acrshort{ETT} by considering the type
 \[
-  \Prod{A: \Ty{i}} \Prod{x \ y:A} \Prod{e : x = y} e = \refl{x} \\
+  \Prod{A: s} \Prod{x \ y:A} \Prod{e : x = y} e = \refl{x} \\
 \]
 which is well typed (using the reflection rule to show that $e$ has
 type $x= x$) and which can be inhabited by elimination of the identity
