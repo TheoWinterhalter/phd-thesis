@@ -216,5 +216,78 @@ more principles in the vein of functional extensionality, like extensionality
 of \(\Pi\)-types for similar reasons.
 
 \section{Basic idea of the translation}
-\todo{Presnet naive idea and paste sec 1.2 from CPP, maybe not hetero equality
-which should be intro before (reminder)}
+
+The basic idea behind the translation is to interpret conversion using the
+internal notion of equality, \ie the identity type.
+The naive approach would thus be to use transport to simulate the conversion
+rule.
+\reminder[-2.3cm]{Transport}{
+Transport turns an equality \(e : A = B\) into a map
+\(A \to B\).
+}
+
+This means however that for two terms \(a : A\) and \(b : B\) such that
+\(A \equiv B\) and \(u \equiv v\) in \acrshort{ETT}, there translations
+become comparable in the target only up-to the equality
+between the two types. \([u] =_{[A]} [v]\) doesn't necessarilly make sense
+anymore.
+
+To solve this proper we use instead a notion of heterogeneous equality.
+This is also the approach followed by
+Oury~\sidecite[1.7cm]{oury2005extensionality}
+although we decided on a slightly different presentations of heterogeneous
+equality to avoid the axioms involved with the use of \acrshort{JMeq}.
+\reminder[-2.3cm]{\acrshort{JMeq}}{
+\(\Heq{T}{t}{U}{u}\), equality between \(t : T\) and \(u : U\) is defined as
+\(\Sum{p:\Eq{}{T}{U}} \Eq{}{\translpo{p}\ t}{u}\).
+}
+
+During the translation, the same term occurring twice can be
+translated in two different manners, if the corresponding typing
+derivations are different. Even the types of the two different
+translations may be different.
+%
+However, we have the strong property that any two translations of the
+same term only differ in places where transports of proofs of equality have been
+injected.
+
+To keep track of this property, we introduce the relation $t \sim t'$
+between two terms of the target, of possibly different
+types\sidenote{The relation is fully syntactic.}.
+%
+The crux of the proof of the translation is to guarantee that for
+every two terms $t_1$ and $t_2$ such that $\isterm{\Ga}{t_1}{T_1}$,
+$\isterm{\Ga}{t_2}{T_2}$ and $t_1 \sim t_2$, there exists $p$ such that
+$\isterm{\Ga} {p} {\Heq{{T_1}} {{t_1}} {{T_2}} {{t_2}}}$.
+
+During the proof, variables of different but (propositionally) equal
+types are introduced and the context cannot be maintained to be the same
+for both $t_1$ and $t_2$. Therefore, the translation needs to keep
+track of this duplication of variables, plus a proof that they are
+heterogeneously equal.
+%
+This mechanism is similar to what happens in the (relational) internal
+parametricity translation in \acrshort{ITT} introduced by
+\sidecite[-0.4cm]{bernardy2012proofs} and recently rephrased in the setting of
+\MetaCoq~\sidecite{DBLP:conf/itp/AnandBCST18}. Namely, a context is not
+translated as a telescope of variables, but as a telescope of triples
+consisting of two variables plus a witness that they are in the
+parametric relation: \(x : A\) is (roughly) sent to
+\(x_1 : A_1, x_2 : A_2, x_\varepsilon : A_\varepsilon\ x_1\ x_2\).
+%
+In our setting, this amounts to consider telescope of triples
+consisting of two variables plus a witness that they are
+heterogeneously equal. We can express this by considering the
+following dependent sums:
+\[
+\Pack{A_1}{A_2} := \Sum{x:A_1} \Sum{y:A_2} \Heq{A_1}{x}{A_2}{y}.
+\]
+
+This presentation inspired by the parametricity translation is crucial
+in order to get an effective translation, because it is necessary to
+keep track of the evolution of contexts when doing the translation on
+open terms.
+%
+This ingredient is missing in Oury's work~\sidecite{oury2005extensionality},
+which prevents him from deducing an effective (\ie constructive and
+computable) translation from his theorem.
