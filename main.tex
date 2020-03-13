@@ -202,6 +202,9 @@
 \addpart{Proofs, Types and Programs}
 \pagelayout{margin} % Restore margins
 
+\input{chapters/proof-theory.tex}
+\input{chapters/simple-types.tex}
+\input{chapters/dependent-types.tex}
 \input{chapters/usual-defs.tex}
 \input{chapters/flavours.tex}
 \input{chapters/desirable-props.tex}
@@ -215,6 +218,11 @@
 \pagelayout{margin} % Restore margins
 
 \input{chapters/elim-reflection-intro.tex}
+
+\pagelayout{wide} % No margins
+\addpart{A verified type-checker for \Coq, in \Coq}
+\labpart{coq-in-coq}
+\pagelayout{margin} % Restore margins
 
 \pagelayout{wide} % No margins
 \addpart{Copy and Paste from CPP (so not final\dots)}
