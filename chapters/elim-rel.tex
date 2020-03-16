@@ -1,3 +1,221 @@
 % \setchapterpreamble[u]{\margintoc}
 \chapter{Relating translated expressions}
 \labch{elim-rel}
+
+We want to define a relation on terms that equates two terms that are
+the same up to transport.
+%
+This begs the question of what notion of transport is going to be
+used.
+%
+Transport can be defined from elimination of equality as in \vrefch{usual-defs}.
+However, in order not to confuse the transports added by the
+translation with the transports that were already present in the
+source, we consider $\translpo{p}$ as part of the syntax in the
+reasoning. It will be unfolded to its definition only after the
+complete translation is performed.
+%
+This idea is not novel as Hofmann already had a $\mathsf{Subst}$ operator that
+was part of his ITT (noted TT\textsubscript{I} in his
+paper~\sidecite{hofmann1995conservativity}).
+
+%
+We first define the (purely syntactic) relation $\ir$ between ETT terms
+and ITT terms in Figure~\ref{fig:ir-def} stating that the ITT term is
+simply a decoration of the first term by transports. Its purpose is to
+state how close to the original term its translation is. Then, we extend
+this relation to a similarity relation $\sim$ on ETT terms by taking its
+symmetric and transitive closure:
+\begin{center}$\sim \coloneqq (\ir \cup \ir^{-1})^+$
+\end{center}
+
+\begin{lemma}[$\sim$ is an equivalence relation]
+  \label{lem:sim-er}
+  $\sim$ is reflexive, symmetric and transitive.
+\end{lemma}
+
+\begin{proof}
+  For reflexivity we proceed by induction on the term.
+\end{proof}
+
+\input{figir}
+%\input{figsim}
+
+The goal is to prove that two terms in this relation, that are well-typed in the
+target type theory, are heterogeneously equal. As for this notion, we recall
+the definition we previously gave:
+$\Heq{T}{t}{U}{u} := \Sum{p:\Eq{}{T}{U}} \Eq{}{\translpo{p}\ t}{u}$.
+%
+This definition of heterogeneous equality can be shown to be
+reflexive, symmetric and transitive. Because of UIP, heterogeneous
+equality collapses to equality when taken on the same type.
+
+\begin{lemma}
+  \label{lem:uip-cong}
+  If $\isterm{\Ga}{e}{\Heq{A}{u}{A}{v}}$
+  then there exists $p$ such that $\isterm{\Ga}{p}{\Eq{A}{u}{v}}$.
+\end{lemma}
+
+\begin{proof}
+  This holds thanks to UIP on equality, which implies K, and so the
+  proof of $A = A$ can be taken to be reflexivity.
+\end{proof}
+
+\begin{remark}
+  As a corollary, $\Heqs$ on types corresponds to equality.
+  Indeed when we have $\isterm{\Ga}{e}{\Heq{s}{A}{s'}{B}}$ we have
+  that $\Eq{}{s}{s'}$, which implies that $s$ and $s'$ have the same sort
+  and thus are syntactically the same (by an inversion argument).
+\end{remark}
+
+Before we can prove the fundamental lemma stating that two terms in relation
+are heterogeneously equal, we need to consider another construction.
+%
+As explained in the introduction, when proving the property by
+induction on terms, we introduce variables in the context that are
+equal only up-to heterogeneous equality.
+%
+This phenomenon is similar to what happens in the parametricity
+translation~\sidecite{bernardy2012proofs}.
+%
+Our fundamental lemma on the decoration relation $\sim$ assumes two
+related terms of potentially different types $T1$ and $T2$ to produce an
+heterogeneous equality between them. For induction to go through under
+binders (e.g. for dependent products and abstractions), we hence need to
+consider the two terms under different, but heterogeneously equal
+contexts.
+%
+Therefore, the context we produce will not only be a telescope of
+variables, but rather a telescope of triples consisting of two variables
+of possibly different types, and a witness that they are heterogeneously
+equal.
+%
+To make this precise, we define the following macro:
+%
+\[
+\Pack{A_1}{A_2} := \Sum{x:A_1} \Sum{y:A_2} \Heq{}{x}{}{y}
+\]
+together with its projections
+\begin{mathpar}
+  \ProjO{p} := \pio{}{}{p}
+
+  \ProjT{p} := \pio{}{}{\pit{}{}{p}}
+
+  \ProjE{p} := \pit{}{}{\pit{}{}{p}}.
+\end{mathpar}
+%
+We can then extend this notion canonically to contexts of the same
+length that are well formed using the same sorts:
+%
+\[
+\begin{array}{l}
+    \Pack{(\Ga_1, x:A_1)}{(\Ga_2, x:A_2)} := \\
+    (\Pack{\Ga_1}{\Ga_2}),
+    x : \Pack{(\llift{\gamma}{}{A_1})}{(\rlift{\gamma}{}{A_2})} \\
+    \\
+    \Pack{\ctxempty}{\ctxempty} := \ctxempty.
+\end{array}
+\]
+%
+When we pack contexts, we also need to apply the correct projections for
+the types in that context to still make sense. Assuming two contexts
+$\Ga_1$ and $\Ga_2$ of the same length, we can define left and right
+substitutions:
+\[
+\begin{array}{ll}
+  \gamma_1 &:= [ x \leftarrow \ProjO{x}\ |\ (x : \_) \in \Ga_1 ] \\
+  \gamma_2 &:= [ x \leftarrow \ProjT{x}\ |\ (x : \_) \in \Ga_2 ].
+\end{array}
+\]
+These substitutions implement lifting of terms to packed contexts:
+$\isterm{\Ga, \Pack{\Ga_1}{\Ga_2}}{\llift{\gamma}{}{t}}{\llift{\gamma}{}{A}}$
+whenever $\isterm{\Ga, \Ga_1}{t}{A}$ (resp.
+$\isterm{\Ga, \Pack{\Ga_1}{\Ga_2}}{\rlift{\gamma}{}{t}}{\rlift{\gamma}{}{A}}$
+whenever $\isterm{\Ga, \Ga_2}{t}{A}$).
+
+For readability, when $\Ga_1$ and $\Ga_2$ are understood we will write $\Gp$ for
+$\Pack{\Ga_1}{\Ga_2}$.
+
+Implicitly, whenever we use the notation $\Pack{\Ga_1}{\Ga_2}$ it means that
+the two contexts are of the same length and well-formed with the same
+sorts.
+%
+We can now state the fundamental lemma.
+
+\begin{lemma}[Fundamental lemma]
+  \label{lem:sim-cong}
+  Let $t_1$ and $t_2$ be two terms. If $\isterm{\Ga, \Ga_1}{t_1}{T_1}$ and
+  $\isterm{\Ga, \Ga_2}{t_2}{T_2}$ and $t_1 \sim t_2$ then there exists $p$ such
+  that
+  $\isterm{\Ga, \Pack{\Ga_1}{\Ga_2}}
+          {p}
+          {\Heq{\llift{\gamma}{}{T_1}}
+               {\llift{\gamma}{}{t_1}}
+               {\rlift{\gamma}{}{T_2}}
+               {\rlift{\gamma}{}{t_2}}}$.
+\end{lemma}
+
+\begin{proof}
+  The proof is by induction on the derivation of $t_1 \sim t_2$. We show
+  the three most interesting cases:
+
+  \begin{itemize}
+  \item \textsc{Var}
+    \[
+      \infer[]
+        { }
+        {x \sim x}
+      %
+    \]
+    If $x$ belongs to $\Ga$, we apply reflexivity---together with uniqueness of
+    typing~\eqref{lem:uniq}---to conclude.
+    Otherwise, $\ProjE{x}$ has the expected type (since
+    $\llift{\gamma}{}{x} \equiv \ProjO{x}$ and $\rlift{\gamma}{}{x} \equiv \ProjT{x}$).
+
+  \item \textsc{Application}
+    \[
+      \infer[]
+        {t_1 \sim t_2 \\
+         A_1 \sim A_2 \\
+         B_1 \sim B_2 \\
+         u_1 \sim u_2
+        }
+        {\app{t_1}{x:A_1}{B_1}{u_1} \sim \app{t_2}{x:A_2}{B_2}{u_2}}
+      %
+    \]
+    We have $\isterm{\Ga, \Ga_1}{\app{t_1}{x:A_1}{B_1}{u_1}}{T_1}$ and
+    $\isterm{\Ga, \Ga_2}{\app{t_2}{x:A_2}{B_2}{u_2}}{T_2}$ which means by
+    inversion~\eqref{lem:inversion} that the subterms are well-typed.
+    We apply the induction hypothesis and then conclude.
+  \item \textsc{TransportLeft}
+    \[
+      \infer[]
+        {t_1 \sim t_2}
+        {\translpo{p}\ t_1 \sim t_2}
+      %
+    \]
+    We have $\isterm{\Ga, \Ga_1}{\translpo{p}\ t_1}{T_1}$ and
+    $\isterm{\Ga, \Ga_2}{t_2}{T_2}$.
+    By inversion~\eqref{lem:inversion} we have
+    $\isterm{\Ga, \Ga_1}{p}{\Eq{}{T_1'}{T_1}}$ and
+    $\isterm{\Ga, \Ga_1}{t_1}{T_1'}$.
+    By induction hypothesis we have $e$ such that
+    $\isterm{\Ga, \Gp}{e}{\Heq{}{\llift{\gamma}{}{t_1}}{}{\rlift{\gamma}{}{t_2}}}$.
+    From transitivity and symmetry we only need to provide a proof of
+    $\Heq{}{\llift{\gamma}{}{t_1}}{}{\translpo{\llift{\gamma}{}{p}}\ \llift{\gamma}{}{t_1}}$ which is inhabited by
+    $\pair{\_}{\_}{\llift{\gamma}{}{p}}{\refl{} (\translpo{\llift{\gamma}{}{p}}\ \llift{\gamma}{}{t_1})}$.
+  \end{itemize}
+
+  The complete proof can be found in Appendix~\ref{sec:proof-fund-lemma}.
+\end{proof}
+
+We can also prove that $\sim$ preserves substitution.
+
+\begin{lemma}
+  If $t_1 \sim t_2$ and $u_1 \sim u_2$ then
+  $t_1[x \sto u_1] \sim t_2[x \sto u_2]$.
+\end{lemma}
+
+\begin{proof}
+  We proceed by induction on the derivation of $t_1 \sim t_2$.
+\end{proof}
