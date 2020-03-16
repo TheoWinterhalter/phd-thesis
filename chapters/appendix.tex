@@ -47,10 +47,10 @@ and $\upharpoonright$ respectively.
     \[
       \infer[]
         {t_1 \sim t_2}
-        {\translpo{p}\ t_1 \sim t_2}
+        {\transpo{p}\ t_1 \sim t_2}
       %
     \]
-    We have $\isterm{\Ga, \Ga_1}{\translpo{p}\ t_1}{T_1}$ and
+    We have $\isterm{\Ga, \Ga_1}{\transpo{p}\ t_1}{T_1}$ and
     $\isterm{\Ga, \Ga_2}{t_2}{T_2}$.
     By inversion~\eqref{lem:inversion} we have
     $\isterm{\Ga, \Ga_1}{p}{\Eq{}{T_1'}{T_1}}$ and
@@ -58,14 +58,14 @@ and $\upharpoonright$ respectively.
     Then by induction hypothesis we have $e$ such that
     $\isterm{\Ga, \Gp}{e}{\Heq{}{\lo{t_1}}{}{\ro{t_2}}}$.
     From transitivity and symmetry we only need to provide a proof of
-    $\Heq{}{\lo{t_1}}{}{\translpo{\lo{p}}\ \lo{t_1}}$ which is inhabited by
-    $\pair{\_}{\_}{\lo{p}}{\refl{} (\translpo{\lo{p}}\ \lo{t_1})}$.
+    $\Heq{}{\lo{t_1}}{}{\transpo{\lo{p}}\ \lo{t_1}}$ which is inhabited by
+    $\pair{\_}{\_}{\lo{p}}{\refl{} (\transpo{\lo{p}}\ \lo{t_1})}$.
 
     \item \textsc{TransportRight}
     \[
       \infer[]
         {t_1 \sim t_2}
-        {t_1 \sim \translpo{p}\ t_2}
+        {t_1 \sim \transpo{p}\ t_2}
       %
     \]
     Similarly.
@@ -356,7 +356,7 @@ and $\upharpoonright$ respectively.
     $\istype{\Gb}{\Ab} \in \transl{\xistype{\Ga}{A}}$ by
     inversion~\eqref{lem:inversion}, thus, from lemma~\ref{lem:change-type}
     and IH we get $\isterm{\Gb}{\ub}{\Ab}$, yielding
-    $\isterm{\Gb}{\translpo{\eb}\ \ub}{\Bb} \in \transl{\xisterm{\Ga}{u}{B}}$.
+    $\isterm{\Gb}{\transpo{\eb}\ \ub}{\Bb} \in \transl{\xisterm{\Ga}{u}{B}}$.
 
     \item \textsc{Lambda}
     \[

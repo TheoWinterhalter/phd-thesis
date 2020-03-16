@@ -11,7 +11,7 @@ used.
 Transport can be defined from elimination of equality as in \vrefch{usual-defs}.
 However, in order not to confuse the transports added by the
 translation with the transports that were already present in the
-source, we consider $\translpo{p}$ as part of the syntax in the
+source, we consider $\transpo{p}$ as part of the syntax in the
 reasoning. It will be unfolded to its definition only after the
 complete translation is performed.
 %
@@ -44,7 +44,7 @@ symmetric and transitive closure:
 The goal is to prove that two terms in this relation, that are well-typed in the
 target type theory, are heterogeneously equal. As for this notion, we recall
 the definition we previously gave:
-$\Heq{T}{t}{U}{u} := \Sum{p:\Eq{}{T}{U}} \Eq{}{\translpo{p}\ t}{u}$.
+$\Heq{T}{t}{U}{u} := \Sum{p:\Eq{}{T}{U}} \Eq{}{\transpo{p}\ t}{u}$.
 %
 This definition of heterogeneous equality can be shown to be
 reflexive, symmetric and transitive. Because of UIP, heterogeneous
@@ -191,10 +191,10 @@ We can now state the fundamental lemma.
     \[
       \infer[]
         {t_1 \sim t_2}
-        {\translpo{p}\ t_1 \sim t_2}
+        {\transpo{p}\ t_1 \sim t_2}
       %
     \]
-    We have $\isterm{\Ga, \Ga_1}{\translpo{p}\ t_1}{T_1}$ and
+    We have $\isterm{\Ga, \Ga_1}{\transpo{p}\ t_1}{T_1}$ and
     $\isterm{\Ga, \Ga_2}{t_2}{T_2}$.
     By inversion~\eqref{lem:inversion} we have
     $\isterm{\Ga, \Ga_1}{p}{\Eq{}{T_1'}{T_1}}$ and
@@ -202,8 +202,8 @@ We can now state the fundamental lemma.
     By induction hypothesis we have $e$ such that
     $\isterm{\Ga, \Gp}{e}{\Heq{}{\llift{\gamma}{}{t_1}}{}{\rlift{\gamma}{}{t_2}}}$.
     From transitivity and symmetry we only need to provide a proof of
-    $\Heq{}{\llift{\gamma}{}{t_1}}{}{\translpo{\llift{\gamma}{}{p}}\ \llift{\gamma}{}{t_1}}$ which is inhabited by
-    $\pair{\_}{\_}{\llift{\gamma}{}{p}}{\refl{} (\translpo{\llift{\gamma}{}{p}}\ \llift{\gamma}{}{t_1})}$.
+    $\Heq{}{\llift{\gamma}{}{t_1}}{}{\transpo{\llift{\gamma}{}{p}}\ \llift{\gamma}{}{t_1}}$ which is inhabited by
+    $\pair{\_}{\_}{\llift{\gamma}{}{p}}{\refl{} (\transpo{\llift{\gamma}{}{p}}\ \llift{\gamma}{}{t_1})}$.
   \end{itemize}
 
   The complete proof can be found in Appendix~\ref{sec:proof-fund-lemma}.

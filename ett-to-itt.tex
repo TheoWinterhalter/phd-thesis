@@ -87,10 +87,10 @@ translated into a typecheckable term of ITT.
 And indeed, it is well know that one can find a corresponding term of
 the same type in ITT by \emph{explicitly} transporting the term $x$
 of type $A$ using the elimination of internal equality on the witness
-of equality $e$, noted $\translpo{e}$:
+of equality $e$, noted $\transpo{e}$:
 %
 \[
-  \lambda\ A\ B \ (e:A = B)\ (x:A).\ \translpo{e}\ x
+  \lambda\ A\ B \ (e:A = B)\ (x:A).\ \transpo{e}\ x
   : \Pi\ A\ B.\ A = B \to A \to B.
 \]
 %
@@ -280,7 +280,7 @@ equality} introduced by \sidecite{mcbride2000dependently}.
 However, to avoid adding additional axioms to ITT as done by
 \sidecite{oury2005extensionality}, we prefer to encode this
 heterogeneous equality using the following dependent sums:
-$$\Heq{T}{t}{U}{u} := \Sum{p:\Eq{}{T}{U}} \Eq{}{\translpo{p}\ t}{u}.$$
+$$\Heq{T}{t}{U}{u} := \Sum{p:\Eq{}{T}{U}} \Eq{}{\transpo{p}\ t}{u}.$$
 %
 
 During the translation, the same term occurring twice can be
@@ -563,7 +563,7 @@ Transport can be defined from elimination of equality as follows:
 \begin{definition}[Transport]
   Given $\isterm{\Ga}{p}{\Eq{s}{T_1}{T_2}}$ and
   $\isterm{\Ga}{t}{T_1}$ we define the transport of $t$ along $p$, written
-  $\translpo{p}\ t$, as
+  $\transpo{p}\ t$, as
   $\app
     {\J
       {s}
@@ -576,12 +576,12 @@ Transport can be defined from elimination of equality as follows:
     {T_1}
     {T_2}
     {t}
-  $ such that $\isterm{\Ga}{\translpo{p}\ t}{T_2}$.
+  $ such that $\isterm{\Ga}{\transpo{p}\ t}{T_2}$.
 \end{definition}
 %
 However, in order not to confuse the transports added by the
 translation with the transports that were already present in the
-source, we consider $\translpo{p}$ as part of the syntax in the
+source, we consider $\transpo{p}$ as part of the syntax in the
 reasoning. It will be unfolded to its definition only after the
 complete translation is performed.
 %
@@ -614,7 +614,7 @@ symmetric and transitive closure:
 The goal is to prove that two terms in this relation, that are well-typed in the
 target type theory, are heterogeneously equal. As for this notion, we recall
 the definition we previously gave:
-$\Heq{T}{t}{U}{u} := \Sum{p:\Eq{}{T}{U}} \Eq{}{\translpo{p}\ t}{u}$.
+$\Heq{T}{t}{U}{u} := \Sum{p:\Eq{}{T}{U}} \Eq{}{\transpo{p}\ t}{u}$.
 %
 This definition of heterogeneous equality can be shown to be
 reflexive, symmetric and transitive. Because of UIP, heterogeneous
@@ -761,10 +761,10 @@ We can now state the fundamental lemma.
     \[
       \infer[]
         {t_1 \sim t_2}
-        {\translpo{p}\ t_1 \sim t_2}
+        {\transpo{p}\ t_1 \sim t_2}
       %
     \]
-    We have $\isterm{\Ga, \Ga_1}{\translpo{p}\ t_1}{T_1}$ and
+    We have $\isterm{\Ga, \Ga_1}{\transpo{p}\ t_1}{T_1}$ and
     $\isterm{\Ga, \Ga_2}{t_2}{T_2}$.
     By inversion~\eqref{lem:inversion} we have
     $\isterm{\Ga, \Ga_1}{p}{\Eq{}{T_1'}{T_1}}$ and
@@ -772,8 +772,8 @@ We can now state the fundamental lemma.
     By induction hypothesis we have $e$ such that
     $\isterm{\Ga, \Gp}{e}{\Heq{}{\llift{\gamma}{}{t_1}}{}{\rlift{\gamma}{}{t_2}}}$.
     From transitivity and symmetry we only need to provide a proof of
-    $\Heq{}{\llift{\gamma}{}{t_1}}{}{\translpo{\llift{\gamma}{}{p}}\ \llift{\gamma}{}{t_1}}$ which is inhabited by
-    $\pair{\_}{\_}{\llift{\gamma}{}{p}}{\refl{} (\translpo{\llift{\gamma}{}{p}}\ \llift{\gamma}{}{t_1})}$.
+    $\Heq{}{\llift{\gamma}{}{t_1}}{}{\transpo{\llift{\gamma}{}{p}}\ \llift{\gamma}{}{t_1}}$ which is inhabited by
+    $\pair{\_}{\_}{\llift{\gamma}{}{p}}{\refl{} (\transpo{\llift{\gamma}{}{p}}\ \llift{\gamma}{}{t_1})}$.
   \end{itemize}
 
   The complete proof can be found in Appendix~\ref{sec:proof-fund-lemma}.
@@ -842,14 +842,14 @@ type, which is required to be able to use the typing rule for application.
   Assume we have $\isterm{\Gb}{\tb}{\Tb} \in \transl{\xisterm{\Ga}{t}{T}}$.
   By definition of $\ir$,
   $T \ir \Tb$ means that $\Tb$ is shaped
-  $\translpo{p}\ \translpo{q}\ ...\ \translpo{r}\ \Tb'$ with $\Tb'$ having
+  $\transpo{p}\ \transpo{q}\ ...\ \transpo{r}\ \Tb'$ with $\Tb'$ having
   the same head constructor as $T$. By inversion~\eqref{lem:inversion}, the
   subterms are typable, including $\Tb'$. Actually, from inversion, we
   even get that the type of $\Tb'$ is a universe. Then,
   using lemma~\ref{lem:sim-cong} and lemma~
   \ref{lem:uip-cong}, we get $\isterm{\Gb}{e}{\Eq{}{\Tb}{\Tb'}}$.
   We conclude with
-  $\isterm{\Gb}{\translpo{e}\ \tb}{\Tb'} \in \transl{\xisterm{\Ga}{t}{T}}$.
+  $\isterm{\Gb}{\transpo{e}\ \tb}{\Tb'} \in \transl{\xisterm{\Ga}{t}{T}}$.
 \end{proof}
 
 Finally, in order for the induction to go through, we need to know
@@ -879,7 +879,7 @@ posteriori}.
   By lemma~\ref{lem:uip-cong} (and lemma~\ref{lem:choose} to give
   universes as types to $\Tb$ and $\Tb'$) we can assume
   $\isterm{\Gb}{p}{\Eq{}{\Tb}{\Tb'}}$. Then
-  $\isterm{\Gb}{\translpo{p}\ \tb}{\Tb'}$ is still a translation since $\ir$
+  $\isterm{\Gb}{\transpo{p}\ \tb}{\Tb'}$ is still a translation since $\ir$
   ignores transports.
 \end{proof}
 
@@ -946,7 +946,7 @@ in ITT.
     $\istype{\Gb}{\Ab} \in \transl{\xistype{\Ga}{A}}$ by
     inversion~\eqref{lem:inversion}, thus, from lemma~\ref{lem:change-type}
     and IH we get $\isterm{\Gb}{\ub}{\Ab}$, yielding
-    $\isterm{\Gb}{\translpo{\eb}\ \ub}{\Bb} \in \transl{\xisterm{\Ga}{u}{B}}$.
+    $\isterm{\Gb}{\transpo{\eb}\ \ub}{\Bb} \in \transl{\xisterm{\Ga}{u}{B}}$.
   \end{itemize}
 
 \end{proof}
@@ -1003,7 +1003,7 @@ transport, namely $\mathsf{transport}'$ such that
 %
 \begin{align*}
   \otransport{A_1}{A_2}{p}{t} &= t &\text{ when } A_1 =_\alpha A_2 \\
-  &= \translpo{p}{t} &\text{ otherwise.}
+  &= \transpo{p}{t} &\text{ otherwise.}
 \end{align*}
 %
 The idea is that we avoid \emph{trivially} unnecessary transports (we do not
