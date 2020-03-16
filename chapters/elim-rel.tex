@@ -16,30 +16,222 @@ reasoning. It will be unfolded to its definition only after the
 complete translation is performed.
 %
 This idea is not novel as Hofmann already had a $\mathsf{Subst}$ operator that
-was part of his ITT (noted TT\textsubscript{I} in his
+was part of his \acrshort{ITT} (noted TT\textsubscript{I} in his
 paper~\sidecite{hofmann1995conservativity}).
 
-%
-We first define the (purely syntactic) relation $\ir$ between ETT terms
-and ITT terms in Figure~\ref{fig:ir-def} stating that the ITT term is
-simply a decoration of the first term by transports. Its purpose is to
-state how close to the original term its translation is. Then, we extend
-this relation to a similarity relation $\sim$ on ETT terms by taking its
-symmetric and transitive closure:
-\begin{center}$\sim \coloneqq (\ir \cup \ir^{-1})^+$
-\end{center}
+\section{Relating terms and their translation}
 
-\begin{lemma}[$\sim$ is an equivalence relation]
+We first define the (purely syntactic) relation $\ir$ between \acrshort{ETT}
+terms and target terms by saying the translated term must be a decoration of the
+first term by transports.
+Its purpose is to state how close to the original term its translation is.
+In the definition, the most important rule is highlighted.
+
+\begin{mathpar}
+
+  \highlight{
+    \infer[]
+      {t_1 \ir t_2}
+      {t_1 \ir \transpo{p}\ t_2}
+    %
+  }
+
+  \\
+  \infer[]
+    { }
+    {x \ir x}
+  %
+
+  \infer[]
+    {A_1 \ir A_2 \\
+     B_1 \ir B_2
+    }
+    {\Prod{x:A_1} B_1 \ir \Prod{x:A_2} B_2}
+  %
+
+  \infer[]
+    {A_1 \ir A_2 \\
+     B_1 \ir B_2
+    }
+    {\Sum{x:A_1} B_1 \ir \Sum{x:A_2} B_2}
+  %
+
+  \infer[]
+    {A_1 \ir A_2 \\
+     u_1 \ir u_2 \\
+     v_1 \ir v_2
+    }
+    {\Eq{A_1}{u_1}{v_1} \ir \Eq{A_2}{u_2}{v_2}}
+  %
+
+  \infer[]
+    { }
+    {s \ir s}
+  %
+
+  \infer[]
+    {A_1 \ir A_2 \\
+     B_1 \ir B_2 \\
+     t_1 \ir t_2
+    }
+    {\lam{x:A_1}{B_1} t_1 \ir \lam{x:A_2}{B_2} t_2}
+  %
+
+  \infer[]
+    {t_1 \ir t_2 \\
+     A_1 \ir A_2 \\
+     B_1 \ir B_2 \\
+     u_1 \ir u_2
+    }
+    {\app{t_1}{x:A_1}{B_1}{u_1} \ir \app{t_2}{x:A_2}{B_2}{u_2}}
+  %
+
+  \infer[]
+    {A_1 \ir A_2 \\
+     B_1 \ir B_2 \\
+     t_1 \ir t_2 \\
+     u_1 \ir u_2
+    }
+    {\pair{x:A_1}{B_1}{t_1}{u_1} \ir \pair{x:A_2}{B_2}{t_2}{u_2}}
+  %
+
+  \infer[]
+    {A_1 \ir A_2 \\
+     B_1 \ir B_2 \\
+     p_1 \ir p_2
+    }
+    {\pio{x:A_1}{B_1}{p_1} \ir \pio{x:A_2}{B_1}{p_2}}
+  %
+
+  \infer[]
+    {A_1 \ir A_2 \\
+     B_1 \ir B_2 \\
+     p_1 \ir p_2
+    }
+    {\pit{x:A_1}{B_1}{p_1} \ir \pit{x:A_2}{B_2}{p_2}}
+  %
+
+  \infer[]
+    {A_1 \ir A_2 \\
+     u_1 \ir u_2
+    }
+    {\refl{A_1} u_1 \ir \refl{A_2} u_2}
+  %
+\end{mathpar}
+
+From this relation we build a new one \(\sim\)) between translated terms.
+\(u \sim v\) basically means that \(u\) and \(v\) are both decorations of the
+same term.
+
+\[
+  \sim\ \coloneqq\ \sqsupset^+ . \ir^+
+\]
+
+In order to better reason about it however, we actually define it inductively
+again.
+
+\begin{mathpar}
+  \highlight{
+    \infer[]
+      {t_1 \sim t_2}
+      {\transpo{p}\ t_1 \sim t_2}
+    %
+  }
+
+  \highlight{
+    \infer[]
+      {t_1 \sim t_2}
+      {t_1 \sim \transpo{p}\ t_2}
+    %
+  }
+
+  \infer[]
+    {A_1 \sim A_2 \\
+     B_1 \sim B_2
+    }
+    {\Prod{x:A_1} B_1 \sim \Prod{x:A_2} B_2}
+  %
+
+  \infer[]
+    {A_1 \sim A_2 \\
+     B_1 \sim B_2
+    }
+    {\Sum{x:A_1} B_1 \sim \Sum{x:A_2} B_2}
+  %
+
+  \infer[]
+    {A_1 \sim A_2 \\
+     u_1 \sim u_2 \\
+     v_1 \sim v_2
+    }
+    {\Eq{A_1}{u_1}{v_1} \sim \Eq{A_2}{u_2}{v_2}}
+  %
+
+  \infer[]
+    { }
+    {s \sim s}
+  %
+
+  \infer[]
+    {A_1 \sim A_2 \\
+     B_1 \sim B_2 \\
+     t_1 \sim t_2
+    }
+    {\lam{x:A_1}{B_1} t_1 \sim \lam{x:A_2}{B_2} t_2}
+  %
+
+  \infer[]
+    {t_1 \sim t_2 \\
+     A_1 \sim A_2 \\
+     B_1 \sim B_2 \\
+     u_1 \sim u_2
+    }
+    {\app{t_1}{x:A_1}{B_1}{u_1} \sim \app{t_2}{x:A_2}{B_2}{u_2}}
+  %
+
+  \infer[]
+    {A_1 \sim A_2 \\
+     B_1 \sim B_2 \\
+     t_1 \sim t_2 \\
+     u_1 \sim u_2
+    }
+    {\pair{x:A_1}{B_1}{t_1}{u_1} \sim \pair{x:A_2}{B_2}{t_2}{u_2}}
+  %
+
+  \infer[]
+    {A_1 \sim A_2 \\
+     B_1 \sim B_2 \\
+     p_1 \sim p_2
+    }
+    {\pio{x:A_1}{B_1}{p_1} \sim \pio{x:A_2}{B_1}{p_2}}
+  %
+
+  \infer[]
+    {A_1 \sim A_2 \\
+     B_1 \sim B_2 \\
+     p_1 \sim p_2
+    }
+    {\pit{x:A_1}{B_1}{p_1} \sim \pit{x:A_2}{B_2}{p_2}}
+  %
+
+  \infer[]
+    {A_1 \sim A_2 \\
+     u_1 \sim u_2
+    }
+    {\refl{A_1} u_1 \sim \refl{A_2} u_2}
+  %
+\end{mathpar}
+
+\section{Properties of the relation}
+
+\begin{lemma}[$\sim$ is a partial equivalence relation]
   \label{lem:sim-er}
-  $\sim$ is reflexive, symmetric and transitive.
+  $\sim$ is symmetric and transitive.
 \end{lemma}
 
-\begin{proof}
-  For reflexivity we proceed by induction on the term.
-\end{proof}
-
-\input{figir}
-%\input{figsim}
+% \begin{proof}
+%   For reflexivity we proceed by induction on the term.
+% \end{proof}
 
 The goal is to prove that two terms in this relation, that are well-typed in the
 target type theory, are heterogeneously equal. As for this notion, we recall
