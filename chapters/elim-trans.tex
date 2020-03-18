@@ -6,13 +6,18 @@
 \labsec{the-translation}
 
 We now define the translations (let us stress the plural here) of an
-extensional judgment. We extend $\ir$ canonically to contexts
-($\Ga \ir \Gb$ when they bind the same variables and the types are in
-relation for $\ir$).
+extensional judgment. We extend $\ir$ canonically to contexts.
+\marginnote[-0.5cm]{
+  $\Ga \ir \Gb$ holds when they bind the same variables and the types are in
+  relation for $\ir$.
+}
 
 Before defining the translation, we define a set
-$\transl{\xisterm{\Ga}{t}{A}}$ of typing judgments
-in ITT associated to a typing judgment $\xisterm{\Ga}{t}{A}$ in ETT.
+$\transl{\xisterm{\Ga}{t}{A}}$ of typing judgments in the target associated to a
+typing judgment $\xisterm{\Ga}{t}{A}$ in \acrshort{ETT}.
+\marginnote[-0.5cm]{
+  This is rather a predicate. The formalisation is clearer on that fact.
+}
 %
 The idea is that this set describes all the possible translations that
 lead to the expected property. When
@@ -25,7 +30,7 @@ induction on the derivation.
   \leavevmode
   \begin{itemize}
     \item For any $\xisctx{\Ga}$ we define $\transl{\xisctx{\Ga}}$ as a set of
-    valid judgments (in ITT) such that
+    valid judgments (in the target) such that
     $\isctx{\Gb} \in \transl{\xisctx{\Ga}}$ if and only if $\Ga \ir \Gb$.
 
     \item Similarly, $\isterm{\Gb}{\tb}{\Ab} \in \transl{\xisterm{\Ga}{t}{A}}$
@@ -34,11 +39,11 @@ induction on the derivation.
 \end{definition}
 
 In order to better master the shape of the produced realiser, we state the
-following lemma which shows that it has the same head
-type constructor as the type it realises.
+following lemma which states that we can chose the translated term such that
+the type has the same head type constructor as the type it realises.
 %
 This is important for instance for the case of an application, where we
-do not know a priori if the translated function has a dependent product
+do not know \emph{a priori} if the translated function has a dependent product
 type, which is required to be able to use the typing rule for application.
 
 \begin{lemma}
@@ -80,8 +85,7 @@ posteriori}.
 \end{lemma}
 
 \begin{proof}
-  By definition we have $T \ir \Tb$ and $T \ir \Tb'$ and thus $T \sim \Tb$ and
-  $T \sim \Tb'$, implying $\Tb \sim \Tb'$ by transitivity~\eqref{lemma:sim-er}.
+  By definition we have $T \ir \Tb$ and $T \ir \Tb'$ and thus $\Tb \sim \Tb'$.
   By \reflemma{sim-cong}
   (in the case $\Ga_1 \equiv \Ga_2 \equiv \ctxempty$) we get
   $\isterm{\Gb}{p}{\Heq{}{\Tb}{}{\Tb'}}$ for some $p$.
@@ -95,8 +99,8 @@ posteriori}.
 We can now define the translation. This is done by mutual induction on
 context well-formedness, typing and conversion derivations. Indeed,
 in order to be able to produce a realiser by induction, we need to show
-that every conversion in ETT is translated as an heterogeneous equality
-in ITT.
+that every conversion in \acrshort{ETT} is translated as an heterogeneous
+equality.
 
 \begin{theorem}[Translation]
   \label{thm:translation}
@@ -117,10 +121,11 @@ in ITT.
 \end{theorem}
 
 \begin{proof}
-  We prove the theorem by induction on the derivation in the
-  extensional type theory. We only show the two most interesting cases
-  of application and conversion.
-  The complete proof is given in Appendix~\refsec{corr-transl}.
+  We prove the theorem by induction on the derivation in \acrshort{ETT}.
+  We only show the two most interesting cases of application and conversion.
+  The complete proof is given in \frefsec{corr-transl}.
+  \todo{Again, not clear I want to keep it... Isn't the formalisation or the
+  paper enough?}
 
   \begin{itemize}
     \item \textsc{Application}
@@ -164,14 +169,21 @@ in ITT.
 \section{Meta-theoretical Consequences}
 \labsec{meta-consequences}
 
-We can check that all ETT theorems whose type are typable in ITT have
-proofs in ITT as well:
+We can check that all \acrshort{ETT} theorems whose type are typable in
+\acrshort{ITT} have proofs in \acrshort{ITT} as well.
+This also holds for \acrshort{WTT}.
 
-\begin{corollary}[Preservation of ITT]
+The reason I did not differentiate the two target theories is simply because
+there was no need. The proof is exactly the same, indeed, the proof never uses
+the conversion in the target since every conversion from \acrshort{ETT} is
+translated to an equality.
+
+\begin{corollary}[Conservativity]
   \labcor{preservation}
   If $\xisterm{}{t}{T}$ and $\istype{}{T}$ then there exist $\tb$ such that
     $\isterm{}{\tb}{T} \in \transl{\xisterm{}{t}{T}}$.
 \end{corollary}
+
 \begin{proof}
   Since $\isctx{\ctxempty} \in \transl{\xisctx{\ctxempty}}$, by
   Theorem~\eqref{thm:translation}, there exists $\tb$ and $\Tb$ such
@@ -185,12 +197,13 @@ proofs in ITT as well:
 
 \begin{corollary}[Relative consistency]
   \labcor{consistency}
-  Assuming ITT is consistent, there is no term $t$ such that
+  Assuming the target (\acrshort{ITT} or \acrshort{WTT} depending on you taste)
+  is consistent, there is no term $t$ such that
   $\xisterm{}{t}{\Prod{A:\Ty{0}}{A}}$.
 \end{corollary}
 
 \begin{proof}
-  Assume such a $t$ exists. By the Corollary~\refcor{preservation},
+  Assume such a $t$ exists. By \refcor{preservation},
   because $\istype{}{\Prod{A:\Ty{0}}{A}}$,
   there exists $\tb$ such that $\isterm{}{\tb}{\Prod{A:\Ty{0}}{A}}$ which
   contradicts the assumed consistency of ITT.
@@ -229,4 +242,12 @@ Take transitivity for instance:
 %
 We show these \emph{defined terms} enjoy the same typing rules as their
 counterparts and use them instead.
-In practice it is enough to recover the exact same term when it is typed in ITT.
+In practice it is enough to recover the exact same term when it is typed in
+\acrshort{ITT}.
+In \acrshort{ITT}, this can even be pushed a bit further to test some
+conversions, but in \acrshort{WTT} it has to stay syntactical.
+
+Note that these optimisations serve no purpose at all to one interested only in
+the proof, it only becomes interesting when exploiting the constructiveness of
+the formalised proof to get translated terms and the corresponding derivations
+from a derivation in \acrshort{ETT}.
