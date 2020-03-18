@@ -225,7 +225,7 @@ again.
 \section{Properties of the relation}
 
 \begin{lemma}[$\sim$ is a partial equivalence relation]
-  \label{lem:sim-er}
+  \lablemma{sim-er}
   $\sim$ is symmetric and transitive.
 \end{lemma}
 
@@ -243,7 +243,7 @@ Thanks to \acrshort{UIP}, heterogeneous equality collapses to regular equality
 when taken on the same type on both sides.
 
 \begin{lemma}
-  \label{lem:uip-cong}
+  \lablemma{uip-cong}
   If $\isterm{\Ga}{e}{\Heq{A}{u}{A}{v}}$
   then there exists $p$ such that $\isterm{\Ga}{p}{\Eq{A}{u}{v}}$.
 \end{lemma}
@@ -342,7 +342,7 @@ sorts.
 We can now tackle the fundamental lemma.
 
 \begin{lemma}[Fundamental lemma]
-  \label{lem:sim-cong}
+  \lablemma{sim-cong}
   Let $t_1$ and $t_2$ be two terms such that \(t_1 \sim t_2\).
   For all contexts \(\Ga\), \(\Ga_1\) and \(\Ga_2\) we can \emph{construct}
   another term \(p\) such that whenever $\isterm{\Ga, \Ga_1}{t_1}{T_1}$ and
@@ -368,7 +368,7 @@ We can now tackle the fundamental lemma.
       %
     \]
     If $x$ belongs to $\Ga$, we apply reflexivity---together with uniqueness of
-    typing~\eqref{lem:uniq}---to conclude.
+    typing~\eqref{lemma:uniq}---to conclude.
     Otherwise, $\ProjE{x}$ has the expected type (since
     $\llift{\gamma}{}{x} \equiv \ProjO{x}$ and $\rlift{\gamma}{}{x} \equiv \ProjT{x}$).
 
@@ -385,7 +385,7 @@ We can now tackle the fundamental lemma.
     \]
     We have $\isterm{\Ga, \Ga_1}{\app{t_1}{x:A_1}{B_1}{u_1}}{T_1}$ and
     $\isterm{\Ga, \Ga_2}{\app{t_2}{x:A_2}{B_2}{u_2}}{T_2}$ which means by
-    inversion~\eqref{lem:inversion} that the subterms are well-typed.
+    inversion~\eqref{lemma:inversion} that the subterms are well-typed.
     We apply the induction hypothesis and then conclude.
   \item \textsc{TransportLeft}
     \[
@@ -396,7 +396,7 @@ We can now tackle the fundamental lemma.
     \]
     We have $\isterm{\Ga, \Ga_1}{\transpo{p}\ t_1}{T_1}$ and
     $\isterm{\Ga, \Ga_2}{t_2}{T_2}$.
-    By inversion~\eqref{lem:inversion} we have
+    By inversion~\eqref{lemma:inversion} we have
     $\isterm{\Ga, \Ga_1}{p}{\Eq{}{T_1'}{T_1}}$ and
     $\isterm{\Ga, \Ga_1}{t_1}{T_1'}$.
     By induction hypothesis we have $e$ such that
