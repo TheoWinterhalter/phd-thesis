@@ -1,3 +1,232 @@
 % \setchapterpreamble[u]{\margintoc}
 \chapter{Translation from \acrshort{ETT} to \acrshort{ITT} and \acrshort{WTT}}
 \labch{elim-trans}
+
+\subsection{The Translation}
+\label{sec:the-translation}
+
+We now define the translations (let us stress the plural here) of an
+extensional judgment. We extend $\ir$ canonically to contexts
+($\Ga \ir \Gb$ when they bind the same variables and the types are in
+relation for $\ir$).
+
+Before defining the translation, we define a set
+$\transl{\xisterm{\Ga}{t}{A}}$ of typing judgments
+in ITT associated to a typing judgment $\xisterm{\Ga}{t}{A}$ in ETT.
+%
+The idea is that this set describes all the possible translations that
+lead to the expected property. When
+$\isterm{\Gb}{\tb}{\Ab} \in \transl{\xisterm{\Ga}{t}{A}}$, we say that
+$\isterm{\Gb}{\tb}{\Ab}$ realises $\xisterm{\Ga}{t}{A}$. The
+translation will be given by showing that this set is inhabited by
+induction on the derivation.
+
+\begin{definition}[Characterisation of possible translations]
+  \leavevmode
+  \begin{itemize}
+    \item For any $\xisctx{\Ga}$ we define $\transl{\xisctx{\Ga}}$ as a set of
+    valid judgments (in ITT) such that
+    $\isctx{\Gb} \in \transl{\xisctx{\Ga}}$ if and only if $\Ga \ir \Gb$.
+
+    \item Similarly, $\isterm{\Gb}{\tb}{\Ab} \in \transl{\xisterm{\Ga}{t}{A}}$
+    iff $\isctx{\Gb} \in \transl{\xisctx{\Ga}}$ and $A \ir \Ab$ and $t \ir \tb$.
+  \end{itemize}
+\end{definition}
+
+In order to better master the shape of the produced realiser, we state the
+following lemma which shows that it has the same head
+type constructor as the type it realises.
+%
+This is important for instance for the case of an application, where we
+do not know a priori if the translated function has a dependent product
+type, which is required to be able to use the typing rule for application.
+
+\begin{lemma}
+  \label{lem:choose}
+  We can always \emph{choose} types $\Tb$ that have the same head constructor
+  as $T$.
+\end{lemma}
+
+\begin{proof}
+  Assume we have $\isterm{\Gb}{\tb}{\Tb} \in \transl{\xisterm{\Ga}{t}{T}}$.
+  By definition of $\ir$,
+  $T \ir \Tb$ means that $\Tb$ is shaped
+  $\transpo{p}\ \transpo{q}\ ...\ \transpo{r}\ \Tb'$ with $\Tb'$ having
+  the same head constructor as $T$. By inversion~\eqref{lem:inversion}, the
+  subterms are typable, including $\Tb'$. Actually, from inversion, we
+  even get that the type of $\Tb'$ is a universe. Then,
+  using lemma~\ref{lem:sim-cong} and lemma~
+  \ref{lem:uip-cong}, we get $\isterm{\Gb}{e}{\Eq{}{\Tb}{\Tb'}}$.
+  We conclude with
+  $\isterm{\Gb}{\transpo{e}\ \tb}{\Tb'} \in \transl{\xisterm{\Ga}{t}{T}}$.
+\end{proof}
+
+Finally, in order for the induction to go through, we need to know
+that when we have a realiser of a derivation $\xisterm{\Ga}{t}{T}$, we can
+pick an arbitrary other type realising $\xistype{\Ga}{T}$ and still
+get a new derivation realising $\xisterm{\Ga}{t}{T}$ with that type.
+%
+This is important for instance for the case of an application, where
+the type of the domain of the translated function may differ from the
+type of the translated argument. So we need to be able to change it \textit{a
+posteriori}.
+
+
+\begin{lemma}
+  \label{lem:change-type}
+  When we have $\isterm{\Gb}{\tb}{\Tb} \in \transl{\xisterm{\Ga}{t}{T}}$
+  and $\istype{\Gb}{\Tb'} \in \transl{\xistype{\Ga}{T}}$ then we also have
+  $\isterm{\Gb}{\tb'}{\Tb'} \in \transl{\xisterm{\Ga}{t}{T}}$ for some $\tb'$.
+\end{lemma}
+
+\begin{proof}
+  By definition we have $T \ir \Tb$ and $T \ir \Tb'$ and thus $T \sim \Tb$ and
+  $T \sim \Tb'$, implying $\Tb \sim \Tb'$ by transitivity~\eqref{lem:sim-er}.
+  By lemma~\ref{lem:sim-cong}
+  (in the case $\Ga_1 \equiv \Ga_2 \equiv \ctxempty$) we get
+  $\isterm{\Gb}{p}{\Heq{}{\Tb}{}{\Tb'}}$ for some $p$.
+  By lemma~\ref{lem:uip-cong} (and lemma~\ref{lem:choose} to give
+  universes as types to $\Tb$ and $\Tb'$) we can assume
+  $\isterm{\Gb}{p}{\Eq{}{\Tb}{\Tb'}}$. Then
+  $\isterm{\Gb}{\transpo{p}\ \tb}{\Tb'}$ is still a translation since $\ir$
+  ignores transports.
+\end{proof}
+
+We can now define the translation. This is done by mutual induction on
+context well-formedness, typing and conversion derivations. Indeed,
+in order to be able to produce a realiser by induction, we need to show
+that every conversion in ETT is translated as an heterogeneous equality
+in ITT.
+
+\begin{theorem}[Translation]
+  \label{thm:translation}
+  \leavevmode
+  \begin{itemize}
+    \item If\,\,\,$\xisctx{\Ga}$ then there exists
+    $\isctx{\Gb} \in \transl{\xisctx{\Ga}}$,
+
+    \item If\,\,\,$\xisterm{\Ga}{t}{T}$ then for any
+    $\isctx{\Gb} \in \transl{\xisctx{\Ga}}$ there exist $\tb$ and $\Tb$ such
+    that $\isterm{\Gb}{\tb}{\Tb} \in \transl{\xisterm{\Ga}{t}{T}}$,
+
+    \item If\,\,\,$\xeqterm{\Ga}{u}{v}{A}$ then for any
+    $\isctx{\Gb} \in \transl{\xisctx{\Ga}}$ there exist
+    $A \ir \Ab, A \ir \Ab', u \ir \ub, v \ir \vb$ and $\eb$ such that
+    $\isterm{\Gb}{\eb}{\Heq{\Ab}{\ub}{\Ab'}{\vb}}$.
+  \end{itemize}
+\end{theorem}
+
+\begin{proof}
+  We prove the theorem by induction on the derivation in the
+  extensional type theory. We only show the two most interesting cases
+  of application and conversion.
+  The complete proof is given in Appendix~\ref{sec:corr-transl}.
+
+  \begin{itemize}
+    \item \textsc{Application}
+    \[
+      \infer[]
+        {\xisterm{\Ga}{A}{s} \\
+         \xisterm{\Ga,x:A}{B}{s'} \\
+         \xisterm{\Ga}{t}{\Prod{x:A} B} \\
+         \xisterm{\Ga}{u}{A}
+        }
+        {\xisterm{\Ga}{\app{t}{x:A}{B}{u}}{B[x \sto u]}}
+      %
+    \]
+    Using IH together with lemmata~\ref{lem:choose} and~\ref{lem:change-type}
+    we get $\isterm{\Gb}{\Ab}{s}$ and $\isterm{\Gb,x:\Ab}{\Bb}{s'}$ and
+    $\isterm{\Gb}{\tb}{\Prod{x:\Ab} \Bb}$ and $\isterm{\Gb}{\ub}{\Ab}$
+    meaning we can conclude
+    $\isterm{\Gb}{\app{\tb}{x:\Ab}{\Bb}{\ub}}{\Bb[x \sto \ub]}
+    \in \transl{\xisterm{\Ga}{\app{t}{x:A}{B}{u}}{B[x \sto u]}}$.
+
+    \item \textsc{Conversion}
+    \[
+      \infer[]
+        {\xisterm{\Ga}{u}{A} \\
+         \xeqtype{\Ga}{A}{B}
+        }
+        {\xisterm{\Ga}{u}{B}}
+      %
+    \]
+    By IH and lemma~\ref{lem:uip-cong} we have
+    $\isterm{\Gb}{\eb}{\Eq{}{\Ab}{\Bb}}$ which implies
+    $\istype{\Gb}{\Ab} \in \transl{\xistype{\Ga}{A}}$ by
+    inversion~\eqref{lem:inversion}, thus, from lemma~\ref{lem:change-type}
+    and IH we get $\isterm{\Gb}{\ub}{\Ab}$, yielding
+    $\isterm{\Gb}{\transpo{\eb}\ \ub}{\Bb} \in \transl{\xisterm{\Ga}{u}{B}}$.
+  \end{itemize}
+
+\end{proof}
+
+
+\subsection{Meta-theoretical Consequences}
+\label{sec:meta-consequences}
+
+We can check that all ETT theorems whose type are typable in ITT have
+proofs in ITT as well:
+
+\begin{corollary}[Preservation of ITT]
+  \label{cor:preservation}
+  If $\xisterm{}{t}{T}$ and $\istype{}{T}$ then there exist $\tb$ such that
+    $\isterm{}{\tb}{T} \in \transl{\xisterm{}{t}{T}}$.
+\end{corollary}
+\begin{proof}
+  Since $\isctx{\ctxempty} \in \transl{\xisctx{\ctxempty}}$, by
+  Theorem~\eqref{thm:translation}, there exists $\tb$ and $\Tb$ such
+  that
+  $\isterm{}{\tb}{\Tb} \in \transl{\xisterm{}{t}{T}}$
+  But as $\istype{}{T}$, we have
+  $\istype{}{T} \in \transl{\xistype{}{T}}$, and,
+  using Lemma~\ref{lem:change-type}, we obtain
+  $\isterm{}{\tb}{T} \in \transl{\xisterm{}{t}{T}}$.
+\end{proof}
+
+\begin{corollary}[Relative consistency]
+  \label{cor:consistency}
+  Assuming ITT is consistent, there is no term $t$ such that
+  $\xisterm{}{t}{\Prod{A:\Ty{0}}{A}}$.
+\end{corollary}
+
+\begin{proof}
+  Assume such a $t$ exists. By the Corollary~\ref{cor:preservation},
+  because $\istype{}{\Prod{A:\Ty{0}}{A}}$,
+  there exists $\tb$ such that $\isterm{}{\tb}{\Prod{A:\Ty{0}}{A}}$ which
+  contradicts the assumed consistency of ITT.
+\end{proof}
+
+\subsection{Optimisations}
+\label{sec:optim}
+
+Up until now, we remained silent about one thing: the size of the
+translated terms. Indeed, the translated term is a decoration of the
+initial one by transports which appear in many locations. For example,
+at each application we use a transport by lemma \ref{lem:choose} to
+ensure that the term in function position is given a function type. In
+most cases---in particular when translating ITT terms---this produces
+unnecessary transports (often by reflexivity) that we wish to avoid.
+
+In order to limit the size explosion, in the above we use a different version of
+transport, namely $\mathsf{transport}'$ such that
+%
+\begin{align*}
+  \otransport{A_1}{A_2}{p}{t} &= t &\text{ when } A_1 =_\alpha A_2 \\
+  &= \transpo{p}{t} &\text{ otherwise.}
+\end{align*}
+%
+The idea is that we avoid \emph{trivially} unnecessary transports (we do not
+deal with $\beta$-conversion for instance).
+We extend this technique to the different constructors of equality (symmetry,
+transitivity, \dots) so that they reduce to reflexivity whenever possible.
+Take transitivity for instance:
+%
+\begin{align*}
+  \otransitivity{\refl{} u}{q} &= q \\
+  \otransitivity{p}{\refl{} u} &= p \\
+  \otransitivity{p}{q} &= \translitivity{p}{q}.
+\end{align*}
+%
+We show these \emph{defined terms} enjoy the same typing rules as their
+counterparts and use them instead.
+In practice it is enough to recover the exact same term when it is typed in ITT.
