@@ -238,9 +238,9 @@ target type theory, are heterogeneously equal.
 
 \todo{Properties on heterogeneous equality should have their own section.
 Maybe with its def in usual defs, and a reminder here.}
-This definition of heterogeneous equality can be shown to be
-reflexive, symmetric and transitive. Because of UIP, heterogeneous
-equality collapses to equality when taken on the same type.
+Heterogeneous equality is reflexive, symmetric and transitive.
+Thanks to \acrshort{UIP}, heterogeneous equality collapses to regular equality
+when taken on the same type on both sides.
 
 \begin{lemma}
   \label{lem:uip-cong}
@@ -249,7 +249,7 @@ equality collapses to equality when taken on the same type.
 \end{lemma}
 
 \begin{proof}
-  This holds thanks to UIP on equality, which implies K, and so the
+  This holds thanks to \acrshort{UIP} on equality, which implies K, and so the
   proof of $A = A$ can be taken to be reflexivity.
 \end{proof}
 
@@ -263,9 +263,9 @@ equality collapses to equality when taken on the same type.
 Before we can prove the fundamental lemma stating that two terms in relation
 are heterogeneously equal, we need to consider another construction.
 %
-As explained in the introduction, when proving the property by
-induction on terms, we introduce variables in the context that are
-equal only up-to heterogeneous equality.
+As explained earlier~\misref, when proving the property by induction on terms, we
+introduce variables in the context that are equal only up to heterogeneous
+equality.
 %
 This phenomenon is similar to what happens in the parametricity
 translation~\sidecite{bernardy2012proofs}.
@@ -298,6 +298,11 @@ together with its projections
 %
 We can then extend this notion canonically to contexts of the same
 length that are well formed using the same sorts:
+\marginnote[-0,5cm]{
+  That is \(\Ga_1 \coloneqq x_1 : A_1, \dots, x_n : A_n\),
+  \(\Ga_2 \coloneqq y_1 : B_1, \dots, y_n : B_n\) where
+  there exists \(s_i\) such that \(A_i : s_i\) and \(B_i : s_i\) for each \(i\).
+}
 %
 \[
 \begin{array}{l}
@@ -320,10 +325,12 @@ substitutions:
 \end{array}
 \]
 These substitutions implement lifting of terms to packed contexts:
+we have
 $\isterm{\Ga, \Pack{\Ga_1}{\Ga_2}}{\llift{\gamma}{}{t}}{\llift{\gamma}{}{A}}$
-whenever $\isterm{\Ga, \Ga_1}{t}{A}$ (resp.
+whenever $\isterm{\Ga, \Ga_1}{t}{A}$
+and
 $\isterm{\Ga, \Pack{\Ga_1}{\Ga_2}}{\rlift{\gamma}{}{t}}{\rlift{\gamma}{}{A}}$
-whenever $\isterm{\Ga, \Ga_2}{t}{A}$).
+whenever $\isterm{\Ga, \Ga_2}{t}{A}$.
 
 For readability, when $\Ga_1$ and $\Ga_2$ are understood we will write $\Gp$ for
 $\Pack{\Ga_1}{\Ga_2}$.
@@ -332,13 +339,14 @@ Implicitly, whenever we use the notation $\Pack{\Ga_1}{\Ga_2}$ it means that
 the two contexts are of the same length and well-formed with the same
 sorts.
 %
-We can now state the fundamental lemma.
+We can now tackle the fundamental lemma.
 
 \begin{lemma}[Fundamental lemma]
   \label{lem:sim-cong}
-  Let $t_1$ and $t_2$ be two terms. If $\isterm{\Ga, \Ga_1}{t_1}{T_1}$ and
-  $\isterm{\Ga, \Ga_2}{t_2}{T_2}$ and $t_1 \sim t_2$ then there exists $p$ such
-  that
+  Let $t_1$ and $t_2$ be two terms such that \(t_1 \sim t_2\).
+  For all contexts \(\Ga\), \(\Ga_1\) and \(\Ga_2\) we can \emph{construct}
+  another term \(p\) such that whenever $\isterm{\Ga, \Ga_1}{t_1}{T_1}$ and
+  $\isterm{\Ga, \Ga_2}{t_2}{T_2}$ we have
   $\isterm{\Ga, \Pack{\Ga_1}{\Ga_2}}
           {p}
           {\Heq{\llift{\gamma}{}{T_1}}
@@ -398,7 +406,8 @@ We can now state the fundamental lemma.
     $\pair{\_}{\_}{\llift{\gamma}{}{p}}{\refl{} (\transpo{\llift{\gamma}{}{p}}\ \llift{\gamma}{}{t_1})}$.
   \end{itemize}
 
-  The complete proof can be found in Appendix~\ref{sec:proof-fund-lemma}.
+  The complete proof can be found in \frefsec{proof-fund-lemma}.
+  \todo{Should I keep it though?}
 \end{proof}
 
 We can also prove that $\sim$ preserves substitution.
@@ -411,3 +420,7 @@ We can also prove that $\sim$ preserves substitution.
 \begin{proof}
   We proceed by induction on the derivation of $t_1 \sim t_2$.
 \end{proof}
+
+The fundamental lemma, as the name suggests, is the main ingredient to proving
+the translation correct (and actually building the translation). Now that we
+have it, we can proceed with the translation.
