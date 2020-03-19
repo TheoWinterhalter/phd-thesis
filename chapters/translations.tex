@@ -120,8 +120,9 @@ following rules:
   Refer to \frefsubsec{pts-itt} to see what theory we extend here.
 }
 Otherwise it has to feature a boolean type \(\bool\)---with the usual \(\ttrue\)
-and \(\ffalse\)---and product types \(A \times B\) as special
-cases\sidenote{See \frefsec{inductive-types}.} of \(\Sigma\)-types.
+and \(\ffalse\)---product types \(A \times B\) as special
+cases\sidenote{See \frefsec{inductive-types}.} of \(\Sigma\)-types,
+and equality.
 %
 \begin{mathpar}
   \infer
@@ -185,8 +186,10 @@ The translation is defined as follows:
   [ p.2 ] &\coloneqq& [p].2 \\ \relax
   [ \ttrue ] &\coloneqq& \ttrue \\ \relax
   [ \ffalse ] &\coloneqq& \ffalse \\ \relax
+  [ \refl{A} u ] &\coloneqq& \refl{\transl{A}} [u] \\ \relax
   [ \Ty{i} ] &\coloneqq& \Ty{i} \\ \relax
-  [ \Pi (x : A).\ B ] &\coloneqq& \Pi (x : \transl{A}).\ \transl{B} \\ \relax
+  [ \Pi (x : A).\ B ] &\coloneqq&
+  (\Pi (x : \transl{A}).\ \transl{B}) \times \bool \\ \relax
   [ \Sigma (x : A).\ B ] &\coloneqq& \Sigma (x:\transl{A}).\ \transl{B} \\
   \relax
   [ \bool ] &\coloneqq& \bool \\ \relax
@@ -194,6 +197,17 @@ The translation is defined as follows:
   \transl{A} &\coloneqq& [A]
 \end{array}
 \]
+\marginnote[-0.6cm]{Notice how \(\transl{.}\) is just defined as \([.]\).}
+
+I actually didn't provide the full translation here since I \emph{forgot}
+\([\notfunext]\). Writing down the term is rather tedious and boring, so instead
+I will give the argument: you can provide any type for \(A\) and \(B\), for
+instance \(\Ty{0}\) and then the for \(f\) and \(g\) we give
+\((\lambda (x:\Ty{0}).\ x, \ttrue)\) and
+\((\lambda (x:\Ty{0}).\ x, \ffalse)\) that will be pointwise equal (after
+suffering the first projection) but different nonetheless.
+
+\todo{Add J to trans}
 
 \section{Other translations}
 
