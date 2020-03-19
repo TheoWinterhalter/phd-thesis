@@ -173,25 +173,27 @@ telling us the it might have come from the translation. Any function coming with
 \(\ffalse\) instead will not be a translated term.
 
 The translation is defined as follows:
-%
-% \[
-% \begin{array}{lcl}
-%   [ x ] &\coloneqq& x \\
-%   [ \lambda (x : A).\ t ] &\coloneqq& (\lambda (x : \transl{A}).\ [t],\ttrue) \\
-%   [ t\ u ] &\coloneqq& [t].1\ [u] \\
-%   [ (u, v) ] &\coloneqq& ([u], [v]) \\
-%   [ p.1 ] &\coloneqq& [p].1 \\
-%   [ p.2 ] &\coloneqq& [p].2 \\
-%   [ \ttrue ] &\coloneqq& \ttrue \\
-%   [ \ffasle ] &\coloneqq& \ffalse \\
-%   [ \Ty{i} ] &\coloneqq& \Ty{i} \\
-%   [ \Pi (x : A).\ B ] &\coloneqq& \Pi (x : \transl{A}).\ \transl{B} \\
-%   [ \Sigma (x : A).\ B ] &\coloneqq& \Sigma (x:\transl{A}).\ \transl{B} \\
-%   [ \bool ] &\coloneqq& \bool \\
-%   \\
-%   \transl{A} &\coloneqq& [A]
-% \end{array}
-% \]
+
+\[
+\begin{array}{lcl}
+  [ x ] &\coloneqq& x \\ \relax
+  [ \lambda (x : A).\ t ] &\coloneqq& (\lambda (x : \transl{A}).\ [t],\ttrue) \\
+  \relax
+  [ t\ u ] &\coloneqq& [t]\ [u] \\ \relax
+  [ (u, v) ] &\coloneqq& ([u], [v]) \\ \relax
+  [ p.1 ] &\coloneqq& [p].1 \\ \relax
+  [ p.2 ] &\coloneqq& [p].2 \\ \relax
+  [ \ttrue ] &\coloneqq& \ttrue \\ \relax
+  [ \ffalse ] &\coloneqq& \ffalse \\ \relax
+  [ \Ty{i} ] &\coloneqq& \Ty{i} \\ \relax
+  [ \Pi (x : A).\ B ] &\coloneqq& \Pi (x : \transl{A}).\ \transl{B} \\ \relax
+  [ \Sigma (x : A).\ B ] &\coloneqq& \Sigma (x:\transl{A}).\ \transl{B} \\
+  \relax
+  [ \bool ] &\coloneqq& \bool \\ \relax
+  \\
+  \transl{A} &\coloneqq& [A]
+\end{array}
+\]
 
 \section{Other translations}
 
