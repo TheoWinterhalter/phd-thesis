@@ -4,6 +4,128 @@
 
 Syntactical translations are a special case of program transformations suited
 for type theory, and a method of choice to get models of type theories.
-This is better studied in Simon Boulier's thesis and next 700~\misref but in
+This is better studied in Simon Boulier's thesis and next 700~\misref{} but in
 order to keep this document self contained, I will do my best to give a
 meaningful excerpt here.
+
+\section{Syntactical translations}
+
+\subsection{Definition}
+
+A \emph{syntactical} translation, as the name suggests, operates on the syntax
+of terms. It has a source theory \cS and a target theory \cT with possibly
+different syntax and typing rules---though usually \cS is an extension of \cT,
+more on that later.
+
+A translation is then given as two functions:
+\begin{itemize}
+  \item \([.]\) taking \cS terms to \cT terms;
+  \item \(\transl{.}\) taking \cS types to \cT types.
+\end{itemize}
+And \(\transl{.}\) is---often---canonically extended to contexts:
+\[
+\begin{array}{lcl}
+  \transl{\ctxempty} &\coloneqq& \ctxempty \\
+  \transl{\Ga, x : A} &\coloneqq& \transl{\Ga}, x : \transl{A}
+\end{array}
+\]
+\marginnote[-2cm]{
+  It's not always the case that the \(\transl{\ctxempty}\) is also the empty
+  context, and sometimes one variable is translated to several, but in a lot of
+  cases it can still be encoded that way.
+}
+
+Usually, \(\transl{.}\) is built using \([.]\) and sometimes corresponds
+exactly to \([.]\).
+The translation is often done in an homomorphic way.
+
+There are two main properties expected of a translation: type preservation
+and preservation of falsehood.
+
+\begin{definition}[Type preservation]
+  A translation \([.], \transl{.}\) is type preserving when
+  \(\isterm{\Ga}{t}{A}\) implies \(\isterm{\transl{\Ga}}{[t]}{\transl{A}}\).
+\end{definition}
+
+\begin{definition}[Preservation of falsehood]
+  A translation \([.], \transl{.}\) from \cS to \cT is said to preserve
+  falsehood when the translation of the empty type implies falsehood in the
+  target:
+  \[ \vdash_\cT \transl{\bot_\cS} \to \bot_\cT \]
+\end{definition}
+
+If a translation satisfies both those properties, we can conclude consistency
+of \cS relatively to \cT.
+
+\begin{theorem}[Relative consistency]
+  If there is a translation from \cS to \cT that preserves typing and
+  falsehood, then the consistency of \cT implies that of \cS.
+\end{theorem}
+
+\begin{proof}
+  Assume a translation \([.], \transl{.}\) from \cS to \cT that preserves typing
+  and falsehood. We'll prove the contraposition and assume inconsistency in
+  \cS, that is the existence of a term \(t\) such that
+  \[ \vdash_\cS t : \bot_\cS \]
+  By preservation of typing, we get
+  \[ \vdash_\cT [t] : \transl{\bot_\cS} \]
+  Moreover, since the translation preserves falsehood, there is a term \(f\)
+  such that \(\vdash_\cT f : \transl{\bot_\cS} \to \bot_\cT\).
+  Thus, we conclude, using application that
+  \[ \vdash_\cT f\ t : \bot_\cT \]
+  in other words that \cT is also inconsistent.
+\end{proof}
+
+Relative consistency is all the more interesting when the source theory is more
+complex than the target and even more so when \cT is theory that we trust.
+
+Type preservation can be achieved by proving intermediary properties:
+substitutivity, preservation of reduction and of conversion.
+
+\begin{definition}[Substitutivity]
+  A translation \([.], \transl{.}\) is substitutive when
+  \[
+    \begin{array}{lcl}
+      [t\{x \sto u\}] &\coloneqq& [t]\{x \sto [u]\} \\
+      \transl{A\{x \sto u\}} &\coloneqq& \transl{A}\{x \sto [u]\} \\
+    \end{array}
+  \]
+\end{definition}
+
+\begin{definition}[Preservation of reduction]
+  A translation \([.], \transl{.}\) is said to preserve reduciton when
+  \(u \red v\) implies \([u] \red [v]\) (and \(\transl{u} \red \transl{v}\)).
+\end{definition}
+
+\begin{definition}[Preservation of conversion]
+  A translation \([.], \transl{.}\) is said to preserve reduciton when
+  \(u \equiv v\) implies \([u] \equiv [v]\)
+  (and \(\transl{u} \equiv \transl{v}\)).
+\end{definition}
+
+\subsection{Example: the \(\times\ \mathsf{bool}\) translation}
+
+A simple yet non-trivial example of translation (or class of translations) is
+the so-called \(\times\ \mathsf{bool}\) translation, again from~\misref.
+
+As we said earlier, the source is going to be an extension of the target.
+We'll keep the target pretty basic as a simple instance of \acrshort{ITT}
+with a hierarchy of universes \(\Ty{i}\) (for \(i \in \mathbb{N}\)) with the
+following rules:
+\begin{itemize}
+  \item \((\Ty{i}, \Ty{j}) \in \Ax\) for \(i \le j\);
+  \item \((\Ty{i}, \Ty{j}, \Ty{k}) \in \Rl\) for \(i, j \le k\).
+\end{itemize}
+Otherwise it has to feature a boolean type \(\bool\)---with the usual \(\ttrue\)
+and \(\ffalse\)---and product types \(A \times B\)---with pairs \((u,v)\) and
+projections \(t.1\) and \(t.2\).
+
+The source is going to be the target extended with a new principle corresponding
+to the negation of \acrlong{funext}.
+
+\section{Other translations}
+
+\todo{On derivations or intermediary representations}
+\todo{Digression on notion of proof again?}
+
+\section{Conversative extensions}
