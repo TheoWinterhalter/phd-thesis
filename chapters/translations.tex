@@ -120,21 +120,13 @@ following rules:
   Refer to \frefsubsec{pts-itt} to see what theory we extend here.
 }
 Otherwise it has to feature a boolean type \(\bool\)---with the usual \(\ttrue\)
-and \(\ffalse\)---and product types \(A \times B\)---with pairs \((u,v)\) and
-projections \(t.1\) and \(t.2\).
-
+and \(\ffalse\)---and product types \(A \times B\) as special
+cases\sidenote{See \frefsec{inductive-types}.} of \(\Sigma\)-types.
+%
 \begin{mathpar}
   \infer
     { }
     {\isterm{\Ga}{\bool}{\Ty{0}}}
-  %
-
-  \infer*[right={(\(i,j \le k\))},vcenter]
-    {
-      \isterm{\Ga}{A}{\Ty{i}} \\
-      \isterm{\Ga}{B}{\Ty{j}}
-    }
-    {\isterm{\Ga}{A \times B}{\Ty{k}}}
   %
 
   \infer
@@ -146,37 +138,60 @@ projections \(t.1\) and \(t.2\).
     { }
     {\isterm{\Ga}{\ffalse}{\bool}}
   %
-
-  \infer
-    {
-      \isterm{\Ga}{u}{A} \\
-      \isterm{\Ga}{v}{B} \\
-      \isterm{\Ga}{A \times B}{\Ty{i}}
-    }
-    {\isterm{\Ga}{(u,v)}{A \times B}}
-  %
-
-  \infer
-    {\isterm{\Ga}{p}{A \times B}}
-    {\isterm{\Ga}{p.1}{A}}
-  %
-
-  \infer
-    {\isterm{\Ga}{p}{A \times B}}
-    {\isterm{\Ga}{p.2}{B}}
-  %
 \end{mathpar}
 
 The source is going to be the target extended with a new principle corresponding
-to the negation of \acrlong{funext}.
-
+to the negation of \acrlong{funext}, that is the existence of two functions
+extensionaly equal, but not equal themselves.
+%
 \[
   \infer
     { }
-    {\isterm{\Ga}{\notfunext}{??}}
+    {
+      \isterm
+        {\Ga}
+        {\notfunext}
+        {\Sigma\ A\ B\ (f\ g : A \to B).\
+          (\forall x.\ f\ x = g\ x) \times f \not= g
+        }
+    }
   %
 \]
-\todo{Need sigmas actually...}
+\marginnote[-1.4cm]{
+  Inequality \(x \not= y\) is defined as the negation of equality, that is a map
+  to the empty type: \(x = y \to \bot\).
+}
+%
+We will write \(\Notfunext\) for the type of \(\notfunext\) in the following.
+
+The idea is to inhabit this extra principle in the target which does not feature
+it, or rather to inhabit its translation \(\transl{\Notfunext}\).
+In order to differentiate functions of the target, while keeping them
+observationally equal, we translate them by adding a boolean label to them.
+Basically \(\lambda x. x\) is sent to \((\lambda x. x, \ttrue)\), the \(\ttrue\)
+telling us the it might have come from the translation. Any function coming with
+\(\ffalse\) instead will not be a translated term.
+
+The translation is defined as follows:
+%
+% \[
+% \begin{array}{lcl}
+%   [ x ] &\coloneqq& x \\
+%   [ \lambda (x : A).\ t ] &\coloneqq& (\lambda (x : \transl{A}).\ [t],\ttrue) \\
+%   [ t\ u ] &\coloneqq& [t].1\ [u] \\
+%   [ (u, v) ] &\coloneqq& ([u], [v]) \\
+%   [ p.1 ] &\coloneqq& [p].1 \\
+%   [ p.2 ] &\coloneqq& [p].2 \\
+%   [ \ttrue ] &\coloneqq& \ttrue \\
+%   [ \ffasle ] &\coloneqq& \ffalse \\
+%   [ \Ty{i} ] &\coloneqq& \Ty{i} \\
+%   [ \Pi (x : A).\ B ] &\coloneqq& \Pi (x : \transl{A}).\ \transl{B} \\
+%   [ \Sigma (x : A).\ B ] &\coloneqq& \Sigma (x:\transl{A}).\ \transl{B} \\
+%   [ \bool ] &\coloneqq& \bool \\
+%   \\
+%   \transl{A} &\coloneqq& [A]
+% \end{array}
+% \]
 
 \section{Other translations}
 
