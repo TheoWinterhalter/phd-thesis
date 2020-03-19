@@ -116,12 +116,67 @@ following rules:
   \item \((\Ty{i}, \Ty{j}) \in \Ax\) for \(i \le j\);
   \item \((\Ty{i}, \Ty{j}, \Ty{k}) \in \Rl\) for \(i, j \le k\).
 \end{itemize}
+\marginnote[-2cm]{
+  Refer to \frefsubsec{pts-itt} to see what theory we extend here.
+}
 Otherwise it has to feature a boolean type \(\bool\)---with the usual \(\ttrue\)
 and \(\ffalse\)---and product types \(A \times B\)---with pairs \((u,v)\) and
 projections \(t.1\) and \(t.2\).
 
+\begin{mathpar}
+  \infer
+    { }
+    {\isterm{\Ga}{\bool}{\Ty{0}}}
+  %
+
+  \infer*[right={(\(i,j \le k\))},vcenter]
+    {
+      \isterm{\Ga}{A}{\Ty{i}} \\
+      \isterm{\Ga}{B}{\Ty{j}}
+    }
+    {\isterm{\Ga}{A \times B}{\Ty{k}}}
+  %
+
+  \infer
+    { }
+    {\isterm{\Ga}{\ttrue}{\bool}}
+  %
+
+  \infer
+    { }
+    {\isterm{\Ga}{\ffalse}{\bool}}
+  %
+
+  \infer
+    {
+      \isterm{\Ga}{u}{A} \\
+      \isterm{\Ga}{v}{B} \\
+      \isterm{\Ga}{A \times B}{\Ty{i}}
+    }
+    {\isterm{\Ga}{(u,v)}{A \times B}}
+  %
+
+  \infer
+    {\isterm{\Ga}{p}{A \times B}}
+    {\isterm{\Ga}{p.1}{A}}
+  %
+
+  \infer
+    {\isterm{\Ga}{p}{A \times B}}
+    {\isterm{\Ga}{p.2}{B}}
+  %
+\end{mathpar}
+
 The source is going to be the target extended with a new principle corresponding
 to the negation of \acrlong{funext}.
+
+\[
+  \infer
+    { }
+    {\isterm{\Ga}{\notfunext}{??}}
+  %
+\]
+\todo{Need sigmas actually...}
 
 \section{Other translations}
 
