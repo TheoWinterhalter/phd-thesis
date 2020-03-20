@@ -311,7 +311,8 @@ the booleans).
   \rowcolor{highlightcol} \relax
   [ \ffalse ] &\coloneqq& \inr\ \tunit \\
   \rowcolor{highlightcol} \relax
-  [ \tif{t}{b. P}{u}{v} ] &\coloneqq& \tif{[t]}{b. \transl{P}}{[u]}{[v]} \\
+  [ \tif{t}{b. P}{u}{v} ] &\coloneqq&
+  \pmatch{[t]}{b. \transl{P}}{\branch{\inl\ \tunit}{[u]} \\ \branch{\inr\ \tunit}{[v]}} \\
   \relax
   [ \inl\ t ] &\coloneqq& \inl\ [t] \\ \relax
   [ \inr\ t ] &\coloneqq& \inr\ [t] \\ \relax
@@ -327,3 +328,9 @@ the booleans).
   \transl{A} &\coloneqq& [A]
 \end{array}
 \]
+
+Once again this translation preserves typing, and is conservative (in particular
+it preserves falsehood). So it offers a \emph{computational} evidence that
+booleans are just a convenience provided you already have the \(\unit\) type and
+sums. In that sense, a translation can---and perhaps should---be seen as
+\emph{compilation} or as a compilation phase.
