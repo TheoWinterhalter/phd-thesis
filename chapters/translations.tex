@@ -11,6 +11,7 @@ meaningful excerpt here.
 \section{Syntactical translations}
 
 \subsection{Definition}
+\labsubsec{syn-trans-def}
 
 A \emph{syntactical} translation, as the name suggests, operates on the syntax
 of terms. It has a source theory \cS and a target theory \cT with possibly
@@ -174,7 +175,7 @@ telling us the it might have come from the translation. Any function coming with
 \(\ffalse\) instead will not be a translated term.
 
 The translation is defined as follows:
-
+%
 \[
 \begin{array}{lcl}
   [ x ] &\coloneqq& x \\ \relax
@@ -187,12 +188,15 @@ The translation is defined as follows:
   [ \ttrue ] &\coloneqq& \ttrue \\ \relax
   [ \ffalse ] &\coloneqq& \ffalse \\ \relax
   [ \refl{A} u ] &\coloneqq& \refl{\transl{A}} [u] \\ \relax
+  [ \J{A}{u}{x.e.P}{w}{v}{p} ] &\coloneqq&
+  \J{\transl{A}}{[u]}{x.e.\transl{P}}{[w]}{[v]}{[p]} \\ \relax
   [ \Ty{i} ] &\coloneqq& \Ty{i} \\ \relax
   [ \Pi (x : A).\ B ] &\coloneqq&
   (\Pi (x : \transl{A}).\ \transl{B}) \times \bool \\ \relax
   [ \Sigma (x : A).\ B ] &\coloneqq& \Sigma (x:\transl{A}).\ \transl{B} \\
   \relax
   [ \bool ] &\coloneqq& \bool \\ \relax
+  [ u =_A v ] &\coloneqq& [u] =_{\transl{A}} [v] \\ \relax
   \\
   \transl{A} &\coloneqq& [A]
 \end{array}
@@ -200,14 +204,25 @@ The translation is defined as follows:
 \marginnote[-0.6cm]{Notice how \(\transl{.}\) is just defined as \([.]\).}
 
 I actually didn't provide the full translation here since I \emph{forgot}
-\([\notfunext]\). Writing down the term is rather tedious and boring, so instead
-I will give the argument: you can provide any type for \(A\) and \(B\), for
+the definition of \([\notfunext]\).
+Writing down the term is rather tedious and boring, so instead I will give an
+argument as to why it exists: you can provide any type for \(A\) and \(B\), for
 instance \(\Ty{0}\) and then the for \(f\) and \(g\) we give
 \((\lambda (x:\Ty{0}).\ x, \ttrue)\) and
 \((\lambda (x:\Ty{0}).\ x, \ffalse)\) that will be pointwise equal (after
 suffering the first projection) but different nonetheless.
 
-\todo{Add J to trans}
+This translation satisfies all the properties I mentioned in
+\nrefsubsec{syn-trans-def}, including preservation of typing and of falsehood.
+As such it shows that the negation of \acrshort{funext} is consistent in
+\acrshort{ITT}. On the other hand, it can be shown that \acrshort{funext} is
+also consistent, and as such independent from \acrshort{ITT}.
+\reminder[-3cm]{Independence}{
+  A proposition \(P\) is \emph{independent} from a theory \cT when both
+  \(\cT + P\) and \(\cT + \neg P\) are consistent relatively to \cT.
+}
+For details, refer to
+\sidecite{boulier17:next-syntac-model-type-theor,boulier2018extending}.
 
 \section{Other translations}
 
