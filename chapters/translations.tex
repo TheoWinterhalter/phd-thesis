@@ -315,8 +315,10 @@ the booleans).
   \relax
   [ \inl\ t ] &\coloneqq& \inl\ [t] \\ \relax
   [ \inr\ t ] &\coloneqq& \inr\ [t] \\ \relax
-  [ \pmatch{t}{p. P}{\inl\ u \mto a \mid \inr\ v \mto b} ] &\coloneqq&
-  \pmatch{t}{p. P}{\inl\ u \mto a \mid \inr\ v \mto b} \\ \relax
+  \left[ \pmatch{t}{p. P}{\branch{\inl\ u}{a} \\ \branch{\inr\ v}{b}} \right]
+  &\coloneqq&
+  \pmatch{[t]}{p. \transl{P}}{\branch{\inl\ u}{[a]} \\ \branch{\inr\ v}{[b]}} \\
+  \relax
   [ \Ty{i} ] &\coloneqq& \Ty{i} \\ \relax
   [ \Pi (x : A).\ B ] &\coloneqq& \Pi (x : \transl{A}).\ \transl{B} \\
   \rowcolor{highlightcol} \relax

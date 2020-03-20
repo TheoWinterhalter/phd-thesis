@@ -108,10 +108,15 @@
 \newcommand{\tunit}{\mathsf{()}}
 \newcommand{\inl}{\mathsf{inl}}
 \newcommand{\inr}{\mathsf{inr}}
-\newcommand{\pmatch}[3]{
-  \mathsf{match}\ #1\ \mathsf{return}\ #2\ \mathsf{with}\ #3\ \mathsf{end}
-}
 \newcommand{\mto}{\Longrightarrow}
+\newcommand{\branch}[2]{\mid #1 &\mto& #2}
+\newcommand{\pmatch}[3]{
+  \begin{array}{lcl}
+    \multicolumn{3}{l}{\mathsf{match}\ #1\ \mathsf{return}\ #2\ \mathsf{with}} \\
+    #3 \\
+    \multicolumn{3}{l}{\mathsf{end}} \\
+  \end{array}
+}
 
 % Pattern-matching
 \newcommand{\matchs}{\mathsf{match}}
