@@ -233,8 +233,34 @@ which gives a more comprehensive treatment of this and other translations.
 
 \section{Other translations}
 
-\todo{On derivations or intermediary representations}
-\todo{Digression on notion of proof again?}
+As I mentioned earlier, it's not alaways the case that contexts are translated
+homomorphically. In the binary parametricity translation~\misref{} a variable
+\(a : A\) in the context is sent to three varaibles:
+\[
+  a_0 : \transl{A}_0, a_1 : \transl{A}_1, a_\varepsilon : \transl{A}\ a_0\ a_1
+\]
+but that can still be encoded as a unique variable
+\[
+  a : \Sigma\ (x : \transl{A}_0)\ (y : \transl{A}_1).\ \transl{A}\ x\ y
+\]
+
+Sometimes, the empty context itself is not translated to the empty context
+as is the case in the forcing translation~\misref{} and such an encoding becomes
+impossible.
+Even worse, in this document, in \refpart{elim-reflection}, I'm going to present
+a translation that isn't even syntactic! Indeed, sometimes the translation can
+only be conducted at the derivation level: derivations in \cS are sent to
+derivations in \cT. It often reflects the fact that terms in \cS are not enough
+to recover the derivation when it exists\sidenote{In other words, type-checking
+is undecidable.}.
+We could however imagine performing the translation on some intermediary between
+the judgment and its derivation, containing just the right amount of
+information. This brings us back to the discussion on the notion of
+proof~\misref.
+
+In those cases, the definitions and properties have to be adapted. This usually
+has to be done on a case-by-case basis as for now there is no general framework
+to deal with all those kinds of translations.
 
 \section{Conversative extensions}
 
