@@ -105,7 +105,13 @@
 \newcommand{\tif}[4]{\mathsf{if}\ #1\ \mathsf{return}\ #2\ \mathsf{then}\ #3\ \mathsf{else}\ #4}
 \newcommand{\notfunext}{\mathsf{notfunext}}
 \newcommand{\Notfunext}{\mathsf{NotFunExt}}
-\newcommand{\tunit}{\mathsf{())}}
+\newcommand{\tunit}{\mathsf{()}}
+\newcommand{\inl}{\mathsf{inl}}
+\newcommand{\inr}{\mathsf{inr}}
+\newcommand{\pmatch}[3]{
+  \mathsf{match}\ #1\ \mathsf{return}\ #2\ \mathsf{with}\ #3\ \mathsf{end}
+}
+\newcommand{\mto}{\Longrightarrow}
 
 % Pattern-matching
 \newcommand{\matchs}{\mathsf{match}}

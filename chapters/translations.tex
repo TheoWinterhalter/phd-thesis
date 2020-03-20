@@ -180,10 +180,11 @@ The translation is defined as follows:
 %
 \[
 \begin{array}{lcl}
-  [ x ] &\coloneqq& x \\ \relax
+  [ x ] &\coloneqq& x \\
+  \rowcolor{highlightcol} \relax
   [ \lambda (x : A).\ t ] &\coloneqq& (\lambda (x : \transl{A}).\ [t],\ttrue) \\
-  \relax
-  [ t\ u ] &\coloneqq& [t]\ [u] \\ \relax
+  \rowcolor{highlightcol} \relax
+  [ t\ u ] &\coloneqq& [t].1\ [u] \\ \relax
   [ (u, v) ] &\coloneqq& ([u], [v]) \\ \relax
   [ p.1 ] &\coloneqq& [p].1 \\ \relax
   [ p.2 ] &\coloneqq& [p].2 \\ \relax
@@ -194,7 +195,8 @@ The translation is defined as follows:
   [ \refl{A} u ] &\coloneqq& \refl{\transl{A}} [u] \\ \relax
   [ \J{A}{u}{x.e.P}{w}{v}{p} ] &\coloneqq&
   \J{\transl{A}}{[u]}{x.e.\transl{P}}{[w]}{[v]}{[p]} \\ \relax
-  [ \Ty{i} ] &\coloneqq& \Ty{i} \\ \relax
+  [ \Ty{i} ] &\coloneqq& \Ty{i} \\
+  \rowcolor{highlightcol} \relax
   [ \Pi (x : A).\ B ] &\coloneqq&
   (\Pi (x : \transl{A}).\ \transl{B}) \times \bool \\ \relax
   [ \Sigma (x : A).\ B ] &\coloneqq& \Sigma (x:\transl{A}).\ \transl{B} \\
@@ -290,6 +292,36 @@ and more generally \acrshort{ITT} extended with \(\Notfunext\) is not
 conservative over \acrshort{ITT}.
 I will present a conservative translation in \frefpart{elim-reflection}.
 
-A simpler example could be that of encodings: say you want to add the \(\unit\)
-type to a very basic theory with only \(\Pi\)-types.
-\todo{Not clear it's a good example, it would require funext or SProp...}
+A simpler example could be that of encodings: say you want to add the booleans
+\(\bool\) to a type theory that already features a unit type \(\unit\) and
+disjunctions \(A + B\), booleans can be encoded as \(\unit + \unit\) so they
+are not strictly necessary but having them as first-class objects can still be
+convenient. A translation corresponding to the encoding is conservative and as
+such we can keep working on the meta-theory of a minimal theory (without
+the booleans).
+%
+\[
+\begin{array}{lcl}
+  [ x ] &\coloneqq& x \\ \relax
+  [ \lambda (x : A).\ t ] &\coloneqq& \lambda (x : \transl{A}).\ [t] \\
+  \relax
+  [ t\ u ] &\coloneqq& [t]\ [u] \\
+  \rowcolor{highlightcol} \relax
+  [ \ttrue ] &\coloneqq& \inl\ \tunit \\
+  \rowcolor{highlightcol} \relax
+  [ \ffalse ] &\coloneqq& \inr\ \tunit \\
+  \rowcolor{highlightcol} \relax
+  [ \tif{t}{b. P}{u}{v} ] &\coloneqq& \tif{[t]}{b. \transl{P}}{[u]}{[v]} \\
+  \relax
+  [ \inl\ t ] &\coloneqq& \inl\ [t] \\ \relax
+  [ \inr\ t ] &\coloneqq& \inr\ [t] \\ \relax
+  [ \pmatch{t}{p. P}{\inl\ u \mto a \mid \inr\ v \mto b} ] &\coloneqq&
+  \pmatch{t}{p. P}{\inl\ u \mto a \mid \inr\ v \mto b} \\ \relax
+  [ \Ty{i} ] &\coloneqq& \Ty{i} \\ \relax
+  [ \Pi (x : A).\ B ] &\coloneqq& \Pi (x : \transl{A}).\ \transl{B} \\
+  \rowcolor{highlightcol} \relax
+  [ \bool ] &\coloneqq& \unit + \unit \\ \relax
+  \\
+  \transl{A} &\coloneqq& [A]
+\end{array}
+\]
