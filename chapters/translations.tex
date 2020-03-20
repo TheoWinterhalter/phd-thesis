@@ -4,8 +4,9 @@
 
 Syntactical translations are a special case of program transformations suited
 for type theory, and a method of choice to get models of type theories.
-This is better studied in Simon Boulier's thesis and next 700~\misref{} but in
-order to keep this document self contained, I will do my best to give a
+This is better studied in Simon Boulier's
+thesis~\sidecite{boulier17:next-syntac-model-type-theor,boulier2018extending}
+but in order to keep this document self contained, I will do my best to give a
 meaningful excerpt here.
 
 \section{Syntactical translations}
@@ -107,7 +108,8 @@ substitutivity, preservation of reduction and of conversion.
 \subsection{Example: the \(\times\ \mathsf{bool}\) translation}
 
 A simple yet non-trivial example of translation (or class of translations) is
-the so-called \(\times\ \mathsf{bool}\) translation, again from~\misref.
+the so-called \(\times\ \mathsf{bool}\) translation, again
+from~\sidecite{boulier17:next-syntac-model-type-theor,boulier2018extending}.
 
 As we said earlier, the source is going to be an extension of the target.
 We'll keep the target pretty basic as a simple instance of \acrshort{ITT}
@@ -117,7 +119,7 @@ following rules:
   \item \((\Ty{i}, \Ty{j}) \in \Ax\) for \(i \le j\);
   \item \((\Ty{i}, \Ty{j}, \Ty{k}) \in \Rl\) for \(i, j \le k\).
 \end{itemize}
-\marginnote[-2cm]{
+\marginnote[-1.6cm]{
   Refer to \frefsubsec{pts-itt} to see what theory we extend here.
 }
 Otherwise it has to feature a boolean type \(\bool\)---with the usual \(\ttrue\)
