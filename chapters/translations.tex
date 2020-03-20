@@ -187,6 +187,8 @@ The translation is defined as follows:
   [ p.2 ] &\coloneqq& [p].2 \\ \relax
   [ \ttrue ] &\coloneqq& \ttrue \\ \relax
   [ \ffalse ] &\coloneqq& \ffalse \\ \relax
+  [ \tif{t}{b. P}{u}{v} ] &\coloneqq& \tif{[t]}{b. \transl{P}}{[u]}{[v]} \\
+  \relax
   [ \refl{A} u ] &\coloneqq& \refl{\transl{A}} [u] \\ \relax
   [ \J{A}{u}{x.e.P}{w}{v}{p} ] &\coloneqq&
   \J{\transl{A}}{[u]}{x.e.\transl{P}}{[w]}{[v]}{[p]} \\ \relax
@@ -217,12 +219,13 @@ This translation satisfies all the properties I mentioned in
 As such it shows that the negation of \acrshort{funext} is consistent in
 \acrshort{ITT}. On the other hand, it can be shown that \acrshort{funext} is
 also consistent, and as such independent from \acrshort{ITT}.
-\reminder[-3cm]{Independence}{
+\reminder[-2.7cm]{Independence}{
   A proposition \(P\) is \emph{independent} from a theory \cT when both
   \(\cT + P\) and \(\cT + \neg P\) are consistent relatively to \cT.
 }
-For details, refer to
-\sidecite{boulier17:next-syntac-model-type-theor,boulier2018extending}.
+For details, you should again refer to
+\sidecite{boulier17:next-syntac-model-type-theor,boulier2018extending}
+which gives a more comprehensive treatment of this and other translations.
 
 \section{Other translations}
 
