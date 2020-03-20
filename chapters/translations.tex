@@ -235,3 +235,39 @@ which gives a more comprehensive treatment of this and other translations.
 \todo{Digression on notion of proof again?}
 
 \section{Conversative extensions}
+
+Translations are a nice way to obtain models of type theories, in particular
+when showing that a certain principle extending a theory can be given an
+interpretation and even computational content.
+\marginnote[-1cm]{
+  I did not dwell on this but as the new principle is given a definition in the
+  target, we can \emph{pull out} its computational behaviour from there while
+  respecting preservation of reduciton.
+}
+
+We can even be more restrictive on translations if we want to show that the new
+principles are not adding new \emph{truths}, essentially saying that the
+extension is more convenient while not really changing the logic.
+There is an appropriate notion that is not specific to translations or even
+type theory which is that of \emph{conservative extension}.
+
+\begin{definition}[Conversative extension]
+  An extension \(\cT_2\) of a theory \(\cT_1\) is \emph{conservative} if every
+  theorem of \(\cT_2\) that can be stated in \(\cT_1\) is already a theorem of
+  \(\cT_1\).
+\end{definition}
+\marginnote[-1.5cm]{
+  An extension of a theory is a theory that proves at least as many theorems as
+  the one it extends.
+}
+\todo{More on this in the proof theory chapter?}
+
+In the context of type theories it can be reformulated as follows.
+
+\begin{definition}[Conservative extension of a type theory]
+  An extension \(\cT_2\) of a type theory \(\cT_1\) is \emph{conservative} if
+  for every judgement \(\vdash_2 t : A\) such that \(\vdash_1 A\)
+  (\ie \(A\) is a type in \(\cT_1\)), there exists \(t'\) such that
+  \(\vdash_1 t' : A\).
+\end{definition}
+\todo{Define the notion of extension of type theory earlier?}
