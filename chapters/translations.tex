@@ -271,3 +271,25 @@ In the context of type theories it can be reformulated as follows.
   \(\vdash_1 t' : A\).
 \end{definition}
 \todo{Define the notion of extension of type theory earlier?}
+
+We will call a translation \emph{conservative} when it allows to exhibit that
+the source theory \cS is a conservative extension of the target \cT, typically
+when every type of \cT (\ie \(\vdash_\cT A\))---which makes sense in \cS since
+it extends \cT---is sent to itself (\(\transl{A} = A\)) or at least implies
+itself:
+\[
+  \vdash_\cT \transl{A} \to A
+\]
+This is kind of generalisation of preservation of falsehood.
+
+The \(\times\ \bool\) translation is not conservative because
+\[
+  \vdash \transl{\Notfunext} \not\to \Notfunext
+\]
+and more generally \acrshort{ITT} extended with \(\Notfunext\) is not
+conservative over \acrshort{ITT}.
+I will present a conservative translation in \frefpart{elim-reflection}.
+
+A simpler example could be that of encodings: say you want to add the \(\unit\)
+type to a very basic theory with only \(\Pi\)-types.
+\todo{Not clear it's a good example, it would require funext or SProp...}
