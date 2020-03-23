@@ -2,8 +2,6 @@
 \chapter{Flavours of type theory}
 \labch{flavours}
 
-\todo{Cumulativity?}
-
 Type theory comes in many different flavours and shapes, different formulations
 and properties. I will not try to be exhaustive but I will try to cover the
 main kind of dependent type theories I have encountered.
@@ -213,7 +211,106 @@ once for \(\Pi\)-types---much less standard---at least).
 
 \Coq is originally based on the \acrfull{CoC}, or the \acrfull{CIC}, though it
 is nowadays rather called the \acrfull{PCUIC}.
-\todo{What to say?}
+It is a variant of \acrshort{ITT} but as the name suggests, it has several
+extra features, hinted at by the words \emph{cumulative}, \emph{inductive}
+and \emph{predicative}.
+
+\subsection{Universes in \Coq}
+
+\Coq features a \emph{predicative} hierarchy of universes
+\((\Type_i)_{i \in \mathbb{N}}\) such that \(\Type_i : \Type_j\) for any
+\(i < j\). The presence of several universes included in one another is not
+there for fun, it is there to circumvent Russel's paradox~\misref{} which
+shows it is inconsistent to have \(\Type : \Type\).
+The \Coq user however doesn't usually has to deal with those and
+instead rely on the so-called \emph{typical ambiguity}~\misref{}: in the \Coq
+proof assistant one will simply write \(\Type\) and \Coq will infer constraints
+to know whether it is possible to appoint each occurrence of \(\Type\) a
+\emph{level}, \ie a natural number, such that the universes are used
+consistently.
+
+Alongside this hierarchy comes another universe, \(\Prop\) which is the universe
+of propositions. This universe is \emph{impredicative}.
+Impredicativity means that the definition of an object can quantify over the
+object itself. In the case of \(\Prop\) it comes from the fact that a
+proposition (\ie a type in \(\Prop\)) can quantify over propositions: \eg
+\(\forall (P : \Prop).\ P\) is still a proposition.
+\marginnote[-0.5cm]{
+  We write \(\forall (P : \Prop).\ P : \Prop\).
+  Note that this type is actually the empty type or false proposition so it's
+  reassuring that it \emph{is} a proposition.
+}
+Actually impredicativity of \(\Prop\) is a bit stronger as it accepts \emph{any}
+quantification, so that \(\forall (n : \mathbb{N}).\ n = n\) is also a
+proposition for instance.
+\(\Prop\) however is of type \(\Type_i\) for any \(i\).
+
+Recently, a new universe of propositions has been introduced~\misref:
+\(\SProp\). This time it is a universe of \emph{strict} propositions in the
+sense that any two proofs of the same proposition are considered to be
+convertible.
+\marginnote[-0.7cm]{
+  For \(P : \SProp\) and \(p_1 : P\) and \(p_2 : P\) then \(p_1 \equiv p_2\).
+}
+In other words, there is no computational content to proofs of strict
+propositions, and as such proofs are \emph{irrelevant}, only there mere
+existence matters.
+Although this addition is a really interesting subject, it goes a bit beyond
+the scope of this thesis, in particular I do not consider it in my
+formalisations (for now).
+
+When I introduced the typing rules for \(\Prop\) and \(\Type\) I showed that
+each universe can be typed in several other universes (actually in each case
+there are an infinite number of possiblities). The reality is even more
+intricate than that and it has to do with \emph{cumulative} part of the name.
+\Coq features a notion of subtyping that is limited to universes and that is
+called \emph{cumulativity}. In essence it says that \(\Type_i \le \Type_j\)
+whenever \(i \le j\), that is that bigger universes contain the smaller
+universes. Cumulativity is given by the following rules.
+\begin{mathpar}
+  \infer*[right=(\(i \le j\)), vcenter]
+    { }
+    {\Ga \vdash \Type_i \le \Type_j}
+  %
+
+  \infer
+    { }
+    {\Ga \vdash \Prop \le \Type_i}
+  %
+
+  \infer
+    {
+      \Ga \vdash A \equiv A' \\
+      \Ga, x : A \vdash B \le B'
+    }
+    {\Ga \vdash \Pi\ (x : A).\ B \le \Pi\ (x : A').\ B'}
+  %
+
+  \infer
+    {
+      \Ga \vdash t : A \\
+      \Ga \vdash A \le B \\
+      \Ga \vdash B
+    }
+    {\Ga \vdash t : B}
+  %
+\end{mathpar}
+\marginnote[-1.5cm]{
+  Notice how the usual conversion rule is replaced by a cumulativity rule.
+}
+This convenience allows the user to forget as much as possible about universes.
+
+
+Finally there is another point regarding universes that isn't hinted at in the
+name: \emph{polymorphism}. This feature introduced by~\misref{} is complementary
+to cumulativity and allows to consider definitions that quantify over universe
+levels (the \(i\) in \(\Type_i\)).
+\todo{What to say? Also mention template poly to say we don't have it.
+This can be by saying poly doesn't deal with Prop for now.}
+
+\subsection{Inductive types}
+
+\todo{Refer to usual-defs and talk about cumulative inductive briefly.}
 
 \section{Equality in type theories}
 
