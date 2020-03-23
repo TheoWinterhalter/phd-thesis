@@ -222,6 +222,11 @@ and \emph{predicative}.
 \(i < j\). The presence of several universes included in one another is not
 there for fun, it is there to circumvent Russel's paradox~\misref{} which
 shows it is inconsistent to have \(\Type : \Type\).
+\marginnote[-1cm]{
+  For type theory we would more likely talk about Girard's
+  paradox~\sidecite[1cm]{girard1972interpretation} or Hurkens'
+  paradox~\sidecite[1.7cm]{hurkens1995simplification}.
+}
 The \Coq user however doesn't usually has to deal with those and
 instead rely on the so-called \emph{typical ambiguity}~\misref{}: in the \Coq
 proof assistant one will simply write \(\Type\) and \Coq will infer constraints
@@ -307,10 +312,10 @@ to cumulativity and allows to consider definitions that quantify over universe
 levels (the \(i\) in \(\Type_i\)).
 For instance, it allows to write a truly polymorphic identity function
 \[
-  \mathsf{id}@\{i\} \coloneqq \lambda (A : \Type_i)\ (x : A).\ x
+  \mathsf{id}_i \coloneqq \lambda (A : \Type_i)\ (x : A).\ x
 \]
-Here, the \(@\{i\}\) is to bind level \(i\) in the expression. Notice that it's
-attached to the constant definition and not on the right-hand side; that's
+Here, the \(i\) subscript is to bind level \(i\) in the expression. Notice that
+it's attached to the constant definition and not on the right-hand side; that's
 because universe levels are only quantified in a prenex-style, meaning you
 must quantify over \emph{all} universe levels before introducing other
 variables. In particular there is no type of polymorphic
@@ -328,7 +333,34 @@ near future.
 
 \subsection{Inductive types}
 
-\todo{Refer to usual-defs and talk about cumulative inductive briefly.}
+Then comes the \emph{inductive} part of the name. I already described
+inductive types in \vrefsec{inductive-types} so I will not repeat myself
+but their presence is the main justification for the `I' in \acrshort{CIC}.
+However, \acrshort{PCUIC} is named that way because it features
+\emph{cumulative inductive types}~\sidecite{timany2018cumulative}
+(\acrshort{CIC}---and even \acrshort{CoC}---already has cumulativity).
+The idea is to extend the cumulativity relation beyond sorts to inductive types
+as well. I'm going to use the same example than the paper introducing them:
+a record~\sidenote{Exploiting the fact that (non-primitive) records are actually
+inductive types with one constructor in \Coq.} definition of categories:
+\[
+  \mathsf{Category}_{i,j} \coloneqq \{
+    \mathsf{Obj} : \Type_i\ ;\
+    \mathsf{Hom} : \mathsf{Obj} \to \mathsf{Obj} \to \Type_j\ ;\
+    \dots
+  \}
+\]
+In \acrshort{PCUIC}, you have the following cumulativity rule.
+\begin{mathpar}
+  \infer
+    {
+      i \le i' \\
+      j \le j'
+    }
+    {\mathsf{Category}_{i,j} \le \mathsf{Category}_{i',j'}}
+  %
+\end{mathpar}
+This allows for more flexibility when dealing with polymorphic definitions.
 
 \section{Equality in type theories}
 
