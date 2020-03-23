@@ -275,26 +275,26 @@ universes. Cumulativity is given by the following rules.
 \begin{mathpar}
   \infer*[right=(\(i \le j\)), vcenter]
     { }
-    {\Ga \vdash \Type_i \le \Type_j}
+    {\Ga \vdash \Type_i \cumul \Type_j}
   %
 
   \infer
     { }
-    {\Ga \vdash \Prop \le \Type_i}
+    {\Ga \vdash \Prop \cumul \Type_i}
   %
 
   \infer
     {
       \Ga \vdash A \equiv A' \\
-      \Ga, x : A \vdash B \le B'
+      \Ga, x : A \vdash B \cumul B'
     }
-    {\Ga \vdash \Pi\ (x : A).\ B \le \Pi\ (x : A').\ B'}
+    {\Ga \vdash \Pi\ (x : A).\ B \cumul \Pi\ (x : A').\ B'}
   %
 
   \infer
     {
       \Ga \vdash t : A \\
-      \Ga \vdash A \le B \\
+      \Ga \vdash A \cumul B \\
       \Ga \vdash B
     }
     {\Ga \vdash t : B}
@@ -357,7 +357,7 @@ In \acrshort{PCUIC}, you have the following cumulativity rule.
       i \le i' \\
       j \le j'
     }
-    {\mathsf{Category}_{i,j} \le \mathsf{Category}_{i',j'}}
+    {\mathsf{Category}_{i,j} \cumul \mathsf{Category}_{i',j'}}
   %
 \end{mathpar}
 This allows for more flexibility when dealing with polymorphic definitions.
