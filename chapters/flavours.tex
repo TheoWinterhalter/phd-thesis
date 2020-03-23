@@ -305,8 +305,26 @@ Finally there is another point regarding universes that isn't hinted at in the
 name: \emph{polymorphism}. This feature introduced by~\misref{} is complementary
 to cumulativity and allows to consider definitions that quantify over universe
 levels (the \(i\) in \(\Type_i\)).
-\todo{What to say? Also mention template poly to say we don't have it.
-This can be by saying poly doesn't deal with Prop for now.}
+For instance, it allows to write a truly polymorphic identity function
+\[
+  \mathsf{id}@\{i\} \coloneqq \lambda (A : \Type_i)\ (x : A).\ x
+\]
+Here, the \(@\{i\}\) is to bind level \(i\) in the expression. Notice that it's
+attached to the constant definition and not on the right-hand side; that's
+because universe levels are only quantified in a prenex-style, meaning you
+must quantify over \emph{all} universe levels before introducing other
+variables. In particular there is no type of polymorphic
+identities\sidenote{Although there is just the one.}.
+
+One might notice that currently, universe polymorphism only talks about
+\(\Type\) and does not make mention of \(\Prop\). This is a shortcoming that
+could be fixed using also \emph{sort polymorphism} but at the time of writing
+of this document, another technology is used in place:
+\emph{template polymorphism}. It is a heuristic orthogonal to universe
+polymorphism to define constants both at the \(\Type\)-level and at the
+\(\Prop\)-level at the same time. However, this seems to be the source of many
+bugs and should be removed from \Coq's kernel at some point in the relatively
+near future.
 
 \subsection{Inductive types}
 
