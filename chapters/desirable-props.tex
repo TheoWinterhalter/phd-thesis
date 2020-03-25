@@ -11,7 +11,52 @@ theories of \vrefch{flavours} has which properties in a table.
 
 \subsection{Weakening and substitutivity}
 
-\todo{Also for reduction, conversion usually}
+Variables and binders are essential to type theory and as such we have to treat
+them with care, in particular we want our theories to be \emph{compositional}
+meaning that different blocks that make sense can be assembled into something
+that still makes sense.
+This is embodied in the two following properties.
+
+\begin{definition}[Weakening]
+  A type theory enjoys weakening when for any \(\Ga, \Xi \vdash t : A\) and
+  \(\vdash \Ga, \Delta\) we have \(\Ga, \Delta, \Xi \vdash t : A\).
+\end{definition}
+\marginnote[-1.2cm]{
+  Note that in more generality you might have to rename variables when
+  weakening, so for this we usually introduce a \emph{lifting} operator
+  \(\lift{}{}\) such that we have
+  \(\Ga, \Delta, \Xi \vdash \lift{n}{k}\ t : \lift{n}{k}\ A\)
+  where \(n = |\Delta|\) and \(k = |\Xi|\).
+}
+
+Weakening means that you can plug a term into a larger context.
+
+Susbstitutions are the way to instantiate the variables that are bound.
+This happens for instance after a \(\beta\)-reduction.
+\reminder[-0.9cm]{\(\beta\)-reduction}{
+  \[
+    (\lambda (x:A). t)\ u \red_\beta t[x \sto u]
+  \]
+}
+Substitutions are typed using two contexts: \(\sigma : \Ga \to \D\) basically
+states that \(\sigma\) maps variables of \(\D\) to terms typed in \(\Ga\).
+\begin{mathpar}
+  \infer
+    {\forall (x : A) \in \D,\ \Ga \vdash \sigma(x) : A\sigma}
+    {\sigma : \Ga \to \D}
+\end{mathpar}
+This is sometimes written \(\Ga \vdash \sigma : \D\) instead, and typing
+definitons vary a little depending on the definition of substitution but this
+is the basic idea.
+
+\begin{definition}[Substitutivity]
+  A type theory is substitutive when for any \(\D \vdash t : A\)
+  and any substitution \(\sigma : \Ga \to \D\), we have
+  \(\Ga \vdash t\sigma : A\sigma\).
+\end{definition}
+
+More often than not, weakening and substitutivity also hold for reduction and
+conversion.
 
 \subsection{Inversion of typing}
 \todo{Not really a measure, it always makes sense in some way}
