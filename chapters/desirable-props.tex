@@ -224,6 +224,15 @@ of this.}: confluence and termination.
   and \(v \reds w\).
 \end{definition}
 
+Confluence is often summarised with the following diagram.
+\[
+  \xymatrix{
+    & t \ar[ld] \ar[rd] & \\
+    u \ar@{.>}[rd] && v \ar@{.>}[ld] \\
+    & w &
+  }
+\]
+
 \begin{definition}[Weak normalisation]
   Weak normalisation of reduction means that for every well-typed term \(t\)
   there exists a term \(n\) such that \(t \reds n \not\red\).
