@@ -191,6 +191,30 @@ altogether. Computation (like \(\beta\)-reduction) is now handled by
 propositional equality alone, and conversion of types is done using transports
 of said equality.
 
+\begin{mathpar}
+  \infer
+    {
+      \Ga \vdash A : s \\
+      \Ga, x:A \vdash t : B \\
+      \Ga \vdash u : A
+    }
+    {
+      \Ga \vdash \beta(t,u) :
+      (\lambda (x : A).\ t)\ u =_{B[x \sto u]} t[x \sto u]
+    }
+  %
+
+  \infer
+    {
+      \Ga \vdash T_1 : s \\
+      \Ga \vdash T_2 : s \\
+      \Ga \vdash p : T_1 = T_2 \\
+      \Ga \vdash t : T_1
+    }
+    {\Ga \vdash \transport{T_1}{T_2}{p}{t} : T_2}
+  %
+\end{mathpar}
+
 This time it's a bit hard to advertise it for practical use in a proof
 assistant, it's nonetheless interesting. For one, its meta-theory is that much
 simpler, an even more attractive fact once combined with a translation from
@@ -272,6 +296,11 @@ intricate than that and it has to do with \emph{cumulative} part of the name.
 called \emph{cumulativity}. In essence it says that \(\Type_i \le \Type_j\)
 whenever \(i \le j\), that is that bigger universes contain the smaller
 universes. Cumulativity is given by the following rules.
+\marginnote[1.5cm]{
+  Notice how the usual conversion rule is replaced by a cumulativity rule.
+  Also, as opposed to usual subtyping definitions, there is no subtyping
+  in contravariant positions, but rather conversion.
+}
 \begin{mathpar}
   \infer*[right=(\(i \le j\)), vcenter]
     { }
@@ -300,11 +329,6 @@ universes. Cumulativity is given by the following rules.
     {\Ga \vdash t : B}
   %
 \end{mathpar}
-\marginnote[-1.5cm]{
-  Notice how the usual conversion rule is replaced by a cumulativity rule.
-  Also, as opposed to usual subtyping definitions, there is no subtyping
-  in contravariant positions, but rather conversion.
-}
 This convenience allows the user to forget as much as possible about universes.
 
 
