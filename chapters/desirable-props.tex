@@ -104,6 +104,44 @@ do it here.
 
 \subsection{Validity}
 
+The term \emph{validity} might be a bit overloaded, and maybe not the norm
+when it comes to type theory, but I will use it to be consistent with the
+notion for \Coq.
+This property states that the type on the right-hand side of the colon is indeed
+a type.
+
+\begin{definition}[Validity]
+  A type theory enjoys validity when from \(\Ga \vdash t : A\) one can deduce
+  \(\Ga \vdash A\) (\ie \(\Ga \vdash A : s\) for some sort \(s\)).
+\end{definition}
+
+Depending on the theory, we can often prove a similar property regarding
+contexts: namely that \(\Ga \vdash t : A\) implies that \(\Ga\) is well-formed
+(\(\vdash \Ga\)). Having this property mainly depends on whether the typing
+rules of things like sorts and variables ask for the context to be well-formed.
+%
+\begin{mathpar}
+  \infer
+    {(x : A) \in \Ga}
+    {\Ga \vdash x : A}
+  %
+
+  \text{vs}
+
+  \infer
+    {
+      \vdash \Ga \\
+      (x : A) \in \Ga
+    }
+    {\Ga \vdash x : A}
+  %
+\end{mathpar}
+%
+In a theory which does not have this requirement / property, many lemmata will
+only apply assuming the contexts involved are well-formed.
+The difference of presentation like this will be studied in
+\nrefch{formalisation}.
+
 \subsection{Unique / principal typing}
 
 \subsection{Properties of reduction}
