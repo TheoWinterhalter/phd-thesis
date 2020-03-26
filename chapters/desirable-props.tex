@@ -10,6 +10,7 @@ theories of \nrefch{flavours} has which properties in a table.
 \section{Properties}
 
 \subsection{Weakening and substitutivity}
+\labsubsec{weak-subst}
 
 Variables and binders are essential to type theory and as such we have to treat
 them with care, in particular we want our theories to be \emph{compositional}
@@ -189,7 +190,70 @@ The idea is that the principal type is the most general type that can be given
 to a term.
 
 \subsection{Properties of reduction}
-\todo{Confluence, termination}
+
+When the type theory features reduction, we also want it to satisfy some
+requirements, aside that reduction behaves in a compositional way as I already
+explained in \nrefsubsec{weak-subst}.
+
+First are basic properties of rewriting systems\sidenote{I won't go into details
+about what they are and it's not necessary to know about them to understand any
+of this.}: confluence and termination.
+
+\marginnote[0.3cm]{
+  The transitive reflexive closure of reduction, written \(\reds\),
+  is defined (inductively) by the rules
+  \[
+    \infer
+      { }
+      {t \reds t}
+    %
+  \]
+  \[
+    \infer
+      {
+        t \red u \\
+        u \reds v
+      }
+      {t \reds v}
+    %
+  \]
+}
+\begin{definition}[Confluence]
+  The reduction relation \(\red\) is confluent if for every \(t\) such that
+  \(t \reds u\) and \(t \reds v\) there exists \(w\) such that \(u \reds w\)
+  and \(v \reds w\).
+\end{definition}
+
+\begin{definition}[Weak normalisation]
+  Weak normalisation of reduction means that for every well-typed term \(t\)
+  there exists a term \(n\) such that \(t \reds n \not\red\).
+  \(n\) is called a \emph{normal form} of \(t\).
+\end{definition}
+
+\begin{definition}[Strong normalisation]
+  Strong normalisation, or termination, of reduction means that for every
+  well-typed term \(t\), there is no infinite reduction sequence starting from
+  \(t\).
+\end{definition}
+
+When a system is confluent and terminating, there exists exactly one normal form
+for each well-typed term.
+
+These properties are related to typing in that they require the term to be
+well-typed in order to be applicable. That's because it's too easy to break
+termination with non-sensical terms.
+There is however a reduction property that is much more linked to typing:
+subject reduction, sometimes called type safety or type preservation.
+
+\begin{definition}[Subject reduction]
+  A type theory enjoys subject reduction when for every \(\Ga \vdash t : A\)
+  and \(t \red u\), we also have \(\Ga \vdash u : A\).
+\end{definition}
+
+This means simplifying a proof does not break its status of proof. This is a
+very sensible property to have in a programming language or a proof assistant.
+It's absence is usually a sign that something is very wrong with the considered
+system: if evaluation might break things, why have evaluation at all?
 
 \subsection{Canonicity}
 \todo{With reduction or weaker with conversion (for ETT)}
