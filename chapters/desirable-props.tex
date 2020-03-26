@@ -239,6 +239,9 @@ Confluence is often summarised with the following diagram.
   \(n\) is called a \emph{normal form} of \(t\).
 \end{definition}
 
+A normal form is a term that cannot reduce any further as illustrated by the
+\(n \not\red\) notation.
+
 \begin{definition}[Strong normalisation]
   Strong normalisation, or termination, of reduction means that for every
   well-typed term \(t\), there is no infinite reduction sequence starting from
@@ -246,7 +249,8 @@ Confluence is often summarised with the following diagram.
 \end{definition}
 
 When a system is confluent and terminating, there exists exactly one normal form
-for each well-typed term.
+for each well-typed term, we can thus talk about \emph{the} normal form of a
+term.
 
 These properties are related to typing in that they require the term to be
 well-typed in order to be applicable. That's because it's too easy to break
@@ -265,7 +269,35 @@ It's absence is usually a sign that something is very wrong with the considered
 system: if evaluation might break things, why have evaluation at all?
 
 \subsection{Canonicity}
-\todo{With reduction or weaker with conversion (for ETT)}
+
+Canonicity is a way of saying that, for instance, booleans \emph{really} are
+booleans \ie they are either \(\ttrue\) or \(\ffalse\).
+It is an important property, especially when seen in the constructivism prism.
+When expressed for \(\Sigma\)-types, this corresponds to the so-called
+\emph{witness property}: a proof of \(\Sigma (x:A).\ P\ x\) (in the empty
+context, so without assumption) is necessarily of the form \((t;p)\)
+with \(t : A\) and \(p : P\ t\).
+
+\begin{definition}[Canonicity]
+  A type theory enjoys canonicity when \(\vdash t : \bool\) implies that
+  either \(t \equiv \ttrue\) or \(t \equiv \ffalse\).
+  More generally, every term of an inductive type is convertible to a
+  construction of this type.
+\end{definition}
+
+This is usually true in a much stronger and useful sense:
+
+\begin{definition}[Computational canonicity]
+  Computational canonicity corresponds to the fact that whenever
+  \(\vdash t : \bool\), then either \(t \reds \ttrue\) or
+  \(t \reds \ffalse\).
+  More generally, every term of an inductive type reduces to a construction
+  of this type.
+\end{definition}
+
+So computational canonicity ensures that whenever you prove that there exists
+some \(t\) such that \(P\ t\), it is possible to evaluate the proof to extract
+the \(t\) in question.
 
 \subsection{Decidability of type checking}
 
