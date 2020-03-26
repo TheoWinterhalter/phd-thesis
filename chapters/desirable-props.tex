@@ -93,6 +93,12 @@ This can be proved by seeing that only two typing rules can be concluded with
 \(\Ga \vdash t\ u : T\): the application rule and the conversion rule. The
 result follows from a simple induction.
 
+\marginnote[0.1cm]{
+  Sometimes it will be talking about cumulativity \(\cumul\) instead of
+  conversion \(\equiv\): in that case we would have
+  \(\Ga \vdash B[x \sto u] \cumul T\) (we have to apply the application rule
+  first and then possibly several time the cumulativity rule).
+}
 Now, it won't always be stated this way depending on the premises of the
 application rule, but also depending on the presence or not of a conversion
 rule. In the case of \acrshort{WTT} for instance, there is no conversion so
@@ -143,6 +149,44 @@ The difference of presentation like this will be studied in
 \nrefch{formalisation}.
 
 \subsection{Unique / principal typing}
+
+Unique typing is a property saying that each term (given a context) has only one
+type up to conversion.
+
+\begin{definition}[Unique typing]
+  A type theory enjoys unique typing when
+  \(\Ga \vdash t : A\) and \(\Ga \vdash t : B\) imply \(\Ga \vdash A \equiv B\).
+\end{definition}
+
+This usually means that the term is carrying enough information to recover
+its type. If one were to use Curry-style terms~\misref{} like
+\(\lambda x.\ x\) then this property can't hold: indeed
+\(\vdash \lambda x.\ x : \unit \to \unit\) and
+\(\vdash \lambda x.\ x : \bool \to \bool\) both hold and the two arrow types
+are not related.
+
+This property can be broken for other reasons however: the presence of subtyping
+(typically cumulativity). In such a case, unique typing can be relaxed to
+principal typing.
+
+\begin{definition}[(Weak) principal typing]
+  A type theory enjoys principal typing (in the weaker sense) when
+  \(\Ga \vdash t : A\) and \(\Ga \vdash t : B\) imply \(\Ga \vdash t : C\) with
+  \(\Ga \vdash C \cumul A\) and \(\Ga \vdash C \cumul B\).
+\end{definition}
+
+It might be perhaps more often understood in a stronger sense.
+
+\begin{definition}[(Strong) principal typing]
+  A type theory enjoys principal typing (in the stronger sense) when for every
+  well typed term \(t\) in \(\Ga\), there exists a type \(P\) such that
+  \(\Ga \vdash t : P\) and that whenever \(\Ga \vdash t : A\) we have
+  \(\Ga \vdash P \cumul A\).
+  \(P\) is called a principal type of \(t\) (in \(\Ga\)).
+\end{definition}
+
+The idea is that the principal type is the most general type that can be given
+to a term.
 
 \subsection{Properties of reduction}
 \todo{Confluence, termination}
