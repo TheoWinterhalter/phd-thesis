@@ -59,8 +59,48 @@ More often than not, weakening and substitutivity also hold for reduction and
 conversion.
 
 \subsection{Inversion of typing}
-\todo{Not really a measure, it always makes sense in some way}
-\todo{Merge with weak/subst?}
+
+Inversion of typing is not really a measure as it is always present in some way.
+It is nonetheless a very useful property to state when reasoning on a type
+theory.
+It is saying than when we have \(\Ga \vdash t : A\), by analysing the shape of
+\(t\) we can get information on \(A\) (and sometimes even \(\Ga\)).
+
+\reminder[-0.6cm]{Application rule}{
+  \[
+    \infer
+      {
+        \Ga \vdash \Pi (x:A).\ B : s \\
+        \Ga \vdash t : \Pi (x:A).\ B \\
+        \Ga \vdash u : A
+      }
+      {\Ga \vdash t\ u : B[x \sto u]}
+  \]
+}
+For instance, if we have \(\Ga \vdash t\ u : T\), then by inversion of typing
+we know that there must exist \(A\) and \(B\) such that
+\begin{mathpar}
+  \Ga \vdash \Pi (x:A).\ B : s
+
+  \Ga \vdash t : \Pi (x:A).\ B
+
+  \Ga \vdash u : A
+
+  \Ga \vdash T \equiv B[x \sto u]
+\end{mathpar}
+
+This can be proved by seeing that only two typing rules can be concluded with
+\(\Ga \vdash t\ u : T\): the application rule and the conversion rule. The
+result follows from a simple induction.
+
+Now, it won't always be stated this way depending on the premises of the
+application rule, but also depending on the presence or not of a conversion
+rule. In the case of \acrshort{WTT} for instance, there is no conversion so
+instead of \(\Ga \vdash T \equiv B[x \sto u]\) we will have syntactic equality
+\(T =_{\alpha} B[x \sto u]\).
+
+You usually prove inversion of typing for every term constructor, but I won't
+do it here.
 
 \subsection{Validity}
 
