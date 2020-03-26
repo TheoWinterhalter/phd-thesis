@@ -14,6 +14,19 @@
   }
 }
 
+% Definition box
+\newcommand\sidedef[3][0pt]{%
+  \marginnote[#1]{
+    \begin{kaobox}[
+      frametitle=Definition: #2,
+      backgroundcolor=GreenYellow!25!White,
+      frametitlebackgroundcolor=GreenYellow!25!White
+    ]
+      #3
+    \end{kaobox}
+  }
+}
+
 % Highlight for maths
 \colorlet{highlightcol}{Yellow!50}
 \newcommand{\highlight}[1]{%
