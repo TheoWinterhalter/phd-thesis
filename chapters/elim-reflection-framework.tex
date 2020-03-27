@@ -1,3 +1,33 @@
 % \setchapterpreamble[u]{\margintoc}
 \chapter{Framework}
 \labch{elim-reflection-framework}
+
+Now that the problem is stated, I will clearly define what the type theories
+I will use as source and target. This is a bit redundant with \nrefch{flavours}
+but I think it's worthwhile to make it clear what the translation is operating
+on.
+
+\section{Common syntax}
+
+To make things simple I use a common syntax for the three theories.
+
+\[
+  \begin{array}{l@{~\,}r@{~\,}l}
+    s &\in& \cS \\
+    T,A,B,t,u,v &\bnf& x \bnfor \lam{x:A}{B} t \bnfor \app{t}{x:A}{B}{u} \\
+    &\bnfor& \pair{x:A}{B}{u}{v} \bnfor \pio{x:A}{B}{p} \bnfor \pit{x:A}{B}{p} \\
+    &\bnfor& \refl{A} u \bnfor \J{A}{u}{x.e.P}{w}{v}{p} \\
+    &\bnfor& \funext{x:A}{B}{f}{g}{e} \bnfor \uip{A}{u}{v}{p}{q} \\
+    &\bnfor& s \bnfor \Prod{x:A} B \bnfor \Sum{x:A} B \bnfor \Eq{A}{u}{v} \\
+    \Ga, \D &\bnf& \ctxempty \bnfor \Ga, x:A
+  \end{array}
+\]
+
+\todo{Maybe separate ITT and WTT as syntactical extensions, then talk
+about how ETT is no longer an extension but it doesn't really matter
+conservativity can still be stated with a simple translation from ITT/WTT to
+ETT.}
+\todo{WTT is not included right now}
+
+\section{Typing rules}
+\todo{Mention no cumulativity}
