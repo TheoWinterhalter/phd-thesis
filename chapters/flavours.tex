@@ -257,10 +257,11 @@ shows it is inconsistent to have \(\Type : \Type\).
 }
 The \Coq user however doesn't usually has to deal with those and
 instead rely on the so-called
-\emph{typical ambiguity}~\sidecite[1.5cm]{harper1991type}: in the \Coq proof
-assistant one will simply write \(\Type\) and \Coq will infer constraints to
-know whether it is possible to appoint each occurrence of \(\Type\) a
-\emph{level}, \ie a natural number, such that the universes are used
+% \emph{typical ambiguity}~\sidecite[1.5cm]{harper1991type,feferman2004typical,specker1966typical}:
+\emph{typical ambiguity}~\sidecite[1.5cm]{harper1991type}:
+in the \Coq proof assistant one will simply write \(\Type\) and \Coq will infer
+constraints to know whether it is possible to appoint each occurrence of
+\(\Type\) a \emph{level}, \ie a natural number, such that the universes are used
 consistently.
 
 Alongside this hierarchy comes another universe, \(\Prop\) which is the universe
