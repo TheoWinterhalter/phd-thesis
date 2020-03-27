@@ -346,6 +346,11 @@ the empty type is uninhabited.
 This doesn't prevent you from having proofs of \(\bot\) in inconsistent
 contexts.
 
+Having canonicity in the theory is a good way to deduce consistency.
+Indeed, if there is a proof of \(\bot\) in the empty context, there must
+one which is a constructor, since there are no constructors for \(\bot\)
+it's not possible.
+
 It's worth noting that inconsistent type theories can still be of interest.
 For instance if you're interested in having effects in your type theory,
 though you might want to be able to know which terms might use effects leading
