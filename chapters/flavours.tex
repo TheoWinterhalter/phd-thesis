@@ -109,8 +109,11 @@ symmetric, transitive closure of reduction.
   \(t \equiv u\) is defined as \(t \mathop{(\redl . \red)^\star} u\)
 }
 
+\marginnote[0.5cm]{
+  See \nrefch{usual-defs}.
+}
 When talking about \acrshort{ITT} we usually mean an extension of this with
-more concepts like some base types~\misref{} and computation rules on their
+more concepts like some base (inductive) types and computation rules on their
 eliminators (pattern-matching). The conversion rule is also not always strictly
 derived from the reduction alone, it often includes \(\eta\)-rules, the most
 common being \(\eta\)-expansion of functions.
@@ -122,7 +125,7 @@ type information\sidenote{Also, the \(A\)---domain of the function---has to
 be sumrised somehow.}, this is why is certain contexts---like \Agda---the
 conversion is also typed.
 The relation between typed and untyped conversion has been explored at several
-occasions~\misref.
+occasions~\sidecite[1.8cm]{van2013explicit}.
 \Coq manages to verify \(\eta\)-conversion for functions and records without
 relying on a typed-conversion as we will see later~\misref.
 \marginnote[-0.5cm]{
@@ -152,7 +155,8 @@ As you can see, this time I opted for a typed conversion, I think it makes more
 sense since the conversion is more semantical than syntactical.
 Also, you can note the little \(\exmark\) subscript, its purpose is to mark
 the judgement as beeing \emph{ex}tensional.
-\Andromeda and \NuPRL implement variants of \acrlongpl{ETT}~\misref.
+\Andromeda and \NuPRL implement variants of
+\acrlongpl{ETT}~\sidecite{andromeda,nuprl}.
 To see its usefulness, we're going to look at the definition of reversal of
 vectors in \Coq, using an accumulator for the definiton to be tail-recursive.
 %
@@ -180,7 +184,7 @@ in the second part.}
 \acrshort{ETT} isn't the ultimate solution however and suffers from many
 drawbacks the main of which being that type-checking is not decidable as we
 shall see later~\misref. We will also explore the relation between
-\acrshort{ETT} and \acrshort{ITT}~\misref.
+\acrshort{ETT} and \acrshort{ITT} in \nrefpart{elim-reflection}.
 
 \subsection{Weak Type Theory}
 \labsubsec{wtt}
@@ -223,7 +227,7 @@ simpler, an even more attractive fact once combined with a translation from
 Another point worth mentioning is that it really crystallises the notion that
 proofs are really just terms and do not require extra machinery to make sure
 they are indeed proofs (even when conversion is decidable, it might takes
-eons before you get this knowlegde)~\misref.
+eons before you get this knowlegde)~\sidecite{de1991plea}.
 
 One might also be tempted to call it minimal, but in order to simulate the
 congruence aspect of conversion, we have to extend the theory with principles
@@ -244,7 +248,7 @@ and \emph{predicative}.
 \Coq features a \emph{predicative} hierarchy of universes
 \((\Type_i)_{i \in \mathbb{N}}\) such that \(\Type_i : \Type_j\) for any
 \(i < j\). The presence of several universes included in one another is not
-there for fun, it is there to circumvent Russel's paradox~\misref{} which
+there for fun, it is there to circumvent Russel's paradox which
 shows it is inconsistent to have \(\Type : \Type\).
 \marginnote[-1cm]{
   For type theory we would more likely talk about Girard's
@@ -274,11 +278,11 @@ quantification, so that \(\forall (n : \mathbb{N}).\ n = n\) is also a
 proposition for instance.
 \(\Prop\) however is of type \(\Type_i\) for any \(i\).
 
-Recently, a new universe of propositions has been introduced~\misref:
-\(\SProp\). This time it is a universe of \emph{strict} propositions in the
-sense that any two proofs of the same proposition are considered to be
-convertible.
-\marginnote[-0.7cm]{
+Recently, a new universe of propositions has been
+introduced~\sidecite{gilbert:hal-01859964}: \(\SProp\).
+This time it is a universe of \emph{strict} propositions in the sense that any
+two proofs of the same proposition are considered to be convertible.
+\marginnote[-0.5cm]{
   For \(P : \SProp\) and \(p_1 : P\) and \(p_2 : P\) then \(p_1 \equiv p_2\).
 }
 In other words, there is no computational content to proofs of strict
@@ -333,9 +337,10 @@ This convenience allows the user to forget as much as possible about universes.
 
 
 Finally there is another point regarding universes that isn't hinted at in the
-name: \emph{polymorphism}. This feature introduced by~\misref{} is complementary
-to cumulativity and allows to consider definitions that quantify over universe
-levels (the \(i\) in \(\Type_i\)).
+name: \emph{polymorphism}. This feature introduced
+by~\sidecite{sozeau2014universe} is complementary to cumulativity and allows to
+consider definitions that quantify over universe levels (the \(i\) in
+\(\Type_i\)).
 For instance, it allows to write a truly polymorphic identity function
 \[
   \mathsf{id}_i \coloneqq \lambda (A : \Type_i)\ (x : A).\ x
