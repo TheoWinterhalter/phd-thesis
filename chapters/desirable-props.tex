@@ -331,9 +331,30 @@ decidable checking, like I will present in \nrefpart{elim-reflection}.
 
 \subsection{Consistency}
 
+To be able to use a type theory as a logic, it needs to be consistent.
+Consistency means that not all types are provable, or equivalently that
+the empty type is uninhabited.
+\marginnote[-0.4cm]{
+  See \nrefch{usual-defs} for definition(s) of the empty type \(\bot\).
+}
+
+\begin{definition}[Consistency]
+  A type theory is said to be consistent when there is no term \(t\) such that
+  \(\vdash t : \bot\).
+\end{definition}
+
+This doesn't prevent you from having proofs of \(\bot\) in inconsistent
+contexts.
+
+It's worth noting that inconsistent type theories can still be of interest.
+For instance if you're interested in having effects in your type theory,
+though you might want to be able to know which terms might use effects leading
+to inconsistencies and use only \emph{pure} terms to prove
+things~\sidecite{pedrot:hal-02189128,pedrot:hal-02383109}.
+This allows for proofs on impure programs.
+
 \section{Summarising table}
 
-\todo{Fill}
 \begin{table*}
   \rowcolors{1}{SkyBlue!10!White}{}
   \caption[Properties of type theories]{Properties of type theories.}
