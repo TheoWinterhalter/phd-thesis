@@ -7,7 +7,7 @@ I will use as source and target. This is a bit redundant with \nrefch{flavours}
 but I think it's worthwhile to make it clear what the translation is operating
 on.
 
-\section{Common syntax}
+\section{Syntax(es)}
 
 To make things simple I will consider the syntax of \acrshort{ITT} and
 \acrshort{WTT} as extensions of the syntax of \acrshort{ETT}.
@@ -27,6 +27,29 @@ First, comes the syntax of \acrshort{ETT}:
     \Sigma &\bnf& \ctxempty \bnfor \Sigma, n:A
   \end{array}
 \]
+
+\paragraph{Sorts.}
+
+Sorts are kept abstract (as represented by the generic \cS) but are not
+unrestricted. With the sorts should come the sort of a sort (or successor
+sort) \(\succs{s}\), the sort of a \(\Pi\)-type \(\pisort{s_1}{s_2}\)
+where \(s_1\) and \(s_2\) are the sorts of the domain and codomain respecitvely,
+and likewise for each constructor.
+These are functions, so the underlying \acrshort{PTS} is functional.
+\todo{Define fun PTS}
+Additionally, we ask that equality of sorts is decidable and that the successor
+function is injective:
+\[
+  \succs{s_1} = \succs{s_2} \longrightarrow s_1 = s_2.
+\]
+Keeping the sorts abstract means that the proof can be instantiated with a lot
+of different hierarchies, as long as they do not feature cumulativity
+unfortunately. This will help us apply our result in the homotopy framework.
+
+\paragraph{Annotations}
+
+\paragraph{Isn't \acrshort{ETT} no longer an extension of either \acrshort{ITT}
+or \acrshort{WTT}?}
 
 \todo{Maybe separate ITT and WTT as syntactical extensions, then talk
 about how ETT is no longer an extension but it doesn't really matter
