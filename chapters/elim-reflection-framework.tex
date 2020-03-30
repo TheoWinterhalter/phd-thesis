@@ -9,7 +9,10 @@ on.
 
 \section{Common syntax}
 
-To make things simple I use a common syntax for the three theories.
+To make things simple I will consider the syntax of \acrshort{ITT} and
+\acrshort{WTT} as extensions of the syntax of \acrshort{ETT}.
+Actually, \acrshort{WTT} will also extend \acrshort{ITT}.
+First, comes the syntax of \acrshort{ETT}:
 
 \[
   \begin{array}{l@{~\,}r@{~\,}l}
@@ -17,9 +20,11 @@ To make things simple I use a common syntax for the three theories.
     T,A,B,t,u,v &\bnf& x \bnfor \lam{x:A}{B} t \bnfor \app{t}{x:A}{B}{u} \\
     &\bnfor& \pair{x:A}{B}{u}{v} \bnfor \pio{x:A}{B}{p} \bnfor \pit{x:A}{B}{p} \\
     &\bnfor& \refl{A} u \bnfor \J{A}{u}{x.e.P}{w}{v}{p} \\
-    &\bnfor& \funext{x:A}{B}{f}{g}{e} \bnfor \uip{A}{u}{v}{p}{q} \\
+    % &\bnfor& \funext{x:A}{B}{f}{g}{e} \bnfor \uip{A}{u}{v}{p}{q} \\
+    &\bnfor& \ax{n} \\
     &\bnfor& s \bnfor \Prod{x:A} B \bnfor \Sum{x:A} B \bnfor \Eq{A}{u}{v} \\
-    \Ga, \D &\bnf& \ctxempty \bnfor \Ga, x:A
+    \Ga, \D &\bnf& \ctxempty \bnfor \Ga, x:A \\
+    \Sigma &\bnf& \ctxempty \bnfor \Sigma, n:A
   \end{array}
 \]
 
