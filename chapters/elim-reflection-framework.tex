@@ -12,7 +12,10 @@ on.
 To make things simple I will consider the syntax of \acrshort{ITT} and
 \acrshort{WTT} as extensions of the syntax of \acrshort{ETT}.
 Actually, \acrshort{WTT} will also extend \acrshort{ITT}.
-First, comes the syntax of \acrshort{ETT}:
+
+\subsection{Syntax of \acrshort{ETT}}
+
+First, comes the syntax of \acrshort{ETT}.
 
 \[
   \begin{array}{l@{~\,}r@{~\,}l}
@@ -46,9 +49,47 @@ Keeping the sorts abstract means that the proof can be instantiated with a lot
 of different hierarchies, as long as they do not feature cumulativity
 unfortunately. This will help us apply our result in the homotopy framework.
 
-\paragraph{Annotations}
+\paragraph{Annotations.}
 
-\paragraph{Isn't \acrshort{ETT} no longer an extension of either \acrshort{ITT}
+Although it may look like a technical detail, the use of annotation is more
+fundamental in ETT than it is in ITT (where it is irrelevant and doesn't affect
+the theory). And this is actually one of the main differences between our work
+(and that of Martin \sidecite{hofmann1995conservativity} who has a similar
+presentation) and the work of \sidecite{oury2005extensionality}.
+
+Indeed, by using the standard model where types are interpreted as
+cardinals rather than sets, it is possible to see that the equality
+$\nat \to \nat = \nat \to \bool$ is independent from the theory, it is
+thus possible to assume it (as an axiom, or for those that would still
+not be convinced, simply under a $\lambda$ that would introduce this
+equality).  In that context, the identity map $\lambda(x : \nat).\ x$
+can be given the type $\nat \to \bool$ and we thus type
+$(\lambda(x : \nat).\ x)\ \zero : \bool$.  Moreover, the
+$\beta$-reduction of the non-annotated system used by Oury concludes
+that this expression reduces to $\zero$, but cannot be given the type
+$\bool$ (as we said, the equality $\nat \to \nat = \nat \to \bool$ is
+independent from the theory, so the context is consistent). This means
+we lack subject reduction in this case (or uniqueness of types,
+depending on how we see the issue).  Our presentation has a blocked
+$\beta$-reduction limited to matching annotations:
+$\app{(\lam{x:A}{B}\ t)}{x:A}{B}{u} = t[x \sto u]$, from which subject
+reduction and uniqueness of types follow.
+
+Although subtle, this difference is responsible for Oury's need for an
+extra axiom. Indeed, to treat the case of equality of applications in
+his proof, he needs to assume the congruence rule for heterogeneous
+equality of applications, which is not provable when formulated with
+John Major equality (Fig.~\ref{fig:jmapp}). Thanks to annotations and
+our notion of heterogeneous equality, we can prove this congruence
+rule for applications.
+
+\paragraph{Axioms.}
+
+\subsection{Syntax of \acrshort{ITT}}
+
+\subsection{Syntax of \acrshort{WTT}}
+
+\subsection{Isn't \acrshort{ETT} no longer an extension of either \acrshort{ITT}
 or \acrshort{WTT}?}
 
 \todo{Maybe separate ITT and WTT as syntactical extensions, then talk
