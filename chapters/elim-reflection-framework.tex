@@ -52,10 +52,12 @@ unfortunately. This will help us apply our result in the homotopy framework.
 \paragraph{Annotations.}
 
 Although it may look like a technical detail, the use of annotation is more
-fundamental in ETT than it is in ITT (where it is irrelevant and doesn't affect
-the theory). And this is actually one of the main differences between our work
-(and that of Martin \sidecite{hofmann1995conservativity} who has a similar
-presentation) and the work of \sidecite{oury2005extensionality}.
+fundamental in \acrshort{ETT} than it is in \acrshort{ITT}/\acrshort{WTT}
+where it is irrelevant and doesn't affect the theory.
+This is actually one of the main differences between our work
+(and that of Martin Hofmann~\sidecite{hofmann1995conservativity} who has a
+similar presentation) and the work of Nicolas
+Oury~\sidecite[0.7cm]{oury2005extensionality}.
 
 Indeed, by using the standard model where types are interpreted as
 cardinals rather than sets, it is possible to see that the equality
@@ -69,19 +71,31 @@ $\beta$-reduction of the non-annotated system used by Oury concludes
 that this expression reduces to $\zero$, but cannot be given the type
 $\bool$ (as we said, the equality $\nat \to \nat = \nat \to \bool$ is
 independent from the theory, so the context is consistent). This means
-we lack subject reduction in this case (or uniqueness of types,
+we lack subject reduction in this case (or unique typing,
 depending on how we see the issue).  Our presentation has a blocked
 $\beta$-reduction limited to matching annotations:
 $\app{(\lam{x:A}{B}\ t)}{x:A}{B}{u} = t[x \sto u]$, from which subject
-reduction and uniqueness of types follow.
+reduction and unique typing follow.
 
+\marginnote{
+  \[
+    \infer[JMAPP]
+      {
+        \Heq{\forall (x : U_1). V_1}{f_1}{\forall (x : U_2). V_2}{f_2} \\
+        \Heq{U_1}{u_1}{U_2}{u_2}
+      }
+      {\Heq{V_1[x \sto u_1]}{f_1\ u_1}{V_2[x \sto u_2]}{f_2\ u_2}}
+    %
+  \]
+}
 Although subtle, this difference is responsible for Oury's need for an
 extra axiom. Indeed, to treat the case of equality of applications in
 his proof, he needs to assume the congruence rule for heterogeneous
 equality of applications, which is not provable when formulated with
-John Major equality (Fig.~\ref{fig:jmapp}). Thanks to annotations and
-our notion of heterogeneous equality, we can prove this congruence
-rule for applications.
+\acrshort{JMeq}. Thanks to annotations and our notion of heterogeneous equality,
+we can prove this congruence rule for applications.
+\todo{Maybe move this earlier? At least part of this discussion should already
+be treated.}
 
 \paragraph{Axioms.}
 
