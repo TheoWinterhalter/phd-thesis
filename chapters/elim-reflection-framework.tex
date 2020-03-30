@@ -99,6 +99,40 @@ be treated.}
 
 \paragraph{Axioms.}
 
+Another interesting bit is the presence of the \(\ax{n}\) term, as well as
+that of the \(\Sigma\) context. Indeed, in order for our \acrshort{ETT} to be
+a bit extensible, we add a context \(\Sigma\) of axioms \(n : A\) that can be
+referenced using \(\ax{n}\) but cannot be bound (they are global).
+For a theory like \Coq, having just axioms is bit weak, but in \acrshort{ETT}
+this is enough to simulate constants and even things such as inductive types:
+any computation rule can be stated propositionally and still be definitional
+thanks to reflection.
+
+For instance to simulate the constant
+\[
+  n : A \coloneqq t
+\]
+we can use the following context
+\[
+  n : A, n\mathsf{def} : n = t
+\]
+
+Similarly, booleans can de encoded as follows.
+\marginnote[1cm]{
+  Note that the sort \(s\) is fixed in the eliminator so it's still not that
+  convenient, but it will serve for a few examples.
+}
+\[
+  \begin{array}{lcl}
+    B &:& s, \\
+    t &:& B, \\
+    f &:& B, \\
+    if &:& \Pi (P : B \to s).\ P\ t \to P\ f \to \Pi (b : B).\ P\ b, \\
+    if_t &:& \Pi P\ u\ v.\ if\ P\ u\ v\ t = u, \\
+    if_f &:& \Pi P\ u\ v.\ if\ P\ u\ v\ f = v
+  \end{array}
+\]
+
 \subsection{Syntax of \acrshort{ITT}}
 
 \subsection{Syntax of \acrshort{WTT}}
