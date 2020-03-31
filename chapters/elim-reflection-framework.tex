@@ -8,6 +8,7 @@ but I think it's worthwhile to make it clear what the translation is operating
 on.
 
 \section{Syntax(es)}
+\labsec{trans-syntaxes}
 
 To make things simple I will consider the syntax of \acrshort{ITT} and
 \acrshort{WTT} as extensions of the syntax of \acrshort{ETT}.
@@ -224,27 +225,27 @@ terms in \acrshort{ITT} and \acrshort{WTT} of course.
 \paradot{Types}
 
 \marginnote[1cm]{
-  The \((s,s')\) and \((s,s',s'')\) on the side refer respecitvely and
-  implicitly to \(\Ax\) and \(\Rl\) as introduced in \nrefsubsec{pts-itt}.
+  The sort constructors here are those mentioned in \nrefsec{trans-syntaxes},
+  though not all were given explicit names.
 }
 \begin{mathpar}
   \infer[]
     {\isctx{\Ga}}
-    {\isterm{\Ga}{s}{s'}}
-  (s,s')
+    {\isterm{\Ga}{s}{\succs{s}}}
+  %
 
   \infer[]
-    {\isterm{\Ga}{A}{s} \\
-      \isterm{\Ga,x:A}{B}{s'}
+    {\isterm{\Ga}{A}{s_1} \\
+      \isterm{\Ga,x:A}{B}{s_2}
     }
-    {\isterm{\Ga}{\Prod{x:A} B}{s''}}
-  (s,s',s'')
+    {\isterm{\Ga}{\Prod{x:A} B}{\pisort{s_1}{s_2}}}
+  %
 
   \infer[]
-    {\isterm{\Ga}{A}{s} \\
-      \isterm{\Ga,x:A}{B}{s'}
+    {\isterm{\Ga}{A}{s_1} \\
+      \isterm{\Ga,x:A}{B}{s_2}
     }
-    {\isterm{\Ga}{\Sum{x:A} B}{s''}}
+    {\isterm{\Ga}{\Sum{x:A} B}{\sumsort{s_1}{s_2}}}
   (s,s',s'')
 
   \infer[]
@@ -252,7 +253,7 @@ terms in \acrshort{ITT} and \acrshort{WTT} of course.
       \isterm{\Ga}{u}{A} \\
       \isterm{\Ga}{v}{A}
     }
-    {\isterm{\Ga}{\Eq{A}{u}{v}}{s}}
+    {\isterm{\Ga}{\Eq{A}{u}{v}}{\eqsort{s}}}
   %
 \end{mathpar}
 
