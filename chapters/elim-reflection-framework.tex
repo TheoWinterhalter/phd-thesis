@@ -23,7 +23,6 @@ First, comes the syntax of \acrshort{ETT}.
     T,A,B,t,u,v &\bnf& x \bnfor \lam{x:A}{B} t \bnfor \app{t}{x:A}{B}{u} \\
     &\bnfor& \pair{x:A}{B}{u}{v} \bnfor \pio{x:A}{B}{p} \bnfor \pit{x:A}{B}{p} \\
     &\bnfor& \refl{A} u \bnfor \J{A}{u}{x.e.P}{w}{v}{p} \\
-    % &\bnfor& \funext{x:A}{B}{f}{g}{e} \bnfor \uip{A}{u}{v}{p}{q} \\
     &\bnfor& \ax{n} \\
     &\bnfor& s \bnfor \Prod{x:A} B \bnfor \Sum{x:A} B \bnfor \Eq{A}{u}{v} \\
     \Ga, \D &\bnf& \ctxempty \bnfor \Ga, x:A \\
@@ -147,18 +146,26 @@ of terms with \acrshort{funext} and \acrshort{UIP}:
 
 We build \acrshort{WTT} over \acrshort{ITT} by adding computation rules
 and some missing congruence rules (in the likeness of \acrshort{funext}).
+Indeed the elimination of equality provided by \(\mathsf{J}\) or by Leibniz'
+principle doesn't account for equalities under binders; conversion however does
+and as such in \acrshort{WTT} we need to add this to the theory.
+In \acrshort{ITT} it's enough to use the congruence of conversion and
+\acrshort{funext} to recover all of those, unfortunately in \acrshort{WTT} I
+could not yet find a way to factorise them. As such we add to the syntax
+equality constructors for each binder.
 
 \[
   \begin{array}{l@{~\,}r@{~\,}l}
-    T,A,B,t,u,v &\bnf& \dots \bnfor \beta(t,u)
-    \bnfor \lamb{B_1}{B_2}{t_1}{t_2}{p_A}{p_B}{p_t} \\
-    &\bnfor& \appb{B_1}{B_2}{p_u}{p_A}{p_B}{p_v}
-    \bnfor \pib{B_1}{B_2}{p_A}{p_B} \\
-    &\bnfor& ...
+    T,A,B,t,u,v &\bnf& \dots \bnfor \beta(t,u) \\
+    &\bnfor& \lamb{x:A}{e_B} e_t
+    \bnfor \appb{u}{x:A}{e_B}{v} \\
+    &\bnfor& \pairb{x:A}{e_B}{u}{v}
+    \bnfor \piob{x:A}{e_B}{p} \bnfor \pitb{x:A}{e_B}{p} \\
+    &\bnfor& \pib (x:A). e_B \bnfor \sumb (x:A). e_B
   \end{array}
 \]
-\todo{Not clear what to put, maybe just the needed principles to go under
-binders, but that's a lot because of annotations.}
+\todo{One for J as well? I'd like to avoid it. J should not really be in ETT
+anyway.}
 
 \subsection{Can \acrshort{ETT} still be called a conservative extension?}
 

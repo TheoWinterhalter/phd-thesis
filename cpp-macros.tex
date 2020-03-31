@@ -120,9 +120,13 @@
   \end{array}
 }
 \newcommand{\ax}[1]{\mathsf{ax}(#1)}
-\newcommand{\lamb}[7]{\overline{\lambda}_{#1,#2,#3,#4}(#5,#6,#7)}
-\newcommand{\appb}[6]{\overline{\mathsf{app}}_{#1,#2}(#3,#4,#5,#6)}
-\newcommand{\pib}[4]{\overline{\Pi}_{#1,#2}(#3,#4)}
+\newcommand{\lamb}[2]{\overline{\lambda}(#1). #2.}
+\newcommand{\appb}[4]{#1\mathbin{\overline{@}_{#2.#3}} #4}
+\newcommand{\pairb}[4]{\overline{\langle} #3 ; #4 \overline{\rangle}_{#1.#2}}
+\newcommand{\piob}[3]{\overline{\pi}_1^{#1.#2}\ #3}
+\newcommand{\pitb}[3]{\overline{\pi}_2^{#1.#2}\ #3}
+\newcommand{\pib}{\overline{\Pi}}
+\newcommand{\sumb}{\overline{\Sigma}}
 
 % Sorts
 \newcommand{\succs}[1]{#1+1}
