@@ -167,10 +167,11 @@ equality constructors for each binder.
 \]
 \todo{One for J as well? I'd like to avoid it. J should not really be in ETT
 anyway.}
+\todo{Missing symbols for projection computation too!}
 
 \subsection{Can \acrshort{ETT} still be called a conservative extension?}
 
-\reminder[-0.6cm]{Conservative extension}{
+\reminder[-0.7cm]{Conservative extension}{
   An extension \(\cT_2\) of a type theory \(\cT_1\) is \emph{conservative} if
   for every judgement \(\vdash_2 t : A\) such that \(\vdash_1 A\)
   (\ie \(A\) is a type in \(\cT_1\)), there exists \(t'\) such that
@@ -328,6 +329,21 @@ terms in \acrshort{ITT} and \acrshort{WTT} of course.
     }
   %
 \end{mathpar}
+
+Although I will omit the global context \(\Sigma\) most of the time (it is
+global after all), you can still imagine that it is present. The axiom typing
+rule is the only interaction with it. In particular we assume that it is
+well-formed.
+\marginnote[-0.6cm]{
+  Well-formedness of global context \(\Sigma\) is defined similarly to that of
+  regular contexts.
+}
+
+\[
+  \infer
+    {(n : A) \in \Sigma}
+    {\Ga \vdash \ax{n} : A}
+\]
 
 \subsection{Typing of \acrshort{ETT}}
 
@@ -535,6 +551,7 @@ reduction.
 The idea is that two terms are convertible if and only if they reduce to the
 same term. This property only follows from confluence and termination of the
 reduction however (see \nrefch{desirable-props}).
+\todo{Probably should have a proof of this somewhere.}
 
 \paradot{Typing}
 
@@ -561,5 +578,77 @@ reduction however (see \nrefch{desirable-props}).
         {\Prod{x:A} \Eq{B}{\app{f}{x:A}{B}{x}}{\app{g}{x:A}{B}{x}}}
     }
     {\isterm{\Ga}{\funext{x:A}{B}{f}{g}{e}}{\Eq{}{f}{g}}}
+  %
+\end{mathpar}
+
+\subsection{Typing of \acrshort{WTT}}
+
+For \acrshort{WTT}, no notion of reduction or conversion and so no conversion
+rule. This leaves us with the typing rules of the extra symbols we added.
+Two of them are in common with \acrshort{ITT} but I will repeat them nonetheless
+for clarity.
+\todo{Comment on the need for heterogeneous equality. It should be defined
+but it's more convenient to have them in typing rules.}
+
+\begin{mathpar}
+  \infer[]
+    {\isterm{\Ga}{e_1,e_2}{\Eq{A}{u}{v}}}
+    {\isterm{\Ga}{\uip{A}{u}{v}{e_1}{e_2}}{\Eq{}{e_1}{e_2}}}
+  %
+
+  \infer[]
+    {\isterm{\Ga}{f,g}{\Prod{x:A} B} \\
+      \isterm
+        {\Ga}
+        {e}
+        {\Prod{x:A} \Eq{B}{\app{f}{x:A}{B}{x}}{\app{g}{x:A}{B}{x}}}
+    }
+    {\isterm{\Ga}{\funext{x:A}{B}{f}{g}{e}}{\Eq{}{f}{g}}}
+  %
+
+  \infer
+    {
+      \Ga, x:A \vdash t : B \\
+      \Ga \vdash u : A
+    }
+    {\Ga \vdash \beta(t,u) : \app{(\lam{x:A}{B} t)}{x:A}{B}{u} = t[x \sto u]}
+  %
+
+  \infer
+    {
+      \Ga, x:A \vdash e_B : B_1 = B_2 \\
+      \Ga, x:A \vdash e_t : \Heq{B_1}{t_1}{B_2}{t_2}
+    }
+    {\lamb{x:A}{e_B} e_t}
+  %
+
+  \infer
+    { }
+    {\appb{u}{x:A}{e_B}{v}}
+  %
+
+  \infer
+    { }
+    {\pairb{x:A}{e_B}{u}{v}}
+  %
+
+  \infer
+    { }
+    {\piob{x:A}{e_B}{p}}
+  %
+
+  \infer
+    { }
+    {\pitb{x:A}{e_B}{p}}
+  %
+
+  \infer
+    { }
+    {\pib (x:A). e_B}
+  %
+
+  \infer
+    { }
+    {\sumb (x:A). e_B}
   %
 \end{mathpar}
