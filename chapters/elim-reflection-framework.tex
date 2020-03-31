@@ -114,7 +114,7 @@ For instance to simulate the constant
 \]
 we can use the following context
 \[
-  n : A, n\mathsf{def} : n = t
+  n : A,\ n_{\mathit{def}} : n = t
 \]
 
 Similarly, booleans can de encoded as follows.
@@ -127,9 +127,9 @@ Similarly, booleans can de encoded as follows.
     B &:& s, \\
     t &:& B, \\
     f &:& B, \\
-    if &:& \Pi (P : B \to s).\ P\ t \to P\ f \to \Pi (b : B).\ P\ b, \\
-    if_t &:& \Pi P\ u\ v.\ if\ P\ u\ v\ t = u, \\
-    if_f &:& \Pi P\ u\ v.\ if\ P\ u\ v\ f = v
+    \mathit{if} &:& \Pi (P : B \to s).\ P\ t \to P\ f \to \Pi (b : B).\ P\ b, \\
+    \mathit{if_t} &:& \Pi P\ u\ v.\ \mathit{if}\ P\ u\ v\ t = u, \\
+    \mathit{if_f} &:& \Pi P\ u\ v.\ \mathit{if}\ P\ u\ v\ f = v
   \end{array}
 \]
 
