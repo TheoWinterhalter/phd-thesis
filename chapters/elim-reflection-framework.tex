@@ -452,20 +452,114 @@ conversion without relying on reduction, but instead in a typed way.
 \end{mathpar}
 
 I omit the congruence rules as they are quite heavy and boring.
+Here is for instance the congruence rule for application:
+\[
+  \infer[]
+    {\eqterm{\Ga}{A_1}{A_2}{s} \\
+      \eqterm{\Ga,x:A_1}{B_1}{B_2}{s'} \\
+      \eqterm{\Ga}{t_1}{t_2}{\Prod{x:A_1} B_1} \\
+      \eqterm{\Ga}{u_1}{u_2}{A_1}
+    }
+    {\eqterm
+      {\Ga}
+      {\app{t_1}{x:A_1}{B_1}{u_1}}
+      {\app{t_1}{x:A_1}{B_1}{u_1}}
+      {B_1[x \sto u_1]}
+    }
+  %
+\]
 
-% \begin{mathpar}
-%   \infer[]
-%     {\isterm{\Ga}{e_1,e_2}{\Eq{A}{u}{v}}}
-%     {\isterm{\Ga}{\uip{A}{u}{v}{e_1}{e_2}}{\Eq{}{e_1}{e_2}}}
-%   %
+\subsection{Typing of \acrshort{ITT}}
 
-%   \infer[]
-%     {\isterm{\Ga}{f,g}{\Prod{x:A} B} \\
-%       \isterm
-%         {\Ga}
-%         {e}
-%         {\Prod{x:A} \Eq{B}{\app{f}{x:A}{B}{x}}{\app{g}{x:A}{B}{x}}}
-%     }
-%     {\isterm{\Ga}{\funext{x:A}{B}{f}{g}{e}}{\Eq{}{f}{g}}}
-%   %
-% \end{mathpar}
+\acrshort{ITT} comes with a conversion deduced from reduction (of which we take
+the congruent closure). Because of this, the conversion rule will be slightly
+different to account for the untyped style of conversion.
+
+\paradot{Reduction}
+
+\marginnote[0.8cm]{
+  Notice that in the typed conversion, \(v\) and \(u'\) were both \(u\),
+  and \(A'\) was \(A\). This will still be the case for well-typed terms, but
+  the reduction rule should not have to decide conversion to apply.
+}
+\begin{mathpar}
+  \app{(\lam{x:A}{B} t)}{x:A}{B}{u} \red t[x \sto u]
+
+  \J{A}{u}{x.e.P}{w}{v}{\refl{A'} u'} \red w
+
+  \pio{x:A}{B}{\pair{x:A}{B}{u}{v}} \red u
+
+  \pit{x:A}{B}{\pair{x:A}{B}{u}{v}} \red v
+\end{mathpar}
+
+\(\red\) is also extended to reduce in subterms with rules like
+\[
+  \infer
+    {t \red t'}
+    {\lam{x:A}{B} t \red \lam{x:A}{B} t'}
+  %
+\]
+
+\paradot{Conversion}
+
+As I said, conversion is symply the reflexive symmetric transitive closure of
+reduction.
+
+\marginnote[0.8cm]{
+  Granted, this presentation does not \emph{immediately} corresponds to
+  reflexive symmetric transitive closure, but it is equivalent.
+}
+\begin{mathpar}
+  \infer
+    { }
+    {u \equiv u}
+  %
+
+  \infer
+    {
+      u \red w \\
+      w \equiv v
+    }
+    {u \equiv v}
+  %
+
+  \infer
+    {
+      u \equiv v \\
+      v \red w
+    }
+    {u \equiv v}
+  %
+\end{mathpar}
+
+The idea is that two terms are convertible if and only if they reduce to the
+same term. This property only follows from confluence and termination of the
+reduction however (see \nrefch{desirable-props}).
+
+\paradot{Typing}
+
+\begin{mathpar}
+  \infer
+    {
+      \Ga \vdash t : A \\
+      A \equiv B \\
+      \Ga \vdash B : s
+    }
+    {\Ga \vdash t : B}
+  %
+
+  \infer[]
+    {\isterm{\Ga}{e_1,e_2}{\Eq{A}{u}{v}}}
+    {\isterm{\Ga}{\uip{A}{u}{v}{e_1}{e_2}}{\Eq{}{e_1}{e_2}}}
+  %
+
+  \infer[]
+    {\isterm{\Ga}{f,g}{\Prod{x:A} B} \\
+      \isterm
+        {\Ga}
+        {e}
+        {\Prod{x:A} \Eq{B}{\app{f}{x:A}{B}{x}}{\app{g}{x:A}{B}{x}}}
+    }
+    {\isterm{\Ga}{\funext{x:A}{B}{f}{g}{e}}{\Eq{}{f}{g}}}
+  %
+\end{mathpar}
