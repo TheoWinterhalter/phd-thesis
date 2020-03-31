@@ -169,6 +169,27 @@ anyway.}
 
 \subsection{Can \acrshort{ETT} still be called a conservative extension?}
 
+\reminder[-0.6cm]{Conservative extension}{
+  An extension \(\cT_2\) of a type theory \(\cT_1\) is \emph{conservative} if
+  for every judgement \(\vdash_2 t : A\) such that \(\vdash_1 A\)
+  (\ie \(A\) is a type in \(\cT_1\)), there exists \(t'\) such that
+  \(\vdash_1 t' : A\).
+}
+As I said earlier one of the goals is to show that \acrshort{ETT} is a
+conservative extension of both \acrshort{ITT} and \acrshort{WTT}. However this
+cannot stricly be the case if \acrshort{ETT} is not first an \emph{extension}
+of those.
+
+This is not really an issue because the terms we add to the syntax of
+\acrshort{ITT} and \acrshort{WTT} can be encoded in \acrshort{ETT} as
+definitions. The notion of conservativity can thus be adapted to work in that
+case: let us write \(\iota\) the translation that is homorphically the identity
+but replaces extra symbols like \acrshort{funext} and \acrshort{UIP} with their
+respective proofs in \acrshort{ETT}, \acrshort{ETT} is conservative over
+\acrshort{ITT}/\acrshort{WTT} in the sense that every \(\vdash A\) such that
+\(\vdash_\exmark t : \iota(A)\) there exists a term \(t'\) such that
+\(\vdash t' : A\).
+
 \todo{It doesn't really matter conservativity can still be stated with a simple
 translation from ITT/WTT to ETT.}
 
