@@ -329,14 +329,131 @@ terms in \acrshort{ITT} and \acrshort{WTT} of course.
   %
 \end{mathpar}
 
+\subsection{Typing of \acrshort{ETT}}
+
+As already mentioned several times, the key feature of \acrshort{ETT} is its
+reflection rule, allowing us to go from propositional equality to conversion.
+This means we need to define conversion in this setting.
+\marginnote[0.3cm]{
+  See \nrefch{formalisation}.
+}
+Here, I will define
+conversion without relying on reduction, but instead in a typed way.
+
+\paradot{Computation}
+
+\begin{mathpar}
+  \infer[]
+    {\isterm{\Ga}{A}{s} \\
+      \isterm{\Ga,x:A}{B}{s'} \\
+      \isterm{\Ga,x:A}{t}{B} \\
+      \isterm{\Ga}{u}{A}
+    }
+    {\eqterm
+      {\Ga}
+      {\app
+        {(\lam{x:A}{B} t)}
+        {x:A}
+        {B}
+        {u}
+      }
+      {t[x \sto u]}
+      {B[x \sto u]}
+    }
+  %
+
+  \infer[]
+    {\isterm{\Ga}{A}{s} \\
+      \isterm{\Ga}{u}{A} \\
+      \isterm{\Ga, x:A, e:\Eq{A}{u}{x}}{P}{s'} \\
+      \isterm{\Ga}{w}{P[x \sto u, e \sto \refl{A} u]}
+    }
+    {\eqterm
+      {\Ga}
+      {\J{A}{u}{x.e.P}{w}{u}{\refl{A} u}}
+      {w}
+      {P[x \sto u, e \sto \refl{A} u]}
+    }
+  %
+
+  \infer[]
+    {\isterm{\Ga}{A}{s} \\
+      \isterm{\Ga}{u}{A} \\
+      \isterm{\Ga,x:A}{B}{s'} \\
+      \isterm{\Ga}{v}{B[x \sto u]}
+    }
+    {\eqterm
+      {\Ga}
+      {\pio{x:A}{B}{\pair{x:A}{B}{u}{v}}}
+      {u}
+      {A}
+    }
+  %
+
+  \infer[]
+    {\isterm{\Ga}{A}{s} \\
+      \isterm{\Ga}{u}{A} \\
+      \isterm{\Ga,x:A}{B}{s'} \\
+      \isterm{\Ga}{v}{B[x \sto u]}
+    }
+    {\eqterm
+      {\Ga}
+      {\pit{x:A}{B}{\pair{x:A}{B}{u}{v}}}
+      {v}
+      {B[x \sto u]}
+    }
+  %
+\end{mathpar}
+
+% \paradot{$\eta$-rule}
+%
 % \begin{mathpar}
 %   \infer[]
-%     {\isterm{\Ga}{u}{A} \\
-%       \eqtype{\Ga}{A}{B} : s
+%     {\isterm{\Ga}{A}{s} \\
+%      \isterm{\Ga, x:A}{B}{s'} \\
+%      \isterm{\Ga}{f}{\Prod{x:A} B}
 %     }
-%     {\isterm{\Ga}{u}{B}}
+%     {\eqterm
+%       {\Ga}
+%       {\lam{x:A}{B} \app{f}{x:A}{B}{x}}
+%       {f}
+%       {\Prod{x:A} B}
+%     }
 %   %
+% \end{mathpar}
 
+\paradot{Conversion}
+
+\begin{mathpar}
+  \infer[]
+    {\eqterm{\Ga}{t_1}{t_2}{T_1} \\
+      \eqtype{\Ga}{T_1}{T_2}
+    }
+    {\eqterm{\Ga}{t_1}{t_2}{T_2}}
+  %
+
+  \infer[]
+    {\isterm{\Ga}{u}{A} \\
+      \eqtype{\Ga}{A}{B} : s
+    }
+    {\isterm{\Ga}{u}{B}}
+  %
+\end{mathpar}
+
+\paradot{Reflection}
+
+\begin{mathpar}
+  \highlight{
+    \infer[]
+      {\xisterm{\Ga}{e}{\Eq{A}{u}{v}}}
+      {\xeqterm{\Ga}{u}{v}{A}}
+    %
+  }
+\end{mathpar}
+
+I omit the congruence rules as they are quite heavy and boring.
+
+% \begin{mathpar}
 %   \infer[]
 %     {\isterm{\Ga}{e_1,e_2}{\Eq{A}{u}{v}}}
 %     {\isterm{\Ga}{\uip{A}{u}{v}{e_1}{e_2}}{\Eq{}{e_1}{e_2}}}
