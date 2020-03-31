@@ -133,7 +133,7 @@ Similarly, booleans can de encoded as follows.
   \end{array}
 \]
 
-\subsection{Syntax of \acrshort{ITT}}
+\subsection{Syntax of \acrshort{ITT} and \acrshort{WTT}}
 
 \acrshort{ITT} is not really far from \acrshort{ETT}, we only extend the syntax
 of terms with \acrshort{funext} and \acrshort{UIP}:
@@ -145,9 +145,20 @@ of terms with \acrshort{funext} and \acrshort{UIP}:
   \end{array}
 \]
 
-This does not really call for discussion, it all has been treated earlier.
+We build \acrshort{WTT} over \acrshort{ITT} by adding computation rules
+and some missing congruence rules (in the likeness of \acrshort{funext}).
 
-\subsection{Syntax of \acrshort{WTT}}
+\[
+  \begin{array}{l@{~\,}r@{~\,}l}
+    T,A,B,t,u,v &\bnf& \dots \bnfor \beta(t,u)
+    \bnfor \lamb{B_1}{B_2}{t_1}{t_2}{p_A}{p_B}{p_t} \\
+    &\bnfor& \appb{B_1}{B_2}{p_u}{p_A}{p_B}{p_v}
+    \bnfor \pib{B_1}{B_2}{p_A}{p_B} \\
+    &\bnfor& ...
+  \end{array}
+\]
+\todo{Not clear what to put, maybe just the needed principles to go under
+binders, but that's a lot because of annotations.}
 
 \subsection{Can \acrshort{ETT} still be called a conservative extension?}
 
