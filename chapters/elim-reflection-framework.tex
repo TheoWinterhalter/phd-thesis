@@ -165,12 +165,12 @@ equality constructors for each binder.
   \begin{array}{l@{~\,}r@{~\,}l}
     T,A,B,t,u,v &\bnf& \dots \bnfor \beta(t,u) \\
     &\bnfor& \redpio(u,v) \bnfor \redpit(u,v) \\
-    &\bnfor& \redJ(u,P,w,v,u') \\
+    &\bnfor& \redJ(u,x.e.P,w) \\
     &\bnfor& \lamb{x:A}{e_B} e_t
-    \bnfor \appb{u}{x:A}{e_B}{v} \\
-    &\bnfor& \pairb{x:A}{e_B}{u}{v}
-    \bnfor \piob{x:A}{e_B}{p} \bnfor \pitb{x:A}{e_B}{p} \\
-    &\bnfor& \Jb(A,u,x.e.p,w,v,h) \\
+    \bnfor \appb{e_u}{x:A}{e_B}{v} \\
+    &\bnfor& \pairb{x:A}{e_B}{u}{e_v}
+    \bnfor \piob{x:A}{e_B}{e_p} \bnfor \pitb{x:A}{e_B}{e_p} \\
+    &\bnfor& \Jb(A,u,x.e.e_P,e_w,v,p) \\
     &\bnfor& \pib (x:A). e_B \bnfor \sumb (x:A). e_B
   \end{array}
 \]
@@ -596,8 +596,6 @@ For \acrshort{WTT}, no notion of reduction or conversion and so no conversion
 rule. This leaves us with the typing rules of the extra symbols we added.
 Two of them are in common with \acrshort{ITT} but I will repeat them nonetheless
 for clarity.
-\todo{Comment on the need for heterogeneous equality. It should be defined
-but it's more convenient to have them in typing rules.}
 
 \begin{mathpar}
   \infer[]
@@ -624,18 +622,30 @@ but it's more convenient to have them in typing rules.}
   %
 
   \infer
-    { }
-    {\redpio(u,v)}
+    {
+      \Ga, x:A \vdash B : s \\
+      \Ga \vdash u : A \\
+      \Ga \vdash v : B[x \sto u]
+    }
+    {\Ga \vdash \redpio(u,v) : \pio{x:A}{B}{\pair{x:A}{B}{u}{v}} = u}
   %
 
   \infer
-    { }
-    {\redpit(u,v)}
+    {
+      \Ga, x:A \vdash B : s \\
+      \Ga \vdash u : A \\
+      \Ga \vdash v : B[x \sto u]
+    }
+    {\Ga \vdash \redpit(u,v) : \pit{x:A}{B}{\pair{x:A}{B}{u}{v}} = v}
   %
 
   \infer
-    { }
-    {\redJ(u,P,w,v,u')}
+    {
+      \Ga \vdash u : A \\
+      \Ga, x:A, e:u=x \vdash P : s \\
+      \Ga \vdash w : P[x \sto u, e \sto \refl{A} u]
+    }
+    {\Ga \vdash \redJ(u,x.e.P,w) : \J{A}{u}{x.e.P}{w}{u}{\refl{A} u} = w}
   %
 
   \infer
@@ -647,37 +657,107 @@ but it's more convenient to have them in typing rules.}
   %
 
   \infer
-    { }
-    {\appb{u}{x:A}{e_B}{v}}
+    {
+      \Ga, x:A \vdash e_B : B_1 = B_2 \\
+      \Ga \vdash e_u : \Heq{\Pi(x:A).B_1}{u_1}{\Pi(x:A).B_2}{u_2} \\
+      \Ga \vdash v : A
+    }
+    {
+      \Ga \vdash \appb{e_u}{x:A}{e_B}{v} :
+      \Heq
+        {B_1[x \sto v]}
+        {\app{u_1}{x:A}{B_1}{v}}
+        {B_2[x \sto v]}
+        {\app{u_2}{x:A}{B_2}{v}}
+    }
   %
 
   \infer
-    { }
-    {\pairb{x:A}{e_B}{u}{v}}
+    {
+      \Ga \vdash u : A \\
+      \Ga, x:A \vdash e_B : B_1 = B_2 \\
+      \Ga \vdash e_v : \Heq{B_1[x \sto u]}{v_1}{B_2[x \sto u]}{v_2}
+    }
+    {
+      \Ga \vdash \pairb{x:A}{e_B}{u}{e_v} :
+      \Heq
+        {\Sigma(x:A).B_1}
+        {\pair{x:A}{B_1}{u}{v_1}}
+        {\Sigma(x:A).B_2}
+        {\pair{x:A}{B_2}{u}{v_2}}
+    }
   %
 
   \infer
-    { }
-    {\piob{x:A}{e_B}{p}}
+    {
+      \Ga, x:A \vdash e_B : B_1 = B_2 \\
+      \Ga \vdash e_p : \Heq{\Sigma(x:A).B_1}{p_1}{\Sigma(x:A).B_2}{p_2}
+    }
+    {
+      \Ga \vdash \piob{x:A}{e_B}{e_p} :
+      \pio{x:A}{B_1}{p_1} = \pio{x:A}{B_2}{p_2}
+    }
   %
 
   \infer
-    { }
-    {\pitb{x:A}{e_B}{p}}
+    {
+      \Ga, x:A \vdash e_B : B_1 = B_2 \\
+      \Ga \vdash e_p : \Heq{\Sigma(x:A).B_1}{p_1}{\Sigma(x:A).B_2}{p_2}
+    }
+    {
+      \Ga \vdash \pitb{x:A}{e_B}{e_p} :
+      \Heq
+        {B_1[x \sto \pio{x:A}{B_1}{p_1}]}
+        {\pit{x:A}{B_1}{p_1}}
+        {B_2[x \sto \pio{x:A}{B_2}{p_2}]}
+        {\pit{x:A}{B_2}{p_2}}
+    }
   %
 
   \infer
-    { }
-    {\Jb(A,u,x.e.p,w,v,h)}
+    {
+      \Ga \vdash u : A \\
+      \Ga, x:A, e : u = x \vdash e_P : P_1 = P_2 \\
+      \Ga \vdash e_w :
+      \Heq
+        {P_1[x \sto u, e \sto \refl{} u]}
+        {w_1}
+        {P_2[x \sto u, e \sto \refl{} u]}
+        {w_2} \\
+      \Ga \vdash v : A \\
+      \Ga \vdash p : u = v
+    }
+    {
+      \Ga \vdash \Jb(A,u,x.e.e_P,e_w,v,p) :
+      \Heq
+        % {P_1[x \sto v, e \sto p]}
+        {}
+        {\J{A}{u}{x.e.P_1}{w_1}{v}{p}}
+        % {P_2[x \sto v, e \sto p]}
+        {}
+        {\J{A}{u}{x.e.P_2}{w_2}{v}{p}}
+    }
   %
 
   \infer
-    { }
-    {\pib (x:A). e_B}
+    {
+      \Ga \vdash A : s \\
+      \Ga, x:A \vdash B_1 = B_2
+    }
+    {\Ga \vdash \pib (x:A). e_B : \Pi(x:A).B_1 = \Pi(x:A).B_2}
   %
 
   \infer
-    { }
-    {\sumb (x:A). e_B}
+    {
+      \Ga \vdash A : s \\
+      \Ga, x:A \vdash B_1 = B_2
+    }
+    {\Ga \vdash \sumb (x:A). e_B : \Sigma(x:A).B_1 = \Sigma(x:A).B_2}
   %
 \end{mathpar}
+
+You can notice that I'm cheating a little bit here. Indeed, I am already using
+heterogeneous equality (\(\cong\)) in the typing rules. If you would indulge me,
+you can imagine that the definition for heterogeneous equality is \emph{inlined}
+in the typing rules. That way it's a much more convenient read (and it is
+already a bit rough).
