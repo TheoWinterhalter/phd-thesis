@@ -714,30 +714,33 @@ for clarity.
     }
   %
 
-  \infer
-    {
-      \Ga \vdash u : A \\
-      \Ga, x:A, e : u = x \vdash e_P : P_1 = P_2 \\
-      \Ga \vdash e_w :
-      \Heq
-        {P_1[x \sto u, e \sto \refl{} u]}
-        {w_1}
-        {P_2[x \sto u, e \sto \refl{} u]}
-        {w_2} \\
-      \Ga \vdash v : A \\
-      \Ga \vdash p : u = v
-    }
-    {
-      \Ga \vdash \Jb(A,u,x.e.e_P,e_w,v,p) :
-      \Heq
-        % {P_1[x \sto v, e \sto p]}
-        {}
-        {\J{A}{u}{x.e.P_1}{w_1}{v}{p}}
-        % {P_2[x \sto v, e \sto p]}
-        {}
-        {\J{A}{u}{x.e.P_2}{w_2}{v}{p}}
-    }
+  {
+    \footnotesize
+    \infer
+      {
+        \Ga \vdash u : A \\
+        \Ga, x:A, e : u = x \vdash e_P : P_1 = P_2 \\
+        \Ga \vdash e_w :
+        \Heq
+          {P_1[x \sto u, e \sto \refl{} u]}
+          {w_1}
+          {P_2[x \sto u, e \sto \refl{} u]}
+          {w_2} \\
+        \Ga \vdash v : A \\
+        \Ga \vdash p : u = v
+      }
+      {
+        \Ga \vdash \Jb(A,u,x.e.e_P,e_w,v,p) :
+        \Heq
+          % {P_1[x \sto v, e \sto p]}
+          {}
+          {\J{A}{u}{x.e.P_1}{w_1}{v}{p}}
+          % {P_2[x \sto v, e \sto p]}
+          {}
+          {\J{A}{u}{x.e.P_2}{w_2}{v}{p}}
+      }
   %
+  }
 
   \infer
     {
