@@ -103,7 +103,7 @@ that every conversion in \acrshort{ETT} is translated as an heterogeneous
 equality.
 
 \begin{theorem}[Translation]
-  \label{thm:translation}
+  \labthm{translation}
   \leavevmode
   \begin{itemize}
     \item If\,\,\,$\xisctx{\Ga}$ then there exists
@@ -177,6 +177,7 @@ The reason I did not differentiate the two target theories is simply because
 there was no need. The proof is exactly the same, indeed, the proof never uses
 the conversion in the target since every conversion from \acrshort{ETT} is
 translated to an equality.
+The two formalisations are proof enough of this.
 
 \begin{corollary}[Conservativity]
   \labcor{preservation}
@@ -186,8 +187,7 @@ translated to an equality.
 
 \begin{proof}
   Since $\isctx{\ctxempty} \in \transl{\xisctx{\ctxempty}}$, by
-  Theorem~\eqref{thm:translation}, there exists $\tb$ and $\Tb$ such
-  that
+  \refthm{translation}, there exists $\tb$ and $\Tb$ such that
   $\isterm{}{\tb}{\Tb} \in \transl{\xisterm{}{t}{T}}$
   But as $\istype{}{T}$, we have
   $\istype{}{T} \in \transl{\xistype{}{T}}$, and,
@@ -212,13 +212,14 @@ translated to an equality.
 \section{Optimisations}
 \labsec{optim}
 
-Up until now, we remained silent about one thing: the size of the
+Up until now, I remained silent about one thing: the size of the
 translated terms. Indeed, the translated term is a decoration of the
 initial one by transports which appear in many locations. For example,
 at each application we use a transport by \reflemma{choose} to
 ensure that the term in function position is given a function type. In
-most cases---in particular when translating ITT terms---this produces
-unnecessary transports (often by reflexivity) that we wish to avoid.
+most cases---in particular when translating \acrshort{ITT} terms back to
+\acrshort{ITT} terms---this produces unnecessary transports (often by
+reflexivity) that we wish to avoid.
 
 In order to limit the size explosion, in the above we use a different version of
 transport, namely $\mathsf{transport}'$ such that
@@ -244,6 +245,11 @@ We show these \emph{defined terms} enjoy the same typing rules as their
 counterparts and use them instead.
 In practice it is enough to recover the exact same term when it is typed in
 \acrshort{ITT}.
+\marginnote[0.1cm]{
+  Note that these optimisations still make sense in \acrshort{WTT} even though
+  transport doesn't compute, we're just replacing a proof by another if you
+  will.
+}
 In \acrshort{ITT}, this can even be pushed a bit further to test some
 conversions, but in \acrshort{WTT} it has to stay syntactical.
 
