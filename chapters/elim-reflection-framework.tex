@@ -155,19 +155,30 @@ In \acrshort{ITT} it's enough to use the congruence of conversion and
 could not yet find a way to factorise them. As such we add to the syntax
 equality constructors for each binder.
 
+\marginnote[1cm]{
+  The first rules (with \(\beta\)) are the computation rules.
+  The other are congruence rules going under binders.
+  They might be easier to understand with their typing rules in
+  \nrefsubsec{wtt-typing}.
+}
 \[
   \begin{array}{l@{~\,}r@{~\,}l}
     T,A,B,t,u,v &\bnf& \dots \bnfor \beta(t,u) \\
+    &\bnfor& \redpio(u,v) \bnfor \redpit(u,v) \\
+    &\bnfor& \redJ(u,P,w,v,u') \\
     &\bnfor& \lamb{x:A}{e_B} e_t
     \bnfor \appb{u}{x:A}{e_B}{v} \\
     &\bnfor& \pairb{x:A}{e_B}{u}{v}
     \bnfor \piob{x:A}{e_B}{p} \bnfor \pitb{x:A}{e_B}{p} \\
+    &\bnfor& \Jb(A,u,x.e.p,w,v,h) \\
     &\bnfor& \pib (x:A). e_B \bnfor \sumb (x:A). e_B
   \end{array}
 \]
-\todo{One for J as well? I'd like to avoid it. J should not really be in ETT
-anyway.}
-\todo{Missing symbols for projection computation too!}
+
+Note most of these congruence symbols would no longer be necessary if we were to
+type things such as \(J\) of \(\Sigma\) using \(\Pi\)-types so that \(\Pi\)
+and \(\lambda\) are the only binders. Computation rules would still be required
+however.
 
 \subsection{Can \acrshort{ETT} still be called a conservative extension?}
 
@@ -191,9 +202,6 @@ respective proofs in \acrshort{ETT}, \acrshort{ETT} is conservative over
 \acrshort{ITT}/\acrshort{WTT} in the sense that every \(\vdash A\) such that
 \(\vdash_\exmark t : \iota(A)\) there exists a term \(t'\) such that
 \(\vdash t' : A\).
-
-\todo{It doesn't really matter conservativity can still be stated with a simple
-translation from ITT/WTT to ETT.}
 
 \section{Typing rules}
 \todo{Mention no cumulativity}
@@ -494,9 +502,9 @@ different to account for the untyped style of conversion.
 \paradot{Reduction}
 
 \marginnote[0.8cm]{
-  Notice that in the typed conversion, \(v\) and \(u'\) were both \(u\),
-  and \(A'\) was \(A\). This will still be the case for well-typed terms, but
-  the reduction rule should not have to decide conversion to apply.
+  Notice that in the typed conversion for \(\mathsf{J}\), \(v\) and \(u'\) were
+  both \(u\), and \(A'\) was \(A\). This will still be the case for well-typed
+  terms, but the reduction rule should not have to decide conversion to apply.
 }
 \begin{mathpar}
   \app{(\lam{x:A}{B} t)}{x:A}{B}{u} \red t[x \sto u]
@@ -582,6 +590,7 @@ reduction however (see \nrefch{desirable-props}).
 \end{mathpar}
 
 \subsection{Typing of \acrshort{WTT}}
+\labsubsec{wtt-typing}
 
 For \acrshort{WTT}, no notion of reduction or conversion and so no conversion
 rule. This leaves us with the typing rules of the extra symbols we added.
@@ -615,6 +624,21 @@ but it's more convenient to have them in typing rules.}
   %
 
   \infer
+    { }
+    {\redpio(u,v)}
+  %
+
+  \infer
+    { }
+    {\redpit(u,v)}
+  %
+
+  \infer
+    { }
+    {\redJ(u,P,w,v,u')}
+  %
+
+  \infer
     {
       \Ga, x:A \vdash e_B : B_1 = B_2 \\
       \Ga, x:A \vdash e_t : \Heq{B_1}{t_1}{B_2}{t_2}
@@ -640,6 +664,11 @@ but it's more convenient to have them in typing rules.}
   \infer
     { }
     {\pitb{x:A}{e_B}{p}}
+  %
+
+  \infer
+    { }
+    {\Jb(A,u,x.e.p,w,v,h)}
   %
 
   \infer
