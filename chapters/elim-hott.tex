@@ -2,37 +2,54 @@
 \chapter{Reflection and homotopy}
 \labch{elim-hott}
 
-\todo{Put before formalisation?}
+\marginnote[0.5cm]{
+  Refer to \nrefch{flavours} for more on this.
+}
+Homotopy and reflection seem contradictory at first since \acrshort{UIP}
+kind of comes with reflection and is negated by univalence, but as I have
+exposed earlier, using \acrlongpl{2TT} we can make two equalities---one with
+\acrshort{UIP} and one which is homotopic---cohabit consistently.
 
-\todo{Steal section on hott from chap formalisation}
+Now, in \nrefch{elim-reflection-framework} I showed how the proof was
+(almost) agnostic with respect to universes, thanks to abstract universe
+constructors, one of which was (crucially) the sort of an identity type.
 
-\todo{This was commented out}
-% \begin{comment}
-  \section{Extension: Translating HTS to 2TT}
-  \label{sec:extens-transl-hts}
+This is the key to instantiate our translation into one going \acrshort{HTS}
+to \acrshort{2TT} or \acrshort{2WTT}.
+We can recover those theories in our setting by taking $\F{i}$ and $\Un{i}$ as
+respectively the fibrant and strict universes
+(for $i \in \mathbb{N}$), along with the following \acrshort{PTS} rules:
+%
+\[
+\begin{array}{l@{~}c@{~}l@{\qquad}l@{~}c@{~}l}
+  (\F{i}, \F{i+1}) &\in& \Ax &
+  (\Un{i}, \Un{i+1}) &\in& \Ax \\
+  (\F{i}, \F{j}, \F{\nmax{i}{j}}) &\in& \Rl &
+  (\F{i}, \Un{j}, \Un{\nmax{i}{j}}) &\in& \Rl \\
+  (\Un{i}, \F{j}, \Un{\nmax{i}{j}}) &\in& \Rl &
+  (\Un{i}, \Un{j}, \Un{\nmax{i}{j}}) &\in& \Rl \\
+\end{array}
+\]
+%
+and the fact that the sort of the (strict) identity type on $A : s$ is
+the \emph{strictified} version of $s$, \ie $\Un{i}$ for $s = \Un{i}$ or
+$s = \F{i}$.
+\marginnote[-0.2cm]{
+  Of course, just extending the proof to two equalities is a possibility as
+  well. As one can imagine it doesn't change the proof much.
+}
+The fibrant equality can be recovered using axioms as exposed in
+\nrefsec{trans-syntaxes}.
 
-  \todo{Keep it as an easy extension? If so, we need to say more as this is no
-  longer a direct application.}
+Note that this is just one of many presentations of \acrlongpl{2TT}: instead
+of being type-based, fibration is sometimes dealt with using a specific
+judgment and this is not covered by our formalisation.
+\marginnote[-1cm]{
+  Type-based approaches are usually much better suited to translations
+  (because they are type-preserving).
+}
 
-  As we mentioned earlier, one of the interesting special cases covered by this
-  translation is the translation from 2-level type theory with reflection
-  (arguably a variant of Homotopy Type System~\sidecite{hts-sota} (HTS) to 2-level
-  type theory~\sidecite{altenkirch2016extending} (2TT).
-  %
-  We thus use two hierarchies $(\F{i})_{i \in \mathbb{N}}$, universes of fibrant
-  types, and $(\Un{i})_{i \in \mathbb{N}}$, universes of strict types.
-  We give the following axioms for the sorts:
-  %
-  \begin{align*}
-    (\F{i}, \F{i+1}) &\in \Ax \\
-    (\Un{i}, \Un{i+1}) &\in \Ax \\
-    (\F{i}, \F{j}, \F{\nmax{i}{j}}) &\in \Rl \\
-    (\F{i}, \Un{j}, \Un{\nmax{i}{j}}) &\in \Rl \\
-    (\Un{i}, \F{j}, \Un{\nmax{i}{j}}) &\in \Rl \\
-    (\Un{i}, \Un{j}, \Un{\nmax{i}{j}}) &\in \Rl
-  \end{align*}
-  %
-  We then equip our theory with a fibrant equality type defined as an inductive
-  type and the proof takes care of it. We can also add any inductive type that we
-  like, as for instance the natural numbers, the unit and empty types.
-  % \end{comment}
+In short, the translation from \acrshort{HTS} to \acrshort{2TT} or
+\acrshort{2WTT} is \emph{exactly} the same as the one
+from \acrshort{ETT} to \acrshort{ITT} or \acrshort{WTT} that I presnet in this
+thesis. This fact is factorised through our formalisation.

@@ -186,47 +186,6 @@ inconsistent typing rule $\Type : \Type$.
 Although inconsistent, this allows us to interface with \TemplateCoq, without
 the---for the time being---very time-consuming universe constraint checking.
 
-\paragraph{Homotopy Type System and Two-Level Type Theory.}
-Another interesting application (or rather instance) of our formalisation
-is a translation from Homotopy Type System (HTS)~\sidecite{hts-sota} to
-Two-Level Type Theory
-(2TT)~\sidecite{DBLP:journals/corr/AltenkirchCK16,DBLP:journals/corr/AnnenkovCK17}.
-
-HTS and 2TT arise from the incompatibility between UIP---recall it is provable
-in ETT---and univalence. The idea is to have two distinct notions of equality
-in the theory, a \emph{strict} one satisfying UIP, and a \emph{fibrant} one
-corresponding to the homotopy type theory equality, possibly satisfying
-univalence. This actually induces a separation in the types of the theory:
-some of them are called \emph{fibrant} and the fibrant or homotopic equality
-can only be eliminated on those.
-HTS can be seen as an extension of 2TT with reflection on the strict equality
-just like ETT is an extension of ITT.
-
-We can recover HTS and 2TT in our setting by taking $\F{i}$ and $\Un{i}$ as
-respectively the fibrant and strict universes of those theories
-(for $i \in \mathbb{N}$), along with the following PTS rules:
-%
-\[
-\begin{array}{l@{~}c@{~}l@{\qquad}l@{~}c@{~}l}
-  (\F{i}, \F{i+1}) &\in& \Ax &
-  (\Un{i}, \Un{i+1}) &\in& \Ax \\
-  (\F{i}, \F{j}, \F{\nmax{i}{j}}) &\in& \Rl &
-  (\F{i}, \Un{j}, \Un{\nmax{i}{j}}) &\in& \Rl \\
-  (\Un{i}, \F{j}, \Un{\nmax{i}{j}}) &\in& \Rl &
-  (\Un{i}, \Un{j}, \Un{\nmax{i}{j}}) &\in& \Rl \\
-\end{array}
-\]
-%
-and the fact that the sort of the (strict) identity type on $A : s$ is
-the \emph{strictified} version of $s$, \ie $\Un{i}$ for $s = \Un{i}$ or
-$s = \F{i}$.
-In order to have the fibrant equality, one simply needs to do as in
-Section~\ref{sec:inductives}.
-
-In short, the translation from HTS to 2TT is basically the same as the one
-from ETT to ITT we presented in this paper, and this fact is factorised through
-our formalisation.
-
 \subsection{ETT-flavoured \Coq: Examples}
 \label{sec:examples}
 
