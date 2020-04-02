@@ -47,13 +47,25 @@ that we will describe more extensively with the examples in
 
 \section{Quick Overview of the Formalisation}
 
-\todo{Old below}
+The formalisation can be found at
+\href{https://github.com/TheoWinterhalter/ett-to-itt}{github.com/TheoWinterhalter/ett-to-itt}
+and at
+\href{https://github.com/TheoWinterhalter/ett-to-itt/tree/weak}{github.com/TheoWinterhalter/ett-to-itt/tree/weak}
+for \acrshort{ETT} to \acrshort{ITT} and \acrshort{ETT} to \acrshort{WTT}
+respectively.
+Let me describe quickly the formalisation in the case of \acrshort{ETT} to
+\acrshort{ITT}, the other formalisation is pretty similar.
 
+\marginnote[0.1cm]{
+  In \nrefch{elim-reflection-framework} I showed two different syntaxes but to
+  make things simpler I use a common type of terms, only some terms will only
+  have a typing rule in \acrshort{ITT}.
+}
 The file \rpath{SAst.v} contains the definition of the (common) abstract syntax
-of ETT and ITT in the form of an inductive definition with de Bruijn
-indices for variables (like in \TemplateCoq).
+of \acrshort{ETT} and \acrshort{ITT} in the form of an inductive definition with
+de Bruijn indices for variables.
 Sorts are defined separately in \rpath{Sorts.v} and we will address them later
-in Section~\ref{sec:sorts}.
+in \nrefsec{elim-trans-sorts}.
 
 \begin{minted}{coq}
 Inductive sterm : Type :=
@@ -68,15 +80,24 @@ Inductive sterm : Type :=
 \end{minted}
 
 The files \rpath{ITyping.v} and \rpath{XTyping.v} define respectively the
-typing judgments for ITT and ETT, using mutual inductive types.
-Then, most of the files are focused on the meta-theory of ITT and can be ignored
-by readers who don't need to see yet another proof of subject reduction.
+typing judgments for \acrshort{ITT} and \acrshort{ETT}.
+The first is defined with first a notion of reduction from which is deduced
+conversion, while the latter has typed conversion and typing defined using
+mutual inductive types.
+\marginnote[0.3cm]{
+  In the formalisation of the translation to \acrshort{WTT}, these meta-theory
+  files are kept to a minimum!
+}
+Then, most of the files are focused on the meta-theory of \acrshort{ITT} and can
+be ignored by readers who don't need to see yet another proof of subject
+reduction.
 
 The most interesting files are obviously those where the fundamental lemma
 and the translation are formalised: \rpath{FundamentalLemma.v} and
 \rpath{Translation.v}.
 For instance, here is the main theorem, as stated in our formalisation:
 %
+\todo{Fix and update (after updating master to 8.11?)}
 \begin{minted}{coq}
 Theorem complete_translation Σ :
   type_glob Σ ->
@@ -89,14 +110,15 @@ Theorem complete_translation Σ :
     ∑ A' A'' u' v' p', eqtrans Σ Γ A u v Γ' A' A'' u' v' p').
 \end{minted}
 %
-Herein \mintinline{coq}{type_glob Σ} refers to the fact that some global
-context is well-typed, its purpose is detailed in
-Section~\ref{sec:inductives}.
+Herein \mintinline{coq}{type_glob Σ} refers to the fact that the global
+context is well-typed---thing which we mainly ignored in the paper translation.
 The fact that the theorem holds in \Coq ensures we can actually
-compute a translated term and type out of a derivation in ETT.
+compute a translated term and type out of a derivation in \acrshort{ETT}.
 
 \section{Inductive Types and Recursion}
 \label{sec:inductives}
+
+\todo{Old below}
 
 In the proof of Section~\ref{sec:translation}, we didn't mention
 anything about inductive types, pattern-matching or recursion as it is
@@ -147,7 +169,7 @@ doesn't break the guard condition of fixed points, and we are instead relying on
 a more type-based approach.
 
 \section{About Universes and Homotopy}
-\label{sec:sorts}
+\labsec{elim-trans-sorts}
 
 The experienced reader might have noticed that our treatment of universes
 (except perhaps for the absence of cumulativity) was really superficial and the
