@@ -1,53 +1,53 @@
 % \setchapterpreamble[u]{\margintoc}
-\chapter{Elimination, formalised}
+\chapter{Formalisation of the translation}
 \labch{elim-formalised}
 
-\todo{Just copied}
-We have formalised the translation
-in the setting of \TemplateCoq~\sidecite{DBLP:conf/itp/AnandBCST18} in order to
-have a more precise proof, but also to evidence the fact that the translation is
-indeed constructive and can be used to perform computations.
+The formalisation is inspired from that of \Coq in \MetaCoq and \emph{besides}
+\MetaCoq to allow for some interoperability to bring about faily realistic
+examples. This provides evidence that the translation is constructive \emph{and}
+computes!
+Note that we also rely on the
+\Equations~\sidecite{DBLP:conf/itp/Sozeau10,sozeau2019equations} plugin to
+derive nice dependent induction principles.
 
-\TemplateCoq is a \Coq library that has a representation of \Coq terms
-as they are in \Coq's kernel (in particular using de Bruijn indices for
-variables) and a (partial) implementation of the type checking algorithm
-(not checking guardedness of fixpoints or positivity of inductive types).
-%
-It comes with a \Coq plugin that permits to quote \Coq terms into their
-representations, and to produce \Coq terms from their representation
-(if they indeed denote well-typed terms).
-%
-We have integrated our formalisation within that framework in order to
-ensure our presentations of ETT and ITT are close to \Coq, but also to
-take advantage of the quoting mechanism to produce terms using
-the interactive mode (in particular we get to use tactics).
-%
-Note that we also rely on Mangin and Sozeau's
-\Equations{}~\sidecite{DBLP:conf/itp/Sozeau10} plugin to derive nice
-dependent induction principles.
-
-Our formalisation takes full advantage of its easy interfacing with \TemplateCoq:
-we define two theories, namely ETT and ITT, but ITT enjoys a lot of syntactic
+Our formalisation takes full advantage of its easy interfacing with \MetaCoq:
+we define two theories, namely \acrshort{ETT} and \acrshort{ITT}
+(or \acrshort{WTT}), but the target features a lot of syntactic
 sugar by having things such as transport, heterogeneous equality and packing as
 part of the syntax. The operations regarding these constructors---in particular
 the tedious ones---are written in \Coq and then quoted to finally be
-\emph{realised} in the translation from ITT to \TemplateCoq.
+\emph{realised} in the translation from \acrshort{ITT} to \MetaCoq.
+\marginnote[1cm]{
+  Some work for the future\dots
+}
+For \acrshort{WTT} the story is a bit different because there is no \emph{weak}
+\Coq or \MetaCoq so for now there is no translation to a purer \acrshort{WTT}
+though this is work that we started but put on hold by coming to realise the
+target wouldn't be that much simpler.
 
-\paragraph{Interoperability with \TemplateCoq.}
-The translation we define from ITT to \TemplateCoq is not proven
+\paragraph{Interoperability with \MetaCoq.}
+The translation we define from \acrshort{ITT} to \MetaCoq is not proven
 correct, but it is not really important as it can just be seen as a
-feature to observe the produced terms in a nicer setting. In any case,
-\TemplateCoq does not yet provide a complete formalisation of CIC rules,
-as guard checking of recursive definitions and strict positivity of
-inductive type declarations are not formalised yet.
+feature to observe the produced terms in a nicer setting.
+\marginnote{
+  We will discuss about \MetaCoq and its theory in greater detail in
+  \nrefpart{coq-in-coq}.
+}
+In any case, \MetaCoq does not yet provide a complete formalisation of
+\acrshort{CIC} rules, as guard checking of recursive definitions and strict
+positivity of inductive type declarations are not formalised yet.
 
-Our formalised theorems however do not depend on \TemplateCoq itself and as such
-there is no need to \emph{trust} the plugin.
+Our formalised theorems however do not depend on \MetaCoq itself and as such
+there is no need to \emph{trust} the plugin or the formalisation of \Coq inside
+it.
 
-We also provide a translation from \TemplateCoq to ETT that we will describe
-more extensively with the examples (Section~\ref{sec:examples}).
+We also provide a translation from \MetaCoq (and thus \Coq!) to \acrshort{ETT}
+that we will describe more extensively with the examples in
+\nrefsec{ett-flavoured}.
 
-\subsection{Quick Overview of the Formalisation}
+\section{Quick Overview of the Formalisation}
+
+\todo{Old below}
 
 The file \rpath{SAst.v} contains the definition of the (common) abstract syntax
 of ETT and ITT in the form of an inductive definition with de Bruijn
@@ -95,7 +95,7 @@ Section~\ref{sec:inductives}.
 The fact that the theorem holds in \Coq ensures we can actually
 compute a translated term and type out of a derivation in ETT.
 
-\subsection{Inductive Types and Recursion}
+\section{Inductive Types and Recursion}
 \label{sec:inductives}
 
 In the proof of Section~\ref{sec:translation}, we didn't mention
@@ -146,7 +146,7 @@ With this we are able to recover what we were missing from
 doesn't break the guard condition of fixed points, and we are instead relying on
 a more type-based approach.
 
-\subsection{About Universes and Homotopy}
+\section{About Universes and Homotopy}
 \label{sec:sorts}
 
 The experienced reader might have noticed that our treatment of universes
@@ -186,8 +186,8 @@ inconsistent typing rule $\Type : \Type$.
 Although inconsistent, this allows us to interface with \TemplateCoq, without
 the---for the time being---very time-consuming universe constraint checking.
 
-\subsection{ETT-flavoured \Coq: Examples}
-\label{sec:examples}
+\section{ETT-flavoured \Coq: Examples}
+\labsec{ett-flavoured}
 
 In this section we demonstrate how our translation can bring extensionality to
 the world of \Coq in action. The examples can be found in
@@ -430,7 +430,7 @@ vec_rect A
 : forall A n m, vec A n -> vec A m -> vec A (n + m)
 \end{minted}
 
-\subsection{Towards an Interfacing between \Andromeda and \Coq}
+\section{Towards an Interfacing between \Andromeda and \Coq}
 
 \Andromeda~\sidecite{andromeda} is a proof assistant implementing ETT in a sense
 that is really close to our formalisation. Aside from a concise nucleus with
@@ -447,7 +447,7 @@ to produce \Coq terms out of \Andromeda developments.
 Note that this would not suffer from the difficulties in generating typing
 derivations since \Andromeda generates them.
 
-\subsection{Composition with other Translations}
+\section{Composition with other Translations}
 
 This translation also enables the formalisation of translations that
 target ETT rather than ITT and still get mechanised proofs of (relative)
