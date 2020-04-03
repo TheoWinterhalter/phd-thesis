@@ -21,9 +21,10 @@ it to investigate theories where conversion is defined differently.
 
 \acrfull{ITT} is the name given to a wide range of type theories actually.
 Those could be described in the setting of \acrlongpl{PTS}.
-The theories behind the proof assistans \Coq and \Agda---respectively
-\acrfull{PCUIC} and \acrfull{MLTT}\sidenote{Note that \acrshort{MLTT} also
-have various forms.}---are variants of \acrshort{ITT}.
+The theories behind the proof assistans \Coq and
+\Agda~\sidecite{norell2007towards}--respectively \acrfull{PCUIC} and
+\acrfull{MLTT}\sidenote{Note that \acrshort{MLTT} also have various
+forms.}---are variants of \acrshort{ITT}.
 
 A \acrshort{PTS} is a pretty basic type theory, it is parametrised by a
 collection of sorts \cS, with so called \emph{rules}
@@ -235,13 +236,15 @@ once for \(\Pi\)-types---much less standard---at least).
 
 \section{Focus on the theory behind \Coq}
 
-\Coq is originally based on the \acrfull{CoC}, or the \acrfull{CIC}, though it
-is nowadays rather called the \acrfull{PCUIC}.
+\Coq is originally based on the \acrfull{CoC}, or the
+\acrfull{CIC}\sidecite{bertot2004interactive}, though it is nowadays rather
+called the \acrfull{PCUIC}.
 It is a variant of \acrshort{ITT} but as the name suggests, it has several
 extra features, hinted at by the words \emph{cumulative}, \emph{inductive}
 and \emph{predicative}.
 
 \subsection{Universes in \Coq}
+\labsubsec{coq-univ}
 
 \Coq features a \emph{predicative} hierarchy of universes
 \((\Type_i)_{i \in \mathbb{N}}\) such that \(\Type_i : \Type_j\) for any

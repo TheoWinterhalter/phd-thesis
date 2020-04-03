@@ -115,70 +115,64 @@ context is well-typed---thing which we mainly ignored in the paper translation.
 The fact that the theorem holds in \Coq ensures we can actually
 compute a translated term and type out of a derivation in \acrshort{ETT}.
 
-\section{Inductive Types and Recursion}
-\label{sec:inductives}
+%%%%% Seems like this is covered in the translation itself.
+% \section{Inductive Types and Recursion}
+% \label{sec:inductives}
 
-\todo{Old below}
+% In the proof of Section~\ref{sec:translation}, we didn't mention
+% anything about inductive types, pattern-matching or recursion as it is
+% a bit technical on paper.  In the formalisation, we offer a way to
+% still be able to use them, and we will even show how it works in
+% practice with the examples (Section\ref{sec:examples}).
 
-In the proof of Section~\ref{sec:translation}, we didn't mention
-anything about inductive types, pattern-matching or recursion as it is
-a bit technical on paper.  In the formalisation, we offer a way to
-still be able to use them, and we will even show how it works in
-practice with the examples (Section\ref{sec:examples}).
+% The main guiding principle is that inductive types and induction are orthogonal
+% to the translation, they should more or less be translated to
+% themselves.
+% %
+% To realise that easily, we just treat an inductive definition as a way
+% to introduce new constants in the theory, one for the type, one for
+% each constructor, one for its elimination principle, and one equality
+% per computation rule.
+% %
+% For instance, the natural numbers can be represented by having the following
+% constants in the context:
+% %
+% \[
+% \begin{array}{l@{~}c@{~}l}
+%   \nat &:& \Ty{0} \\
+%   \zero &:& \nat \\
+%   \natsucc &:& \nat \to \nat \\
+%   \natrec &:& \forall P,\
+%   P\ \zero \to (\forall m,\ P\ m \to P\ (\natsucc\ m)) \to
+%   \forall n,\ P\ n \\
+%   \natrec_\zero &:& \forall P\ P_z\ P_s,\ \natrec\ P\ P_z\ P_s\ \zero = P_z \\
+%   \natrec_\natsucc &:& \forall P\ P_z\ P_s\ n,\\
+%   &&\natrec\ P\ P_z\ P_s\ (\natsucc\ n) = P_s\ n\ (\natrec\ P\ P_z\ P_s\ n)
+% \end{array}
+% \]
+% %
+% Here we rely on the reflection rule to obtain the computational behaviour of the
+% eliminator $\natrec$.
 
-The main guiding principle is that inductive types and induction are orthogonal
-to the translation, they should more or less be translated to
-themselves.
-%
-To realise that easily, we just treat an inductive definition as a way
-to introduce new constants in the theory, one for the type, one for
-each constructor, one for its elimination principle, and one equality
-per computation rule.
-%
-For instance, the natural numbers can be represented by having the following
-constants in the context:
-%
-\[
-\begin{array}{l@{~}c@{~}l}
-  \nat &:& \Ty{0} \\
-  \zero &:& \nat \\
-  \natsucc &:& \nat \to \nat \\
-  \natrec &:& \forall P,\
-  P\ \zero \to (\forall m,\ P\ m \to P\ (\natsucc\ m)) \to
-  \forall n,\ P\ n \\
-  \natrec_\zero &:& \forall P\ P_z\ P_s,\ \natrec\ P\ P_z\ P_s\ \zero = P_z \\
-  \natrec_\natsucc &:& \forall P\ P_z\ P_s\ n,\\
-  &&\natrec\ P\ P_z\ P_s\ (\natsucc\ n) = P_s\ n\ (\natrec\ P\ P_z\ P_s\ n)
-\end{array}
-\]
-%
-Here we rely on the reflection rule to obtain the computational behaviour of the
-eliminator $\natrec$.
+% This means for instance that we do not consider inductive types that would only
+% make sense in ETT, but we deem this not to be a restriction and to the best of
+% our knowledge isn't something that is usually considered in the literature.
+% %
+% With that in mind, our translation features a global context of typed constants
+% with the restriction that the types of those constants should be well-formed
+% in ITT. Those constants are thus used as black boxes inside ETT.
 
-This means for instance that we do not consider inductive types that would only
-make sense in ETT, but we deem this not to be a restriction and to the best of
-our knowledge isn't something that is usually considered in the literature.
-%
-With that in mind, our translation features a global context of typed constants
-with the restriction that the types of those constants should be well-formed
-in ITT. Those constants are thus used as black boxes inside ETT.
+% With this we are able to recover what we were missing from
+% \Coq, without having to deal with the trouble of proving that the translation
+% doesn't break the guard condition of fixed points, and we are instead relying on
+% a more type-based approach.
 
-With this we are able to recover what we were missing from
-\Coq, without having to deal with the trouble of proving that the translation
-doesn't break the guard condition of fixed points, and we are instead relying on
-a more type-based approach.
-
-\section{About Universes and Homotopy}
+\section{About Universes}
 \labsec{elim-trans-sorts}
 
-The experienced reader might have noticed that our treatment of universes
-(except perhaps for the absence of cumulativity) was really superficial and the
-notion of sorts used is rather orthogonal to our main development.
-This is even more apparent in the formalisation. Indeed, we didn't fix a
-specific universe hierarchy, but instead specify what properties it should
-have, in what is reminiscent to a (functional\sidenote{Meaning the sort of a
-sort, and the sort of a product are functions, necessary to the uniqueness of
-types~\eqref{lem:uniq}.}) PTS formulation.
+As I mentioned earlier in \nrefch{elim-reflection-framework}, sorts are treated
+abstractly in the translation. In the formalisation sorts are defined using
+the following class:
 %
 \begin{minted}{coq}
 Class Sorts.notion := {
@@ -193,20 +187,29 @@ Class Sorts.notion := {
 \end{minted}
 %
 From the notion of sorts, we require functions to get the sort of a sort,
-the sort of a product from the sorts of its arguments, and (crucially) the sort
-of an identity type.
+the sort of a product from the sorts of its arguments, and the sort of an
+identity type.
 We also require some measure of decidable equality and injectivity on those.
+From this we ensure the \acrshort{PTS} is \emph{functional} (in particular
+without cumulativity) so that we have unique typing.
 
-This allows us to instantiate this by a lot of different notions including the
-one presented earlier in the paper or even its extension with a universe $\Prop$
-of propositions (like CIC~\sidecite{bertot2004interactive}). We present here two
-instances that have their own interest.
+We're using classes here because they come with some automation in \Coq which
+allows us to assume globally a notion of sort without having to speficy it at
+each use.
 
-\paragraph{$\Type$ in $\Type$.}
-One of the instances we provide is one with only one universe $\Type$, with the
-inconsistent typing rule $\Type : \Type$.
-Although inconsistent, this allows us to interface with \TemplateCoq, without
-the---for the time being---very time-consuming universe constraint checking.
+This allows us to instantiate this by a lot of different notions like a natural
+number based hierarchy of \(\Type_i\) and even an extension of it with a
+universe $\Prop$ of propositions as in \acrshort{CIC}.
+We also provide an instance corresponding to \acrshort{2TT} as explained in
+\nrefch{elim-hott}.
+
+\marginnote[1.2cm]{
+  For inconsistency of \(\Type\) \emph{in} \(\Type\), see \nrefsubsec{coq-univ}.
+}
+In order to deal with examples in a simpler manner (making up for our lack of
+universe polymorphism and cumulativity) by interacting with \Coq (thanks to
+\MetaCoq), one of the instances we provide comes with only one universe $\Type$
+and the inconsistent typing rule $\Type : \Type$.
 
 \section{ETT-flavoured \Coq: Examples}
 \labsec{ett-flavoured}
@@ -214,6 +217,8 @@ the---for the time being---very time-consuming universe constraint checking.
 In this section we demonstrate how our translation can bring extensionality to
 the world of \Coq in action. The examples can be found in
 \rpath{plugin\_demo.v}.
+Again, since we do not have \emph{weak} \Coq or \MetaCoq, these are in the case
+of the translation to \acrshort{ITT} only.
 
 \paragraph{First, a pedestrian approach.}
 %
@@ -221,19 +226,20 @@ We would like to begin by showing how one can write an example step by step
 before we show how it can be instrumented and automated as a plugin.
 For this we use a self-contained example without any inductive
 types or recursion, illustrating a very simple case of reflection.
-The term we want to translate is our introductory example of transport:
+The term we want to translate is the identity coercion:
 \[
   \lambda\ A\ B\ e\ x.\ x : \Pi\ A\ B.\ A = B \to
   A \to B
 \]
-which relies on the equality $e : A = B$ and reflection to convert $x
-: A$ to $x : B$.
+which relies on the equality \(e : A = B\) and reflection to convert  \(x : A\)
+to \(x : B\).
 %
 Of course, this definition isn't accepted in \Coq because this
-conversion is not valid in ITT.
+conversion is not valid in \acrshort{ITT}.
 %
 \begin{minted}{coq}
-Fail Definition pseudoid (A B : Type) (e : A = B) (x : A) : B := x.
+Fail Definition pseudoid (A B : Type) (e : A = B) (x : A) : B
+  := x.
 \end{minted}
 %
 However, we still want to be able to write it \emph{in some way}, in order to
@@ -246,21 +252,23 @@ Axiom candidate : forall A B (t : A), B.
 \end{minted}
 %
 \mintinline{coq}|candidate A B t| is a candidate \mintinline{coq}|t| of type
-\mintinline{coq}|A| to inhabit type \mintinline{coq}|B|.
-We complete this by adding a notation that is reminiscent to
-\Agda's~\sidecite{norell2007towards} hole mechanism.
+\mintinline{coq}|A| to inhabit type \mintinline{coq}|B| in the fashion of
+\ocaml's \mintinline{ocaml}|Obj.magic|.
+We complete this by adding a notation that is reminiscent to \Agda's hole
+mechanism.
 %
 \begin{minted}{coq}
 Notation "'{!' t '!}'" := (candidate _ _ t).
 \end{minted}
 
-We can now write the ETT function within \Coq.
+We can now write the \acrshort{ETT} function within \Coq.
 %
 \begin{minted}{coq}
-Definition pseudoid (A B : Type) (e : A = B) (x : A) : B := {! x !}.
+Definition pseudoid (A B : Type) (e : A = B) (x : A) : B :=
+  {! x !}.
 \end{minted}
 %
-We can then quote the term and its type to \TemplateCoq thanks to the
+We can then quote the term and its type to \MetaCoq thanks to the
 \mintinline{coq}|Quote Definition| command provided by the plugin.
 %
 \begin{minted}{coq}
@@ -269,36 +277,53 @@ Quote Definition pseudoid_term :=
 Quote Definition pseudoid_type :=
   ltac:(let T := type of pseudoid in exact T).
 \end{minted}
+\marginnote[-1.5cm]{
+  The syntax is a bit heavy because of a call to \ltac used to quote the
+  normal form of the term.
+}
 %
-The terms that we get are now \TemplateCoq terms, representing \Coq syntax.
-We need to put them in ETT, meaning adding the annotations, and also removing
-the \mintinline{coq}|candidate| axiom.
+The terms that we get are now \MetaCoq terms, representing \Coq syntax.
+We need to put them in \acrshort{ETT}, meaning adding the annotations, and also
+removing the \mintinline{coq}|candidate| axiom.
 This is the purpose of the \mintinline{coq}|fullquote| function that we provide
 in our formalisation.
 %
+\marginnote[1cm]{
+  \mintinline{coq}|fullquote| is given a \emph{big} number corresponding to the
+  the number of recusrive calls its allowed to do. This \emph{fuel} technique
+  allows us to circumvent the termination checker of \Coq.
+}
 \begin{minted}{coq}
 Definition pretm_pseudoid :=
-  Eval lazy in fullquote (2^18) Σ [] pseudoid_term empty empty nomap.
+  Eval lazy in
+  fullquote (2^18) Σ [] pseudoid_term empty empty nomap.
+
 Definition tm_pseudoid :=
-  Eval lazy in match pretm_pseudoid with
-              | Success t => t
-              | Error _ => sRel 0
-              end.
+  Eval lazy in
+  match pretm_pseudoid with
+  | Success t => t
+  | Error _ => sRel 0
+  end.
+
 
 Definition prety_pseudoid :=
-  Eval lazy in fullquote (2^18) Σ [] pseudoid_type empty empty nomap.
+  Eval lazy in
+  fullquote (2^18) Σ [] pseudoid_type empty empty nomap.
+
 Definition ty_pseudoid :=
-  Eval lazy in match prety_pseudoid with
-               | Success t => t
-               | Error _ => sRel 0
-               end.
+  Eval lazy in
+  match prety_pseudoid with
+  | Success t => t
+  | Error _ => sRel 0
+  end.
 \end{minted}
 %
 \mintinline{coq}|tm_pseudoid| and \mintinline{coq}|ty_pseudoid| correspond
-respectively to the ETT representation of \mintinline{coq}|pseudoid| and its
-type.
-We then produce, using our home-brewed Ltac type-checking tactic, the
-corresponding ETT typing derivation (notice the use of reflection to typecheck).
+respectively to the \acrshort{ETT} representation of \mintinline{coq}|pseudoid|
+and its type.
+We then produce, using our home-brewed \ltac type-checking tactic, the
+corresponding \acrshort{ETT} typing derivation (notice the use of reflection to
+typecheck).
 %
 \begin{minted}{coq}
 Lemma type_pseudoid : Σi ;;; [] |-x tm_pseudoid : ty_pseudoid.
@@ -311,7 +336,7 @@ Defined.
 \end{minted}
 %
 We can then translate this derivation, obtain the translated term and then
-convert it to \TemplateCoq.
+convert it to \MetaCoq.
 %
 \begin{minted}{coq}
 Definition itt_pseudoid : sterm :=
@@ -333,13 +358,14 @@ fun (A B : Type) (e : A = B) (x : A) => transport e x
      : forall A B : Type, A = B -> A -> B
 \end{minted}
 
-\paragraph{Making a Plugin with \TemplateCoq.}
+\paragraph{Making a Plugin with \MetaCoq.}
 %
 All of this work is pretty systematic. Fortunately for us,
-\TemplateCoq also features a monad to reify \Coq commands which we can
+\MetaCoq also features a monad to reify \Coq commands which we can
 use to \emph{program} the translation steps.
 As such we have written a complete procedure, relying on type checkers we
-wrote for ITT and ETT, which can generate equality obligations.
+wrote for \acrshort{ITT} and \acrshort{ETT}, which can generate equality
+obligations.
 
 Thanks to this, the user doesn't have to know about the details of
 implementation of the translation, and stay within the \Coq ecosystem.
@@ -347,15 +373,18 @@ implementation of the translation, and stay within the \Coq ecosystem.
 For instance, our previous example now becomes:
 %
 \begin{minted}{coq}
-Definition pseudoid (A B : Type) (e : A = B) (x : A) : B := {! x !}.
+Definition pseudoid (A B : Type) (e : A = B) (x : A) : B :=
+  {! x !}.
 
 Run TemplateProgram (Translate ε "pseudoid").
 \end{minted}
 %
+\marginnote[-0.6cm]{
+  \mintinline{coq}{ε} is the empty translation context, see the next example to
+  understand the need for a translation context
+}
 This produces a \Coq term \mintinline{coq}{pseudoid'} corresponding to the
-translation (\mintinline{coq}{ε} is the empty translation
-context, see the next example to understand the need for a
-translation context).
+translation.
 Notice how the user doesn't even have to provide any proof of equality or
 derivations of any sort. The derivation part is handled by our own typechecker
 while the obligation part is solved automatically by the \Coq obligation mechanism.
@@ -364,7 +393,8 @@ while the obligation part is solved automatically by the \Coq obligation mechani
 %
 As we promised, our translation is able to handle inductive types.
 For this consider the inductive type of vectors (or length-indexed lists) below,
-together with a simple definition (we will remain in ITT for simplicity).
+together with a simple definition (we will remain in \acrshort{ITT} for
+simplicity).
 %
 \begin{minted}{coq}
 Inductive vec A : nat -> Type :=
@@ -380,11 +410,14 @@ Definition vv := vcons 1 _ vnil.
 This time, in order to apply the translation we need to extend the translation
 context with \mintinline{coq}|nat| and \mintinline{coq}|vec|.
 %
+\marginnote[1cm]{
+  The \mintinline{coq}{_ <- _ ;; _} notation corresponds to a monadic bind.
+}
 \begin{minted}{coq}
 Run TemplateProgram (
-    Θ <- TranslateConstant ε "nat" ;;
-    Θ <- TranslateConstant Θ "vec" ;;
-    Translate Θ "vv"
+  Θ <- TranslateConstant ε "nat" ;;
+  Θ <- TranslateConstant Θ "vec" ;;
+  Translate Θ "vv"
 ).
 \end{minted}
 %
@@ -404,32 +437,34 @@ be done on lists ends up in the following conversion problem:
 \begin{minted}{coq}
 Fail Definition vrev {A n m} (v : vec A n) (acc : vec A m)
 : vec A (n + m) :=
-  vec_rect A (fun n _ => forall m, vec A m -> vec A (n + m))
-           (fun m acc => acc)
-           (fun a n _ rv m acc => rv _ (vcons a m acc))
-           n v m acc.
+  vec_rect
+    A (fun n _ => forall m, vec A m -> vec A (n + m))
+    (fun m acc => acc)
+    (fun a n _ rv m acc => rv _ (vcons a m acc))
+    n v m acc.
 \end{minted}
 %
 The recursive call returns a vector of length \mintinline{coq}|n + S m|
-where the context expects one of length \mintinline{coq}|S n + m|. In ITT, these
-types are not convertible. This example is thus a perfect fit for ETT where we
-can use the fact that these two expressions always compute to the same thing
-when instantiated with concrete numbers.
+where the context expects one of length \mintinline{coq}|S n + m|. In
+\acrshort{ITT}, these types are not convertible. This example is thus a perfect
+fit for \acrshort{ETT} where we can use the fact that these two expressions
+always compute to the same thing when instantiated with concrete numbers.
 %
 \begin{minted}{coq}
 Definition vrev {A n m} (v : vec A n) (acc : vec A m)
 : vec A (n + m) :=
-  vec_rect A (fun n _ => forall m, vec A m -> vec A (n + m))
-           (fun m acc => acc)
-           (fun a n _ rv m acc => {! rv _ (vcons a m acc) !})
-           n v m acc.
+  vec_rect
+    A (fun n _ => forall m, vec A m -> vec A (n + m))
+    (fun m acc => acc)
+    (fun a n _ rv m acc => {! rv _ (vcons a m acc) !})
+    n v m acc.
 
 Run TemplateProgram (
-    Θ <- TranslateConstant ε "nat" ;;
-    Θ <- TranslateConstant Θ "vec" ;;
-    Θ <- TranslateConstant Θ "Nat.add" ;;
-    Θ <- TranslateConstant Θ "vec_rect" ;;
-    Translate Θ "vrev"
+  Θ <- TranslateConstant ε "nat" ;;
+  Θ <- TranslateConstant Θ "vec" ;;
+  Θ <- TranslateConstant Θ "Nat.add" ;;
+  Θ <- TranslateConstant Θ "vec_rect" ;;
+  Translate Θ "vrev"
 ).
 \end{minted}
 %
@@ -447,42 +482,45 @@ vec_rect A
   (fun n _ => forall m, vec A m -> vec A (n + m))
   (fun m acc => acc)
   (fun a n₀ v₀ rv m₀ acc₀ =>
-    transport (vrev_obligation_3 A n m v acc a n₀ v₀ rv m₀ acc₀)
-      (rv (S m₀) (vcons a m₀ acc₀))) n v m acc
+    transport
+      (vrev_obligation_3 A n m v acc a n₀ v₀ rv m₀ acc₀)
+      (rv (S m₀) (vcons a m₀ acc₀))
+  ) n v m acc
 : forall A n m, vec A n -> vec A m -> vec A (n + m)
 \end{minted}
 
 \section{Towards an Interfacing between \Andromeda and \Coq}
 
-\Andromeda~\sidecite{andromeda} is a proof assistant implementing ETT in a sense
-that is really close to our formalisation. Aside from a concise nucleus with
-a basic type theory, most things happen with the declaration of constants
-with given types, including equalities to define the computational behaviour
-of eliminators for instance.
+\Andromeda~\sidecite{andromeda} is a proof assistant implementing \acrshort{ETT}
+in a sense that is really close to our formalisation. Aside from a concise
+nucleus with a basic type theory, most things happen with the declaration of
+constants with given types, including equalities to define the computational
+behaviour of eliminators for instance.
 This is essentially what we do in our formalisation.
 Furthermore, their theory relies on $\Type : \Type$, meaning, our modular
 handling of universes can accommodate for this as well.
 
-All in all, it should be possible in the near future to use our translation
-to produce \Coq terms out of \Andromeda developments.
+All in all, it should be possible in the future to use our translation
+(or a similar one) to produce \Coq terms out of \Andromeda developments.
 %
 Note that this would not suffer from the difficulties in generating typing
-derivations since \Andromeda generates them.
+derivations since \Andromeda would be generating them.
 
 \section{Composition with other Translations}
 
 This translation also enables the formalisation of translations that
-target ETT rather than ITT and still get mechanised proofs of (relative)
-consistency by composition with this ETT to ITT translation.  This could
-also be used to implement plugins based on the composition of
+target \acrshort{ETT} rather than \acrshort{ITT} and still get mechanised proofs
+of (relative) consistency by composition with this \acrshort{ETT} to
+\acrshort{ITT} translation.
+This could also be used to implement plugins based on the composition of
 translations. In particular, supposing we have a theory which forms a
-subset of ETT and whose conversion is decidable. Using this translation,
-we could formalise it as an embedded domain-specific type theory and
-provide an automatic translation of well-typed terms into witnesses in
+subset of \acrshort{ETT} and whose conversion is decidable. Using this
+translation, we could formalise it as an embedded domain-specific type theory
+and provide an automatic translation of well-typed terms into witnesses in
 \Coq. This would make it possible to extend conversion with the theory
 of lists for example.
 
 This would provide a simple way to justify the consistency of
-CoqMT~\sidecite{DBLP:conf/lpar/JouannaudS17} for example, seeing it as an
-extensional type theory where reflection is restricted to equalities
-on a specific domain whose theory is decidable.
+\acrshort{CoqMT}~\sidecite{DBLP:conf/lpar/JouannaudS17} for example, seeing it
+as an extensional type theory where reflection is restricted to equalities on a
+specific domain whose theory is decidable.
