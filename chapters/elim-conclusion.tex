@@ -7,18 +7,22 @@
 \section{Limitations and Axioms}
 \label{sec:axioms}
 
+\marginnote[0.2cm]{
+  I'd like to use a minimal representation of derivations that does not contain
+  everything that can be inferred automatically for one.
+}
 Currently, the representation of terms and derivations and the
 computational content of the proof only allow us to deal with the
-translation of relatively small terms but we hope to improve that in
+translation of relatively small terms but I hope to improve that in
 the future. As we have seen, the actual translation involves the
 computational content of lemmata of inversion, substitution, weakening
 and equational reasoning and thus cannot be presented as a simple
 recursive definition on derivations.
 
 
-As we already mentioned, the axioms K and FunExt are both
-necessary in ITT if we want the translation to be conservative as they are
-provable in ETT~\sidecite{hofmann1995conservativity}.
+As I already mentioned, the axioms K and \acrshort{funext} are both
+necessary in \acrshort{ITT} if we want the translation to be conservative as
+they are provable in \acrshort{ETT}~\sidecite{hofmann1995conservativity}.
 However, one might still be concerned about having axioms
 as they can for instance hinder canonicity of the system.
 In that respect, K isn't really a restriction since it preserves canonicity.
@@ -26,27 +30,31 @@ The best proof of that is probably \Agda itself which natively features K---in
 fact, one needs to explicitly deactivate it with a flag if they wish to work
 without.
 
-The case of FunExt is trickier. It should be possible to realise
+The case of \acrshort{funext} is trickier. It should be possible to realise
 the axiom by composing our translation with a setoid
 interpretation~\sidecite{altenkirch99} which validates it, or by going into a
-system featuring it, for instance by implementing Observational Type
-Theory~\sidecite{altenkirch2007observational} like
-\Epigram~\sidecite{mcbride2004epigram}.
+system featuring it, for instance by implementing
+\acrlong{OTT}~\sidecite{altenkirch2007observational} like
+\Epigram~\sidecite[1cm]{mcbride2004epigram}.
 
 However, these two axioms are not used to define the translation itself,
-but only to witness UIP and function extensionality in the translation to
+but only to witness \acrshort{UIP} and \acrlong{funext} in the translation to
 \Coq.
-The translation only relies on one axiom, called
-\mintinline{coq}|conv_trans_AXIOM| in the formalisation, stating that conversion
-of ITT is transitive.
-%
-The proof of this property basically sums up to the confluence of the
-reduction rules of ITT which is out of scope for this paper and has
+The translation itself only relies on one axiom, called
+\mintinline{coq}|conv_trans_AXIOM|, stating that conversion
+of \acrshort{ITT} is transitive.
+The translation to \acrshort{WTT} is totally axiom-free however!
+
+The proof of transivity in \acrshort{ITT} basically sums up to the confluence of
+the reduction rules which is out of scope for this thesis and has
 recently been formalised in Agda~\sidecite{Abel:2017:DCT:3177123.3158111} (in a
 simpler setting with only one universe).
+\MetaCoq also features a proof of confluence for
+\Coq~\sidecite[0.3cm]{sozeau2019coq}.
 Regardless, this axiom inhabits a proposition (the type of conversion is in
 \mintinline{coq}|Prop|) and is thus irrelevant for computation. Actually no
-information about the derivation leaks to the production of the ITT term.
+information about the derivation leaks to the production of the \acrshort{ITT}
+term.
 
 On a different note, the \mintinline{coq}|candidate| axiom allows us to derive
 \mintinline{coq}|False| but is merely used to write ill-typed terms in \Coq.
@@ -57,45 +65,44 @@ term is relying on unsafe assumptions thanks to the
 \section{Related Works and Conclusion}
 \label{sec:related-works}
 
-The seminal works on the precise connection between ETT and ITT go
-back to \sidecite{streicher1993investigations} and
-\sidecite{hofmann1995conservativity,HofmannPhD}.
+The seminal works on the precise connection between \acrshort{ETT} and
+\acrshort{ITT} go back to \sidecite{streicher1993investigations} and
+\sidecite[0.7cm]{hofmann1995conservativity,HofmannPhD}.
 %
 In particular, the work of Hofmann provides a categorical answer to
-the question of consistency and conservativity of ETT over ITT with
-UIP and FunExt.
+the question of consistency and conservativity of \acrshort{ETT} over
+\acrshort{ITT} with \acrshort{UIP} and \acrshort{funext}.
 %
-Ten years later, \sidecite{oury2005extensionality,Oury2006} provided
-a translation from ETT to ITT with
-UIP and FunExt and other axioms (mainly due to
+Ten years later, \sidecite[1.6cm]{oury2005extensionality,Oury2006} provided
+a translation from \acrshort{ETT} to \acrshort{ITT} with
+\acrshort{UIP} and \acrshort{funext} and other axioms (mainly due to
 technical difficulties).
 %
 Although a first step towards a move from categorical semantics to a
 syntactic translation, his work does not stress any constructive
 aspect of the proof and shows that there merely exist translations in
-ITT to a typed term in ETT.
+\acrshort{ITT} to a typed term in \acrshort{ETT}.
 
-\sidecite{van2013explicit} have later proposed and
-formalised a similar translation between a PTS with and without explicit
-conversion. This does not entail anything about ETT to ITT but we can
-find similarities in that there is a witness of conversion between any
-term and itself under an explicit conversion, which internalises
-irrelevance of explicit conversions. This morally corresponds to a
-Uniqueness of Conversions principle.
+\sidecite[0.5cm]{van2013explicit} have later proposed and
+formalised a similar translation between a \acrshort{PTS} with and without
+explicit conversion. This does not entail anything about \acrshort{ETT} to
+\acrshort{ITT} but we can find similarities in that there is a witness of
+conversion between any term and itself under an explicit conversion, which
+internalises irrelevance of explicit conversions. This morally corresponds to a
+\emph{Uniqueness of Conversions} principle.
 
-The Program \sidecite{sozeau:icfp07} extension of \Coq performs a
+The \name{Program} \sidecite{sozeau:icfp07} extension of \Coq performs a
 related coercion insertion algorithm, between objects in subsets on the
 same carrier or in different instances of the same inductive family,
 assuming a proof-irrelevance axiom. Inserting coercions locally is not
-as general as the present translation from ETT to ITT which can insert
-transports in any context.
+as general as the present translation from \acrshort{ETT} to \acrshort{ITT}
+which can insert transports in any context.
 
-In this paper we provide the first effective translation from ETT to ITT
-with UIP and FunExt. The translation has been
-formalised in \Coq using \TemplateCoq, a meta-programming plugin of
-\Coq. This translation is also effective in the sense that we can
-produce in the end a \Coq term using the \TemplateCoq denotation
-machinery.
+In this document (and in the orginal paper) we provide the first effective
+translation from \acrshort{ETT} to \acrshort{ITT} with \acrshort{UIP} and
+\acrshort{funext}. The translation has been formalised in \Coq.
+This translation is also effective in the sense that we can produce in the end a
+\Coq term using the \MetaCoq denotation machinery.
 %
 With ongoing work to extend the translation to the inductive fragment
 of \Coq, we are paving the way to an extensional version of the \Coq
@@ -103,9 +110,14 @@ proof assistant which could be translated back to its intensional
 version, allowing the user to navigate between the two modes, and in
 the end produce a proof term checkable in the intensional fragment.
 
-% \begin{acks}
-  We would like to thank Andrej Bauer and Philipp Haselwarter with whom we had
-  fruitful discussions on the subject, prior to this work.
-  We also would like to thank the attendees of the Aarhus EUTypes 2018 meeting
-  for their insightful feedback on the plugin stemming from the translation.
-% \end{acks}
+This thesis also introduces a translation from \acrshort{ETT} to \acrshort{WTT}
+which thus yields a translation from \acrshort{ITT} to \acrshort{WTT}. This
+shows that computation is not \emph{essential} to the logical power of a type
+theory.
+
+\paradot{Acknowledgements}
+
+I would like to thank Andrej Bauer and Philipp Haselwarter with whom I had
+fruitful discussions on the subject, prior to this work.
+I also would like to thank the attendees of the Aarhus EUTypes 2018 meeting
+for their insightful feedback on the plugin stemming from the translation.
