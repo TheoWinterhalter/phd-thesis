@@ -235,6 +235,7 @@ to allow equalities under binders, and this has to be done for each binder
 once for \(\Pi\)-types---much less standard---at least).
 
 \section{Focus on the theory behind \Coq}
+\labsec{coq-theory}
 
 \Coq is originally based on the \acrfull{CoC}, or the
 \acrfull{CIC}\sidecite{bertot2004interactive}, though it is nowadays rather
@@ -395,6 +396,55 @@ In \acrshort{PCUIC}, you have the following cumulativity rule.
   %
 \end{mathpar}
 This allows for more flexibility when dealing with polymorphic definitions.
+
+\subsection{let-bindings}
+
+This is not limited to \Coq, but let-bindings behave differently than in
+simply typed programming languages. In languages like \ocaml a let-binding can
+be simulated by a \(\beta\)-redex.
+\marginnote[0.5cm]{
+  It might be that the compiler does things a bit differently in both cases
+  for optimisations purposes, but at least \emph{in principle} they should be
+  equivalent.
+}
+\begin{minted}{ocaml}
+let x = u in t
+\end{minted}
+will be equivalent to
+\begin{minted}{ocaml}
+(fun x -> t) u
+\end{minted}
+as both will evaluate \mintinline{ocaml}{u} before substituting it for
+\mintinline{ocaml}{x} in \mintinline{ocaml}{t}. This works mainly because
+\ocaml is a \acrshort{CbV} language.
+In \Coq, replacing the first by the second won't always yield a well-typed
+expression.
+\marginnote[0.5cm]{
+  In \ocaml we have \(x : A \vdash t\).
+}
+In the \Coq expression \mintinline{coq}{let x := u in t}, \mintinline{coq}{t}
+actually lives in an extended context with \mintinline{coq}{x := u}, meaning
+that the definition is also stored, not just its type and name. This information
+can be used to \emph{recall} that \mintinline{coq}{x} is convertible to
+\mintinline{coq}{u}. The example below illustrates a case where the
+transformation yields an ill-typed term.
+\begin{minted}{coq}
+Section Let.
+
+  Context (u : nat).
+  Context (f : u = u -> nat).
+
+  Definition foo :=
+    let x := u in f (eq_refl x).
+
+  (** The term "eq_refl" has type "x = x" while it is expected
+      to have type "u = u" (cannot unify "x" and "u").
+  *)
+  Fail Definition bar :=
+    (fun x => f (eq_refl x)) u.
+
+End Let.
+\end{minted}
 
 \section{Equality in type theories}
 
