@@ -12,7 +12,7 @@ the end, \Coq's kernel will type-check those and will complain if the tactics
 produced ill-typed terms. This means the implementation of the tactic language
 and other \emph{surface}-features are not critical. It's better if they do their
 job properly, but there is a safety net in case they don't.
-\marginnote[2cm]{
+\marginnote[2.5cm]{
   The green arrow is the only \emph{trusted} one. The others can fail.
 }
 \begin{figure}[hb]
@@ -21,6 +21,11 @@ job properly, but there is a safety net in case they don't.
 
 In this setting the kernel has to be kept as small as possible for inspection
 by humans. In particular experimental features are dangerous in there.
+\marginnote[0.1cm]{
+  The interested reader can have a look at
+  \url{https://github.com/coq/coq/blob/master/dev/doc/critical-bugs}
+  where a list of critical bugs of \Coq is maintained.
+}
 Unfortunately, \Coq's kernel is not free of mistakes, and one critical bug has
 been found roughly every year for the last two decades. Even then the kernel
 presentation offers some damage control as it usually requires minor changes to
@@ -50,8 +55,25 @@ are made explicit; implementation and specification are clearly separated.
 Note that we still have to rely on a \acrshort{TTB} because of Gödel's
 incompleteness theorems~\misref{} which prevent us from proving consistency of
 \Coq within \Coq.
-\marginnote[0.3cm]{
+\marginnote[0.1cm]{
   See \nrefch{desirable-props}.
 }
 This implies that we have to admit strong normalisation of the system, as it
 would lead us to canonicity and thus consistency.
+Thus, the assumption that the meta-theory enjoys the well-known assumed
+properties is the main shortcoming of our formalisation. If those didn't hold,
+it would either raise a serious issue in \Coq's theory, or a problem in the
+specification we made of it. For this last reason, the relatively small
+specification we have is welcome.
+
+\marginnote[1.2cm]{
+  See \nrefch{flavours}.
+}
+Besides that, the theory of \acrshort{PCUIC} we specify and implement is a bit
+simpler from that of \Coq: we use lists where arrays are involved and more
+importantly we do not feature modules and template polymorphism.
+The implementation also provides efficient universe constraint checking and
+guard condition checking, we chose to remain abstract over those and simply
+assume the existence of those in the specification: any implementation
+satisfaying the specification can thus be plugged in. We use a rather naive
+universe checker for now and do not provide any guard checking at all.
