@@ -48,3 +48,160 @@ presentation is not really suited to a constructive setting like \Coq because of
 the negative formulation.
 
 \section{Constructive setting}
+
+In an intuitionistic or even constructive setting, the notion of
+well-foundedness is stated in a positive way: instead of saying the there is no
+infinitely decreasing sequence, we say that every element---for instance every
+natural number---is \emph{reachable} in a finite number of steps from the base
+case(s).
+
+\begin{definition}[Accessibility]
+  A term \(t\) of type \(A\) is accessible for a relation \(\prec\) on \(A\)
+  when all smaller elements for \(\prec\) are also accessible.
+\end{definition}
+\marginnote[-1.3cm]{
+  In particular, a minimal element---in the sense that there are no \(u\) such
+  that \(u \prec t\)---is always accessible.
+}
+
+For instance, to show that \(2\) is accessible for \(<\) we would need to show
+that \(0\) and \(1\) are accessible, and for \(1\) we would need to show that
+\(0\) is accessible. This leaves us with \(0\). It is accessible because there
+are no smaller natural numbers. \(0\) is the base case.
+
+\marginnote[0.1cm]{
+  Note that we define well-founded relations and not well-orders, this is more
+  general and actually sufficient for us. A well-order is an order that forms a
+  well-founded relation.
+}
+\begin{definition}[Well-founded relation]
+  A relation \(\prec\) on \(A\) is well-founded when all the inhabitants of
+  \(A\) are accessible for \(\prec\).
+\end{definition}
+
+Again, this is the case that all natural numbers are accessible for \(<\)
+and this can be shown by induction.
+From this we can do well-founded induction: if a property holds for \(t\) when
+it holds for smaller elements, it holds for every accessible element.
+
+In \Coq the accessibility predicate is defined as follows:
+\begin{minted}{coq}
+Inductive Acc (A : Type) (R : A -> A -> Prop) (x : A) : Prop :=
+  Acc_intro : (forall y : A, R y x -> Acc R y) -> Acc R x
+\end{minted}
+This corresponds to a translation of the definition above to the syntax of \Coq.
+The induction principle produced by \Coq for \mintinline{coq}{Acc} yields
+well-founded induction.
+\begin{minted}{coq}
+Acc_ind :
+  forall (A : Type) (R : A -> A -> Prop) (P : A -> Prop),
+    (forall x : A,
+      (forall y : A, R y x -> Acc R y) ->
+      (forall y : A, R y x -> P y) ->
+      P x
+    ) ->
+    forall x : A, Acc R x -> P x
+\end{minted}
+It says that if for any given \(x : A\) such that all \(y : A\) smaller than
+\(x\) are accesible and verify the predicate \(P\), \(x\) also verifies \(P\),
+then all accessible elements verify \(P\).
+
+\reminder[-0.7cm]{Fibonacci sequence}{
+  The Fibonacci sequence \((\mathcal{F}_n)_{n \in \mathbb{N}}\) is defined by
+  \(\mathcal{F}_0 = 0\), \(\mathcal{F}_1 = 1\) and
+  \(\mathcal{F}_{n+2} = \mathcal{F}_{n+1} + \mathcal{F}_n\).
+}
+Let's say this time we want to define the Fibonacci sequence, the following
+definition isn't accepted by \Coq's termination checker.
+\begin{minted}{coq}
+Fail Fixpoint fib n :=
+  match n with
+  | 0 => 1
+  | 1 => 1
+  | S (S n) => fib (S n) + fib n
+  end.
+\end{minted}
+It doesn't like the \mintinline{coq}{S n} bit in the recursive call.
+I'm cheating a bit because it can still be defined by telling \Coq that
+\mintinline{coq}{S n} here is indeed a subterm of the matched term.
+\begin{minted}{coq}
+Fixpoint fib n :=
+  match n with
+  | 0 => 1
+  | 1 => 1
+  | S ((S n) as m) => fib m + fib n
+  end.
+\end{minted}
+\marginnote[0.2cm]{
+  If you're not convinced by this argument, just read the rest of the thesis
+  to see well-founded induction in action.
+}
+For the sake of the argument I will still write this function using well-founded
+induction.
+\begin{minted}{coq}
+Require Import Lia Arith.
+
+Lemma wf_nat :
+  well_founded lt.
+Proof.
+  intro n. induction n as [| n ih].
+  - constructor. intros m h. lia.
+  - constructor. intros m h.
+    destruct (eq_nat_dec m n).
+    + subst. assumption.
+    + destruct ih as [ih]. apply ih. lia.
+Qed.
+
+Definition fib n :=
+  Acc_rec (fun _ => nat)
+    (fun n =>
+      match n with
+      | 0 => fun _ _ => 1
+      | 1 => fun _ _ => 1
+      | S (S m) =>
+        fun acc_lt_n fib_lt_n =>
+          fib_lt_n (S m) (Nat.lt_succ_diag_r (S m)) +
+          fib_lt_n m
+            (Nat.lt_trans _ _ _
+              (Nat.lt_succ_diag_r m)
+              (Nat.lt_succ_diag_r (S m)))
+      end
+    )
+    (wf_nat n).
+\end{minted}
+\marginnote[-9.8cm]{
+  \mintinline{coq}{well_founded R} is defined as
+  \mintinline{coq}{forall x : A, Acc R x} for
+  \mintinline{coq}{R : A -> A -> Prop}.
+  Also \mintinline{coq}{n < m} is just a notation for
+  \mintinline{coq}{lt n m}.
+}
+The \mintinline{coq}{fib} function we try to define earlier is barely
+recognisable here. Fortunately for us there are tools to write well-founded
+inductions in a nicer way. One such tool is \Equations.
+\begin{minted}{coq}
+From Equations Require Equations.
+
+Equations fib (n : nat) : nat
+  by wf n lt :=
+
+  fib 0 := 1 ;
+  fib 1 := 1 ;
+  fib (S (S n)) := fib (S n) + fib n.
+\end{minted}
+The syntax differs a bit from vanilla \Coq but should be pretty
+self-explanatory. We write the function just the way we want it to be and
+specify that we are using well-founded recursion on \mintinline{coq}{n}
+using the standard \mintinline{coq}{lt} order with \mintinline{coq}{by wf n lt}.
+Then it generates some proof obligations saying that the recursive calls are
+indeed made on smaller arguments for \mintinline{coq}{lt}, but as they are
+pretty simple, it solves them for us.
+Moreover it uses the type-class mechanism to automatically find a proof that
+the order is indeed well-founed.
+Thanks to \Equations, well-founded recursion is not too painful and pretty
+useful.
+
+\section{Lexicographic orders}
+
+I will dedicate this section to a special case of order that will be useful for
+the formalisation.
