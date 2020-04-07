@@ -1,3 +1,50 @@
 % \setchapterpreamble[u]{\margintoc}
 \chapter{Well-founded induction and well-orders}
 \labch{coq-orders}
+
+This chapter is perhaps a bit off-track compared to the others in this chapter
+as it is a bit general but I have it here because I am going to rely on it in
+the next chapters.
+
+\section{General setting}
+
+The \emph{classical} definition of a well-founded order basically says that one
+cannot \emph{go down} indefinitely in that order.
+
+\begin{definition}[Well-order (classically)]
+  An order \(\prec\) is said to be well-founded when there is not infinitely
+  decreasing sequence for that order, \ie there is no sequence
+  \((u_i)_{i \in \mathbb{N}}\) such that for all \(i\), \(u_{i+1} \prec u_i\).
+\end{definition}
+
+When \(\prec\) is a well-order, every non-increasing sequence has to become
+stationary at some point.
+The prototypical example of this the canonical order on \(\mathbb{N}\): if you
+take a natural number and start going down, at some point you have to stop lest
+you go below \(0\) and leave the realm of natural numbers.
+We say that \(\mathbb{N}\) is a well-founded set in that case.
+
+This is particularly useful to show that a process terminates. If after
+completing each task you are left with the completion of smaller tasks,
+you will eventually run out of tasks to complete.
+This can be used to justify the termination of an \ocaml function like the
+ever-famous factorial function.
+\marginnote[0.5cm]{
+  Even though the \ocaml \mintinline{ocaml}{int} type is not comprised only of
+  natural numbers, the \mintinline{ocaml}{n < 1} condition ensures that the
+  recursive call only happens when \(n \ge 1\).
+}
+\begin{minted}{ocaml}
+let rec fact n =
+  if n < 1
+  then 1
+  else n * (fact (n - 1))
+\end{minted}
+The recursive call is always on a smaller natural number and at some point it
+will reach some \(n < 1\) and return a value.
+
+This kind of reasoning is the key to proofs of termination in general, but this
+presentation is not really suited to a constructive setting like \Coq because of
+the negative formulation.
+
+\section{Constructive setting}
