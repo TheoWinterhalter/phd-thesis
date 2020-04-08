@@ -205,3 +205,121 @@ useful.
 
 I will dedicate this section to a special case of order that will be useful for
 the formalisation.
+
+\subsection{Simple lexicographic orders}
+
+Generally speaking, a lexicographic order is the combination of two orders to
+yield an order on pairs. The alphabetical order is one instance of lexicographic
+order: you first compare the first letter of each word, and if they match you
+proceed to the second, etc.
+
+\begin{definition}[Lexicographic order]
+  Given two types \(A\) and \(B\) and two orders \(\prec_A\) and \(\prec_B\)
+  on them, the lexicographic order \(\prec_{\mathsf{lex}}\) on \(A \times B\)
+  is defined as
+  \[
+    (a,b) \prec_{\mathsf{lex}} (a',b')
+    \text{ when }
+    \left\{
+    \begin{array}{ll}
+      \text{either} & a \prec_A a' \\
+      \text{or} & a = a' \text{ and } b \prec_B b'
+    \end{array}
+    \right.
+  \]
+\end{definition}
+
+So, like the alphabetical order, when the two first elements are in the
+relation, we won't even look at the rest.
+\marginnote[0.2cm]{
+  They also remain orders.
+}
+This is pretty convenient, especially since lexicographic orders preserve
+well-foundedness.
+
+\begin{lemma}[Well-founded lexicographic orders]
+  If \(\prec_A\) and \(\prec_B\) are both well-founed, then the lexicographic
+  order they induce is also well-founded.
+\end{lemma}
+
+\todo{Some example of program?}
+
+In the context of dependent types, these might not prove sufficient, hence the
+need for dependent lexicographic orders.
+
+\subsection{Dependent lexicographic orders}
+
+In the same way that simple products \(A \times B\) can be extended to their
+dependent counterpart \(\Sigma\)-types: \(\Sigma (x:A). B\), lexicographic
+orders have a dependent version.
+As before, we take an order \(\prec_A\) on \(A\), but as \(B\) depends on
+\(x : A\), we need the second order to also depend on \(x\). Fortunately for us,
+the only times we're interested in \(\prec_B\) is when the first two components
+are the same (\(a = a'\)), meaning the same type \(B[x \sto a]\).
+
+\marginnote[2.6cm]{
+  Notice in the second case that there is no \(a'\), it's twice \(a\).
+}
+\begin{definition}[Dependent lexicographic order]
+  Given a type \(A\) and a type \(B\) dependent on \(A\), as well as an order
+  \(\prec_A\) on \(A\) and an order \(\prec_B\) on \(B\), dependent on \(A\),
+  we define their dependent lexicographic order on \(\Sigma (x:A). B\),
+  \(\prec_{\mathsf{lex}}\) as
+  \[
+    \begin{array}{lcl}
+      \dpair{a,b} \prec_{\mathsf{lex}} \dpair{a',b'} &\text{when}&
+      a \prec_A a' \\
+      \dpair{a,b} \prec_{\mathsf{lex}} \dpair{a,b'} &\text{when}&
+      b \prec_{B[x \sto a]} b'
+    \end{array}
+  \]
+\end{definition}
+
+I find the \Coq definition can shed more light than the paper one in this case.
+In it the dependencies appear in a more explicit manner so it can lift some
+confusion I hope.
+
+\begin{minted}{coq}
+Inductive dlexprod {A} {B : A -> Type}
+  (leA : A -> A -> Prop) (leB : forall x, B x -> B x -> Prop)
+  : sigT B -> sigT B -> Prop :=
+
+| left_lex :
+    forall x x' y y',
+      leA x x' ->
+      dlexprod leA leB (x;y) (x';y')
+
+| right_lex :
+    forall x y y',
+      leB x y y' ->
+      dlexprod leA leB (x;y) (x;y').
+\end{minted}
+\marginnote[-1cm]{
+  In \Coq I write \mintinline{coq}{(x;y)} for \(\dpair{x,y}\).
+}
+
+I use notations for the simple and dependent lexicographic orders:
+\begin{minted}{coq}
+Notation "R1 ⊗ R2" :=
+  (lexprod R1 R2)
+  (at level 20, right associativity).
+
+Notation "x ⊩ R1 ⨶ R2" :=
+  (dlexprod R1 (fun x => R2))
+  (at level 20, right associativity).
+\end{minted}
+
+Once again, the dependent lexicographic order of two well-founded orders is also
+well-founded. In \Coq I show something even more precise, saying that a pair
+\(\dpair{x,y}\) is accessible if \(x\) is accessible and the second order is
+well-founded.
+\begin{minted}{coq}
+Lemma dlexprod_Acc :
+  forall A B leA leB,
+    (forall x, well_founded (leB x)) ->
+    forall x y,
+      Acc leA x ->
+      Acc (@dlexprod A B leA leB) (x;y).
+\end{minted}
+
+\section{Lexicographic order modulo a bissimulation}
