@@ -56,6 +56,17 @@
 	\color{Gray!50} \parencite{#1}: \citeauthor*{#1} (\citeyear{#1}), \citetitle{#1}\\%
 }
 
+% Font fallback
+\usepackage{newunicodechar}
+\newfontfamily{\fallbackmonofont}{Symbola}[Scale=MatchLowercase]
+\DeclareTextFontCommand{\textfallbackmono}{\fallbackmonofont}
+\newcommand{\fallbackcharmono}[2][\textfallbackmono]{%
+    \newunicodechar{#2}{#1{#2}}%
+}
+\fallbackcharmono{⊗}
+\fallbackcharmono{⊩}
+\fallbackcharmono{⨶}
+
 %----------------------------------------------------------------------------------------
 
 \begin{document}
