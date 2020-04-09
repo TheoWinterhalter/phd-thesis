@@ -5,6 +5,8 @@
 You need the Fira Sans and Fira Mono fonts to build the thesis.
 For instance you can find them on https://fonts.google.com/specimen/Fira+Sans
 and https://fonts.google.com/specimen/Fira+Mono.
+You also need Symbola because I use it as a fallback for some special unicode
+characters.
 
 ## Compilation
 
