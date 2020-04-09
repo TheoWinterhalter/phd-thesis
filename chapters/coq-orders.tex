@@ -279,6 +279,10 @@ I find the \Coq definition can shed more light than the paper one in this case.
 In it the dependencies appear in a more explicit manner so it can lift some
 confusion I hope.
 
+\marginnote[1.25cm]{
+  \mintinline{coq}{sigT B} has implicit parameter \mintinline{coq}{A} and
+  corresponds to the \(\Sigma\)-type \mintinline{coq}{∑ (x : A), B x}.
+}
 \begin{minted}{coq}
 Inductive dlexprod {A} {B : A -> Type}
   (leA : A -> A -> Prop) (leB : forall x, B x -> B x -> Prop)
@@ -331,3 +335,99 @@ components are \emph{equal}. In some cases, this requirement is just too strong
 and we want to relax it a bit, by accepting them to be equal modulo another
 relation. Of course we cannot accept any relation, otherwise we would have no
 hope of showing the resulting order well-founded.
+
+Again I will stick to the \Coq definition because I find it better to convey
+information.
+
+\begin{minted}{coq}
+Inductive dlexmod {A} {B : A -> Type}
+    (leA : A -> A -> Prop)
+    (eA : A -> A -> Prop)
+    (coe : forall x x', eA x x' -> B x -> B x')
+    (leB : forall x, B x -> B x -> Prop)
+  : sigT B -> sigT B -> Prop :=
+
+| left_dlexmod :
+    forall x x' y y',
+      leA x x' ->
+      dlexmod leA eA coe leB (x;y) (x';y')
+
+| right_dlexmod :
+    forall x x' y y' (e : eA x x'),
+      leB x' (coe _ _ e y) y' ->
+      dlexmod leA eA coe leB (x;y) (x';y').
+
+Notation "x ⊨ e \ R1 'by' coe ⨷ R2" :=
+  (dlexmod R1 e coe (fun x => R2))
+  (at level 20, right associativity).
+\end{minted}
+
+It is very similar to the dependent lexicographic order of the previous section,
+only this time we compare the second components when they are related by
+\mintinline{coq}{eA}. Because of the dependency however, we have
+\mintinline{coq}{y : B x} and \mintinline{coq}{y' : B x'} while
+\mintinline{coq}{leB} will want only one of either \mintinline{coq}{x} or
+\mintinline{coq}{x'}.
+For this reason we need to somehow relate \mintinline{coq}{B x} and
+\mintinline{coq}{B x'}; that is the purpose of the \mintinline{coq}{coe}
+function we take as argument. It \emph{transports} terms of
+\mintinline{coq}{B x} to \mintinline{coq}{B x'}; that way we compare
+\mintinline{coq}{coe x x' e y} and \mintinline{coq}{y'} for
+\mintinline{coq}{leB}.
+The existence of such a coercion function is not automatic, hence the need to
+have it explicitly in the notation \mintinline{coq}{x ⊨ e \ R1 by coe ⨷ R2}.
+
+As you probably have guessed, dependent lexicographic order modulo a relation
+can also be shown to be well-founded, provided it involves well-orders and that
+the coercion funciton is well-behaved.
+Here is the lemma---whose statement is longer than its proof so I will break it
+down right after---in \Coq.
+\begin{minted}{coq}
+Lemma acc_dlexmod :
+  forall A B (leA : A -> A -> Prop) (eA : A -> A -> Prop)
+        (coe : forall x x', eA x x' -> B x -> B x')
+        (leB : forall x : A, B x -> B x -> Prop)
+        (sym : forall x y, eA x y -> eA y x)
+        (trans : forall x y z, eA x y -> eA y z -> eA x z),
+    (forall x, well_founded (leB x)) ->
+    (forall x x' y, eA x x' -> leA y x' -> leA y x) ->
+    (forall x,
+      exists e : eA x x, forall y, coe _ _ e y = y
+    ) ->
+    (forall x x' y e,
+      coe x x' (sym _ _ e) (coe _ _ e y) = y
+    ) ->
+    (forall x0 x1 x2 e1 e2 y,
+      coe _ _ (trans x0 x1 x2 e1 e2) y =
+      coe _ _ e2 (coe _ _ e1 y)
+    ) ->
+    (forall x x' e y y',
+      leB _ y (coe x x' e y') ->
+      leB _ (coe _ _ (sym _ _ e) y) y'
+    ) ->
+    forall x,
+      Acc leA x ->
+      forall y,
+        Acc (leB x) y ->
+        forall x' (e : eA x x'),
+          Acc (@dlexmod A B leA eA coe leB) (x'; coe _ _ e y).
+\end{minted}
+
+To be honest this formulation is not really pretty, and comes as the minimal
+subset of requirement I found with which I could still prove well-foundedness.
+The first thing to notice, is the addition of two operators on the relation
+\mintinline{coq}{eA}: I ask that it is symmetric and transitive as witnessed
+by \mintinline{coq}{sym} and by \mintinline{coq}{trans}.
+Then I list several properties that I require, I shall list them one by one:
+\begin{enumerate}[label=(\roman*)]
+  \item \mintinline{coq}{leB} has to be well-founded;
+  \item objects in relation for \mintinline{coq}{eA} can substituted in
+  \mintinline{coq}{leA} on the right;
+  \item \mintinline{coq}{eA} should be reflexive and coercing using the proof
+  of reflexivity is the identity;
+  \item \mintinline{coq}{sym _ _ e} and \mintinline{coq}{e} cancel each other
+  out for \mintinline{coq}{coe};
+  \item coercing a transitivity is the same as coercing twice;
+  \item if you have a coercion of the right of \mintinline{coq}{leB} you can
+  instead put its symmetric on the left.
+\end{enumerate}
