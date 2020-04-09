@@ -428,3 +428,21 @@ Then I list several properties that I require, I shall list them one by one:
   \item if you have a coercion of the right of \mintinline{coq}{leB} you can
   instead put its symmetric on the left.
 \end{enumerate}
+
+All these should feel natural if you have equality in mind.
+I did mention bissimulations however and didn't even talk about it.
+Let me correct this slight.
+
+\begin{definition}{Simulation}
+  Given a relation \(\red\) on \(A\), a relation \(\sim\) on \(A\) is called a
+  simulation if whenever \(p \red q\) and \(p \sim p'\) there exists \(q'\)
+  such that \(q \sim q'\) and \(p' \red q'\).
+\end{definition}
+
+This is summarised by the folliwng diagram.
+\[
+  \xymatrix{
+    p \ar@{~}[r] \ar[d] & p' \ar@{.>}[d] \\
+    q \ar@{~~}[r] & {\exists q'}
+  }
+\]
