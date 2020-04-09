@@ -47,27 +47,25 @@
 
 % For code higlighting
 \usepackage{minted}
-\setminted{fontsize=\footnotesize}
+\setminted{
+	fontsize=\footnotesize,
+	encoding=utf8
+}
 \setmintedinline{fontsize=\currentfontsize}
 
 % HACK: Remove red boxes
-% \AtBeginEnvironment{minted}{%
-%   \renewcommand{\fcolorbox}[4][]{#4}
-% }
-% \appto{\mintinline}{\renewcommand{\fcolorbox}[4][]{#4}}
-% \apptocmd{\mintinline}{\renewcommand{\fcolorbox}[4][]{#4}}{}{}
-% no red boxes on parser error:
-% \makeatletter
-% \expandafter\def\csname PYGdefault@tok@err\endcsname{\def\PYGdefault@bc##1{{\strut ##1}}}
-% \makeatother
+% From https://tex.stackexchange.com/questions/343494/minted-red-box-around-greek-characters
+\usepackage{etoolbox,xpatch}
 
-\usepackage{etoolbox}
 \makeatletter
 \AtBeginEnvironment{minted}{\dontdofcolorbox}
 \def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+\xpatchcmd{\inputminted}{\minted@fvset}{\minted@fvset\dontdofcolorbox}{}{}
+\xpatchcmd{\mintinline}{\minted@fvset}{\minted@fvset\dontdofcolorbox}{}{}
 \makeatother
 
-\xpatchcmd{\mintinline}{\minted@fvset}{\minted@fvset\dontdofcolorbox}{}{}
+% Without red boxes: xcode, arduino, abap,
+% \usemintedstyle{abap}
 
 \usepackage{stmaryrd}
 
