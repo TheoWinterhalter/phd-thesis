@@ -383,12 +383,12 @@ the coercion funciton is well-behaved.
 Here is the lemma---whose statement is longer than its proof so I will break it
 down right after---in \Coq.
 \begin{minted}{coq}
-Lemma acc_dlexmod :
+Lemma dlexmod_Acc :
   forall A B (leA : A -> A -> Prop) (eA : A -> A -> Prop)
-        (coe : forall x x', eA x x' -> B x -> B x')
-        (leB : forall x : A, B x -> B x -> Prop)
-        (sym : forall x y, eA x y -> eA y x)
-        (trans : forall x y z, eA x y -> eA y z -> eA x z),
+    (coe : forall x x', eA x x' -> B x -> B x')
+    (leB : forall x : A, B x -> B x -> Prop)
+    (sym : forall x y, eA x y -> eA y x)
+    (trans : forall x y z, eA x y -> eA y z -> eA x z),
     (forall x, well_founded (leB x)) ->
     (forall x x' y, eA x x' -> leA y x' -> leA y x) ->
     (forall x,
@@ -405,12 +405,9 @@ Lemma acc_dlexmod :
       leB _ y (coe x x' e y') ->
       leB _ (coe _ _ (sym _ _ e) y) y'
     ) ->
-    forall x,
+    forall x y,
       Acc leA x ->
-      forall y,
-        Acc (leB x) y ->
-        forall x' (e : eA x x'),
-          Acc (@dlexmod A B leA eA coe leB) (x'; coe _ _ e y).
+      Acc (@dlexmod A B leA eA coe leB) (x ; y).
 \end{minted}
 
 To be honest this formulation is not really pretty, and comes as the minimal
