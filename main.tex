@@ -40,9 +40,34 @@
 
 \usepackage{mathpartir}
 
-% For coq higlighting
+% Trick for current font size
+\makeatletter
+\newcommand{\currentfontsize}{\fontsize{\f@size}{\f@baselineskip}\selectfont}
+\makeatother
+
+% For code higlighting
 \usepackage{minted}
 \setminted{fontsize=\footnotesize}
+\setmintedinline{fontsize=\currentfontsize}
+
+% HACK: Remove red boxes
+% \AtBeginEnvironment{minted}{%
+%   \renewcommand{\fcolorbox}[4][]{#4}
+% }
+% \appto{\mintinline}{\renewcommand{\fcolorbox}[4][]{#4}}
+% \apptocmd{\mintinline}{\renewcommand{\fcolorbox}[4][]{#4}}{}{}
+% no red boxes on parser error:
+% \makeatletter
+% \expandafter\def\csname PYGdefault@tok@err\endcsname{\def\PYGdefault@bc##1{{\strut ##1}}}
+% \makeatother
+
+\usepackage{etoolbox}
+\makeatletter
+\AtBeginEnvironment{minted}{\dontdofcolorbox}
+\def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+\makeatother
+
+\xpatchcmd{\mintinline}{\minted@fvset}{\minted@fvset\dontdofcolorbox}{}{}
 
 \usepackage{stmaryrd}
 
@@ -66,6 +91,8 @@
 \fallbackcharmono{⊗}
 \fallbackcharmono{⊩}
 \fallbackcharmono{⨶}
+\fallbackcharmono{⊨}
+\fallbackcharmono{⨷}
 
 %----------------------------------------------------------------------------------------
 
