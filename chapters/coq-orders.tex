@@ -328,7 +328,7 @@ Lemma dlexprod_Acc :
 
 \todo{Maybe an example of usage?}
 
-\subsection{Lexicographic order modulo a bissimulation}
+\subsection{Lexicographic order modulo a bisimulation}
 
 With usual lexicographic orders, the second order is involved with the first
 components are \emph{equal}. In some cases, this requirement is just too strong
@@ -430,7 +430,7 @@ Then I list several properties that I require, I shall list them one by one:
 \end{enumerate}
 
 All these should feel natural if you have equality in mind.
-I did mention bissimulations however and didn't even talk about it.
+I did mention bisimulations however and didn't even talk about it.
 Let me correct this slight.
 
 \begin{definition}{Simulation}
@@ -439,10 +439,18 @@ Let me correct this slight.
   such that \(q \sim q'\) and \(p' \red q'\).
 \end{definition}
 
-This is summarised by the folliwng diagram.
+This is summarised by the following diagram.
 \[
   \xymatrix{
     p \ar@{~}[r] \ar[d] & p' \ar@{.>}[d] \\
     q \ar@{~~}[r] & {\exists q'}
   }
 \]
+
+\begin{definition}[Bisimulation]
+  A relation \(\sim\) on \(A\) is a bisimulation for \(\red\) when it is both
+  a simulation for \(\red\) and for \(\red^{-1}\).
+\end{definition}
+
+\todo{Is a bisimulation an equivalence relation? It doesn't seem enough to
+get coe and such.}
