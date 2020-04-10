@@ -418,8 +418,8 @@ by \mintinline{coq}{sym} and by \mintinline{coq}{trans}.
 Then I list several properties that I require, I shall list them one by one:
 \begin{enumerate}[label=(\roman*)]
   \item \mintinline{coq}{leB} has to be well-founded;
-  \item objects in relation for \mintinline{coq}{eA} can substituted in
-  \mintinline{coq}{leA} on the right;
+  \item \label{item:dlexmod-sim} objects in relation for \mintinline{coq}{eA}
+  can substituted in \mintinline{coq}{leA} on the right;
   \item \mintinline{coq}{eA} should be reflexive and coercing using the proof
   of reflexivity is the identity;
   \item \mintinline{coq}{sym _ _ e} and \mintinline{coq}{e} cancel each other
@@ -452,5 +452,63 @@ This is summarised by the following diagram.
   a simulation for \(\red\) and for \(\red^{-1}\).
 \end{definition}
 
-\todo{Is a bisimulation an equivalence relation? It doesn't seem enough to
-get coe and such.}
+A bisimulation doesn't quite fit the bill yet though. The simulation property
+does look like \ref{item:dlexmod-sim} but it would conclude
+\mintinline{coq}{leA y' x} for some \mintinline{coq}{eA y y'} instead of plain
+\mintinline{coq}{leA y x}. Also, there is no reason for a bisimulation to
+be an equivalence relation and even less for the existence of a well-behaved
+coercion function for the second order.
+\todo{This can probably be relaxed actually.}
+
+If we go back to the simple---\ie not dependent---case for a bit, a bisimulation
+that is also an equivalence relation is sufficient.
+
+\begin{minted}{coq}
+Inductive lexmod {A B}
+    (leA : A -> A -> Prop)
+    (eA : A -> A -> Prop)
+    (leB : B -> B -> Prop)
+  : A * B -> A * B -> Prop :=
+
+| left_lexmod :
+    forall x x' y y',
+      leA x x' ->
+      lexmod leA eA leB (x,y) (x',y')
+
+| right_lexmod :
+    forall x x' y y',
+      eA x x' ->
+      leB y y' ->
+      lexmod leA eA leB (x,y) (x',y').
+
+Notation "e \ R1 ⊕ R2" :=
+  (lexmod R1 e R2)
+  (at level 20, right associativity).
+
+Lemma lexmod_Acc :
+  forall A B (leA : A -> A -> Prop) (eA : A -> A -> Prop)
+    (leB : B -> B -> Prop),
+    well_founded leB ->
+    (forall x x' y,
+      eA x x' ->
+      leA y x' ->
+      exists y',
+        leA y' x *
+        eA y' y
+    ) ->
+    (forall a, eA a a) ->
+    (forall a b c, eA a c -> eA b c -> eA a b) ->
+    forall x y,
+      Acc leA x ->
+      Acc (eA \ leA ⊕ leB) (x, y).
+\end{minted}
+
+Regarding the requirement of the simulation to also be an equivalence relation,
+we can actually use the notion of bisimilarity, a special kind of bisimulation.
+
+\begin{definition}[Bisimularity]
+  % \todo{Def}
+\end{definition}
+
+\todo{Bisimularity is ER, then say dependent case more complex so need for coe
+but I still kept the naming of well-known property.}
