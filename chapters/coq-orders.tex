@@ -507,8 +507,17 @@ Regarding the requirement of the simulation to also be an equivalence relation,
 we can actually use the notion of bisimilarity, a special kind of bisimulation.
 
 \begin{definition}[Bisimularity]
-  % \todo{Def}
+  Given a relation \(\red\) on type \(A\), two terms \(p\) and \(q\) in \(A\)
+  are called \emph{bisimilar} when there exist a bisimulation \(\sim\) for
+  \(\red\) such that \(p \sim q\).
 \end{definition}
 
-\todo{Bisimularity is ER, then say dependent case more complex so need for coe
-but I still kept the naming of well-known property.}
+The bisimilarity relation is itself an equivalence relation meaning we can use
+it to quotient simple lexicographic orders.
+
+\marginnote[0.2cm]{
+  In the simple case, the coercion function is the indentity always, so all
+  its properties follow trivially.
+}
+Again, in the dependent case this is not enough but I still kept the same
+because it is roughly a generalisation of the simple case.
