@@ -1,3 +1,123 @@
 % \setchapterpreamble[u]{\margintoc}
 \chapter{Simple type theory}
 \labch{simple-types}
+
+When studying programming languages theoretically, \(\lambda\)-calculus imposes
+itself as the prototypical example. A model of computation much simpler than
+Turing machines, it becomes extermely useful in combination with a so-called
+type-system. This combination culminates into the Curry-Howard isomorphism that
+relates programming and logic in profound ways, serving as a foundation for
+type theory and modern logic.
+
+I will not try and do some thorough analysis and history of the subject but I
+will give an account of my understanding of it, limiting myself to points that
+I find relevant to my thesis.
+
+\section{\(\lambda\)-calculus}
+
+\(\lambda\)-calculus can be reasonably called the simplest programming language.
+It consists basically of functions, variables and applications.
+If you are familiar with \ocaml these constructs are summarised in the example
+below.
+\begin{minted}{ocaml}
+(fun x -> x) u
+\end{minted}
+Here, we have the identity function \mintinline{ocaml}{fun x -> x}---\ie the
+function which maps \mintinline{ocaml}{x} to \mintinline{ocaml}{x}---applied to
+some expression \mintinline{ocaml}{u}.
+In mathematical textbooks we would define the identity function (for natural
+numbers) as follows.
+\[
+  \mathit{id} :
+  \left(
+  \begin{array}{lcl}
+    \mathbb{N} &\to& \mathbb{N} \\
+    x &\mapsto& x
+  \end{array}
+  \right)
+\]
+The whole expression written \(\mathit{id}(u)\).
+
+\(\lambda\)-calculus is a third way of writing the same thing.
+\[
+  (\lambda x.\ x)\ u
+\]
+The little \(\lambda\) corresponds to the declaration of a function, in this
+case \emph{binding} the \(x\) before the dot, in the expression after it.
+Application of a function is marked with a space, such as \(u\ v\) meaning
+\(u\) applied to argument \(v\).
+Formally, the grammar of \(\lambda\)-calculus is:
+\marginnote[0.55cm]{
+  \(x\) is a placeholder for any variable name, typicaly in the range of \(x\),
+  \(y\) and \(z\).
+}
+\[
+  t, u, v \coloneqq x \mid \lambda x.\ t \mid t\ u
+\]
+and that's it.
+
+In a term, the variable names are considered irrelevant, for instance, the
+\(\lambda\)-terms \(\lambda x.\ x\) and \(\lambda y.\ y\) are deemed equivalent.
+Of course, it only works, if all occurences of \(x\) are replaced consistently
+with \(y\). This operation is called \(\alpha\)-renaming, we thus talk about
+\(\alpha\)-equality:
+\[
+  \lambda x.\ x =_\alpha \lambda y.\ y
+\]
+
+Of course, that alone is not sufficient to describe a programming language,
+it's missing a key compenent: evaluation of programs.
+Indeed, without it, variables are meaningless.
+
+We want to say that the application of a function should always yield some
+result. For instance, the identity function \(\lambda x.\ x\) when applied to
+\(u\) should naturally reduce to \(u\) itself.
+
+The purpose of a variable is to be \emph{instantiated}.
+Before we talk about this, we need to talk about \emph{bound} and \emph{free}
+variables.
+If you take the expression \((\lambda x.\ x)\ y\) you can see two variables
+\(x\) and \(y\); the two do not behave the same: \(x\) is below a
+\(\lambda\)-abstraction that \emph{introduces} (or \emph{binds}) it whereas
+\(y\) is \emph{free}, no \(\lambda\)-abstraction constrains it.
+Of course, this status changes if the term is put inside another:
+\[
+  \lambda y.\ (\lambda x.\ x)\ y
+\]
+This times both \(y\) and \(x\) are \emph{bound}.
+
+\marginnote[0.2cm]{
+  Sometimes this fact is summarised in the term \emph{capture-avoiding} meaning
+  that bound variables aren't touched. I will refrain from using a qualifier
+  that basically means that it's not a nonsensical definition.
+}
+The only variables that can be instantiated are the \emph{free} ones.
+For example, it wouldn't make sense to replace the \(x\) in the identity
+\(\lambda x.\ x\) function, it would somehow break it. \emph{Substitution} is
+the operation that replaces free variables with other expressions.
+We will write
+\[
+  t[x \sto u]
+\]
+to mean the term \(t\) were all \emph{free} occurences of the variable \(x\)
+are replaced by the term \(u\).
+
+For example,
+\[
+  ((\lambda x.\ x)\ y)[y \sto u] = (\lambda x.\ x)\ u
+\]
+
+Now that we have substitution, we are armed to deal with reduction.
+Reduction is defined from the so-called \(\beta\)-reduction
+\[
+  (\lambda x.\ t)\ u \red_\beta t[x \sto u]
+\]
+It is essentially saying that when applied to an argument, a function
+reduces to its body were the argument replaces the variable it was binding.
+
+There is a lot more to say on the \emph{untyped} \(\lambda\)-calculus, but this
+out of scope of this document.
+
+\section{Types for programs}
+
+\section{The Curry-Howard isomorphism}
