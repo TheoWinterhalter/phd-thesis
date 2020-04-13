@@ -150,6 +150,85 @@ It can be decomposed into
   \stack{\lambda x. \shole} :: \stack{\shole\ u} :: \stack{f\ \shole}
   :: \varepsilon
 \]
+meaning that the term will first be put under an abstraction, the result of this
+applied to \(u\) and the whole given as an argument to \(f\).
+This notion will prove particularly useful when considering the reduction
+machine in \nrefch{coq-reduction}, indeed the stack is way to remember the
+surrounding term when focusing on a subterm, once it has reached a normal form,
+we can use the stack as a \emph{continuation}.
+
+You can see the process step by step in the following example.
+\marginnote[2cm]{
+  I use \(\red_\beta\) to denote the cases where a \emph{real} reduction
+  happens and the focused term (a \(\lambda\)-abstraction) consumes its
+  argument; the other cases are \emph{focusing}, \ie pushing some term with
+  hole on the stack.
+}
+\[
+  \begin{array}{lc}
+    \stack{
+      (
+        (\lambda x.\ x\ u)\
+        (\lambda y.\ y)
+      ) \ v
+    } & \red \\[0.2cm]
+    \stack{
+      \stack{(
+        (\lambda x.\ x\ u)\
+        (\lambda y.\ y)
+      )} \ v
+    } & \red \\[0.3cm]
+    \stack{
+      \stack{(
+        \stack{(\lambda x.\ x\ u)}\
+        (\lambda y.\ y)
+      )} \ v
+    } & \red_\beta \\[0.4cm]
+    \stack{
+      \stack{(
+        (\lambda y.\ y)\ u
+      )} \ v
+    } & \red \\[0.3cm]
+    \stack{
+      \stack{(
+        \stack{(\lambda y.\ y)}\ u
+      )} \ v
+    } & \red_\beta \\[0.4cm]
+    \stack{
+      \stack{u} \ v
+    }
+  \end{array}
+\]
+
+\marginnote[0.1cm]{
+  In the formalism above, \(\vscmd{t}{\stack{\shole\ u} :: \varepsilon}\)
+  corresponds to \(\stack{\stack{t}\ u}\). I am simply now making explicit
+  the separation betwee the focused term and the stack.
+}
+The intesting bit is that the focused term still interacts with the stack.
+To see clearer we can use the notation \(\vscmd{t}{\pi}\) representing
+term \(t\) \emph{against} stack \(\pi\). From this we can write the following
+reduction rules that together correspond to \(\beta\)-reduction.
+
+\marginnote[0.5cm]{
+  \(\beta\)-reduction now happens in two steps:
+  \(
+    \vscmd{(\lambda x.\ t)\ u}{\pi} \red
+    \vscmd{\lambda x.\ t}{\stack{\shole\ u} :: \pi} \red
+    \vscmd{t[x \sto u]}{\pi}
+  \)
+}
+\[
+  \begin{array}{lcl}
+    \vscmd{u \ v}{\pi} &\red& \vscmd{u}{\stack{\shole\ v} :: \pi} \\
+    \vscmd{\lambda x.\ t}{\stack{\shole\ u} :: \pi}
+    &\red& \vscmd{t[x \sto u]}{\pi}
+  \end{array}
+\]
+
+\section{Positions induced by stacks}
+
+\section{Ordering positions}
 
 \todo{Should orders on positions be introduced here?
 Maybe as a third section? Or maybe in reduction? We can also just talk about
