@@ -122,6 +122,50 @@ For instance \mintinline{coq}{[ app_l ; let_in ]} is valid position in term
 which represents the term \mintinline{coq}{(let na := b : B in t) u}
 and points to subterm \mintinline{coq}{t}.
 
+We can also define a function to access the subterm at a given position.
+\marginnote[4cm]{
+  The \mintinline{coq}{tRel 0} case is in an impossible branch when the position
+  is valid, but for simplicity, the function is defined for any position.
+  Otherwise we would have to carry the proof that it is valid everywhere.
+}
+\begin{minted}{coq}
+Fixpoint atpos t (p : position) {struct p} : term :=
+  match p with
+  | [] => t
+  | c :: p =>
+    match c, t with
+    | app_l, tApp u v => atpos u p
+    | app_r, tApp u v => atpos v p
+    | case_p, tCase indn pr c brs => atpos pr p
+    | case_c, tCase indn pr c brs => atpos c p
+    | case_brs n, tCase indn pr c brs =>
+        match nth_error brs n with
+        | Some (_, br) => atpos br p
+        | None => tRel 0
+        end
+    | proj_c, tProj pr c => atpos c p
+    | fix_mfix_ty n, tFix mfix idx =>
+        match nth_error mfix n with
+        | Some d => atpos d.(dtype) p
+        | None => tRel 0
+        end
+    | fix_mfix_bd n, tFix mfix idx =>
+        match nth_error mfix n with
+        | Some d => atpos d.(dbody) p
+        | None => tRel 0
+        end
+    | lam_ty, tLambda na A t => atpos A p
+    | lam_tm, tLambda na A t => atpos t p
+    | prod_l, tProd na A B => atpos A p
+    | prod_r, tProd na A B => atpos B p
+    | let_bd, tLetIn na b B t => atpos b p
+    | let_ty, tLetIn na b B t => atpos B p
+    | let_in, tLetIn na b B t => atpos t p
+    | _, _ => tRel 0
+    end
+  end.
+\end{minted}
+
 Positions let you go deep inside a term, forgetting about its surrounding;
 surrounding which can be recorded using stacks.
 
