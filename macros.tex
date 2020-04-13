@@ -33,6 +33,22 @@
   \colorbox{highlightcol}{$\displaystyle#1$}%
 }
 
+% Stack highlight
+\newcounter{stack}
+\colorlet{stackcol}{Green}
+\newcommand{\stack}[1]{%
+  % \stepcounter{stack}%
+  \addtocounter{stack}{15}%
+  \colorbox{white!\the\value{stack}!stackcol}{$\displaystyle#1$}%
+  \addtocounter{stack}{-15}%
+}
+% \newcommand{\shole}{%
+%   \colorbox{white}{\phantom{X}}
+% }
+\newcommand{\shole}{%
+  \colorbox{white}{X}
+}
+
 % Names
 \def\name#1{\textsf{#1}\xspace}
 \def\Coq{\name{Coq}}
