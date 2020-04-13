@@ -123,11 +123,6 @@ which represents the term \mintinline{coq}{(let na := b : B in t) u}
 and points to subterm \mintinline{coq}{t}.
 
 We can also define a function to access the subterm at a given position.
-\marginnote[4cm]{
-  The \mintinline{coq}{tRel 0} case is in an impossible branch when the position
-  is valid, but for simplicity, the function is defined for any position.
-  Otherwise we would have to carry the proof that it is valid everywhere.
-}
 \begin{minted}{coq}
 Fixpoint atpos t (p : position) {struct p} : term :=
   match p with
@@ -165,6 +160,11 @@ Fixpoint atpos t (p : position) {struct p} : term :=
     end
   end.
 \end{minted}
+\marginnote[-2.5cm]{
+  The \mintinline{coq}{tRel 0} case is in an impossible branch when the position
+  is valid, but for simplicity, the function is defined for any position.
+  Otherwise we would have to carry the proof that it is valid everywhere.
+}
 
 Positions let you go deep inside a term, forgetting about its surrounding;
 surrounding which can be recorded using stacks.
