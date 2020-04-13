@@ -270,7 +270,95 @@ reduction rules that together correspond to \(\beta\)-reduction.
   \end{array}
 \]
 
+In \Coq I define stacks as follows.
+\begin{minted}{coq}
+Inductive stack : Type :=
+| Empty
+| App (t : term) (π : stack)
+| Fix (f : mfixpoint term) (n : nat) (args : list term)
+      (π : stack)
+| Fix_mfix_ty (na : name) (bo : term) (ra : nat)
+              (mfix1 mfix2 : mfixpoint term) (id : nat)
+              (π : stack)
+| Fix_mfix_bd (na : name) (ty : term) (ra : nat)
+              (mfix1 mfix2 : mfixpoint term) (id : nat)
+              (π : stack)
+| CoFix (f : mfixpoint term) (n : nat) (args : list term)
+        (π : stack)
+| Case_p (indn : inductive * nat) (c : term)
+         (brs : list (nat * term)) (π : stack)
+| Case (indn : inductive * nat) (p : term)
+       (brs : list (nat * term)) (π : stack)
+| Case_brs (indn : inductive * nat) (p c : term) (m : nat)
+           (brs1 brs2 : list (nat * term)) (π : stack)
+| Proj (p : projection) (π : stack)
+| Prod_l (na : name) (B : term) (π : stack)
+| Prod_r (na : name) (A : term) (π : stack)
+| Lambda_ty (na : name) (b : term) (π : stack)
+| Lambda_tm (na : name) (A : term) (π : stack)
+| LetIn_bd (na : name) (B t : term) (π : stack)
+| LetIn_ty (na : name) (b t : term) (π : stack)
+| LetIn_in (na : name) (b B : term) (π : stack)
+| coApp (t : term) (π : stack).
+
+Notation "'ε'" := (Empty).
+\end{minted}
+
 \section{Positions induced by stacks}
+
+The reason I present stacks and positions together is because they are related.
+If you consider the term \(t\) against some stack \(\pi\) as one term, there
+exists a position in that term that points to \(t\).
+For instance if you consider
+\[
+  \stack{u\ \stack{\stack{t}\ v}}
+\]
+then the position that first chooses the right-hand term of the top-level
+application and then the left-hand term will indeed point to \(t\).
+In \Coq syntax as earlier this would be
+\begin{minted}{coq}
+[ app_r ; app_l ]
+\end{minted}
+
+In fact the position can be computed from the stack itself, regardless of the
+term we want to plug in. In the example above, the stack is
+\[
+  \stack{\shole\ v} :: \stack{u\ \shole} :: \varepsilon
+\]
+We read it from right to left\sidenote{This is because the leftmost term with
+hole corresponds to the innermost element in the resulting term.} to reconstruct
+the position and simply give the position of the hole.
+
+\begin{minted}{coq}
+Fixpoint stack_position π : position :=
+  match π with
+  | ε => []
+  | App u ρ => stack_position ρ ++ [ app_l ]
+  | Fix f n args ρ => stack_position ρ ++ [ app_r ]
+  | Fix_mfix_ty na bo ra mfix1 mfix2 idx ρ =>
+      stack_position ρ ++ [ fix_mfix_ty #|mfix1| ]
+  | Fix_mfix_bd na ty ra mfix1 mfix2 idx ρ =>
+      stack_position ρ ++ [ fix_mfix_bd #|mfix1| ]
+  | CoFix f n args ρ => stack_position ρ ++ [ app_r ]
+  | Case_p indn c brs ρ => stack_position ρ ++ [ case_p ]
+  | Case indn pred brs ρ => stack_position ρ ++ [ case_c ]
+  | Case_brs indn pred c m brs1 brs2 ρ =>
+      stack_position ρ ++ [ case_brs #|brs1| ]
+  | Proj pr ρ => stack_position ρ ++ [ proj_c ]
+  | Prod_l na B ρ => stack_position ρ ++ [ prod_l ]
+  | Prod_r na A ρ => stack_position ρ ++ [ prod_r ]
+  | Lambda_ty na u ρ => stack_position ρ ++ [ lam_ty ]
+  | Lambda_tm na A ρ => stack_position ρ ++ [ lam_tm ]
+  | LetIn_bd na B u ρ => stack_position ρ ++ [ let_bd ]
+  | LetIn_ty na b u ρ => stack_position ρ ++ [ let_ty ]
+  | LetIn_in na b B ρ => stack_position ρ ++ [ let_in ]
+  | coApp u ρ => stack_position ρ ++ [ app_r ]
+  end.
+\end{minted}
+
+As I said multiple times, we will use stacks for reduction machines, to show the
+termination of such machines it is nice to have an order on stacks. This order
+will be achieved by going from stacks to positions.
 
 \section{Ordering positions}
 
