@@ -247,7 +247,7 @@ You can see the process step by step in the following example.
 \marginnote{
   In the formalism above, \(\vscmd{t}{\stack{\shole\ u} :: \varepsilon}\)
   corresponds to \(\stack{\stack{t}\ u}\). I am simply now making explicit
-  the separation betwee the focused term and the stack.
+  the separation between the focused term and the stack.
 }
 The intesting bit is that the focused term still interacts with the stack.
 To see clearer we can use the notation \(\vscmd{t}{\pi}\) representing
@@ -362,6 +362,62 @@ will be achieved by going from stacks to positions.
 
 \section{Ordering positions}
 
-\todo{Should orders on positions be introduced here?
-Maybe as a third section? Or maybe in reduction? We can also just talk about
-the order in general, and saying that some stuff can be unspecified?}
+If you consider the valid positions in a given term (\ie expressions of type
+\mintinline{coq}{pos t} for some \mintinline{coq}{t}) there exists a
+well-founded order on them. There are actually several due to some degree of
+liberty as we shall see.
+
+Since positions are defined as lists, the natural order on them would the
+structural which says that any (strict) prefix of a position is smaller.
+This order isn't really of interest to us because it would correspond to
+\emph{unfocusing}.
+Conversely, by extending a position with a new choice you are going deeper into
+the term, something which you cannot do indefinitely, you are bound to reach a
+leaf at some (finite) point.
+
+If you think about it dually, I'm merely explaining that the structural order on
+terms is well-founded, so why bother?
+The interesting part is that the order on positions can be more flexible than
+the subterm relation in that it allows us to compare `going left' with
+`going right'.
+Say you have the application \(t \coloneqq u\ v\), both \(u\) and \(v\) are
+subterms of \(u\) and \(v\) but there is no way to relate them reliably and
+have \(v\) \emph{always} smaller than \(u\) also because they can be arbitrary.
+If instead we were to consider positions in \(t\) we would have the empty one
+corresponding to \(t\) itself, \mintinline{coq}{[ app_l ]} corresponding to
+\(u\) and \mintinline{coq}{[ app_r ]} for \(v\). This means we abstract over the
+content of both \(u\) and \(v\). The positions can thus be ordered as follows:
+\begin{minted}{coq}
+[ app_r ] < [ app_l ] < []
+\end{minted}
+
+I am going to explain why this is desirable in \nrefch{coq-reduction}.
+
+In \Coq, the definition of the order is done in two steps: first an order on
+raw positions, from which we then derive an order on valid positions.
+\marginnote[4.8cm]{
+  The \mintinline{coq}{(` p)} notation corresponds to the first projection of
+  a subset type.
+}
+\begin{minted}{coq}
+Inductive positionR : position -> position -> Prop :=
+| positionR_app_lr p q :
+    positionR (app_r :: p) (app_l :: q)
+
+| positionR_deep c p q :
+    positionR p q ->
+    positionR (c :: p) (c :: q)
+
+| positionR_root c p :
+    positionR (c :: p) [].
+
+Definition posR {t} (p q : pos t) : Prop :=
+  positionR (` p) (` q).
+\end{minted}
+
+While the first order is not well-founded, the second one is, as crystallised
+by the following lemma.
+\begin{minted}{coq}
+Lemma posR_Acc :
+  forall t p, Acc (@posR t) p.
+\end{minted}
