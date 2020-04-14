@@ -114,10 +114,53 @@ Reduction is defined from the so-called \(\beta\)-reduction
 \]
 It is essentially saying that when applied to an argument, a function
 reduces to its body were the argument replaces the variable it was binding.
+Reduction \(\red\) is then obtained by taking the contextual closure of
+\(\red_\beta\), \ie allowing reduction in each subterm:
+\begin{mathpar}
+  \infer
+    {u \red u'}
+    {u\ v \red u'\ v}
+  %
+
+  \infer
+    {v \red v'}
+    {u\ v \red u\ v'}
+  %
+
+  \infer
+    {t \red t'}
+    {\lambda x.\ t \red \lambda x.\ t'}
+  %
+
+  \infer
+    { }
+    {(\lambda x.\ t)\ u \red t[x \sto u]}
+  %
+\end{mathpar}
 
 There is a lot more to say on the \emph{untyped} \(\lambda\)-calculus, but this
 out of scope of this document.
 
 \section{Types for programs}
+
+Not all programs make sense. Consider the term
+\[
+  \delta \coloneqq \lambda x.\ x\ x
+\]
+giving \(x\) as argument to \(x\) should already feel wrong somehow, but if you
+give \(\delta\) as argument to itself you get
+\[
+  \Omega \coloneqq \delta\ \delta
+\]
+Now let's have a look at its computational behaviour:
+\[
+  \begin{array}{lcl}
+    \Omega &\coloneqq& \delta\ \delta \\
+    &=& (\lambda x.\ x\ x)\ \delta \\
+    &\red_\beta& \delta\ \delta \\
+    &=& \Omega
+  \end{array}
+\]
+The problem should become apparent: \(\Omega\) reduces to itself!
 
 \section{The Curry-Howard isomorphism}
