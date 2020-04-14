@@ -86,6 +86,9 @@ Of course, this status changes if the term is put inside another:
 \]
 This times both \(y\) and \(x\) are \emph{bound}.
 
+A term with free variables is called \emph{open}, while a term with only bound
+variables is called \emph{closed}.
+
 \marginnote[0.2cm]{
   Sometimes this fact is summarised in the term \emph{capture-avoiding} meaning
   that bound variables aren't touched. I will refrain from using a qualifier
@@ -162,5 +165,72 @@ Now let's have a look at its computational behaviour:
   \end{array}
 \]
 The problem should become apparent: \(\Omega\) reduces to itself!
+Generally, that is not something you want to have.
+In case you have more structure in your language, such as in \ocaml where you
+have integers, you also want to restrict some operations like addition to
+expressions that are of the right \emph{kind}---in our case, integers.
+\ocaml expressions like \mintinline{ocaml}{true + 3} or
+\mintinline{ocaml}{1 + fun x -> 2} should be---and are!---rejected.
+
+The way we prevent such problematic terms---\ie those that don't have
+semantics---is by using \emph{types}. The \(\lambda\)-calculus is pretty simple,
+the only things we can do is define functions and apply them, as such we
+introduce a type of functions \(A \to B\).
+\(A \to B\) is the type of functions that take an argument of type \(A\)
+and produce a value of type \(B\).
+If we go back to \ocaml for a bit, a function like
+\mintinline{ocaml}{fun x -> x + x} will have type \mintinline{ocaml}{int -> int}
+while another making use of different data structures like
+\mintinline{ocaml}{fun b -> if b then "Yes" else "No"} will be of type
+\mintinline{ocaml}{bool -> string}.
+Going back to \(\lambda\)-calculus, the important rule is that when you have
+a function \(f\) of type \(A \to B\)---which we will write \(f : A \to B\)---and
+an argument \(u : A\), the result of the application will have type \(B\):
+\[
+  f\ u : B
+\]
+
+The usefulness of types is best summarised in the famous quote:
+\begin{quote}
+  ``Well-typed programs cannot go wrong.''
+
+  \hspace*{\fill} --- Robin Milner~\sidecite{milner1978theory}
+\end{quote}
+
+As I mentioned earlier, \(\lambda\)-terms can sometimes be open terms---\ie
+contain free variables---so in order to type them, we need to know the type of
+those variables. This information is called an environment or \emph{context}.
+We can thus give the syntax of types and contexts.
+\marginnote[1cm]{
+  \(o\) stands for base types. A context is a list of type ascriptions for the
+  variables, implicitly the variables are distinct.
+}
+\[
+  \begin{array}{rcl}
+    A, B &\bnf& o \bnfor A \to B \\
+    \Ga, \D &\bnf& \ctxempty \bnfor \Ga, x : A
+  \end{array}
+\]
+
+The typing rules of \acrlong{STL} are the following.
+\begin{mathpar}
+  \infer
+    {\Ga, x:A \vdash t : B}
+    {\Ga \vdash \lambda x.\ t : A \to B}
+  %
+
+  \infer
+    {
+      \Ga \vdash u : A \to B \\
+      \Ga \vdash v : A
+    }
+    {\Ga \vdash u\ v : B}
+  %
+
+  \infer
+    {(x : A) \in \Ga}
+    {\Ga \vdash x : A}
+  %
+\end{mathpar}
 
 \section{The Curry-Howard isomorphism}
