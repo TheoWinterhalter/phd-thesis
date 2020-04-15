@@ -410,11 +410,59 @@ to perform induction on lists, the type of which is
   \Pi\ l.\ P\ l
 \]
 
+\paradot{Sum types}
+
+\todo{TODO}
+
 \paradot{Simple products}
 
-\todo{Mention records}
+Simple products \(A \times B\) are types of pairs of elements, one in \(A\)
+and one in \(B\). None too surprising.
+\begin{mathpar}
+  \infer
+    {
+      \Ga \vdash A \\
+      \Ga \vdash B
+    }
+    {\Ga \vdash A \times B}
+  %
+
+  \infer
+    {
+      \Ga \vdash a : A \\
+      \Ga \vdash b : B
+    }
+    {\Ga \vdash (a,b) : A \times B}
+  %
+
+  \infer
+    {
+      \Ga \vdash p : A \times B \\
+      \Ga, x : A \times B \vdash P \\
+      \Ga, a : A, b : B \vdash t : P[x \sto (a,b)]
+    }
+    {
+      \Ga \vdash
+      \pmatch{p}{x.P}{
+        \branch{(a,b)}{t}
+      }
+      : P[x \sto p]
+    }
+  %
+\end{mathpar}
+
+This presentation of pairs is called \emph{positive} as it uses a constructor.
+In the section on records I will show the \emph{negative} version.
 
 \paradot{\(\Sigma\)-types}
+
+\marginnote[0.2cm]{
+  In the simple case we have sums \(A + B\), products \(A \times B\)
+  and exponentials \(B^A\) or \(A \to B\). In the dependent case however, it is
+  all shifted: we have sums \(\Sigma A.B\) and products \(\Pi A.B\).
+}
+Dependent sums or \(\Sigma\)-types are a generalisation of simple products to
+dependent types.
 
 \todo{prods as sigmas}
 
