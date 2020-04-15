@@ -412,7 +412,50 @@ to perform induction on lists, the type of which is
 
 \paradot{Sum types}
 
-\todo{TODO}
+Simple sums \(A + B\) consist in a disjunction of cases. A proof of \(A + B\)
+is either a proof of \(A\) or a proof of \(B\).
+\begin{mathpar}
+  \infer
+    {
+      \Ga \vdash A \\
+      \Ga \vdash B
+    }
+    {\Ga \vdash A + B}
+  %
+
+  \infer
+    {
+      \Ga \vdash a : A \\
+      \Ga \vdash B
+    }
+    {\Ga \vdash \inl\ a : A + B}
+  %
+
+  \infer
+    {
+      \Ga \vdash b : B \\
+      \Ga \vdash A
+    }
+    {\Ga \vdash \inr\ b : A + B}
+  %
+
+  \infer
+    {
+      \Ga \vdash p : A + B \\
+      \Ga, x : A + B \vdash P \\
+      \Ga, a : A \vdash u : P[x \sto \inl\ a] \\
+      \Ga, b : B \vdash v : P[x \sto \inr\ b]
+    }
+    {
+      \Ga \vdash
+      \pmatch{p}{x.P}{
+        \branch{\inl\ a}{u} \\
+        \branch{\inr\ b}{v}
+      }
+      : P[x \sto p]
+    }
+  %
+\end{mathpar}
 
 \paradot{Simple products}
 
