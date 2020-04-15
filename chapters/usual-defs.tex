@@ -687,7 +687,56 @@ With the typing rules I gave it is still possible to do it, it's just that we
 have to conclude using the elimination of \(\bot\) in the \(\vnil\) branch.
 
 \paradot{Equality}
-\todo{TODO}
+As equality is special I will only give a brief definition before we dicuss it
+in more detail later in this chapter. In \nrefch{flavours} I will also show
+different notions of equality.
+In any case, we want the type \(u =_A v\) to represent equality of terms \(u\)
+and \(v\) of type \(A\). When can you prove that \(u\) and \(v\) are
+\emph{equal}? When they are the same!
+\begin{mathpar}
+  \infer
+    {
+      \Ga \vdash A \\
+      \Ga \vdash u : A \\
+      \Ga \vdash v : A
+    }
+    {\Ga \vdash u =_A v}
+  %
+
+  \infer
+    {\Ga \vdash u : A}
+    {\Ga \vdash \refl{A} u : u =_A u}
+  %
+
+  \infer
+    {
+      \Ga \vdash u : A \\
+      \Ga \vdash v : A \\
+      \Ga \vdash e : u =_A v \\
+      \Ga, x : A, p : u =_A x \vdash P \\
+      \Ga \vdash t : P[x \sto u, p \sto \refl{A} u]
+    }
+    {
+      \Ga \vdash
+      \pmatch{e}{x.p.P}{
+        \branch{\refl{}}{t}
+      }
+      : P[x \sto v, p \sto e]
+    }
+  %
+\end{mathpar}
+\(\refl{A} u\) is the reflexivity proof and it \emph{unifies} \(u\) and \(v\)
+in its return type. Hence you can conclude that \(v\) is an index while \(A\)
+and \(u\) are parameters.
+The pattern-matching in the case where \(P\) does not depend on the equality
+\(p\) helps us recover Leibniz's principle stating that \(u = v\) means that
+for every \(P\), \(P\ x \to P\ y\).
+In particular this allows us to \emph{rewrite} equalities, \ie chaging something
+for something else equal to it in an expression.
+
+Generally speaking indices are complex to deal with and it is related to how
+equality is complex in type theory, hence the multiple approaches there are to
+it.
 
 \subsection{Other inductive types}
 \todo{Mutual}
