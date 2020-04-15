@@ -144,6 +144,10 @@ Once again, pattern-matching allows us to inspect a proof of \(\unit\):
 This might seem a bit useless, but essentially it means that to prove anything
 involving a dependency on \(\unit\), like \(P[x \sto u]\), it suffices to prove
 it assuming it is \(\tunit\): \(P[x \sto \tunit]\).
+When the term \(u\) was already \(\tunit\), the \(\mathsf{match}\) can go away:
+\[
+  \pmatch{\tunit}{x.P}{\branch{\tunit}{v}} \red v
+\]
 
 Sometimes this type is called \(\top\) as in the logical triviality.
 
@@ -185,15 +189,181 @@ Here we are able to conjure some inhabitant of \(P[x \sto t]\) from thin air.
 The \(P\) is typically not dependent on the proof of \(\bot\), meaning that from
 an inhabitant of \(\bot\) we can get an inhabitant of \emph{any} type.
 
+\subsection{Recusrive types}
+
+Inductive types are morally types of trees. For now I only prensented types
+consisting only of leaves. To allow for nodes with subtrees, constructors can
+take subtrees (or subterms) as arguments.
+The best and simplest example of those is that of natural numbers.
+
+\paradot{Natural numbers}
+
+The way we represent \emph{unary} natural numbers in type theory is by saying
+a natural number is either \(0\) or the successor of another natural number
+\(n\), \ie \(n + 1\). We usually write the successor operation \(\natsucc\).
+So natural numbers are \(0\), \(\natsucc\ 0\), \(\natsucc\ (\natsucc\ 0)\), etc.
+\marginnote[2.7cm]{
+  Notice how \(u_\natsucc\) is allowed to mention \(m\). The variable is bound
+  by the pattern \(\natsucc\ m\) on the left-hand side.
+}
+\begin{mathpar}
+  \infer
+    { }
+    {\Ga \vdash \nat}
+  %
+
+  \infer
+    { }
+    {\Ga \vdash \zero : \nat}
+  %
+
+  \infer
+    {\Ga \vdash n : \nat}
+    {\Ga \vdash \natsucc\ n : \nat}
+  %
+
+  \infer
+    {
+      \Ga \vdash n : \nat \\
+      \Ga, x:\nat \vdash P \\
+      \Ga \vdash u_\zero : P[x \sto \zero] \\
+      \Ga, m:\nat \vdash u_\natsucc : P[x \sto \natsucc\ m]
+    }
+    {
+      \Ga \vdash
+      \pmatch{n}{x.P}{
+        \branch{\zero}{u_\zero} \\
+        \branch{\natsucc\ m}{u_\natsucc}
+      }
+      : P[x \sto n]
+    }
+  %
+\end{mathpar}
+Together with the computation rules
+\[
+  \begin{array}{lcl}
+    \pmatch{\zero}{x.P}{
+      \branch{\zero}{u_\zero} \\
+      \branch{\natsucc\ m}{u_\natsucc}
+    }
+    &\red&
+    u_\zero \\
+    \pmatch{\natsucc\ n}{x.P}{
+      \branch{\zero}{u_\zero} \\
+      \branch{\natsucc\ m}{u_\natsucc}
+    }
+    &\red&
+    u_\natsucc[m \sto n]
+  \end{array}
+\]
+
+As with the previous examples, this allows us to do case analysis on natural
+numbers but this is no longer sufficient to effectively reason on them.
+The bare minimum we would require is to do induction on natural numbers.
+
+There are two main ways of achieving this.
+\begin{itemize}
+  \item \emph{Eliminators.} This method consists in assuming the induction
+  principle of \(\nat\) directly.
+  \[
+    \natrec :
+      \Pi\ P.\
+        P\ \zero \to
+        (\Pi n.\ P\ n \to P\ (\natsucc\ n)) \to
+        \Pi n. P\ n
+  \]
+  There are ways to generate them automatically~\sidecite{kovacs2020signatures}
+  and \Coq does it to some extent. The troublesome part is getting the
+  right computation rules and dealing with nested inductive types.
+  In this case, the computation rules are
+  \[
+    \begin{array}{lcl}
+      \natrec\ P\ p_\zero\ p_\natsucc\ \zero &\red& p_\zero \\
+      \natrec\ P\ p_\zero\ p_\natsucc\ (\natsucc\ n) &\red&
+      p_\natsucc\ n\ (\natrec\ P\ p_\zero\ p_\natsucc\ n) \\
+    \end{array}
+  \]
+
+  \item \emph{Fixed-points.} The method used in \Coq comes from a combination of
+  pattern-matching and a fixed-point operator.
+  \marginnote[0.7cm]{
+    The notation \(\Pi \D. T\) is to quantify over a whole context.
+    If \(\D\) is \(x : A, y : B\), \(\Pi \D. T\) is \(\Pi (x:A)\ (y:B).\ T\).
+    When \(\D\) is empty, this is just \(T\).
+  }
+  \[
+    \infer
+      {
+        \Ga \vdash \Pi \Delta. T \\
+        \Ga, f : \Pi \Delta. T, \D \vdash t : T \\
+        \highlight{f \vdash_n t \text{ termination checks}}
+      }
+      {\Ga \vdash \fixp_n (f : \Pi \Delta. T).\ t : \Pi \Delta. T}
+    %
+  \]
+  The termination checking condition roughly verifies that the \(n\)-th argument
+  in \(\D\) is only fed to \(f\) (\ie recursive calls) in a decreasing manner.
+  This so-called guard condition is a complicated matter and out of scope of
+  this thesis and probably better studied in
+  \sidecite{gimenez1998structural}. In general this can be thought as only
+  subterms of the argument are passed on to \(f\).
+  The computational behaviour of the fixed-point operator is via unfolding of
+  its definition.
+  \[
+    \fixp_n (f : \Pi \D.T).\ t \red
+    \lambda \D.\ t[f \sto \fixp_n (f : \Pi \D.T).\ t]
+  \]
+  Of course, doing this would defeat the purpose of the termination checker:
+  ensuring that the obtained definition terminates. As you can see you can
+  unfold the fixed-point indefinitely.
+  The way we prevent that is by using a syntactical guard on the reduction rule.
+  It is instead the following.
+  \marginnote[0.6cm]{
+    \(\mathbf{C}\) stands for a constuctor like \(\zero\) or \(\natsucc\).
+  }
+  \[
+    \begin{array}{lc}
+      (\fixp_n (f : \Pi \D.T).\ t)\
+      u_1\ \dots\ u_{n-1}\ (\mathbf{C}\ v_1\ \dots\ v_m)
+      &\red \\
+      (\lambda \D.\ t[f \sto \fixp_n (f : \Pi \D.T).\ t])\
+      u_1\ \dots\ u_{n-1}\ (\mathbf{C}\ v_1\ \dots\ v_m)
+    \end{array}
+  \]
+  We can then write down the induction principle \(\natrec\) with \(\fixp\)
+  and \(\mathsf{match}\).
+  \marginnote[2cm]{
+    Notice how \(m\) is a subterm of \(\natsucc\ m\) in the recursive call to
+    \(f\). It is indeed its fourth argument.
+  }
+  \[
+    \begin{array}{l}
+      \fixp_4\ (f : \Pi\ P\ p_\zero\ p_\natsucc\ n.\ P\ n). \\
+      \pmatch{n}{x.\ P\ x}{
+        \branch{\zero}{p_\zero} \\
+        \branch
+          {\natsucc\ m}
+          {p_\natsucc\ m\ (f\ P\ p_\zero\ p_\natsucc\ \highlight{m})}
+      }
+    \end{array}
+  \]
+  It will have the same reduction rules as the eliminator shown above.
+\end{itemize}
+
+I won't go into that much detail for other inductive types as they will all
+follow more or less the same schema.
+
 \subsection{Parameterised inductive types}
 
 
-\todo{nat, lists, sigmas, prods and prods as sigmas}
+\todo{lists, sigmas, prods and prods as sigmas}
 
 \subsection{Indexed inductive types}
 \todo{vectors}
 \todo{Lead to equality}
 
+\subsection{Other inductive types}
+\todo{Mutual}
 \todo{Inductive Inductive/Recusrive? Probably irrelevant here}
 
 \section{Coinductive types and records}
