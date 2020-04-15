@@ -505,9 +505,52 @@ In the section on records I will show the \emph{negative} version.
   all shifted: we have sums \(\Sigma A.B\) and products \(\Pi A.B\).
 }
 Dependent sums or \(\Sigma\)-types are a generalisation of simple products to
-dependent types.
+dependent types. They are the way to represent existential quantifier
+(except in a---usually---constructive way): \(\Sigma (x:A).P\ x\) is proven by
+giving a term \(t : A\) and a proof of \(P\ t\).
+\begin{mathpar}
+  \infer
+    {
+      \Ga \vdash A \\
+      \Ga, x : A \vdash B
+    }
+    {\Ga \vdash \Sigma (x:A). B}
+  %
 
-\todo{prods as sigmas}
+  \infer
+    {
+      \Ga, x:A \vdash B \\
+      \Ga \vdash a : A \\
+      \Ga \vdash b : B[x \sto a]
+    }
+    {\Ga \vdash \dpair{a,b} : \Sigma (x:A).B}
+  %
+
+  \infer
+    {
+      \Ga \vdash p : \Sigma (x:A).B \\
+      \Ga, x : \Sigma (x:A).B \vdash P \\
+      \Ga, a : A, b : B[x \sto a] \vdash t : P[x \sto \dpair{a,b}]
+    }
+    {
+      \Ga \vdash
+      \pmatch{p}{x.P}{
+        \branch{\dpair{a,b}}{t}
+      }
+      : P[x \sto p]
+    }
+  %
+\end{mathpar}
+Once more, this is the \emph{positive} presentation of \(\Sigma\)-types.
+With this presentation it is also possible to restrict \(P\) in case we don't
+want to make it possible to extract the witness (the \(a\) in \(\dpair{a,b}\)).
+
+\marginnote[0.2cm]{
+  The \(\_\) is there to note that \(B\) does not depend on the variable in
+  \(A\).
+}
+It is also worth noting that simple products are a particular case of
+\(\Sigma\)-type: \(A \times B\) can be defined as \(\Sigma (\_:A).B\).
 
 \subsection{Indexed inductive types}
 \todo{vectors}
