@@ -410,6 +410,10 @@ to perform induction on lists, the type of which is
   \Pi\ l.\ P\ l
 \]
 
+\paradot{Options}
+
+\todo{TODO}
+
 \paradot{Sum types}
 
 Simple sums \(A + B\) consist in a disjunction of cases. A proof of \(A + B\)
@@ -553,8 +557,100 @@ It is also worth noting that simple products are a particular case of
 \(\Sigma\)-type: \(A \times B\) can be defined as \(\Sigma (\_:A).B\).
 
 \subsection{Indexed inductive types}
-\todo{vectors}
-\todo{Lead to equality}
+
+\marginnote[1cm]{
+  In all the examples I showed, the parameters are \emph{uniform}, \ie they are
+  the same everywhere, but there can be non uniform occurrences of them where
+  the recursive argument is at a different parameter.
+}
+Inductive types can have parameters, but they can also have \emph{indices}.
+They are similar to parameters in that they are arguments to the inductive type
+but while parameters are always the same in the \emph{conclusion} of the type of
+a constructor, indices can vary.
+I will show the two most talked about cases of indexed inductive types: vectors
+and equality.
+
+\paradot{Vectors}
+
+Vectors are length-indexed lists: \(\tvec_A\ n\) is type of lists of length
+\(n\) whose elements inhabit \(A\). In this case, \(A\) is a parameter and
+\(n\) is an index.
+\marginnote[1cm]{
+  I highlight the index for the constructors to show how it differs.
+  \(\vnil\) is the only list of length \(0\) and a \(\vcons\) always adds one
+  element to a vector.
+}
+\begin{mathpar}
+  \infer
+    {
+      \Ga \vdash A \\
+      \Ga \vdash n : \nat
+    }
+    {\Ga \vdash \tvec_A\ n}
+  %
+
+  \infer
+    {\Ga \vdash A}
+    {\Ga \vdash \vnil : \tvec_A\ \highlight{\zero}}
+  %
+
+  \infer
+    {
+      \Ga \vdash a : A \\
+      \Ga \vdash n : \nat \\
+      \Ga \vdash v : \tvec_A\ n
+    }
+    {\Ga \vdash \vcons\ a\ n\ v : \tvec_A\ \highlight{\natsucc\ n}}
+  %
+
+  \infer
+    {
+      \Ga \vdash v : \tvec_A\ n \\
+      \Ga, p : \nat, x : \tvec_A\ p \vdash P \\
+      \Ga \vdash u_\vnil : P[p \sto 0, x \sto \vnil] \\
+      \Ga, a : A, m : \nat, w : \tvec_A\ m \vdash
+      u_\vcons : P[p \sto \natsucc\ m, x \sto \vcons\ a\ m\ w]
+    }
+    {
+      \Ga \vdash
+      \pmatch{v}{p.x.P}{
+        \branch{\vnil}{u_\vnil} \\
+        \branch{\vcons\ a\ m\ w}{u_\vcons}
+      }
+      : P[p \sto n, x \sto v]
+    }
+  %
+\end{mathpar}
+The pattern-matching this time binds \emph{two} variables: the variable
+representing the matched term as usual, but also the index! This is because it
+varies depending on the branch.
+
+Vectors are pretty useful because since you account for the length, you can
+write safer and more precise functions. For instance, the tail function on lists
+would land in an option type (in the case the list is \(\nil\)), but here we
+can easily say it should only take some \(\tvec_A\ (\natsucc\ n)\) as argument,
+ruling out the empty vector completely.
+\marginnote[1.4cm]{
+  The return type is also more precise: the tail of a list of length
+  \(\natsucc\ n\) is of length \(n\).
+}
+\[
+  \begin{array}{l}
+    \lambda\ A\ (n : \nat)\ (v : \tvec_A\ (\natsucc\ n)). \\
+    \pmatch{v}{p.x. \tvec_A\ n}{
+      \branch{\vcons\ a\ m\ w}{w}
+    }
+  \end{array}
+\]
+Notice how I didn't even provide a branch for \(\vnil\) because it will always
+by ill-typed. This is unfortunately impossible in vanilla \Coq but is supported
+in \Agda natively and can be achived in \Coq with \Program of the \Equations
+plugin~\sidecite{DBLP:conf/itp/Sozeau10,sozeau2019equations}.
+With the typing rules I gave it is still possible to do it, it's just that we
+have to conclude using the elimination of \(\bot\) in the \(\vnil\) branch.
+
+\paradot{Equality}
+\todo{TODO}
 
 \subsection{Other inductive types}
 \todo{Mutual}
