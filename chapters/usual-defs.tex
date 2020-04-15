@@ -355,8 +355,62 @@ follow more or less the same schema.
 
 \subsection{Parameterised inductive types}
 
+Parameterised inductive types, as the name suggests, can take parameters.
+In \ocaml, parameters are necessarily types, and it is often the case in \Coq
+though everything goes.
 
-\todo{lists, sigmas, prods and prods as sigmas}
+\paradot{Lists}
+
+I already presented lists in \ocaml, and their \Coq counterpart isn't much
+different.
+\begin{mathpar}
+  \infer
+    {\Ga \vdash A}
+    {\Ga \vdash \tlist\ A}
+  %
+
+  \infer
+    {\Ga \vdash A}
+    {\Ga \vdash \nil : \tlist\ A}
+  %
+
+  \infer
+    {
+      \Ga \vdash A \\
+      \Ga \vdash h : A \\
+      \Ga \vdash t : \tlist\ A
+    }
+    {\Ga \vdash h :: t : \tlist\ A}
+  %
+
+  \infer
+    {
+      \Ga \vdash l : \tlist\ A \\
+      \Ga, x : \tlist\ A \vdash P \\
+      \Ga \vdash u_\nil : P[x \sto \nil] \\
+      \Ga, h : A, t : \tlist\ A \vdash u_{::} : P[x \sto h :: t]
+    }
+    {
+      \Ga \vdash
+      \pmatch{l}{x.P}{
+        \branch{\nil}{u_\nil} \\
+        \branch{h :: t}{u_{::}}
+      }
+      : P[x \sto l]
+    }
+  %
+\end{mathpar}
+The computation rules are the ones you should expect by now.
+Similarly to natural numbers, that can be combined with the fixed-point operator
+to perform induction on lists, the type of which is
+\[
+  \Pi\ A\ (P : \tlist\ A \to \Type).\
+  P\ \nil \to
+  (\Pi\ h\ t.\ P\ t \to P\ (h :: t)) \to
+  \Pi\ l.\ P\ l
+\]
+
+\todo{sigmas, prods and prods as sigmas}
 
 \subsection{Indexed inductive types}
 \todo{vectors}
