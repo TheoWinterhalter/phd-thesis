@@ -412,7 +412,43 @@ to perform induction on lists, the type of which is
 
 \paradot{Options}
 
-\todo{TODO}
+\(\option\ A\) represents a potential data of type \(A\) but it could also not
+be present. It is optional.
+\begin{mathpar}
+  \infer
+    {\Ga \vdash A}
+    {\Ga \vdash \option\ A}
+  %
+
+  \infer
+    {\Ga \vdash a : A}
+    {\Ga \vdash \some\ a : \option\ A}
+  %
+
+  \infer
+    {\Ga \vdash A}
+    {\Ga \vdash \none : \option\ A}
+  %
+
+  \infer
+    {
+      \Ga \vdash o : \option\ A \\
+      \Ga, x : \option\ A \vdash P \\
+      \Ga, a : A \vdash u_\some : P[x \sto \some\ a] \\
+      \Ga \vdash u_\none : P[x \sto \none]
+    }
+    {
+      \Ga \vdash
+      \pmatch{o}{x.P}{
+        \branch{\some\ a}{u_\some} \\
+        \branch{\none}{u_\none}
+      }
+      : P[x \sto o]
+    }
+  %
+\end{mathpar}
+It is an easy way of representing functions that are not defined on their whole
+domain (they return \(\none\) when they are not).
 
 \paradot{Sum types}
 
