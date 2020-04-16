@@ -779,6 +779,103 @@ Both these features are not available in \Coq yet, but are present in \Agda.
 
 \section{Coinductive types and records}
 
+Not all data is best represented inductively, instead of constructors it is
+possible to talk about \emph{destructors}, \ie observations.
+
+\subsection{Records}
+
+Records are datatypes containing different fields. In \Coq they can be defined
+like this.
+\begin{minted}{coq}
+Record prod A B := pair {
+  fst : A ;
+  snd : B
+}
+\end{minted}
+This corresponds to another way of defining \(A \times B\).
+
+Historically in \Coq, records are defined as inductive types with one
+constructor. The above definition is in fact syntactic sugar for
+\begin{minted}{coq}
+Inductive prod A B :=
+| pair : A -> B -> prod A B.
+
+Definition fst A B (p : prod A B) : A :=
+  match p with
+  | pair a b => a
+  end.
+
+Definition snd A B (p : prod A B) : B :=
+  match p with
+  | pair a b => b
+  end.
+\end{minted}
+This is what we call \emph{positive} records, corresponding to the presentation
+of \(A \times B\) and \(\Sigma (x:A).B\) I made earlier.
+
+There is however an option in \Coq to instead use a \emph{negative}
+presentation:
+\begin{minted}{coq}
+Set Primitive Projections.
+\end{minted}
+Once it is set the definition above of the record becomes primitive.
+The constructor \mintinline{coq}{pair} is the one that becomes a definition:
+\begin{minted}{coq}
+Definition pair A B (a : A) (b : B) : prod A B :=
+  {|
+    fst := a ;
+    snd := b
+  |}.
+\end{minted}
+
+I will now give the typing rules of negative \(\Sigma\)-types.
+\begin{mathpar}
+  \infer
+    {
+      \Ga \vdash A \\
+      \Ga, x : A \vdash B
+    }
+    {\Ga \vdash \Sigma (x:A). B}
+  %
+
+  \infer
+    {\Ga \vdash p : \Sigma (x:A).B}
+    {\Ga \vdash \pi_1\ p : A}
+  %
+
+  \infer
+    {\Ga \vdash p : \Sigma (x:A).B}
+    {\Ga \vdash \pi_2\ p : B[x \sto \pi_1\ p]}
+  %
+
+  \infer
+    {
+      \Ga \vdash a : A \\
+      \Ga, x:A \vdash B \\
+      \Ga \vdash b : B[x \sto a]
+    }
+    {\Ga \vdash \dpair{a,b} : \Sigma (x:A).B}
+  %
+\end{mathpar}
+
+The way to think about them is that when providing \(\dpair{a,b}\) you are
+actually saying how the term will behave when projected (by either \(\pi_1\)
+and \(\pi_2\)).
+This is illustrated by the computation rules.
+\[
+  \begin{array}{lcl}
+    \pi_1\ \dpair{a,b} &\red& a \\
+    \pi_2\ \dpair{a,b} &\red& b
+  \end{array}
+\]
+
+I already hinted at this, but with this presentation it is not possible to
+restrict usage of \(\pi_1\), it is always possible to recover the witness.
+
+\subsection{Coinductive types}
+
+\sidecite{abel2013copatterns}
+
 \section{Equality}
 \labsec{equality-def}
 
