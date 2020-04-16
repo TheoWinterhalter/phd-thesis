@@ -992,11 +992,70 @@ Its definition is
   \end{array}
 \]
 
+It is often the case that \(P\) doesn't mention the equality, in which case we
+get the simpler notion of \emph{transport}.
+\marginnote[1cm]{
+  I changed the order of the arguments a bit compared with \(\eqrec\) because
+  I find it more legible this way, and because I can, thanks to less
+  dependencies.
+}
+\[
+  \begin{array}{lcl}
+    \ntransp &:&
+    \Pi\ A\ (P : A \to \Type)\ (u\ v : A).\ \\
+    && \quad u =_A v \to \\
+    && \quad P\ u \to \\
+    && \quad P\ v \\
+    &\coloneqq& \lambda\ A\ P\ u\ v\ e\ t.\ \\
+    && \pmatch{e}{x.p.\ P\ x}{
+          \branch{\refl{}}{t}
+        }
+  \end{array}
+\]
+
+Transport will be a good stepping stone to show that equality is a congruence.
+\marginnote[1cm]{
+  Notice how
+  \[
+    \ntransp\ A\ (\lambda x.\ u =_A x)\ u\ v\ e
+  \]
+  has type
+  \[
+    u =_A u \to u =_A v
+  \]
+}
+\[
+  \begin{array}{lcl}
+    \mathsf{sym} &:&
+    \Pi\ A\ (u\ v : A).\ \\
+    && \quad u =_A v \to \\
+    && \quad v =_A u \\
+    &\coloneqq& \lambda\ A\ u\ v\ e.\ \\
+    && \quad \ntransp\ A\ (\lambda x.\ u =_A x)\ u\ v\ e\ (\refl{A} u) \\
+    \\
+    \mathsf{trans} &:&
+    \Pi\ A\ (u\ v\ w : A).\ \\
+    && \quad u =_A v \to \\
+    && \quad v =_A w \to \\
+    && \quad u =_A w \\
+    &\coloneqq& \lambda\ A\ u\ v\ w\ e_1\ e_2.\ \\
+    && \quad \ntransp\ A\ (\lambda x.\ u =_A x)\ v\ w\ e_2\ e_1 \\
+    \\
+    \mathsf{cong} &:&
+    \Pi\ A\ B\ (f : A \to B)\ (u\ v : A).\ \\
+    && \quad u =_A v \to \\
+    && \quad f\ u =_B f\ v \\
+    &\coloneqq& \lambda\ A\ B\ f\ u\ v\ e.\ \\
+    && \quad \ntransp\ A\ (\lambda x.\ f\ u =_B f\ x)\ u\ v\ e\
+    (\refl{B} (f\ u))
+  \end{array}
+\]
+
 \subsection{Independent principles}
 
 \todo{This is not a debate about how to define it, we will show the Coq one
 and refer to the next chapter to the discussion about its definition.}
-\todo{UIP, funext, transport, heterogenous equality}
+\todo{UIP, funext, heterogenous equality}
 
 \acrfull{JMeq} introduced by
 \sidecite{mcbride2000dependently} has axioms
