@@ -117,9 +117,20 @@
 \newcommand{\inr}{\mathsf{inr}}
 \newcommand{\mto}{\Longrightarrow}
 \newcommand{\branch}[2]{\mid #1 &\mto& #2}
+\newcommand{\fitbranch}[2]{\mid #1 &\Rightarrow& #2}
 \newcommand{\pmatch}[3]{
   \begin{array}{lcl}
     \multicolumn{3}{l}{\mathsf{match}\ #1\ \mathsf{return}\ #2\ \mathsf{with}} \\
+    #3 \\
+    \multicolumn{3}{l}{\mathsf{end}} \\
+  \end{array}
+}
+\newcommand{\fitmatch}[3]{
+  \setlength\arraycolsep{2pt}
+  \begin{array}{lcl}
+    \multicolumn{3}{l}{\mathsf{match}\ #1} \\
+    \multicolumn{3}{l}{\mathsf{return}\ #2} \\
+    \multicolumn{3}{l}{\mathsf{with}} \\
     #3 \\
     \multicolumn{3}{l}{\mathsf{end}} \\
   \end{array}

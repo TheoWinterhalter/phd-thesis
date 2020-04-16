@@ -947,8 +947,8 @@ well-behaved in \Coq so we mostly ignore them for the time being.
       }
       {
         \Ga \vdash
-        \pmatch{e}{x.p.P}{
-          \branch{\refl{}}{t}
+        \fitmatch{e}{x.p.P}{
+          \fitbranch{\mathsf{refl}}{t}
         }
         : P[x \sto v, p \sto e]
       }
