@@ -918,6 +918,82 @@ well-behaved in \Coq so we mostly ignore them for the time being.
 \section{Equality}
 \labsec{equality-def}
 
+\reminder[-0.7cm]{Equality}{
+  Equality is given by the following rules.
+  \[
+    \infer
+      {
+        \Ga \vdash A \\
+        \Ga \vdash u : A \\
+        \Ga \vdash v : A
+      }
+      {\Ga \vdash u =_A v}
+    %
+  \]
+  \[
+    \infer
+      {\Ga \vdash u : A}
+      {\Ga \vdash \refl{A} u : u =_A u}
+    %
+  \]
+  \[
+    \infer
+      {
+        \Ga \vdash u : A \\
+        \Ga \vdash v : A \\
+        \Ga \vdash e : u =_A v \\
+        \Ga, x : A, p : u =_A x \vdash P \\
+        \Ga \vdash t : P[x \sto u, p \sto \refl{A} u]
+      }
+      {
+        \Ga \vdash
+        \pmatch{e}{x.p.P}{
+          \branch{\refl{}}{t}
+        }
+        : P[x \sto v, p \sto e]
+      }
+    %
+  \]
+}
+I will here describe some usual definition and concepts associated with equality
+in type theory, mostly from the point of view of \Coq.
+Again, several notions of equality are of interest and I study them briefly
+in \nrefch{flavours}.
+
+\subsection{Basic properties of equality}
+
+Equality, by all means, should be a congruence, and it is. It might be
+surprising given that we \emph{only} ask for it to be reflexive.
+Induction helps us recover these properties.
+
+We can build a term \(\eqrec\) corresponding to the eliminator for equality.
+\[
+  \begin{array}{lcl}
+    \eqrec &:&
+    \Pi\ A\ (u : A)\ (P : \Pi\ (x : A).\ u =_A x \to \Type).\ \\
+    && \quad P\ u\ (\refl{A}\ u) \to \\
+    && \quad \Pi\ v\ (e : u =_A v).\ P\ v\ e
+  \end{array}
+\]
+Its definition is
+% eq_rect =
+% fun (A : Type) (x : A) (P : A -> Type) (f : P x) (y : A) (e : x = y) =>
+% match e in (_ = y0) return (P y0) with
+% | eq_refl => f
+% end
+% 	 : forall (A : Type) (x : A) (P : A -> Type),
+%        P x -> forall y : A, x = y -> P y
+\[
+  \begin{array}{l}
+    \lambda\ A\ u\ P\ t\ v\ e.\ \\
+    \pmatch{e}{x.p.\ P\ x\ p}{
+      \branch{\refl{}}{t}
+    }
+  \end{array}
+\]
+
+\subsection{Independent principles}
+
 \todo{This is not a debate about how to define it, we will show the Coq one
 and refer to the next chapter to the discussion about its definition.}
 \todo{UIP, funext, transport, heterogenous equality}
