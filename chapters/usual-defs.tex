@@ -874,7 +874,46 @@ restrict usage of \(\pi_1\), it is always possible to recover the witness.
 
 \subsection{Coinductive types}
 
-\sidecite{abel2013copatterns}
+Coinductive types are the dual of inductive types and are used to represent
+potentially infinite data. Streams of data are one such example: like lists
+streams have heads and tails, except there always is a tail, it is never-ending.
+\begin{mathpar}
+  \infer
+    {\Ga \vdash A}
+    {\Ga \vdash \stream\ A}
+  %
+
+  \infer
+    {\Ga \vdash s : \stream\ A}
+    {\Ga \vdash \head\ s : A}
+  %
+
+  \infer
+    {\Ga \vdash s : \stream\ A}
+    {\Ga \vdash \tail\ s : \stream\ A}
+  %
+\end{mathpar}
+In the definition of the coinductive type of streams we define destructors:
+\(\head\) and \(\tail\) are means to inspect a \(\stream\).
+We cannot use constructors to describe a stream however as it is infinite.
+There are several ways to build such data but the one I find most convincing and
+beautiful is to use a dual approach to pattern-matching:
+\emph{copattern-matching}~\sidecite{abel2013copatterns}, usually in combination
+with co-fixed-point.
+In \Agda, the stream consisting only of zeroes can be defined as follows:
+\begin{minted}{agda}
+zeroes : Stream Nat
+head zeroes = zero
+tail zeroes = zeroes
+\end{minted}
+while the stream of natural numbers starting at \(n\) is
+\begin{minted}{agda}
+seq : Nat → Stream Nat
+head (seq n) = n
+tail (seq n) = seq (succ n)
+\end{minted}
+In won't go into further detail about those, coinductive types are not really
+well-behaved in \Coq so we mostly ignore them for the time being.
 
 \section{Equality}
 \labsec{equality-def}
