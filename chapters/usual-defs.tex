@@ -739,8 +739,43 @@ equality is complex in type theory, hence the multiple approaches there are to
 it.
 
 \subsection{Other inductive types}
-\todo{Mutual}
-\todo{Inductive Inductive/Recusrive? Probably irrelevant here}
+
+There are other kinds of inductive types and I shall go briefly over some of
+them.
+
+\paradot{Mutual inductive types}
+
+Sometimes you want to define two notions at the same time because they are
+linked or interleaved.
+Take the notion of odd and even numbers for instance. They can both be defined
+independently or one built on top of the other, but they can also be defined
+mutually: \(0\) is even, when \(n\) is even, \(n+1\) is odd and when \(n\)
+is odd, \(n+1\) is even.
+In \Coq it goes like this.
+\begin{minted}{coq}
+Inductive even : nat -> Type :=
+| even_O : even 0
+| even_S : forall n, odd n -> even (S n)
+
+with odd : nat -> Type :=
+| odd_S : forall n, even n -> odd (S n).
+\end{minted}
+
+To deal with them you need mutual fixed-points.
+
+\paradot{Inductive inductive types and induction recursion}
+
+\marginnote[0.7cm]{
+  In the \emph{mutual} case, only the constructors could mention the other
+  inductive types.
+}
+Pushing even further in that direction, come inductive inductive
+types~\sidecite[1.3cm]{forsberg2010inductive} where the type of inductive types
+can also depend on the other inductive types.
+Induction recursion~\sidecite[1.2cm]{dybjer2000general} allows you to define
+inductive types mutually with functions acting on them.
+
+Both these features are not available in \Coq yet, but are present in \Agda.
 
 \section{Coinductive types and records}
 
