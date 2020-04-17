@@ -1052,7 +1052,57 @@ Transport will be a good stepping stone to show that equality is a congruence.
 \]
 
 \subsection{Independent principles}
-\todo{UIP, funext}
+
+I will now present some usual notions associated with equality. I call them
+independent because they are neither provable in nor contradictory to the theory
+of \Coq. This will be studied in \arefpart{elim-reflection}.
+
+\paradot{\acrfull{UIP}}
+
+\acrshort{UIP} is a principle saying that all proofs of an equality are
+themselves equal.
+\[
+  \mathsf{uip} : \Pi\ A\ (x\ y : A)\ (e \ e' : x =_A y).\ e = e'
+\]
+In particular---or equivalently---all proofs of \(x = x\) are equal to the
+reflexivity proof: this is Streicher's axiom K:
+\[
+  \mathsf{K} : \Pi\ A\ (x : A)\ (e : x =_A x).\ e =_{x =_A x} \refl{A} x
+\]
+This can be very useful to deal with higher-level equalities.
+This principle can be assumed in \Coq but is not provable. In \Agda however this
+principle holds and has to be deactivated with an
+option~\sidecite{cockx2016eliminating}.
+
+\paradot{\Acrfull{funext}}
+
+\Acrshort{funext} states that two functions are equal whenever they are
+pointwise equal.
+\[
+  \begin{array}{lcl}
+    \mathsf{funext} &:&
+    \Pi\ A\ B\ (f\ g : A \to B).\\
+    && \quad (\Pi x.\ f\ x =_B g\ x) \to \\
+    && \quad f =_{A \to B} g
+  \end{array}
+\]
+
+There is also a dependent varaint of \acrshort{funext}.
+\[
+  \begin{array}{lcl}
+    \mathsf{funextD} &:&
+    \Pi\ A\ (B : A \to \Type)\ (f\ g : \Pi. (x : A).\ B\ x).\\
+    && \quad (\Pi x.\ f\ x =_{B\ x} g\ x) \to \\
+    && \quad f =_{\Pi (x:A).\ B\ x} g
+  \end{array}
+\]
+
+This corresponds to the usual understanding of equality on functions.
+Some systems support it natively with computational content like
+\acrshort{OTT}~\sidecite[-0.8cm]{altenkirch2007observational},
+\acrfull{STT}~\sidecite[-0.1cm]{altenkirch2019setoid} or
+\acrfull{CubicalTT}~\sidecite[0.2cm]{coquand:cubical,cohen2016cubical}.
+
 
 \subsection{Heterogenous equality}
 
