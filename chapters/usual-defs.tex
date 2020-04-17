@@ -1099,14 +1099,53 @@ There is also a dependent varaint of \acrshort{funext}.
 
 This corresponds to the usual understanding of equality on functions.
 Some systems support it natively with computational content like
-\acrshort{OTT}~\sidecite[-0.8cm]{altenkirch2007observational},
+\acrfull{OTT}~\sidecite[-0.8cm]{altenkirch2007observational},
 \acrfull{STT}~\sidecite[-0.1cm]{altenkirch2019setoid} or
 \acrfull{CubicalTT}~\sidecite[0.2cm]{coquand:cubical,cohen2016cubical}.
 
 
 \subsection{Heterogenous equality}
 
-\acrfull{JMeq} introduced by
-\sidecite{mcbride2000dependently} has axioms
-instead better
-\[ \Heq{T}{t}{U}{u} := \Sum{p:\Eq{}{T}{U}} \Eq{}{\transpo{p}\ t}{u}. \]
+Sometimes, you want to be able to compare terms of different types. This will
+happen typically with dependent types, \eg with vectors \(u : \tvec_A\ (n + m)\)
+and \(v : \tvec_A\ (m + n)\). It feels like we should be able to compare them
+since their types are equal, unfortunately they are usually not convertible
+and as such \(u = v\) would be ill-typed.
+
+In such cases one has to consider \emph{heterogenous} equalities---as opposed
+to the regular homogenous equality.
+\acrfull{JMeq} is one such notion of heterogenous equality, introduced by
+\sidecite{mcbride2000dependently}.
+It is pretty similar to the equality type I showed earlier, except it uses an
+extra index for a second type.
+\begin{mathpar}
+  \infer
+    {
+      \Ga \vdash a : A \\
+      \Ga \vdash b : B
+    }
+    {\Ga \vdash \Heq{A}{a}{B}{b}}
+  %
+
+  \infer
+    {\Ga \vdash a : A}
+    {\Ga \vdash \mathsf{hrefl}_A\ a : \Heq{A}{a}{A}{a}}
+  %
+\end{mathpar}
+As usual it features pattern-matching. Unfortunately, it doesn't allow us to
+recover the property that heterogenous equalities where the two types are in
+fact the same like \(\Heq{A}{u}{A}{v}\), imply homogenous equality \(u =_A v\).
+This has to be added as an extra axiom, equivalent to \acrshort{UIP}.
+
+For this reason, I prefer an encoding of heterogenous equality with
+\(\Sigma\)-types:
+\[ \Heq{T}{t}{U}{u} := \Sum{p:\Eq{}{T}{U}} \Eq{}{\transpo{p}\ t}{u} \]
+where we write \(\transpo{p}\) for the map from \(T\) to \(U\), it is a notation
+for
+\[
+  \transpo{p} \coloneqq \ntransp\ \Type\ (\lambda x. x)\ T\ U\ p.
+\]
+When we have \(\Heq{A}{u}{A}{v}\), it means we have a proof of equality
+\(p : A = A\) and a proof of \(\transpo{p}\ u = v\). It becomes apparent that
+we need \acrshort{UIP} to rewrite \(p\) to \(\mathsf{refl}\) such that the
+second equality becomes \(u = v\) as wanted.
