@@ -1,3 +1,56 @@
 % \setchapterpreamble[u]{\margintoc}
 \chapter{Proof theory}
 \labch{proof-theory}
+
+My work is done in the wide domain of proof theory. Proof theorists are
+interested in the way to prove things, in the `proof' object itself.
+This allows us to understand more about proof reuse, about transposition of a
+property to another system, or about some intrinsinc properties of the proof
+itself. The study of proofs also allows to define clear systems outlining
+formally what a proof is and when it is valid. This leads to the notion of
+certificate that one can check independently. The epitome of this is the ability
+to write proofs that are checkable by a computer, shifting the trust one needs
+to put within every proof, to the system which validates them all.
+
+\section{How to prove something}
+
+\subsection{A social construct?}
+
+Before we start proving something, we must know percisely what it is we want to
+prove. In informal mathematics, the statement will be a sentence, involving
+concepts that the writer and reader agree on. The proof then consists in a
+sequence of sentences and argument that convince the same readers.
+
+With this definition, a proof is a subjective concept, it depends on the
+reader's capacity to understand and potentially fill the gap themselves about
+understood statements and properties. It also involves a fair bit of
+\emph{trusting} usually: you may not understand a proof, but will believe in
+the common effort of the community to verify the proof or, even better,
+reproduce it.
+As such, \emph{consensus} seems key in the scientific community.
+
+One way to reach consensus much faster is to have statements and proofs really
+precise and unambiguous, described in formal systems. This approach still has
+shortcomings, will all readers check every tiny detail of the proof once it's
+laid out extensively? This poses the risk of having the \emph{idea} lost in a
+sea of information.
+To me this calls for computer-verified proofs---and maybe even automated or
+computer aided proofs---so that the reader can focus on the interesting part of
+the proof while trusting only the tool and not the human that used it.
+
+Even there is room for question on whether this really constitutes a proof.
+For instance, how \emph{hard} is it for the computer to \emph{see} that the
+proof is indeed correct? One definition would be to say, as long as it takes
+a finite amount of time, it's good, but if it takes ages, we won't have any
+certainty. In \sidecite{de1991plea}, de Bruijn suggests that a proof should be
+self-evident. You shouldn't have to think for hours before seeing that is indeed
+correct, and the same holds for computers.
+
+In the remainder of the section I will address the way we \emph{write}
+statements and proofs.
+
+\subsection{Formal statements}
+
+\subsection{Inference rules}
+
+\section{Proof frameworks}
