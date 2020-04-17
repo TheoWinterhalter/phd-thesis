@@ -51,6 +51,43 @@ statements and proofs.
 
 \subsection{Formal statements}
 
+\marginnote[0.2cm]{
+  Since I want to be as general as possible, this talk about formal statements
+  will be pretty informal.
+}
+What do formal statements look like? Probably something like
+\[
+  \forall n \in \mathbb{N}. \exists m \in \mathbb{R}.
+  f(n) = \mathsf{e}^{\phi(m)} \wedge g(n) > m
+\]
+It involves defined symbols, and logical connectives to make something precise.
+In particular you will not the universal (\(\forall\)) and existential
+(\(\exists\)) quantifiers, equality (\(=\)), logical conjunction (\(\wedge\))
+and a comparison operator (\(>\)).
+We can assume \(\mathbb{N}\), \(\mathbb{R}\), \(f\), \(g\), \(h\), \(\phi\) and
+\(e\) to be defined prior to the statement (using similar formalism).
+
+To define this, we give a syntax of propositions, mutually with a syntax of
+sets on which we want to quantify. Because equality can mention elements however
+we also have to provide a syntax for those, and maybe one for function symbols.
+\[
+  \begin{array}{rrl}
+    P, Q &\bnf& \top \bnfor \bot \bnfor P \wedge Q \bnfor P \vee Q \\
+    &\bnfor& \forall x \in E. P \bnfor \exists x \in E. P \bnfor u = v \\
+    E &\bnf& \mathbb{N} \bnfor \mathbb{R} \bnfor \dots \\
+    u, v &\bnf& x \bnfor \mathsf{e}^u \bnfor u + v \bnfor f(u) \bnfor \dots \\
+    f, g, h &\bnf& \dots
+  \end{array}
+\]
+
+Coming up with a correct syntax like those can be pretty painful so formalisms
+tend to be as minimal as possible, the other advantage being that is much easier
+to reason on the statements when there aren't hundreds of syntactical
+constructs.
+
+Of course, giving a syntax of statements is not enough. We must give these
+symbols a semantics to know what it means to prove them.
+
 \subsection{Inference rules}
 
 \section{Proof frameworks}
