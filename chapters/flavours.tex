@@ -453,9 +453,40 @@ type theory, but there I only presented \emph{one way} of dealing with equality,
 the one that is prevalent in type theory based proof assistants like \Agda and
 \Coq.
 
-\todo{Re-present the inductive eq then HoTT, talk about alternatives like OTT
-and cubical, then present two-level type theories and HTS. Also point towards
-quotients, QIT}
+In \Coq equality is defined as follows.
+\begin{minted}{coq}
+Inductive eq (A : Type) (u : A) : A -> Prop :=
+| eq_refl : eq A u u.
+\end{minted}
+
+This has some shortcomings\sidenote{At least for some people, many are content
+with the current status too.} like equalities between equalities, and between
+functions aren't really accounted for, in the sense that's it's hard---often
+impossible---to prove them.
+\marginnote[0.2cm]{
+  \acrshort{UIP} is given computational content in \Agda, it's feasible so
+  it's not really an argument against this definition.
+}
+This gives rise to axioms like \acrshort{UIP} and \acrshort{funext}, but axioms
+lack computational content.
+
+Variant of type theory give different definitions and properties to equality.
+
+\subsection{\acrfull{OTT}}
+
+\acrfull{STT}
+
+\subsection{\acrfull{HoTT}}
+
+\paradot{Univalence}
+
+\paradot{\acrfull{CubicalTT}}
+
+\paradot{\acrfullpl{2TT}}
 
 \acrshort{HTS}~\sidecite{hts-sota}
 \acrshort{2TT}~\sidecite{DBLP:journals/corr/AltenkirchCK16,DBLP:journals/corr/AnnenkovCK17}
+
+\subsection{Quotients}
+
+\acrfullpl{QIT}
