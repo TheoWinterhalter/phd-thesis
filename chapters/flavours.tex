@@ -495,6 +495,10 @@ Some times still enjoy a certain form of \acrshort{UIP} however: they are called
 sets, or homotopy sets (hSet). This actually defines a hierarchy of types, by
 looking at their type of equality.
 
+As the name suggests, equality is coming from an intuition of algebraic
+topology: homotopy. An equality \(u = v\) is thus seen as a path connecting
+\(u\) and \(v\).
+
 \paradot{Univalence} One of the leading principles coming with \acrshort{HoTT}
 is the univalence axiom. The idea is to lift the folklore idea in mathematics
 that isomorphic objects are the \emph{same}, into a well-defined notion:
@@ -521,12 +525,50 @@ To achieve this, some proof assistants implement \acrlong{CubicalTT}.
 does not build on regular type theory with an inductive equality but instead
 define it diffrently, with intuition coming from cubical
 sets~\sidecite[0.2cm]{coquand:cubical}.
+This time the analogy with paths is put to the extreme: there is a special
+construct \(\II\) morally representing the interval \([0;1]\). Its end points
+are \(\Iz\) and \(\Io\).
+An equality between two terms \(u\) and \(v\) of type \(A\) is now a map \(f\)
+from \(\II\) to \(A\) such that \(f\ \Iz \equiv u\) and \(f\ \Io \equiv v\).
+By having the map dependent instead, we can easily have heterogenous equality:
+\[
+  f : (i : \II) \to A\ i
+\]
+The main interest of this is that it gives computational content to univalence
+which is no longer an axiom but a theorem. Since univalence implies
+\acrshort{funext} this is also the case for it.
+
+There is a large-scale implementation of \acrshort{CubicalTT} in
+\Agda called \name{CubicalAgda}~\sidecite{vezzosi2019cubical},
+amongst other efforts.
 
 \paradot{\acrfullpl{2TT}}
 
-\acrshort{HTS}~\sidecite{hts-sota}
+\acrshort{UIP} and univalence are inconsistent together for a simple reason:
+univalence allows \(\bool = \bool\) two \emph{distinct} proofs: one given by
+the identity equivalence, the other by the equivalence that swaps \(\ttrue\)
+and \(\ffalse\), while \acrshort{UIP} states there must be only one such proof.
+This in particular means that univalence is inconsistent in \acrshort{ETT}.
+There is a solution to this which consists in assuming two equalities.
+This cannot be done naively however, since two equalities that cohabit
+collapse.
+For this, the two equalities must be compartmentalised to limit their
+interaction. Hence the name \acrfull{2TT}.
+This idea was first introduced as \acrfull{HTS}~\sidecite[-0.4cm]{hts-sota} in
+an extensional setting, but since then there are other approaches to
 \acrshort{2TT}~\sidecite{DBLP:journals/corr/AltenkirchCK16,DBLP:journals/corr/AnnenkovCK17}
+where only \acrshort{UIP} is assumed.
 
 \subsection{Quotients}
 
-\acrfullpl{QIT}
+Implementing quotients is a notoriously problematic issue in type theory.
+In \Coq this is still limited to specific cases where the quotient can
+effectively be expressed.
+\acrshort{OTT} and \acrshort{STT} should in principle help in solving that
+problem since they involve the idea that a type comes with its equality.
+The problem is usually to make everything compute and behave nicely.
+
+The world of \acrshort{HoTT} has brought several notions like that of
+\acrfull{QIT}~\sidecite{altenkirch2016type}.
+A \acrfull{QIT} not only has term constructors, but also equality constructors:
+defining the type and quotienting it at the same time.
