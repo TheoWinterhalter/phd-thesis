@@ -489,9 +489,38 @@ and better fit the Setoïd model~\sidecite[0.3cm]{altenkirch1999extensional}.
 
 \subsection{\acrfull{HoTT}}
 
-\paradot{Univalence}
+\acrshort{HoTT}~\sidecite{hottbook} is rather based on the idea that
+\acrshort{UIP} shouldn't hold and that instead, higher equalities matter.
+Some times still enjoy a certain form of \acrshort{UIP} however: they are called
+sets, or homotopy sets (hSet). This actually defines a hierarchy of types, by
+looking at their type of equality.
 
-\paradot{\acrfull{CubicalTT}}
+\paradot{Univalence} One of the leading principles coming with \acrshort{HoTT}
+is the univalence axiom. The idea is to lift the folklore idea in mathematics
+that isomorphic objects are the \emph{same}, into a well-defined notion:
+equivalent types are equal.
+\marginnote[-0.5cm]{
+  Equivalence \(A \cong B\) means roughly that there exist maps \(f : A \to B\)
+  and \(g : B \to A\) such that they are both inverse of each other.
+}
+The axioms is a bit more precise in that it states that the trivial map
+taking an equality of types \(A = B\) to an equivalence \(A \cong B\)
+is itself an equivalence.
+Univalence allows us to \emph{trasport} a result onto another equivalent
+setting.
+An interesting consequence of the univalence axiom is that it implies
+\acrshort{funext}.
+
+Once again, this is an \emph{axiom} and as such, it does not compute.
+There are ways~\sidecite[-0.4cm]{tabareau2018equivalences} to overcome this in
+\Coq which has its own \acrshort{HoTT} library~\sidecite[0.2cm]{bauer2017hott}
+but this still doesn't give a full-fledged computation rule for univalence.
+To achieve this, some proof assistants implement \acrlong{CubicalTT}.
+
+\paradot{\acrfull{CubicalTT}} \acrshort{CubicalTT}~\sidecite{cohen2016cubical}
+does not build on regular type theory with an inductive equality but instead
+define it diffrently, with intuition coming from cubical
+sets~\sidecite[0.2cm]{coquand:cubical}.
 
 \paradot{\acrfullpl{2TT}}
 
