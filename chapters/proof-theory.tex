@@ -61,7 +61,7 @@ What do formal statements look like? Probably something like
   f(n) = \mathsf{e}^{\phi(m)} \wedge g(n) > m
 \]
 It involves defined symbols, and logical connectives to make something precise.
-In particular you will not the universal (\(\forall\)) and existential
+In particular you will note the universal (\(\forall\)) and existential
 (\(\exists\)) quantifiers, equality (\(=\)), logical conjunction (\(\wedge\))
 and a comparison operator (\(>\)).
 We can assume \(\mathbb{N}\), \(\mathbb{R}\), \(f\), \(g\), \(h\), \(\phi\) and
@@ -70,9 +70,15 @@ We can assume \(\mathbb{N}\), \(\mathbb{R}\), \(f\), \(g\), \(h\), \(\phi\) and
 To define this, we give a syntax of propositions, mutually with a syntax of
 sets on which we want to quantify. Because equality can mention elements however
 we also have to provide a syntax for those, and maybe one for function symbols.
+\marginnote[0.7cm]{
+  Here \(P \to Q\) denotes `\(P\) implies \(Q\)', often written
+  \(P \Longrightarrow Q\). In my domain things are different and we use a single
+  arrow.
+}
 \[
   \begin{array}{rrl}
-    P, Q &\bnf& \top \bnfor \bot \bnfor P \wedge Q \bnfor P \vee Q \\
+    P, Q &\bnf& \top \bnfor \bot \bnfor P \wedge Q \bnfor P \vee Q
+    \bnfor P \to Q \\
     &\bnfor& \forall x \in E. P \bnfor \exists x \in E. P \bnfor u = v \\
     E &\bnf& \mathbb{N} \bnfor \mathbb{R} \bnfor \dots \\
     u, v &\bnf& x \bnfor \mathsf{e}^u \bnfor u + v \bnfor f(u) \bnfor \dots \\
@@ -90,8 +96,113 @@ symbols a semantics to know what it means to prove them.
 
 \subsection{Inference rules}
 
-\todo{Talk about the three implications, \(\to\), \(\vdash\) and inference
-rules}
+We need to define what it means to prove a statement given some hypotheses.
+For instance we have
+\[
+  A, B \vdash A \wedge B
+\]
+to denote the fact that \(A\) and \(B\) as hypotheses, \emph{entail} the
+proposition \(A \wedge B\).
+This is called a \emph{judgement}, and in general it can have a list of
+statements on the right: \(A, B, C \vdash D, E, F\) means that, \emph{assuming}
+\(A\), \(B\) \emph{and} \(C\), then \emph{either} \(D\), \(E\) \emph{or} \(F\)
+is provable.
+I will focus mostly on cases where the right-hand side consists only
+of one proposition.
+\[
+  \begin{array}{rcl}
+    \Ga, \D &\bnf& \ctxempty \bnfor \Ga, P \\
+    \mathcal{J} &\bnf& \Ga \vdash \D
+  \end{array}
+\]
+We can now move on to the notion of inference rules. They are what define the
+logic in which we place ourselves, they dictate what judgements can be
+\emph{derived}---\ie proven---and how.
+The simplest of rules usually is the so-called \emph{axiom} rule stating that
+assuming \(A\), you can prove \(A\).
+\[
+  \infer
+    { }
+    {A \vdash A}
+\]
+The line separates one judgement below, the conclusion, to one, several or
+possibly no judgements above. They represent requirements to conclude the below
+part. In this case, one doesn't need to assume anything to conclude that \(A\)
+entails \(A\).
+Going back to conjunction, the rule\sidenote{It is actually one of many possible
+rules. It all depends on the logic.} to prove one is the following.
+\[
+  \infer
+    {
+      \Ga \vdash A \\
+      \Ga \vdash B
+    }
+    {\Ga \vdash A \wedge B}
+\]
+That is to say, to prove \(A \wedge B\) (under hypotheses \(\Ga\)), it
+\emph{suffices} to prove \(A\) and \(B\) (under the same hypotheses).
+This is called an \emph{introduction} rule because it allows us to introduce a
+connective in the conclusion.
+Sometimes, we want to be able to conclude something from a complex assumption
+like \(A \wedge B\), this is instead called an \emph{elimination} rule.
+\begin{mathpar}
+  \infer
+    {\Ga, A, B \vdash P}
+    {\Ga, A \wedge B \vdash P}
+  %
+\end{mathpar}
+To prove \(P\) assuming \(A \wedge B\), it is enough to prove \(P\) assuming
+both \(A\) and \(B\).
+We then have similar rules for disjunction.
+\marginnote[0.5cm]{
+  To prove \(A \vee B\) you only need to prove either \(A\) or \(B\), hence the
+  two introduction rules. On the contrary if you want to prove \(P\) assuming
+  \(A \vee B\), you have to provide a proof for the two different cases: either
+  \(A\) holds, or \(B\) holds, in both instances \(P\) should hold.
+}
+\begin{mathpar}
+  \infer
+    {\Ga \vdash A}
+    {\Ga \vdash A \vee B}
+  %
+
+  \infer
+    {\Ga \vdash B}
+    {\Ga \vdash A \vee B}
+  %
+
+  \infer
+    {
+      \Ga, A \vdash P \\
+      \Ga, B \vdash P
+    }
+    {\Ga, A \vee B \vdash P}
+  %
+\end{mathpar}
+
+Amongst the most important rules are those related to implication.
+\begin{mathpar}
+  \infer
+    {\Ga, A \vdash B}
+    {\Ga \vdash A \to B}
+  %
+
+  \infer
+    {
+      \Ga \vdash A \to B \\
+      \Ga \vdash A
+    }
+    {\Ga \vdash B}
+  %
+\end{mathpar}
+They are interesting because they show a level of interaction between the
+entailement and the implication. To prove that \(A \to B\), you only assume
+\(A\) and show \(B\). Moreover, if you know \(A \to B\) and \(A\), then you
+have \(B\). This last rule is called the \emph{modus ponens}.
+
+Because of this, it might seem like implication (\(\to\)), entailement
+(\(\vdash\)) and inference (---) are three forms of logical implication.
+They \emph{are}, but at different levels.
 
 \section{Proof frameworks}
 
