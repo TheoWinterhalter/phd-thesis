@@ -242,4 +242,75 @@ This excludes \emph{bad} terms like \(\Omega\).
 
 \section{The Curry-Howard isomorphism}
 
-\todo{β-red is cut-elimination, proof simplification}
+Now, if we look back on the rules I gave for implication in
+\nrefch{proof-theory}, there is a parallel with the typing rules of
+\acrshort{STL}.
+\begin{mathpar}
+  \infer
+    {\Ga, \faded{x:}\ A \vdash \faded{t :}\ B}
+    {\Ga \vdash \faded{\lambda x.\ t :}\ A \to B}
+  %
+
+  \infer
+    {
+      \Ga \vdash \faded{u :}\ A \to B \\
+      \Ga \vdash \faded{v :}\ A
+    }
+    {\Ga \vdash \faded{u\ v :}\ B}
+  %
+
+  \infer
+    {\faded{(x : }\ A\faded{)} \in \Ga}
+    {\Ga \vdash \faded{x :}\ A}
+  %
+\end{mathpar}
+
+If we forget about the terms for a bit, they are exactly the \emph{same}.
+The Curry-Howard isomorphism sets up a parallel between types and propositions
+and between programs and proofs.
+This is the origin of a very fruitful relationship between the two worlds.
+
+The correspondence doesn't stop there, computation also plays a part in it.
+Consider the term \((\lambda x. x)\ y\) it can be typed as follows
+(assuming \(y\) has type \(A\)).
+\[
+  \infer
+    {
+      \infer*
+        {
+          \infer*
+            { }
+            {y : A, x : A \vdash x : A}
+        }
+        {y : A \vdash \lambda x. x : A \to A}
+      \\
+      \infer*
+        { }
+        {y : A \vdash y : A}
+      %
+    }
+    {y : A \vdash (\lambda x. x)\ y : A}
+  %
+\]
+
+However, we know it can compute with \(\beta\)-reduction:
+\[
+  (\lambda x. x)\ y \red_\beta y
+\]
+This yields a simpler term with a simpler typing derivation.
+\[
+  \infer
+    { }
+    {y : A \vdash y : A}
+\]
+This means that \(\beta\)-reduction allows for simplification of proofs.
+In proof theory, this property is called \emph{cut-elimination}, as the
+\emph{modus ponens} rules is called a \emph{cut}, in that it removes all
+superfluous applications of \emph{cut} in the proof.
+Thanks to that, a proof of \(A \to B\) is in fact an algorithm turning a proof
+of \(A\) into a proof of \(B\).
+
+All this is very useful and exciting for me. However, simple types are quite
+limited and do not allow for a proper handling of things like quantifiers
+(\(\forall\) and \(\exists\)). Hence the need for \emph{dependent} types which
+will be the subject of the next chapter.
