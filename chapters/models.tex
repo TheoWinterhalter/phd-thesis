@@ -84,8 +84,33 @@ contextual categories~\sidecite[-0.9cm]{cartmell1986generalised} from which stem
 categories with attributes~\sidecite[0.2cm]{hofmann1994interpretation} and
 C-systems~\sidecite[0.9cm]{voevodsky2016subsystems},
 \acrfullpl{CwF}~\sidecite[1.7cm]{dybjer1995internal}, and more\dots
-
 I will focus on \acrshortpl{CwF} in this document.
+
+A \acrshort{CwF} is given by
+\begin{itemize}
+  \item a collection of objects (or contexts) \(\Con\);
+  \item morphisms (or substitutions) \(\sigma : \Ga \to \D\) between contexts
+  \(\Ga, \D : \Con\);
+  \item for each context \(\Ga : \Con\), a collection \(\CTy\ \Ga\) of types in
+  that context;
+  \item for each context \(\Ga : \Con\) and type \(A : \CTy\ \Ga\), a collection
+  \(\CTm\ \Ga\ A\) of terms of type \(A\);
+  \item an operation of substitution for types taking \(\sigma : \Ga \to \D\)
+  and a type \(A : \CTy\ \D\) to type \(A[\sigma] : \CTy\ \Ga\);
+  \item a similar substitution operation on terms taking \(\sigma : \Ga \to \D\)
+  and a term \(t : \CTm\ \D\ A\) to term \(t[\sigma] : \CTm\ \Ga\ A[\sigma]\);
+  \item a terminal object representing the empty context \(\ctxempty : \Con\);
+  \item an extension operation taking \(\Ga : \Con\) and \(A : \CTy\ \Ga\)
+  to a new object \(\Ga, A : \Con\) together with a morphism
+  \(\pp : \Ga, A \to \Ga\) and a term \(\pq : \CTm\ (\Ga, A)\ A[\pp]\);
+  \item an operation taking \(\sigma : \Ga \to \D\) and term
+  \(a : \CTm\ \Ga\ A[\sigma]\) to substitution \(\sigma, a : \Ga \to \D, A\)
+  such that \(\pp \circ (\sigma, a) = \sigma\) and \(\pq[\sigma, a] = a\).
+\end{itemize}
+The two first have to give the structure of category, this in particular means
+that there is an identity substitution, and associative composition of those.
+
+\todo{Put Card model here?}
 
 \section{Type-theoretic models}
 
