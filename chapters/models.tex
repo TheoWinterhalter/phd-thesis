@@ -18,8 +18,7 @@ into another theory or object, both living in the same meta-theory.
 \end{figure}
 To be more precise, a model is given by a class of objects to interpret
 contexts, one for terms and one for types; but a model also provides an
-interpretation to judgments in such a way that interpretation is coherent.
-\todo{Make the definition clearer.}
+interpretation to judgments in such a way that the interpretation is coherent.
 
 \subsection{What can be proved using models}
 
@@ -64,6 +63,18 @@ Gödel's incompleteness theorems have to do with this.
 \todo{Is it really the place? Should it even go in the proof theory chapter?}
 
 \section{Set-theoretic models}
+
+Set-theoretic models are models of type-theory where types are interpreted as
+sets. For instance the type \(A \to B\) will be interpreted as the set of
+set-theoretic functions from the interpretation of \(A\) to the interpretation
+of \(B\):
+\marginnote[0.2cm]{
+  It is usual to write \(\transl{A}\) for the interpretation of \(A\).
+}
+\[
+  \transl{A \to B} \coloneqq \mathcal{F}(\transl{A},\transl{B})
+\]
+\todo{I'm missing a ref here on how to do this...}
 
 \section{Categorical models}
 
