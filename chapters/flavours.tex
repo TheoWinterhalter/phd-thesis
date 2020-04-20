@@ -474,7 +474,18 @@ Variant of type theory give different definitions and properties to equality.
 
 \subsection{\acrfull{OTT}}
 
-\acrfull{STT}
+The idea behind \acrshort{OTT}~\sidecite{altenkirch2007observational} is that
+equality should be defined for each type specifically and correspond to
+observational equivalences. For functions, equality is \emph{defined} as
+pointwise equality.
+\[
+  f =_{A \to B} g \coloneqq \Pi\ (x : A).\ f\ x =_B f\ y
+\]
+In this world, reflexivity becomes a property and is no longer part of the
+definition.
+More recently, this work has been extended to
+\acrfull{STT}~\sidecite{altenkirch2019setoid} to support heterogenous equality
+and better fit the model.
 
 \subsection{\acrfull{HoTT}}
 
