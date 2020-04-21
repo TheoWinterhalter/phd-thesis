@@ -371,6 +371,274 @@ and
   \end{array}
 \]
 
+I will now echo the previous section and show that \(\Card\) admits all the
+constructions I introduced then.
+
+\paradot{Dependent products}
+
+\sidedef[-0.7cm]{Dependent product of sets}{
+  \(\prod_{x \in A} B(x)\) is defined as the set of functions \(f\) from \(A\)
+  to \(\bigcup_{x \in A} B(x)\) such that \(f(x) \in B(x)\).
+}
+Given \(A : \CTy\ \Ga\) and \(B : \CTy\ (\Ga, A)\) we define
+\(\Pi\ A\ B : \CTy\ \Ga\) as
+\[
+  (\Pi\ A\ B)(\gamma) = \card{\prod_{x \in A(\gamma)} B(\beta(\gamma,x))}
+\]
+We define abstraction and application as follows:
+\marginnote[0.7cm]{
+  With \(b : \CTm\ (\Ga,A)\ B\), \(f : \CTm\ \Ga\ (\Pi\ A\ B)\) and
+  \(u : \CTm\ \Ga\ A\).
+}
+\[
+  \begin{array}{lcl}
+    (\lambda b)(\gamma) &=& \beta(x \mapsto b(\beta(\gamma,x))) \\
+    \capp(f,u)(\gamma) &=& \beta^{-1}(f(\gamma))(u(\gamma))
+  \end{array}
+\]
+Now we show
+\[
+  \begin{array}{rcl}
+    (\Pi\ A\ B)[\sigma] &=& \Pi\ A[\sigma]\ B[(\sigma \circ \pp), \pq] \\
+    (\lambda b)[\sigma] &=& \lambda b[(\sigma \circ \pp), \pq] \\
+    (\capp(f,u))[\sigma] &=& \capp(f[\sigma],u[\sigma]) \\
+    \capp(\lambda b, u) &=& b[\cid, u] \\
+    \lambda \capp(f \circ \pp, \pq) &=& f
+  \end{array}
+\]
+
+% \[
+%   \begin{array}{lc>{\displaystyle}lcl}
+%     (\Pi\ A[\sigma]\ B[(\sigma \circ \pp), \pq])(\gamma)
+%     &=& \card{
+%       \prod_{x \in A[\sigma](\gamma)}
+%       B[(\sigma \circ \pp), \pq](\beta(\gamma, x))
+%     } \\
+%     &=& \card{
+%       \prod_{x \in A(\sigma(\gamma))}
+%       B(((\sigma \circ \pp), \pq)(\beta(\gamma, x)))
+%     } \\
+%     &=& \card{
+%       \prod_{x \in A(\sigma(\gamma))}
+%       B(\beta((\sigma \circ \pp)(\beta(\gamma, x)), \pq(\beta(\gamma, x))))
+%     } \\
+%     &=& \card{
+%       \prod_{x \in A(\sigma(\gamma))}
+%       B(\beta((\sigma(\pp(\beta(\gamma, x)))), \pq(\beta(\gamma, x))))
+%     } \\
+%     &=& \card{
+%       \prod_{x \in A(\sigma(\gamma))}
+%       B(\beta((\sigma(\pp(\beta(\gamma, x)))),
+%       \pi_2(\beta^{-1}(\beta(\gamma, x)))))
+%     } \\
+%     &=& \card{
+%       \prod_{x \in A(\sigma(\gamma))}
+%       B(\beta((\sigma(\pp(\beta(\gamma, x)))), \pi_2(\gamma, x)))
+%     } \\
+%     &=& \card{
+%       \prod_{x \in A(\sigma(\gamma))}
+%       B(\beta((\sigma(\pp(\beta(\gamma, x)))), x))
+%     }
+%   \end{array}
+% \]
+
+\[
+  \begin{array}{lcl}
+    (\Pi\ A[\sigma]\ B[(\sigma \circ \pp), \pq])(\gamma)
+    &=& \card{
+      \prod_{x \in A[\sigma](\gamma)}
+      B[(\sigma \circ \pp), \pq](\beta(\gamma, x))
+    } \\
+    &=& \card{
+      \prod_{x \in A(\sigma(\gamma))}
+      B(((\sigma \circ \pp), \pq)(\beta(\gamma, x)))
+    } \\
+    &=& \card{\prod_{x \in A(\sigma(\gamma))} B(\beta(\sigma(\gamma),x))} \\
+    &=& (\Pi\ A\ B)(\sigma(\gamma)) \\
+    &=& (\Pi\ A\ B)[\sigma](\gamma)
+  \end{array}
+\]
+\marginnote[-3cm]{
+  In the argument of \(B\) what happens is
+  \[
+    \begin{array}{ll}
+      \multicolumn{2}{l}{((\sigma \circ \pp), \pq)(\beta(\gamma, x))} \\
+      =& \beta((\sigma \circ \pp)(\beta(\gamma, x)), \pq(\beta(\gamma, x))) \\
+      =& \beta((\sigma(\pp(\beta(\gamma, x)))), \pq(\beta(\gamma, x))) \\
+      =& \beta((\sigma(\pi_1(\gamma, x))), \pi_2(\gamma, x)) \\
+      =& \beta(\sigma(\gamma), x)
+    \end{array}
+  \]
+}
+
+\[
+  \begin{array}{lcl}
+    (\lambda b[(\sigma \circ \pp), \pq])(\gamma)
+    &=& \beta(x \mapsto b[(\sigma \circ \pp), \pq](\beta(\gamma,x))) \\
+    &=& \beta(x \mapsto b(((\sigma \circ \pp), \pq)(\beta(\gamma,x)))) \\
+    &=& \beta(x \mapsto b(\beta(\sigma(\gamma), x))) \\
+    &=& (\lambda b)(\sigma(\gamma)) \\
+    &=& (\lambda b)[\sigma](\gamma)
+  \end{array}
+\]
+
+\[
+  \begin{array}{lcl}
+    (\capp(f,u))[\sigma](\gamma)
+    &=& \capp(f,u)(\sigma(\gamma)) \\
+    &=& \beta^{-1}(f(\sigma(\gamma)))(u(\sigma(\gamma))) \\
+    &=& \beta^{-1}(f[\sigma](\gamma))(u[\sigma](\gamma)) \\
+    &=& \capp(f[\sigma], u[\sigma])(\gamma)
+  \end{array}
+\]
+
+\[
+  \begin{array}{lcl}
+    \capp(\lambda b, u)(\gamma)
+    &=& \beta^{-1}((\lambda b)(\gamma))(u(\gamma)) \\
+    &=& \beta^{-1}(\beta(x \mapsto b(\beta(\gamma,x))))(u(\gamma)) \\
+    &=& (x \mapsto b(\beta(\gamma,x))(u(\gamma)) \\
+    &=& b(\beta(\gamma, u(\gamma)) \\
+    &=& b[\cid, u](\gamma)
+  \end{array}
+\]
+
+\[
+  \begin{array}{lcl}
+    (\lambda \capp(f \circ \pp, \pq))(\gamma)
+    &=& \beta(x \mapsto \capp(f \circ \pp, \pq)(\beta(\gamma,x))) \\
+    &=& \beta(x \mapsto \beta^{-1}((f \circ \pp)(\beta(\gamma,x)))(\pq(\beta(\gamma,x))))) \\
+    &=& \beta(x \mapsto \beta^{-1}(f(\gamma))(x))) \\
+    &=& \beta(\beta^{-1}(f(\gamma))) \\
+    &=& f(\gamma)
+  \end{array}
+\]
+
+
+% \paradot{Dependent sums}
+
+% A \acrshort{CwF} has (negative\sidenote{See \nrefch{flavours}.}) dependent sums
+% when:
+% \begin{itemize}
+%   \item for any \(A : \CTy\ \Ga\) and \(B : \CTy\ (\Ga, A)\) there exists
+%   \(\Sigma\ A\ B : \CTy\ \Ga\);
+%   \item for \(a : \CTm\ \Ga\ A\) and \(b : \CTm\ \Ga\ B[\cid,a]\) there exists
+%   the dependent pair \(\dpair{a,b} : \CTm\ \Ga\ (\Sigma\ A\ B)\);
+%   \item for \(p : \CTm\ \Ga\ (\Sigma\ A\ B)\) there exists
+%   \(\pi_1\ p : \CTm\ \Ga\ A\);
+%   \item for \(p : \CTm\ \Ga\ (\Sigma\ A\ B)\) there exists
+%   \(\pi_2\ p : \CTm\ \Ga\ B[\cid, \pi_1\ p]\)
+% \end{itemize}
+% such that
+% \[
+%   \begin{array}{rcl}
+%     (\Sigma\ A\ B)[\sigma] &=& \Sigma\ A[\sigma]\ B[(\sigma \circ \pp), \pq] \\
+%     \dpair{a,b}[\sigma] &=& \dpair{a[\sigma], b[\sigma]} \\
+%     (\pi_1\ p)[\sigma] &=& \pi_1\ p[\sigma] \\
+%     (\pi_2\ p)[\sigma] &=& \pi_2\ p[\sigma] \\
+%     \pi_1\ \dpair{a,b} &=& a \\
+%     \pi_2\ \dpair{a,b} &=& b
+%   \end{array}
+% \]
+
+% \paradot{Identity types}
+
+% A \acrshort{CwF} has identity types---another name for the equality type---when:
+% \begin{itemize}
+%   \item for \(A : \CTy\ \Ga\) and \(u, v : \CTm\ \Ga\ A\) there exists
+%   \(\CId_A\ u\ v : \CTy\ \Ga\);
+%   \item for \(A : \CTy\ \Ga\) and \(u : \CTm\ \Ga\ A\) there exists
+%   \(\crefl_u : \CTm\ \Ga\ (\CId_A\ u\ u)\)
+% \end{itemize}
+% such that
+% \[
+%   \begin{array}{rcl}
+%     (\CId_A\ u\ v)[\sigma] &=& \CId_{A[\sigma]}\ u[\sigma]\ v[\sigma] \\
+%     (\crefl_a)[\sigma] &=& \crefl_{a[\sigma]}
+%   \end{array}
+% \]
+% In a lot of models, equality end up being interpreted as the equality of the
+% model meaning the eliminator is not necessary, hence my not requiring it.
+
+% \paradot{Booleans}
+
+% A \acrshort{CwF} has booleans when for any \(\Ga : \Con\) it has
+% \begin{itemize}
+%   \item \(\bool : \CTy\ \Ga\);
+%   \item \(\ttrue : \CTm\ \Ga\ \bool\);
+%   \item \(\ffalse : \CTm\ \Ga\ \bool\);
+%   \item given \(b : \CTm\ \Ga\ \bool\), \(C : \CTy\ (\Ga, \bool)\),
+%   \(t : \CTm\ \Ga\ C[\cid, \ttrue]\) and \(f : \CTm\ \Ga\ C[\cid, \ffalse]\),
+%   some \(\tif{b}{C}{t}{f} : \CTm\ \Ga\ C[\cid, b]\)
+% \end{itemize}
+% such that
+% \[
+%   \begin{array}{rcl}
+%     \bool[\sigma] &=& \bool \\
+%     \ttrue[\sigma] &=& \ttrue \\
+%     \ffalse[\sigma] &=& \ffalse \\
+%     \left(\fitif{b}{C}{t}{f}\right)[\sigma] &=&
+%     \fitif{b[\sigma]}{C[(\sigma \circ \pp), \pq]}{t[\sigma]}{f[\sigma]} \\
+%     \tif{\ttrue}{C}{t}{f} &=& t \\
+%     \tif{\ffalse}{C}{t}{f} &=& f
+%   \end{array}
+% \]
+
+% \paradot{Natural numbers}
+
+% A \acrshort{CwF} has natural numbers when, given \(\Ga : \Con\), it has
+% \marginnote[0.1cm]{
+%   For the successor I use \(\Pi\)-types when I could have instead put things
+%   in the context. Both are valid and I'm often favorable to the idea that things
+%   should be kept separate as much as possible, but the reliance on application
+%   and everything allows us to avoid proving the same things several times,
+%   especially since manipulating contexts is so tedious with categories.
+% }
+% \begin{itemize}
+%   \item \(\nat : \CTy\ \Ga\);
+%   \item \(\czero : \CTm\ \Ga\ \nat\);
+%   \item for \(n : \CTm\ \Ga\ \nat\), \(\csucc\ n : \CTm\ \Ga\ \nat\);
+%   \item for \(n : \CTm\ \Ga\ \nat\), \(C : \CTy\ (\Ga, \nat)\),
+%   \(z : \CTm\ \Ga\ C[\cid, \czero]\) and
+%   \(s : \CTm\ \Ga\ (\Pi\ \nat\ \Pi\ C\ C[(\pp, \csucc\ \pq) \circ \pp])\),
+%   there exists \(\natrec_C\ n\ z\ s : \CTm\ \Ga\ C[\cid, n]\)
+% \end{itemize}
+% such that
+% \[
+%   \begin{array}{rcl}
+%     \nat[\sigma] &=& \nat \\
+%     \czero[\sigma] &=& \czero \\
+%     (\csucc\ n)[\sigma] &=& \csucc\ n[\sigma] \\
+%     (\natrec_C\ n\ z\ s) &=&
+%     \natrec_{C[(\sigma \circ \pp), \pq]}\ n[\sigma]\ z[\sigma]\ s[\sigma] \\
+%     \natrec_C\ \czero\ z\ s &=& z \\
+%     \natrec_C\ (\csucc\ n)\ z\ s &=& \capp(\capp(s,n), \natrec_C\ n\ z\ s)
+%   \end{array}
+% \]
+
+% \paradot{Tarski universes}
+
+% A Tarski universe is given by
+% \begin{itemize}
+%   \item a type in the empty context \(\CU : \CTy\ \ctxempty\);
+%   \item a type family \(\CEl : \CTy\ (\ctxempty, \CU)\);
+%   \item a function
+%   \(\pi \in \setfun{\amalg_{a \in \CU} \CU^{\CEl[\cid, a]}}{\CU}\)
+% \end{itemize}
+% such that
+% \[
+%   \begin{array}{rcl}
+%     \CU[\sigma] &=& \CU \\
+%     \CEl[\cid, \pi(a,b)] &=& \Pi\ \CEl[\cid, a]\ \CEl[\pp, b(\pq)]
+%   \end{array}
+% \]
+% This makes the universe closed under dependent types, we can of course extend
+% this notion to include other constructions.
+
+% All of these can be defined in the \(\Set\) model above. They are however all
+% simpler cases than the \(\Card\) model I will give in the next section so I
+% won't detail them.
+
 \section{Type-theoretic models}
 
 \todo{Cat models fall in this too}
