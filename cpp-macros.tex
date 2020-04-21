@@ -110,6 +110,14 @@
 \newcommand{\ttrue}{\mathsf{true}}
 \newcommand{\ffalse}{\mathsf{false}}
 \newcommand{\tif}[4]{\mathsf{if}\ #1\ \mathsf{return}\ #2\ \mathsf{then}\ #3\ \mathsf{else}\ #4}
+\newcommand{\fitif}[4]{
+  \begin{array}{ll}
+    \multicolumn{2}{l}{\mathsf{if}\ #1} \\
+    \multicolumn{2}{l}{\mathsf{return}\ #2} \\
+    \mathsf{then} & #3 \\
+    \mathsf{else} & #4
+  \end{array}
+}
 \newcommand{\notfunext}{\mathsf{notfunext}}
 \newcommand{\Notfunext}{\mathsf{NotFunExt}}
 \newcommand{\tunit}{\mathsf{()}}

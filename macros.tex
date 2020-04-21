@@ -2,7 +2,7 @@
 \newcommand{\misref}{\textcolor{orange}{\emph{[??]}}}
 
 % Reminder box
-\newcommand\reminder[3][0pt]{%
+\newcommand{\reminder}[3][0pt]{%
   \marginnote[#1]{
     \begin{kaobox}[
       frametitle=Reminder: #2,
@@ -15,7 +15,7 @@
 }
 
 % Definition box
-\newcommand\sidedef[3][0pt]{%
+\newcommand{\sidedef}[3][0pt]{%
   \marginnote[#1]{
     \begin{kaobox}[
       frametitle=Definition: #2,
@@ -87,3 +87,11 @@
 \def\pq{\mathsf{q}}
 \def\Set{\mathsf{Set}}
 \def\Card{\mathsf{Card}}
+\def\capp{\mathsf{app}}
+\def\cid{\mathsf{id}}
+\def\CId{\mathsf{Id}}
+\def\crefl{\mathsf{refl}}
+\newcommand{\czero}{\mathsf{zero}}
+\newcommand{\csucc}{\mathsf{succ}}
+\def\CU{\mathsf{U}}
+\def\CEl{\mathsf{El}}
