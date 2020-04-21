@@ -139,7 +139,7 @@ The category \(\Set\) of sets is a \acrshort{CwF}:
   are defined as the first and second projection respectively;
   \item given \(\sigma : \Ga \to \D\) and \(a : \CTm\ \Ga\ A[\sigma]\),
   \(\sigma, a\) is defined as the function
-  \(\gamma \mapsto (\sigma(\gamma), a)\) which verifies the conditions.
+  \(\gamma \mapsto (\sigma(\gamma), a(\gamma))\) which verifies the conditions.
 \end{enumerate}
 
 Right now this only interprets a type theory with no type or term constructors.
@@ -305,6 +305,71 @@ simpler cases than the \(\Card\) model I will give in the next section so I
 won't detail them.
 
 \subsection{Cardinal model}
+
+In the previous section I briefly presented the \(\Set\) model. Here I will
+detail the cardinal model of type theory that we initially wrote with Andrej
+Bauer. It teaches us interesting things about syntax and especially about
+\acrshort{ETT}.
+
+For every set \(X\) there is a unique cardinal \(\card{X}\) such that
+\(X \cong \card{X}\). We choose a bijection \(\beta_X : \setfun{X}{\card{X}}\).
+I will write \(\beta\) for \(\beta_X\) when the \(X\) is understood.
+
+The \(\Card\) \acrshort{CwF} is defined very similarly to \(\Set\):
+\begin{enumerate}
+  \item objects are cardinals;
+  \item substitutions are given as set-theoretic functions, composed as
+  functions;
+  \item types in \(\CTy\ \Ga\) are cardinals indexed by \(\Ga\);
+  \item terms of \(\CTm\ \Ga\ A\) are choice functions
+  \(t \in \setfun{\Ga}{\bigcup_{\gamma \in \Ga} A_\gamma}\) such that
+  \(t(\gamma) \in A_\gamma\) for every \(\gamma \in \Ga\);
+  \item given \(\sigma : \Ga \to \D\) and \(A : \CTy\ \D\), \(A[\sigma]\)
+  is defined as the \(\Ga\)-index family \((A_{\sigma(\gamma)})_\gamma\);
+  \item given \(\sigma : \Ga \to \D\) and \(t : \CTm\ \D\ A\), \(t[\sigma]\)
+  is defined as the choice function \(t \circ \sigma\);
+  \item the empty context is given as the cardinal \(1\);
+  \item given \(\Ga : \Con\) and \(A : \CTy\ \Ga\), \(\Ga, A\) is defined as
+  the cardinal of the disjoint union
+  \(\card{\amalg_{\gamma \in \Ga} A_\gamma}\), \(\pp\) is defined as
+  \(\pi_1 \circ \beta^{-1}\) where \(\pi_1\) is the first projection of the
+  disjoint union, \(\pq\) is defined as \(\pi_2 \circ \beta^{-1}\);
+  \item given \(\sigma : \Ga \to \D\) and \(a : \CTm\ \Ga\ A[\sigma]\),
+  \(\sigma, a\) is defined as the function
+  \(\gamma \mapsto \beta(\sigma(\gamma), a(\gamma))\).
+\end{enumerate}
+
+Let us verify the coherence conditions:
+\[
+  \begin{array}{rcl}
+    \pp \circ (\sigma, a) &=& \sigma \\
+    \pq [\sigma, a] &=& a
+  \end{array}
+\]
+Given \(\sigma : \Ga \to \D\), \(a : \CTm\ \Ga\ A[\sigma]\) and
+\(\gamma \in \Ga\) we have
+\[
+  \begin{array}{lclcl}
+    (\pp \circ (\sigma, a))(\gamma) &=&
+    \pp((\sigma, a)(\gamma)) \\
+    &=& \pp(\beta(\sigma(\gamma),a(\gamma))) \\
+    &=& (\pi_1 \circ \beta^{-1})(\beta(\sigma(\gamma),a(\gamma))) \\
+    &=& \pi_1(\beta^{-1}(\beta(\sigma(\gamma),a(\gamma)))) \\
+    &=& \pi_1(\sigma(\gamma), a(\gamma)) &=& \sigma(\gamma)
+  \end{array}
+\]
+and
+\[
+  \begin{array}{lclcl}
+    (\pq [\sigma, a])(\gamma) &=&
+    (\pq \circ (\sigma, a))(\gamma) \\
+    &=& \pq((\sigma,a)(\gamma)) \\
+    &=& \pq(\beta(\sigma(\gamma),a(\gamma))) \\
+    &=& (\pi_2 \circ \beta^{-1})(\beta(\sigma(\gamma),a(\gamma))) \\
+    &=& \pi_2(\beta^{-1}(\beta(\sigma(\gamma),a(\gamma)))) \\
+    &=& \pi_2(\sigma(\gamma),a(\gamma)) &=& a(\gamma)
+  \end{array}
+\]
 
 \section{Type-theoretic models}
 
