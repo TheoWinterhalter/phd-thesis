@@ -72,7 +72,7 @@ of \(B\):
   It is usual to write \(\transl{A}\) for the interpretation of \(A\).
 }
 \[
-  \transl{A \to B} \coloneqq \mathcal{F}(\transl{A},\transl{B})
+  \transl{A \to B} \coloneqq \setfun{\transl{A}}{\transl{B}})
 \]
 \todo{I'm missing a ref here on how to do this...}
 
@@ -86,8 +86,10 @@ C-systems~\sidecite[0.9cm]{voevodsky2016subsystems},
 \acrfullpl{CwF}~\sidecite[1.7cm]{dybjer1995internal}, and more\dots
 I will focus on \acrshortpl{CwF} in this document.
 
+\subsection{Categories with families}
+
 A \acrshort{CwF} is given by
-\begin{itemize}
+\begin{enumerate}
   \item a collection of objects (or contexts) \(\Con\);
   \item morphisms (or substitutions) \(\sigma : \Ga \to \D\) between contexts
   \(\Ga, \D : \Con\);
@@ -97,8 +99,9 @@ A \acrshort{CwF} is given by
   \(\CTm\ \Ga\ A\) of terms of type \(A\);
   \item an operation of substitution for types taking \(\sigma : \Ga \to \D\)
   and a type \(A : \CTy\ \D\) to type \(A[\sigma] : \CTy\ \Ga\);
-  \item a similar substitution operation on terms taking \(\sigma : \Ga \to \D\)
-  and a term \(t : \CTm\ \D\ A\) to term \(t[\sigma] : \CTm\ \Ga\ A[\sigma]\);
+  \item \label{item:term-subst} a similar substitution operation on terms taking
+  \(\sigma : \Ga \to \D\) and a term \(t : \CTm\ \D\ A\) to term
+  \(t[\sigma] : \CTm\ \Ga\ A[\sigma]\);
   \item a terminal object representing the empty context \(\ctxempty : \Con\);
   \item an extension operation taking \(\Ga : \Con\) and \(A : \CTy\ \Ga\)
   to a new object \(\Ga, A : \Con\) together with a morphism
@@ -106,11 +109,41 @@ A \acrshort{CwF} is given by
   \item an operation taking \(\sigma : \Ga \to \D\) and term
   \(a : \CTm\ \Ga\ A[\sigma]\) to substitution \(\sigma, a : \Ga \to \D, A\)
   such that \(\pp \circ (\sigma, a) = \sigma\) and \(\pq[\sigma, a] = a\).
-\end{itemize}
+\end{enumerate}
 The two first have to give the structure of category, this in particular means
 that there is an identity substitution, and associative composition of those.
 
-\todo{Put Card model here?}
+The category \(\Set\) of sets is a \acrshort{CwF}:
+\marginnote[3.8cm]{
+  \ref{item:term-subst} holds because for every \(\gamma \in \Ga\),
+  \[
+    (t \circ \sigma)(\gamma) = t(\sigma(\gamma)) \in A_{\sigma(\gamma)}
+    = A[\sigma]_\gamma
+  \]
+}
+\begin{enumerate}
+  \item objects are sets;
+  \item substitutions are set-theoretic functions, composed as functions;
+  \item types in \(\CTy\ \Ga\) are sets indexed by \(\Ga\);
+  \item terms of \(\CTm\ \Ga\ A\) are choice functions
+  \(t \in \setfun{\Ga}{\bigcup_{\gamma \in \Ga} A_\gamma}\) such that
+  \(t(\gamma) \in A_\gamma\) for every \(\gamma \in \Ga\);
+  \item given \(\sigma : \Ga \to \D\) and \(A : \CTy\ \D\), \(A[\sigma]\)
+  is defined as the \(\Ga\)-index family \((A_{\sigma(\gamma)})_\gamma\);
+  \item given \(\sigma : \Ga \to \D\) and \(t : \CTm\ \D\ A\), \(t[\sigma]\)
+  is defined as the choice function \(t \circ \sigma\);
+  \item the empty context is given as the singleton \(\{ \emptyset \}\);
+  \item given \(\Ga : \Con\) and \(A : \CTy\ \Ga\), \(\Ga, A\) is defined as
+  the disjoint union \(\amalg_{\gamma \in \Ga} A_\gamma\), \(\pp\) and \(\pq\)
+  are defined as the first and second projection respectively;
+  \item given \(\sigma : \Ga \to \D\) and \(a : \CTm\ \Ga\ A[\sigma]\),
+  \(\sigma, a\) is defined as the function
+  \(\gamma \mapsto (\sigma(\gamma), a)\) which verifies the conditions.
+\end{enumerate}
+
+Right now this only interprets a type theory with no type or term constructors
+
+\subsection{Cardinal model}
 
 \section{Type-theoretic models}
 
