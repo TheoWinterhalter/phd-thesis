@@ -190,19 +190,19 @@ when:
   \item for \(a : \CTm\ \Ga\ A\) and \(b : \CTm\ \Ga\ B[\cid,a]\) there exists
   the dependent pair \(\dpair{a,b} : \CTm\ \Ga\ (\Sigma\ A\ B)\);
   \item for \(p : \CTm\ \Ga\ (\Sigma\ A\ B)\) there exists
-  \(\pi_1\ p : \CTm\ \Ga\ A\);
+  \(p.1 : \CTm\ \Ga\ A\);
   \item for \(p : \CTm\ \Ga\ (\Sigma\ A\ B)\) there exists
-  \(\pi_2\ p : \CTm\ \Ga\ B[\cid, \pi_1\ p]\)
+  \(p.2 : \CTm\ \Ga\ B[\cid, p.1]\)
 \end{itemize}
 such that
 \[
   \begin{array}{rcl}
     (\Sigma\ A\ B)[\sigma] &=& \Sigma\ A[\sigma]\ B[(\sigma \circ \pp), \pq] \\
     \dpair{a,b}[\sigma] &=& \dpair{a[\sigma], b[\sigma]} \\
-    (\pi_1\ p)[\sigma] &=& \pi_1\ p[\sigma] \\
-    (\pi_2\ p)[\sigma] &=& \pi_2\ p[\sigma] \\
-    \pi_1\ \dpair{a,b} &=& a \\
-    \pi_2\ \dpair{a,b} &=& b
+    (p.1)[\sigma] &=& p[\sigma].1 \\
+    (p.2)[\sigma] &=& p[\sigma].2 \\
+    \dpair{a,b}.1 &=& a \\
+    \dpair{a,b}.2 &=& b
   \end{array}
 \]
 
@@ -346,6 +346,10 @@ Let us verify the coherence conditions:
     \pq [\sigma, a] &=& a
   \end{array}
 \]
+\marginnote[0.8cm]{
+  Notice how I verify equality of functions extensionally, that is because we
+  are considering set-theoretic functions here.
+}
 Given \(\sigma : \Ga \to \D\), \(a : \CTm\ \Ga\ A[\sigma]\) and
 \(\gamma \in \Ga\) we have
 \[
@@ -383,7 +387,7 @@ constructions I introduced then.
 Given \(A : \CTy\ \Ga\) and \(B : \CTy\ (\Ga, A)\) we define
 \(\Pi\ A\ B : \CTy\ \Ga\) as
 \[
-  (\Pi\ A\ B)(\gamma) = \card{\prod_{x \in A(\gamma)} B(\beta(\gamma,x))}
+  (\Pi\ A\ B)(\gamma) \coloneqq \card{\prod_{x \in A(\gamma)} B(\beta(\gamma,x))}
 \]
 We define abstraction and application as follows:
 \marginnote[0.7cm]{
@@ -392,8 +396,8 @@ We define abstraction and application as follows:
 }
 \[
   \begin{array}{lcl}
-    (\lambda b)(\gamma) &=& \beta(x \mapsto b(\beta(\gamma,x))) \\
-    \capp(f,u)(\gamma) &=& \beta^{-1}(f(\gamma))(u(\gamma))
+    (\lambda b)(\gamma) &\coloneqq& \beta(x \mapsto b(\beta(\gamma,x))) \\
+    \capp(f,u)(\gamma) &\coloneqq& \beta^{-1}(f(\gamma))(u(\gamma))
   \end{array}
 \]
 Now we show
@@ -406,41 +410,6 @@ Now we show
     \lambda \capp(f \circ \pp, \pq) &=& f
   \end{array}
 \]
-
-% \[
-%   \begin{array}{lc>{\displaystyle}lcl}
-%     (\Pi\ A[\sigma]\ B[(\sigma \circ \pp), \pq])(\gamma)
-%     &=& \card{
-%       \prod_{x \in A[\sigma](\gamma)}
-%       B[(\sigma \circ \pp), \pq](\beta(\gamma, x))
-%     } \\
-%     &=& \card{
-%       \prod_{x \in A(\sigma(\gamma))}
-%       B(((\sigma \circ \pp), \pq)(\beta(\gamma, x)))
-%     } \\
-%     &=& \card{
-%       \prod_{x \in A(\sigma(\gamma))}
-%       B(\beta((\sigma \circ \pp)(\beta(\gamma, x)), \pq(\beta(\gamma, x))))
-%     } \\
-%     &=& \card{
-%       \prod_{x \in A(\sigma(\gamma))}
-%       B(\beta((\sigma(\pp(\beta(\gamma, x)))), \pq(\beta(\gamma, x))))
-%     } \\
-%     &=& \card{
-%       \prod_{x \in A(\sigma(\gamma))}
-%       B(\beta((\sigma(\pp(\beta(\gamma, x)))),
-%       \pi_2(\beta^{-1}(\beta(\gamma, x)))))
-%     } \\
-%     &=& \card{
-%       \prod_{x \in A(\sigma(\gamma))}
-%       B(\beta((\sigma(\pp(\beta(\gamma, x)))), \pi_2(\gamma, x)))
-%     } \\
-%     &=& \card{
-%       \prod_{x \in A(\sigma(\gamma))}
-%       B(\beta((\sigma(\pp(\beta(\gamma, x)))), x))
-%     }
-%   \end{array}
-% \]
 
 \[
   \begin{array}{lcl}
@@ -515,31 +484,65 @@ Now we show
 \]
 
 
-% \paradot{Dependent sums}
+\paradot{Dependent sums}
 
-% A \acrshort{CwF} has (negative\sidenote{See \nrefch{flavours}.}) dependent sums
-% when:
-% \begin{itemize}
-%   \item for any \(A : \CTy\ \Ga\) and \(B : \CTy\ (\Ga, A)\) there exists
-%   \(\Sigma\ A\ B : \CTy\ \Ga\);
-%   \item for \(a : \CTm\ \Ga\ A\) and \(b : \CTm\ \Ga\ B[\cid,a]\) there exists
-%   the dependent pair \(\dpair{a,b} : \CTm\ \Ga\ (\Sigma\ A\ B)\);
-%   \item for \(p : \CTm\ \Ga\ (\Sigma\ A\ B)\) there exists
-%   \(\pi_1\ p : \CTm\ \Ga\ A\);
-%   \item for \(p : \CTm\ \Ga\ (\Sigma\ A\ B)\) there exists
-%   \(\pi_2\ p : \CTm\ \Ga\ B[\cid, \pi_1\ p]\)
-% \end{itemize}
-% such that
-% \[
-%   \begin{array}{rcl}
-%     (\Sigma\ A\ B)[\sigma] &=& \Sigma\ A[\sigma]\ B[(\sigma \circ \pp), \pq] \\
-%     \dpair{a,b}[\sigma] &=& \dpair{a[\sigma], b[\sigma]} \\
-%     (\pi_1\ p)[\sigma] &=& \pi_1\ p[\sigma] \\
-%     (\pi_2\ p)[\sigma] &=& \pi_2\ p[\sigma] \\
-%     \pi_1\ \dpair{a,b} &=& a \\
-%     \pi_2\ \dpair{a,b} &=& b
-%   \end{array}
-% \]
+\(\Card\) has dependent sums, as defined as
+\[
+  (\Sigma\ A\ B)(\gamma) \coloneqq
+  \card{\amalg_{x \in A(\gamma)} B(\beta(\gamma,x))}
+\]
+with constructors and destructors:
+\[
+  \begin{array}{lcl}
+    \dpair{a,b}(\gamma) &\coloneqq& \beta(a(\gamma), b(\gamma)) \\
+    p.1 &\coloneqq& \pi_1 \circ \beta^{-1} \circ p \\
+    p.2 &\coloneqq& \pi_2 \circ \beta^{-1} \circ p
+  \end{array}
+\]
+
+We now show
+\[
+  \begin{array}{rcl}
+    (\Sigma\ A\ B)[\sigma] &=& \Sigma\ A[\sigma]\ B[(\sigma \circ \pp), \pq] \\
+    \dpair{a,b}[\sigma] &=& \dpair{a[\sigma], b[\sigma]} \\
+    (p.1)[\sigma] &=& p[\sigma].1 \\
+    (p.2)[\sigma] &=& p[\sigma].2 \\
+    \dpair{a,b}.1 &=& a \\
+    \dpair{a,b}.2 &=& b
+  \end{array}
+\]
+
+\[
+  \begin{array}{lcl}
+    (\Sigma\ A[\sigma]\ B[(\sigma \circ \pp), \pq])(\gamma)
+    &=& \card{\amalg_{x \in A[\sigma](\gamma)} B[(\sigma \circ \pp), \pq](\beta(\gamma,x))} \\
+    &=& \card{\amalg_{x \in A(\sigma(\gamma))} B(\beta(\sigma(\gamma), x))} \\
+    &=& (\Sigma\ A\ B)(\sigma(\gamma)) \\
+    &=& (\Sigma\ A\ B)[\sigma](\gamma) \\
+    \\
+    \dpair{a[\sigma], b[\sigma]}(\gamma)
+    &=& \beta(a(\sigma(\gamma)), b(\sigma(\gamma))) \\
+    &=& \dpair{a,b}[\sigma](\gamma) \\
+    \\
+    (p[\sigma].1)(\gamma)
+    &=& \pi_1(\beta^{-1}(p(\sigma(\gamma)))) \\
+    &=& (p.1)[\sigma](\gamma) \\
+    \\
+    (p[\sigma].2)(\gamma)
+    &=& \pi_2(\beta^{-1}(p(\sigma(\gamma)))) \\
+    &=& (p.2)[\sigma](\gamma) \\
+    \\
+    (\dpair{a,b}.1)(\gamma)
+    &=& \pi_1(\beta^{-1}(\dpair{a,b}(\gamma))) \\
+    &=& \pi_1(\beta^{-1}(\beta(a(\gamma), b(\gamma)))) \\
+    &=& a(\gamma) \\
+    \\
+    (\dpair{a,b}.2)(\gamma)
+    &=& \pi_2(\beta^{-1}(\dpair{a,b}(\gamma))) \\
+    &=& \pi_2(\beta^{-1}(\beta(a(\gamma), b(\gamma)))) \\
+    &=& b(\gamma)
+  \end{array}
+\]
 
 % \paradot{Identity types}
 
