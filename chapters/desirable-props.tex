@@ -268,6 +268,32 @@ very sensible property to have in a programming language or a proof assistant.
 It's absence is usually a sign that something is very wrong with the considered
 system: if evaluation might break things, why have evaluation at all?
 
+\subsection{Injectivity of \(\Pi\)-types}
+
+Another property slightly related to confluence and subject reduction is
+the injectivity of \(\Pi\)-types. It is part of the more general notion of
+injectivity of constructors and non-confusion of type constructors.
+
+For \(\Pi\)-types, injectivity means that whenever
+\[
+  \Pi (x:A).B \equiv \Pi (x:A').B'
+\]
+then we have both \(A \equiv A'\) and \(B \equiv B'\).
+
+This property is usually proven using confluence of reduction (when it makes
+sense) so that \(\Pi (x:A).B \equiv \Pi (x:A').B'\) is equivalent to both types
+reducing to the same term. Since the \(\Pi\) type constructor will never
+disappear from reduction, it necessarily means that \(A\) and \(A'\) reduce to
+the same term, hence are convertible (and the same holds for the codomains).
+
+Injectivity of \(\Pi\)-types is crucial in proving that \(\beta\)-reduction is
+type-preserving, one of the key elements to the proof of subject reduction.
+
+Injectivity of constructors states that for instance
+\(\natsucc\ n \equiv \natsucc\ m\) implies \(n \equiv m\) while non-confusion
+says that \(\zero \not\equiv \natsucc\ n\) or \(\Type \not\equiv A \to B\).
+Those are useful to achive consistency which we will see later.
+
 \subsection{Canonicity}
 
 Canonicity is a way of saying that, for instance, booleans \emph{really} are
