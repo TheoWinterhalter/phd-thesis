@@ -544,24 +544,142 @@ We now show
   \end{array}
 \]
 
-% \paradot{Identity types}
+\paradot{Identity types}
 
-% A \acrshort{CwF} has identity types---another name for the equality type---when:
-% \begin{itemize}
-%   \item for \(A : \CTy\ \Ga\) and \(u, v : \CTm\ \Ga\ A\) there exists
-%   \(\CId_A\ u\ v : \CTy\ \Ga\);
-%   \item for \(A : \CTy\ \Ga\) and \(u : \CTm\ \Ga\ A\) there exists
-%   \(\crefl_u : \CTm\ \Ga\ (\CId_A\ u\ u)\)
-% \end{itemize}
-% such that
-% \[
-%   \begin{array}{rcl}
-%     (\CId_A\ u\ v)[\sigma] &=& \CId_{A[\sigma]}\ u[\sigma]\ v[\sigma] \\
-%     (\crefl_a)[\sigma] &=& \crefl_{a[\sigma]}
-%   \end{array}
-% \]
-% In a lot of models, equality end up being interpreted as the equality of the
-% model meaning the eliminator is not necessary, hence my not requiring it.
+Crucially, \(\Card\) has identity types.
+Given \(A : \CTy\ \Ga\) and \(u, v : \CTm\ \Ga\ A\), we define
+\(\CId_A\ u\ v : \CTy\ \Ga\) to be the type family
+\[
+  (\CId_A\ u\ v)(\gamma) \coloneqq \{ 0 \mid u(\gamma) = v(\gamma) \}
+\]
+The set \(\{ 0 \mid u(\gamma) = v(\gamma) \}\) is indeed a cardinal number,
+namely \(0\) when \(u(\gamma) \not= v(\gamma)\) and \(1\) when
+\(u(\gamma) = v(\gamma)\).
+In fact, \(u(\gamma) = v(\gamma)\) is equivalent to
+\(0 \in (\CId_A\ u\ v)(\gamma)\).
+Thus, we define \(\crefl_u : \CTm\ \Ga\ (\CId_A\ u\ u)\) as
+\[
+  (\crefl_u)(\gamma) = 0
+\]
+which is the only possible function.
+
+We check
+\[
+  \begin{array}{rcl}
+    (\CId_A\ u\ v)[\sigma] &=& \CId_{A[\sigma]}\ u[\sigma]\ v[\sigma] \\
+    (\crefl_a)[\sigma] &=& \crefl_{a[\sigma]}
+  \end{array}
+\]
+
+\[
+  \begin{array}{lcl}
+    \CId_{A[\sigma]}\ u[\sigma]\ v[\sigma]
+    &=& \{ 0 \mid u[\sigma](\gamma) = v[\sigma](\gamma) \} \\
+    &=& \{ 0 \mid u(\sigma(\gamma)) = v(\sigma(\gamma)) \} \\
+    &=& (\CId_A\ u\ v)(\sigma(\gamma)) \\
+    &=& (\CId_A\ u\ v)[\sigma](\gamma) \\
+    \\
+    \crefl_{a[\sigma]}(\gamma)
+    &=& 0 \\
+    &=& (\crefl_a)(\sigma(\gamma)) \\
+    &=& (\crefl_a)[\sigma](\gamma)
+  \end{array}
+\]
+
+Now that we have equality I will why we don't need an eliminator in this
+particular case.
+
+\begin{theorem}
+  The cardinal model validates equality reflection.
+\end{theorem}
+\reminder[-1.6cm]{Reflection rule}{
+  \begin{equation*}
+    \infer[]
+      {\isterm{\Ga}{e}{\Eq{A}{u}{v}}}
+      {\eqterm{\Ga}{u}{v}{A}}
+    %
+  \end{equation*}
+  See \refdef{reflection}
+}%
+%
+\begin{proof}
+  Assuming that we have \(p : \CTm\ \Ga\ (\CId_A\ u\ v)\) we want to show that
+  \(u\) and \(v\) are equal choice functions, \ie that \(u(gamma) = v(\gamma)\)
+  for all \(\gamma \in \Ga\).
+  Because \(0 = p(\gamma) \in (\CId_A\ u\ v)(\gamma)\), it follows that
+  \(u(\gamma) = v(\gamma)\).
+\end{proof}
+
+The cardinal model is even stronger than that in that it validates isomorphism
+reflection.
+An isomorphism \(A \cong B\) is given by two functions \(f : A \to B\)
+and \(g : B \to A\) that are inverses of each other (for the type-theoretic
+equality).
+
+\begin{definition}[Isomorphism reflection]
+  Isomorphism reflection states that isomorphic types are \emph{convertible}:
+  \[
+    \infer
+      {\Ga \vdash e : A \cong B}
+      {\Ga \vdash A \equiv B}
+    %
+  \]
+\end{definition}
+
+This consists in a strong invariance principle stating that isomorphic types
+cannot be distinguished. Another invariance principle is the univalence axiom.
+
+\begin{theorem}
+  The cardinal model validates isomorphism reflection.
+\end{theorem}
+
+\begin{proof}
+  Assume we are given isomorphic type \(A, B : \CTy\ \Ga\), that is two
+  functions \(f : \CTm\ \Ga\ (\Pi\ A\ B[\pp])\) and
+  \(g : \CTm\ \Ga\ (\Pi\ B\ A[\pp])\) as well as two equalities showing they
+  are mutual inverses:
+  \[
+    \begin{array}{l}
+      p :
+      \CTm\ \Ga\
+      (\Pi\ A\ \CId_{A[\pp]}\ \capp(g[\pp], \capp(f[\pp], \pq))\ \pq) \\
+      q :
+      \CTm\ \Ga\
+      (\Pi\ B\ \CId_{B[\pp]}\ \capp(f[\pp], \capp(g[\pp], \pq))\ \pq)
+    \end{array}
+  \]
+
+  We want to show equality of \(A\) and \(B\) that is \(A(\gamma) = B(\gamma)\)
+  for every \(\gamma \in \Ga\). Given such \(\gamma\), we have
+  \(f(\gamma) \in \card{\prod_{x \in A(\gamma)} B[\pp](\beta(\gamma,x))}\)
+  which is to say \(f(\gamma) \in \card{\setfun{A(\gamma)}{B(\gamma)}}\),
+  similarly \(g(\gamma) \in \card{\setfun{B(\gamma)}{A(\gamma)}}\).
+  We thus have two functions
+  \[
+    \begin{array}{rcl}
+      \beta^{-1}(f(\gamma)) &\in& \setfun{A(\gamma)}{B(\gamma)} \\
+      \beta^{-1}(g(\gamma)) &\in& \setfun{B(\gamma)}{A(\gamma)}
+    \end{array}
+  \]
+  We show they are in bijection using \(p\) and \(q\):
+  \[
+    \begin{array}{rcl}
+      \beta^{-1}(p(\gamma)) &\in&
+      \prod_{a \in A(\gamma)}
+      \{ 0 \mid \beta^{-1}(g(\beta^{-1}(f(\gamma)))) = a \} \\
+      \beta^{-1}(q(\gamma)) &\in&
+      \prod_{b \in B(\gamma)}
+      \{ 0 \mid \beta^{-1}(f(\beta^{-1}(g(\gamma)))) = b \}
+    \end{array}
+  \]
+  Since \(A(\gamma)\) and \(B(\gamma)\) are cardinals in bijection, they are
+  necessarily equal: \(A(\gamma) = B(\gamma)\).
+\end{proof}
+
+This means that the cardinal model validates strange equalities like that of
+Cantor space and Baire space \(2^{\mathbb{N}} = \mathbb{N}^{\mathbb{N}}\)
+which violates injectivity of \(\Pi\)-types.
+\todo{Reminder?}
 
 % \paradot{Booleans}
 
