@@ -412,7 +412,7 @@ Now we show
 \]
 
 \[
-  \begin{array}{lcl}
+  \begin{array}{rcl}
     (\Pi\ A[\sigma]\ B[(\sigma \circ \pp), \pq])(\gamma)
     &=& \card{
       \prod_{x \in A[\sigma](\gamma)}
@@ -424,10 +424,37 @@ Now we show
     } \\
     &=& \card{\prod_{x \in A(\sigma(\gamma))} B(\beta(\sigma(\gamma),x))} \\
     &=& (\Pi\ A\ B)(\sigma(\gamma)) \\
-    &=& (\Pi\ A\ B)[\sigma](\gamma)
+    &=& (\Pi\ A\ B)[\sigma](\gamma) \\
+    \\
+    (\lambda b[(\sigma \circ \pp), \pq])(\gamma)
+    &=& \beta(x \mapsto b[(\sigma \circ \pp), \pq](\beta(\gamma,x))) \\
+    &=& \beta(x \mapsto b(((\sigma \circ \pp), \pq)(\beta(\gamma,x)))) \\
+    &=& \beta(x \mapsto b(\beta(\sigma(\gamma), x))) \\
+    &=& (\lambda b)(\sigma(\gamma)) \\
+    &=& (\lambda b)[\sigma](\gamma) \\
+    \\
+    (\capp(f,u))[\sigma](\gamma)
+    &=& \capp(f,u)(\sigma(\gamma)) \\
+    &=& \beta^{-1}(f(\sigma(\gamma)))(u(\sigma(\gamma))) \\
+    &=& \beta^{-1}(f[\sigma](\gamma))(u[\sigma](\gamma)) \\
+    &=& \capp(f[\sigma], u[\sigma])(\gamma) \\
+    \\
+    \capp(\lambda b, u)(\gamma)
+    &=& \beta^{-1}((\lambda b)(\gamma))(u(\gamma)) \\
+    &=& \beta^{-1}(\beta(x \mapsto b(\beta(\gamma,x))))(u(\gamma)) \\
+    &=& (x \mapsto b(\beta(\gamma,x))(u(\gamma)) \\
+    &=& b(\beta(\gamma, u(\gamma)) \\
+    &=& b[\cid, u](\gamma) \\
+    \\
+    (\lambda \capp(f \circ \pp, \pq))(\gamma)
+    &=& \beta(x \mapsto \capp(f \circ \pp, \pq)(\beta(\gamma,x))) \\
+    &=& \beta(x \mapsto \beta^{-1}((f \circ \pp)(\beta(\gamma,x)))(\pq(\beta(\gamma,x))))) \\
+    &=& \beta(x \mapsto \beta^{-1}(f(\gamma))(x))) \\
+    &=& \beta(\beta^{-1}(f(\gamma))) \\
+    &=& f(\gamma)
   \end{array}
 \]
-\marginnote[-3cm]{
+\marginnote[-13.2cm]{
   In the argument of \(B\) what happens is
   \[
     \begin{array}{ll}
@@ -439,49 +466,6 @@ Now we show
     \end{array}
   \]
 }
-
-\[
-  \begin{array}{lcl}
-    (\lambda b[(\sigma \circ \pp), \pq])(\gamma)
-    &=& \beta(x \mapsto b[(\sigma \circ \pp), \pq](\beta(\gamma,x))) \\
-    &=& \beta(x \mapsto b(((\sigma \circ \pp), \pq)(\beta(\gamma,x)))) \\
-    &=& \beta(x \mapsto b(\beta(\sigma(\gamma), x))) \\
-    &=& (\lambda b)(\sigma(\gamma)) \\
-    &=& (\lambda b)[\sigma](\gamma)
-  \end{array}
-\]
-
-\[
-  \begin{array}{lcl}
-    (\capp(f,u))[\sigma](\gamma)
-    &=& \capp(f,u)(\sigma(\gamma)) \\
-    &=& \beta^{-1}(f(\sigma(\gamma)))(u(\sigma(\gamma))) \\
-    &=& \beta^{-1}(f[\sigma](\gamma))(u[\sigma](\gamma)) \\
-    &=& \capp(f[\sigma], u[\sigma])(\gamma)
-  \end{array}
-\]
-
-\[
-  \begin{array}{lcl}
-    \capp(\lambda b, u)(\gamma)
-    &=& \beta^{-1}((\lambda b)(\gamma))(u(\gamma)) \\
-    &=& \beta^{-1}(\beta(x \mapsto b(\beta(\gamma,x))))(u(\gamma)) \\
-    &=& (x \mapsto b(\beta(\gamma,x))(u(\gamma)) \\
-    &=& b(\beta(\gamma, u(\gamma)) \\
-    &=& b[\cid, u](\gamma)
-  \end{array}
-\]
-
-\[
-  \begin{array}{lcl}
-    (\lambda \capp(f \circ \pp, \pq))(\gamma)
-    &=& \beta(x \mapsto \capp(f \circ \pp, \pq)(\beta(\gamma,x))) \\
-    &=& \beta(x \mapsto \beta^{-1}((f \circ \pp)(\beta(\gamma,x)))(\pq(\beta(\gamma,x))))) \\
-    &=& \beta(x \mapsto \beta^{-1}(f(\gamma))(x))) \\
-    &=& \beta(\beta^{-1}(f(\gamma))) \\
-    &=& f(\gamma)
-  \end{array}
-\]
 
 
 \paradot{Dependent sums}
@@ -513,7 +497,7 @@ We now show
 \]
 
 \[
-  \begin{array}{lcl}
+  \begin{array}{rcl}
     (\Sigma\ A[\sigma]\ B[(\sigma \circ \pp), \pq])(\gamma)
     &=& \card{\amalg_{x \in A[\sigma](\gamma)} B[(\sigma \circ \pp), \pq](\beta(\gamma,x))} \\
     &=& \card{\amalg_{x \in A(\sigma(\gamma))} B(\beta(\sigma(\gamma), x))} \\
@@ -559,7 +543,7 @@ In fact, \(u(\gamma) = v(\gamma)\) is equivalent to
 \(0 \in (\CId_A\ u\ v)(\gamma)\).
 Thus, we define \(\crefl_u : \CTm\ \Ga\ (\CId_A\ u\ u)\) as
 \[
-  (\crefl_u)(\gamma) = 0
+  (\crefl_u)(\gamma) \coloneqq 0
 \]
 which is the only possible function.
 
@@ -572,7 +556,7 @@ We check
 \]
 
 \[
-  \begin{array}{lcl}
+  \begin{array}{rcl}
     \CId_{A[\sigma]}\ u[\sigma]\ v[\sigma]
     &=& \{ 0 \mid u[\sigma](\gamma) = v[\sigma](\gamma) \} \\
     &=& \{ 0 \mid u(\sigma(\gamma)) = v(\sigma(\gamma)) \} \\
@@ -686,29 +670,73 @@ which violates injectivity of \(\Pi\)-types.
 
 All this proves that in type theory, one cannot distinguish isomorphic types.
 
-% \paradot{Booleans}
+\paradot{Booleans}
 
-% A \acrshort{CwF} has booleans when for any \(\Ga : \Con\) it has
-% \begin{itemize}
-%   \item \(\bool : \CTy\ \Ga\);
-%   \item \(\ttrue : \CTm\ \Ga\ \bool\);
-%   \item \(\ffalse : \CTm\ \Ga\ \bool\);
-%   \item given \(b : \CTm\ \Ga\ \bool\), \(C : \CTy\ (\Ga, \bool)\),
-%   \(t : \CTm\ \Ga\ C[\cid, \ttrue]\) and \(f : \CTm\ \Ga\ C[\cid, \ffalse]\),
-%   some \(\tif{b}{C}{t}{f} : \CTm\ \Ga\ C[\cid, b]\)
-% \end{itemize}
-% such that
-% \[
-%   \begin{array}{rcl}
-%     \bool[\sigma] &=& \bool \\
-%     \ttrue[\sigma] &=& \ttrue \\
-%     \ffalse[\sigma] &=& \ffalse \\
-%     \left(\fitif{b}{C}{t}{f}\right)[\sigma] &=&
-%     \fitif{b[\sigma]}{C[(\sigma \circ \pp), \pq]}{t[\sigma]}{f[\sigma]} \\
-%     \tif{\ttrue}{C}{t}{f} &=& t \\
-%     \tif{\ffalse}{C}{t}{f} &=& f
-%   \end{array}
-% \]
+\(\Card\) has booleans, defined as
+\[
+  \begin{array}{rcl}
+    \bool(\gamma) &=& 2 \\
+    \ttrue(\gamma) &=& 1 \\
+    \ffalse(\gamma) &=& 0 \\
+    (\tif{b}{C}{t}{f})(\gamma) &=&
+    \left\{
+    \begin{array}{ll}
+      t(\gamma) & \text{if \(b(\gamma) = 1\)} \\
+      f(\gamma) & \text{otherwise}
+    \end{array}
+    \right.
+  \end{array}
+\]
+
+The equations are
+\[
+  \begin{array}{rcl}
+    \bool[\sigma] &=& \bool \\
+    \ttrue[\sigma] &=& \ttrue \\
+    \ffalse[\sigma] &=& \ffalse \\
+    \left(\fitif{b}{C}{t}{f}\right)[\sigma] &=&
+    \fitif{b[\sigma]}{C[(\sigma \circ \pp), \pq]}{t[\sigma]}{f[\sigma]} \\
+    \tif{\ttrue}{C}{t}{f} &=& t \\
+    \tif{\ffalse}{C}{t}{f} &=& f
+  \end{array}
+\]
+
+The first three hold trivially. I prove the remaining below.
+\[
+  \begin{array}{rcl}
+    \left(
+      \fitif{b[\sigma]}{C[(\sigma \circ \pp), \pq]}{t[\sigma]}{f[\sigma]}
+    \right)(\gamma)
+    &=&
+    \left\{
+    \begin{array}{ll}
+      t(\sigma(\gamma)) & \text{if \(b(\sigma(\gamma)) = 1\)} \\
+      f(\sigma(\gamma)) & \text{otherwise}
+    \end{array}
+    \right. \\
+    &=& \left(\fitif{b}{C}{t}{f}\right)[\sigma](\gamma) \\
+    \\
+    \tif{\ttrue}{C}{t}{f}
+    &=&
+    \left\{
+    \begin{array}{ll}
+      t(\gamma) & \text{if \(\ttrue(\gamma) = 1\)} \\
+      f(\gamma) & \text{otherwise}
+    \end{array}
+    \right. \\
+    &=& t(\gamma) \\
+    \\
+    \tif{\ffalse}{C}{t}{f}
+    &=&
+    \left\{
+    \begin{array}{ll}
+      t(\gamma) & \text{if \(\ffalse(\gamma) = 1\)} \\
+      f(\gamma) & \text{otherwise}
+    \end{array}
+    \right.\\
+    &=& f(\gamma)
+  \end{array}
+\]
 
 % \paradot{Natural numbers}
 
