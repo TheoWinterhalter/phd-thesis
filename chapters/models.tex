@@ -784,13 +784,42 @@ We check the equalities
     \nat[\sigma] &=& \nat \\
     \czero[\sigma] &=& \czero \\
     (\csucc\ n)[\sigma] &=& \csucc\ n[\sigma] \\
-    (\natrec_C\ n\ z\ s) &=&
+    (\natrec_C\ n\ z\ s)[\sigma] &=&
     \natrec_{C[(\sigma \circ \pp), \pq]}\ n[\sigma]\ z[\sigma]\ s[\sigma] \\
     \natrec_C\ \czero\ z\ s &=& z \\
     \natrec_C\ (\csucc\ n)\ z\ s &=& \capp(\capp(s,n), \natrec_C\ n\ z\ s)
   \end{array}
 \]
-\todo{Prove}
+
+\marginnote[5.5cm]{
+  Since \(\czero(\gamma) = 0\).
+}
+\marginnote[6.4cm]{
+  Since \((\csucc\ n)(\gamma) = n(\gamma) + 1\).
+}
+\[
+  \begin{array}{rcl}
+    \nat[\sigma](\gamma)
+    &=& \nat(\sigma(\gamma)) \\
+    &=& \omega \\
+    &=& \nat(\gamma) \\
+    \\
+    \czero[\sigma](\gamma)
+    &=& 0 \\
+    &=& \czero(\gamma) \\
+    \\
+    (\csucc\ n)[\sigma](\gamma)
+    &=& n(\sigma(\gamma)) + 1 \\
+    &=& (\csucc\ n[\sigma])(\gamma) \\
+    \\
+    (\natrec_C\ \czero\ z\ s)(\gamma)
+    &=& z(\gamma) \\
+    \\
+    (\natrec_C\ (\csucc\ n)\ z\ s)(\gamma)
+    &=&
+    \capp(\capp(s, n), \natrec_C\ n\ z\ s)(\gamma)
+  \end{array}
+\]
 
 \paradot{Tarski universes}
 
