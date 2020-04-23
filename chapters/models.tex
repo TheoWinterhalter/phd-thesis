@@ -444,7 +444,7 @@ Now we show
     &=& \beta^{-1}((\lambda b)(\gamma))(u(\gamma)) \\
     &=& \beta^{-1}(\beta(x \mapsto b(\beta(\gamma,x))))(u(\gamma)) \\
     &=& (x \mapsto b(\beta(\gamma,x))(u(\gamma)) \\
-    &=& b(\beta(\gamma, u(\gamma)) \\
+    &=& b(\beta(\gamma, u(\gamma))) \\
     &=& b[\cid, u](\gamma) \\
     \\
     (\lambda \capp(f \circ \pp, \pq))(\gamma)
@@ -817,12 +817,82 @@ A perhaps more interesting universe is given by using the \(\aleph\) function:
 \[
   \begin{array}{lcl}
     \CU(\gamma) &\coloneqq& \kappa \\
-    \CEl(a)(\gamma) &\coloneqq& \aleph_{a(\alpha)} \\
+    \CEl(a)(\gamma) &\coloneqq& \aleph_{a(\gamma)} \\
     \pi(a,b) &\coloneqq& \mu
   \end{array}
 \]
 where
 \(\aleph_\mu = \prod_{x \in \CEl{a(\gamma)}} \CEl{\beta^{-1}(b(\gamma))(x)}\).
+
+I won't really go into detail about cardinals and everything here, or as to
+why this universe also supports natural numbers, equality and such.
+
+\paradot{A warning about syntax}
+
+Together all these show that the cardinal model of type theory is indeed a model
+of type theory with some quirks, teaching us that isomorphic objects can't be
+distinguished.
+There is another important teaching it brings us about syntax.
+
+Once we have reflection, we have to be careful how we deal with
+\(\beta\)-reduction. In the cardinal model we indeed have that
+\(\nat \to \bool\) and \(\nat \to \nat\) are \emph{equal} types.
+\marginnote[0.1cm]{
+  \(A \to B\) will be a shorthand for \(\Pi\ A\ B[\pp]\).
+}
+As such the identity function \(\lambda \pq : \CTm\ \ctxempty\ (\nat \to \nat)\)
+can be typed \(\lambda \pq : \CTm\ \ctxempty\ (\nat \to \bool)\).
+Since \(\ctwo \coloneqq \csucc\ (\csucc\ \czero) : \CTm\ \ctxempty\ \nat\)
+we have
+\[
+  \capp(\lambda \pq, \csucc\ (\csucc\ \czero)) : \CTm\ \ctxempty\ \bool
+\]
+If we allow it to \(\beta\)-reduce we end up with
+\(\ctwo : \CTm\ \ctxempty\ \bool\) which does not hold as
+\[
+  \ctwo(\gamma) = 2 \not\in 2 = \bool(\gamma)
+\]
+for any \(\gamma \in \ctxempty\).
+\marginnote[0cm]{
+  In fact there is only one such \(\gamma\): \(0\).
+}
+Didn't we prove that \(\beta\)-reduction held however?
+Let us replay the proof of \(\beta\)-reduction above in our specific case:
+\[
+  \begin{array}{rcl}
+    \capp(\lambda \pq, \ctwo)(\gamma)
+    &=& \beta^{-1}((\lambda \pq)(\gamma))(\ctwo(\gamma)) \\
+    &=& \beta^{-1}(\beta(x \mapsto \pq(\beta(\gamma,x))))(\ctwo(\gamma)) \\
+    &=& (x \mapsto \pq(\beta(\gamma,x))(\ctwo(\gamma)) \\
+    &=& \pq(\beta(\gamma, \ctwo(\gamma))) \\
+    &=& \pq[\cid, \ctwo](\gamma)
+  \end{array}
+\]
+Simplifying away \(\pq\) and \(\ctwo\) this becomes
+\[
+  \begin{array}{rcl}
+    \capp(\lambda \pq, \ctwo)(\gamma)
+    &=& \beta^{-1}((\lambda \pq)(\gamma))(2) \\
+    &=& \beta^{-1}(\beta(x \mapsto x))(2) \\
+    &=& (x \mapsto x)(2) \\
+    &=& 2 \\
+    &=& \pq[\cid, \ctwo](\gamma)
+  \end{array}
+\]
+The problematic part is the equality
+\[
+  \beta^{-1}(\beta(x \mapsto x))(2) = (x \mapsto x)(2)
+\]
+where simplify the expression \(\beta^{-1} \circ \beta\) to the identity
+function. As usual I left the subscripts implicit, but that's where the error
+is coming from: we actually have
+\[
+  \beta_{2^\omega}^{-1} \circ \beta_{\omega^\omega}
+\]
+which do not cancel each other out.
+
+This is case for using type annotations on \(\lambda\)-abstractions and
+applications to block \(\beta\)-reduction when the types don't match.
 
 \section{Type-theoretic models}
 
