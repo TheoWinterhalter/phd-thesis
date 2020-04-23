@@ -285,16 +285,17 @@ such that
 
 A Tarski universe is given by
 \begin{itemize}
-  \item a type in the empty context \(\CU : \CTy\ \ctxempty\);
-  \item a type family \(\CEl : \CTy\ (\ctxempty, \CU)\);
-  \item a function
-  \(\pi \in \setfun{\amalg_{a \in \CU} \CU^{\CEl[\cid, a]}}{\CU}\)
+  \item a type \(\CU : \CTy\ \Ga\);
+  \item for \(a : \CTm\ \Ga\ \CU\), a type \(\CEl(a) : \CTy\ \Ga\);
+  \item for \(a : \CTm\ \Ga\ \CU\), \(b : \CTm\ \Ga\ (\Pi\ \CEl(a)\ \CU)\),
+  a term \(\pi(a,b) : \CTm\ \Ga\ \CU\)
 \end{itemize}
 such that
 \[
   \begin{array}{rcl}
     \CU[\sigma] &=& \CU \\
-    \CEl[\cid, \pi(a,b)] &=& \Pi\ \CEl[\cid, a]\ \CEl[\pp, b(\pq)]
+    \CEl(a)[\sigma] &=& \CEl(a[\sigma]) \\
+    \CEl(\pi(a,b)) &=& \Pi\ \CEl(a)\ \CEl(\capp(b[\pp], \pq))
   \end{array}
 \]
 This makes the universe closed under dependent types, we can of course extend
@@ -796,21 +797,23 @@ The equalities are fairly straightforward.
 If \(\kappa\) is an inaccessible cardinal then we get a universe by taking
 \[
   \begin{array}{lcl}
-    \CU &\coloneqq& \kappa \\
-    \CEl(\gamma) &\coloneqq& \card{\pi_2(\beta^{-1}(\gamma))} \\
-    \pi(a,b) &\coloneqq& \prod_{x \in \card{a}} \card{b(x)}
+    \CU(\gamma) &\coloneqq& \kappa \\
+    \CEl(a)(\gamma) &\coloneqq& \card{a(\gamma)} \\
+    \pi(a,b)(\gamma) &\coloneqq&
+    \prod_{x \in \card{a(\gamma)}} \card{\beta^{-1}(b(\gamma))(x)}
   \end{array}
 \]
 
 A perhaps more interesting universe is given by using the \(\aleph\) function:
 \[
   \begin{array}{lcl}
-    \CU &\coloneqq& \kappa \\
-    \CEl(\gamma) &\coloneqq& \aleph_{\pi_2(\beta^{-1}(\gamma))} \\
+    \CU(\gamma) &\coloneqq& \kappa \\
+    \CEl(a)(\gamma) &\coloneqq& \aleph_{a(\alpha)} \\
     \pi(a,b) &\coloneqq& \mu
   \end{array}
 \]
-where \(\aleph_\mu = \card{\prod_{x \in \card{A}} \card{b(x)}}\).
+where
+\(\aleph_\mu = \prod_{x \in \CEl{a(\gamma)}} \CEl{\beta^{-1}(b(\gamma))(x)}\).
 
 \section{Type-theoretic models}
 
