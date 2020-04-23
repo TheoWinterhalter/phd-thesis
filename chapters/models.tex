@@ -791,27 +791,17 @@ We check the equalities
   \end{array}
 \]
 
-\marginnote[5.5cm]{
+The substitutions equalities are fairly straightforward.
+The computations are proven below.
+
+\marginnote[0.9cm]{
   Since \(\czero(\gamma) = 0\).
 }
-\marginnote[6.4cm]{
+\marginnote[1.9cm]{
   Since \((\csucc\ n)(\gamma) = n(\gamma) + 1\).
 }
 \[
   \begin{array}{rcl}
-    \nat[\sigma](\gamma)
-    &=& \nat(\sigma(\gamma)) \\
-    &=& \omega \\
-    &=& \nat(\gamma) \\
-    \\
-    \czero[\sigma](\gamma)
-    &=& 0 \\
-    &=& \czero(\gamma) \\
-    \\
-    (\csucc\ n)[\sigma](\gamma)
-    &=& n(\sigma(\gamma)) + 1 \\
-    &=& (\csucc\ n[\sigma])(\gamma) \\
-    \\
     (\natrec_C\ \czero\ z\ s)(\gamma)
     &=& z(\gamma) \\
     \\
