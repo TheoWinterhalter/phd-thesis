@@ -778,7 +778,7 @@ The eliminator is a bit more complex but not too surprising:
   \end{array}
 \]
 
-We check the equalities
+The equalities are fairly straightforward.
 \[
   \begin{array}{rcl}
     \nat[\sigma] &=& \nat \\
@@ -788,26 +788,6 @@ We check the equalities
     \natrec_{C[(\sigma \circ \pp), \pq]}\ n[\sigma]\ z[\sigma]\ s[\sigma] \\
     \natrec_C\ \czero\ z\ s &=& z \\
     \natrec_C\ (\csucc\ n)\ z\ s &=& \capp(\capp(s,n), \natrec_C\ n\ z\ s)
-  \end{array}
-\]
-
-The substitutions equalities are fairly straightforward.
-The computations are proven below.
-
-\marginnote[0.9cm]{
-  Since \(\czero(\gamma) = 0\).
-}
-\marginnote[1.9cm]{
-  Since \((\csucc\ n)(\gamma) = n(\gamma) + 1\).
-}
-\[
-  \begin{array}{rcl}
-    (\natrec_C\ \czero\ z\ s)(\gamma)
-    &=& z(\gamma) \\
-    \\
-    (\natrec_C\ (\csucc\ n)\ z\ s)(\gamma)
-    &=&
-    \capp(\capp(s, n), \natrec_C\ n\ z\ s)(\gamma)
   \end{array}
 \]
 
