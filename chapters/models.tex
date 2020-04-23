@@ -897,5 +897,58 @@ applications to block \(\beta\)-reduction when the types don't match.
 
 \section{Type-theoretic models}
 
-\todo{Cat models fall in this too}
+Type theory can also be a nice setting to give models to type theory.
+In fact categorical models can fall in this category: as Simon Boulier does
+in his thesis~\sidecite{boulier2018extending} we can define \(\Con\),
+substitutions, \(\CTy\) and \(\CTm\) within \Coq or \Agda.
+\begin{minted}{coq}
+Definition Con := Type.
+
+(* Substitutions Γ → Δ *)
+Definition Subs (Γ Δ : Con) := Γ -> Δ.
+
+Definition Ty (Γ : Con) := Γ -> Type.
+
+Definition Tm (Γ : Con) (A : Ty Γ) := forall γ : Γ, A γ.
+
+Definition subsTy {Γ Δ} (σ : Subs Γ Δ) (A : Ty Δ) : Ty Γ :=
+  fun γ => A (σ γ).
+
+Notation "A [ σ ]" := (subsTy σ A) (at level 0).
+
+Definition subsTm {Γ Δ} (σ : Subs Γ Δ) {A} (t : Tm Δ A)
+  : Tm Γ A[σ]
+  := fun γ => t (σ γ).
+
+Definition empty : Con :=
+  unit.
+
+Definition cons (Γ : Con) (A : Ty Γ) : Con :=
+  ∑ (γ : Γ), A γ.
+
+Definition p {Γ : Con} {A : Ty Γ} : Subs (cons Γ A) Γ :=
+  fun '(γ;a) => γ.
+
+Definition q {Γ : Con} {A : Ty Γ} : Tm (cons Γ A) A[p] :=
+  fun '(γ;a) => a.
+
+Definition scons {Γ Δ} (σ : Subs Γ Δ) {A} (a : Tm Γ A[σ])
+  : Subs Γ (cons Δ A)
+  := fun γ => (σ γ ; a γ).
+
+Lemma p_scons :
+  forall Γ Δ (σ : Subs Γ Δ) A (a : Tm Γ A[σ]),
+    p ∘ (scons σ a) = σ.
+Proof.
+  reflexivity.
+Qed.
+
+Lemma q_scons :
+  forall Γ Δ (σ : Subs Γ Δ) A (a : Tm Γ A[σ]),
+    subsTm (scons σ a) q = a.
+Proof.
+  reflexivity.
+Qed.
+\end{minted}
+
 \todo{translations, syntactical models, standard model}
