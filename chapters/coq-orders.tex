@@ -440,12 +440,18 @@ Let me correct this slight.
 \end{definition}
 
 This is summarised by the following diagram.
-\[
-  \xymatrix{
-    p \ar@{~}[r] \ar[d] & p' \ar@{.>}[d] \\
-    q \ar@{~~}[r] & {\exists q'}
-  }
-\]
+\begin{center}
+  \begin{tikzpicture}[baseline=(p.base), node distance=2cm]
+    \node (p) { \(p\) } ;
+    \node (p') [right of = p] { \(p'\) } ;
+    \node (q) [below of = p] { \(q\) } ;
+    \node (q') [below of = p'] { \(q'\) } ;
+    \draw[tred] (p) to (q) ;
+    \draw[tred, dashed] (p') to (q') ;
+    \draw[sim] (p) -- (p') ;
+    \draw[sim, dashed] (q) -- (q') ;
+  \end{tikzpicture}
+\end{center}
 
 \begin{definition}[Bisimulation]
   A relation \(\sim\) on \(A\) is a bisimulation for \(\red\) when it is both

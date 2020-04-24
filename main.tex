@@ -69,12 +69,16 @@
 
 \usepackage{stmaryrd}
 
-\usepackage[all]{xy}
-\SelectTips{cm}{11}
-\CompileMatrices % Caching for xymatrix
-
 % Tikz
-\usetikzlibrary{tikzmark, arrows, arrows.meta}
+\usetikzlibrary{tikzmark, arrows, arrows.meta, decorations.pathmorphing}
+
+% Tikz styles
+\tikzstyle{tred} = [-{Triangle[open]}]
+% \tikzstyle{arrow} = [thick,->,>=stealth]
+\tikzstyle{barrow} = [->, bend angle=40]
+
+% https://tex.stackexchange.com/questions/88949/curved-waved-lines-with-tikz
+\tikzset{sim/.style={decorate, decoration={coil, aspect = 0, post length = 0mm, pre length = 0mm, segment length = 1cm}}}
 
 \include{macros}
 \input{cpp-macros} % TODO Integrate into macros and factorise
