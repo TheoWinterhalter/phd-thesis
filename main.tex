@@ -78,7 +78,24 @@
 \tikzstyle{barrow} = [->, bend angle=40]
 
 % https://tex.stackexchange.com/questions/88949/curved-waved-lines-with-tikz
-\tikzset{sim/.style={decorate, decoration={coil, aspect = 0, post length = 0mm, pre length = 0mm, segment length = 0.9cm, pre = moveto, post = moveto}}}
+\tikzset{sim/.style={decorate, decoration={coil, aspect = 0, segment length = 0.9cm, pre = moveto, post = moveto}}}
+
+% https://tex.stackexchange.com/questions/104119/star-next-to-arrowhead-in-tikz
+\tikzset{
+    to*/.style = {
+        shorten >=.25em,#1-to,
+        to path = {-- node[inner sep=0pt,at end,sloped] {${}^\star$} (\tikztotarget) \tikztonodes}
+    },
+    to*/.default=
+}
+
+\tikzset{
+    *to/.style = {
+        shorten >=.25em,#1-to,
+        to path = {-- node[inner sep=0pt,at end,sloped] {${}_\star$} (\tikztotarget) \tikztonodes}
+    },
+    *to/.default=
+}
 
 \include{macros}
 \input{cpp-macros} % TODO Integrate into macros and factorise

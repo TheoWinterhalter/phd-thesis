@@ -233,10 +233,14 @@ Confluence is often summarised with the following diagram.
     \node (u) [left of = dummy] { \(u\) } ;
     \node (v) [right of = dummy] { \(v\) } ;
     \node (w) [below of = dummy] { \(\exists w\) } ;
-    \draw[tred] (t) to (u) ;
-    \draw[tred] (t) to (v) ;
-    \draw[tred, dashed] (u) to (w) ;
-    \draw[tred, dashed] (v) to (w) ;
+    % \draw[tred] (t) to (u) ;
+    % \draw[tred] (t) to (v) ;
+    % \draw[tred, dashed] (u) to (w) ;
+    % \draw[tred, dashed] (v) to (w) ;
+    \path (t) edge[to*, tred] (u) ;
+    \path (t) edge[to*, tred] (v) ;
+    \path (u) edge[*to, tred, dashed] (w) ;
+    \path (v) edge[*to, tred, dashed] (w) ;
   \end{tikzpicture}
 \end{center}
 
