@@ -110,6 +110,39 @@
 
 \begin{document}
 
+% XeLaTeX tikzmark fix
+% Coutesy of https://tex.stackexchange.com/questions/364498/tikz-offsets-origin-when-compiled-in-xelatex-as-compared-to-pdflatex
+\makeatletter
+\def\pgfsys@hboxsynced#1{%
+  {%
+    \pgfsys@beginscope%
+    \setbox\pgf@hbox=\hbox{%
+      \hskip\pgf@pt@x%
+      \raise\pgf@pt@y\hbox{%
+        \pgf@pt@x=0pt%
+        \pgf@pt@y=0pt%
+        \special{pdf: content q}%
+        \pgflowlevelsynccm%
+        \pgfsys@invoke{q -1 0 0 -1 0 0 cm}%
+        \special{pdf: content -1 0 0 -1 0 0 cm q}% translate to original coordinate system
+        \pgfsys@invoke{0 J [] 0 d}% reset line cap and dash
+        \wd#1=0pt%
+        \ht#1=0pt%
+        \dp#1=0pt%
+        \box#1%
+        \pgfsys@invoke{n Q Q Q}%
+      }%
+      \hss%
+    }%
+    \wd\pgf@hbox=0pt%
+    \ht\pgf@hbox=0pt%
+    \dp\pgf@hbox=0pt%
+    \pgfsys@hbox\pgf@hbox%
+    \pgfsys@endscope%
+  }%
+}
+\makeatother
+
 % \setmainfont[Ligatures=TeX]{Fira Math Light}
 \setmainfont[
 	Ligatures=TeX,
