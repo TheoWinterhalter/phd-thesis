@@ -4,19 +4,82 @@
 
 An interesting fact of type theory (and perhaps one its main selling points) is
 that it is a suitable framework in which to reason about type theory.
-Representing type theory in itself isn't entirely straightforward, and some care
-must be taken. There are actually several choices to be made when representing
-type theory and they are not all equivalent or with the same pros and cons.
+That being said, representing type theory in itself isn't entirely
+straightforward, and some care must be taken. There are actually several choices
+to be made when representing type theory and they are not all equivalent or with
+the same pros and cons.
 I will detail some of them, spending more time on those I ended up choosing
 and will try to motivate my choice.
 
 \section{How to deal with variables}
 
 When writing programs or expressions with binders on paper or on the computer
-we will usually use \emph{names}, identifiers for variables like
-\(\lambda x. \lambda y. x\ y\).
+we will usually use \emph{names}, identifiers for variables like in
+\(\lambda x. \lambda y. x\ y\), \(x\) refers to the variable bound by le
+outermost \(\lambda\), while \(y\) referes to the variable bound by the
+innermost.
+The names aren't fundamental in what the term represents:
+\(\lambda z. \lambda w. z\ w\) represents \emph{exactly} the same term.
+We call this operation \(\alpha\)-renaming, here I \(\alpha\)-renamed \(x\)
+to \(z\) and \(y\) to \(w\). This defines the notion of \(\alpha\)-equality
+or \(\alpha\)-equivalence.
+\[
+  \lambda x. \lambda y. x\ y =_\alpha \lambda z. \lambda w. z\ w
+\]
+However variable names should only be thought of as an abstraction to represent
+such terms and not a part of the syntax in itself.
 
-\todo{de Bruijn indices for \(\alpha\)}
+Thinking in terms of variables name can lead to unpleasant examples where
+\(\alpha\)-renaming might become a necessity.
+For instance, \(\lambda x. \lambda x. x\) is perfectly valid but is easier to
+read when renamed to \(\lambda y. \lambda x. x\). This process is called
+\emph{shadowing}, when several variables bear the same name in scope, it is the
+innermost that takes precedence. This principle is crucial for compositionality.
+
+Even more problems arise when considering substitutions (after all, that is what
+variables are for: to be substituted).
+If you consider the term \(t \coloneqq x\ (\lambda x. x)\) we have two
+occurrences of the name \(x\) but they do \emph{not} represent the same
+variable, the first \(x\) is \emph{free} in the term, while the second is
+\emph{bound} by the only \(\lambda\).
+Now when substituting \(x\) for term \(u\) in \(t\), one has to be careful not
+to replace the bound variable \(x\). The expected result is
+\[
+  t[x \sto u] = u\ (\lambda x. x)
+\]
+This used to be called \emph{capture-avoiding} substitutions, but I will call
+them substitutions, because the operation yielding \(u\ (\lambda x. u)\)
+is utterly rubbish and not deserving of a name.
+
+Several solutions have been proposed to this ``problem'' like nominal
+sets~\sidecite[-2.1cm]{pitts2001nominal},
+\acrfull{HOAS}~\sidecite[-1.4cm]{pfenning1988higher} and de Bruijn indices or
+levels~\sidecite[-1.1cm]{de1978lambda}.
+In think de Bruijn indices are exactly what we want when dealing with
+\(\lambda\)-terms as they carry the right amount of information.
+The idea is to use natural numbers instead of names to indicate how many binders
+to traverse before reaching the one introducing the variable.
+\[
+  \begin{array}{rcl}
+    \lambda x.\ \lambda y.\ \lambda z.\ z
+    &\to& \lambda\ \lambda\ \lambda\ \db{0} \\
+    \lambda x.\ \lambda y.\ \lambda z.\ y
+    &\to& \lambda\ \lambda\ \lambda\ \db{1} \\
+    \lambda x.\ \lambda y.\ \lambda z.\ x
+    &\to& \lambda\ \lambda\ \lambda\ \db{2}
+  \end{array}
+\]
+In this setting the same variable can be represented in different ways:
+\[
+  \lambda x.\ x\ (\lambda y.\ x\ y)
+\]
+becomes
+\[
+  \lambda\ \db{0}\ (\lambda\ \db{1}\ \db{0})
+\]
+so that \(x\) is now written \(\db{0}\) and \(\db{1}\) depending on whether it
+is referenced under the second \(\lambda\) or not.
+
 \todo{Explicit substitutions}
 \todo{Maybe this section is about syntax}
 \todo{Curry vs Church for annotation of domain}
