@@ -7,6 +7,7 @@ For instance you can find them on https://fonts.google.com/specimen/Fira+Sans
 and https://fonts.google.com/specimen/Fira+Mono.
 You also need Symbola because I use it as a fallback for some special unicode
 characters.
+I also now use DejaVu Sans as another fallback font.
 
 ## Compilation
 

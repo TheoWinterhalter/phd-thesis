@@ -95,7 +95,13 @@
 \fallbackcharmono{⨷}
 \fallbackcharmono{⊕}
 \fallbackcharmono{∘}
-\fallbackcharmono{ᵗ}
+
+\newfontfamily{\dejavusansfont}{DejaVu Sans}[Scale=MatchLowercase]
+\DeclareTextFontCommand{\textfallbackdejavusans}{\dejavusansfont}
+\newcommand{\fallbackchardejavusans}[2][\textfallbackdejavusans]{%
+    \newunicodechar{#2}{#1{#2}}%
+}
+\fallbackchardejavusans{ᵗ}
 
 %----------------------------------------------------------------------------------------
 
