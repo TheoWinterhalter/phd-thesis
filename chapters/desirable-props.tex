@@ -225,13 +225,21 @@ of this.}: confluence and termination.
 \end{definition}
 
 Confluence is often summarised with the following diagram.
-\[
-  \xymatrix{
-    & t \ar[ld]_{\star} \ar[rd]^{\star} & \\
-    u \ar@{.>}[rd]_{\star} && v \ar@{.>}[ld]^{\star} \\
-    & {\exists w} &
-  }
-\]
+
+\tikzstyle{tred} = [-{Triangle[open]}]
+\begin{center}
+  \begin{tikzpicture}
+    \node (t) { \(t\) } ;
+    \node (dummy) [below of = t] { } ;
+    \node (u) [left of = dummy] { \(u\) } ;
+    \node (v) [right of = dummy] { \(v\) } ;
+    \node (w) [below of = dummy] { \(\exists w\) } ;
+    \draw[tred] (t) to (u) ;
+    \draw[tred] (t) to (v) ;
+    \draw[tred, dashed] (u) to (w) ;
+    \draw[tred, dashed] (v) to (w) ;
+  \end{tikzpicture}
+\end{center}
 
 \begin{definition}[Weak normalisation]
   Weak normalisation of reduction means that for every well-typed term \(t\)
