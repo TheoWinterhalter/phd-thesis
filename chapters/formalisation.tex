@@ -80,6 +80,53 @@ becomes
 so that \(x\) is now written \(\db{0}\) and \(\db{1}\) depending on whether it
 is referenced under the second \(\lambda\) or not.
 
+\makeatletter
+\def\pgfsys@hboxsynced#1{%
+  {%
+    \pgfsys@beginscope%
+    \setbox\pgf@hbox=\hbox{%
+      \hskip\pgf@pt@x%
+      \raise\pgf@pt@y\hbox{%
+        \pgf@pt@x=0pt%
+        \pgf@pt@y=0pt%
+        \special{pdf: content q}%
+        \pgflowlevelsynccm%
+        \pgfsys@invoke{q -1 0 0 -1 0 0 cm}%
+        \special{pdf: content -1 0 0 -1 0 0 cm q}% translate to original coordinate system
+        \pgfsys@invoke{0 J [] 0 d}% reset line cap and dash
+        \wd#1=0pt%
+        \ht#1=0pt%
+        \dp#1=0pt%
+        \box#1%
+        \pgfsys@invoke{n Q Q Q}%
+      }%
+      \hss%
+    }%
+    \wd\pgf@hbox=0pt%
+    \ht\pgf@hbox=0pt%
+    \dp\pgf@hbox=0pt%
+    \pgfsys@hbox\pgf@hbox%
+    \pgfsys@endscope%
+  }%
+}
+\makeatother
+
+% \tikzstyle{arrow} = [thick,->,>=stealth]
+\tikzstyle{barrow} = [->, bend angle=40]
+
+\begin{center}
+  \begin{tikzpicture}[remember picture]
+    \node (term) {
+      \(\subnode{la}{\(\lambda\)}\ \subnode{va}{\(\db{0}\)}\
+      (\subnode{lb}{\(\lambda\)}\ \subnode{vb}{\(\db{1}\)}\
+      \subnode{vc}{\(\db{0}\)})\)
+    } ;
+    \draw[barrow, bend right] (va.north) to (la.north) ;
+    \draw[barrow, bend left] (vb.south) to (la.south) ;
+    \draw[barrow, bend right] (vc.north) to (lb.north) ;
+  \end{tikzpicture}
+\end{center}
+
 \todo{Explicit substitutions}
 \todo{Maybe this section is about syntax}
 \todo{Curry vs Church for annotation of domain}
