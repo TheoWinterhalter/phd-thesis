@@ -110,11 +110,41 @@ variables: the term \(t \coloneqq x\ (\lambda x.\ x)\) of before is now
 \(\db{n}\ (\lambda\ \db{0})\) where \(n\) is some number which should point to
 somewhere in the context (same as the \(x\) it replaces).
 
-\todo{Explicit substitutions}
-\todo{Maybe this section is about syntax}
+Notice however that using de Bruijn indices, weakening---\ie putting a term into
+an extended context---will now affect the term itself.
+If you consider the following weakening, adding one variable \(z\) in the middle
+of the context, doesn't affect the term using names.
+\marginnote[1cm]{
+  I use variables in the scope to make clear where the new variable is inserted
+  in the nameless case.
+}
+\[
+  x : A, y : B \vdash x\ y\ (\lambda u.\ x\ y\ u)
+  \leadsto
+  x : A, z : C, y : B \vdash x\ y\ (\lambda u.\ x\ y\ u)
+\]
+In the context of de Bruijn indices this becomes
+\[
+  A, B \vdash \db{1}\ \db{0}\ (\lambda\ \db{2}\ \db{1}\ \db{0})
+  \leadsto
+  A, C, B \vdash
+  \highlight{\db{2}}\ \db{0}\ (\lambda\ \highlight{\db{3}}\ \db{1}\ \db{0})
+\]
+
+
+\subsection{Substitutions}
+
+Another choice that is close to the representation of variable is that of
+substitutions. There are several ways to represent a substitution in itself,
+but I think the main question is whether to make them \emph{explicit} or not,
+\ie part of the syntax or not.
+
+\subsection{Annotations}
 \todo{Curry vs Church for annotation of domain}
 \todo{Annotation paranoia formal-type-theory (including typed or untyped equality?)}
 \todo{Cardinal model}
+
+\subsection{Universes and types}
 \todo{Tarski/Russel universes}
 
 \section{Representation of typing}
