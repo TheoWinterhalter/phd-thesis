@@ -248,7 +248,124 @@ This information is minimal in the sense that any more annotations can be
 recovered from a theory without them.
 
 \subsection{Universes and types}
-\todo{Tarski/Russel universes}
+
+Another point of choice is whether to separate types and terms, putting them in
+different syntactic classes. One of the great advantages of dependent type
+theory over simple type theory is that types and terms can be expressed using
+the same language. Keeping them separate might also make sense.
+
+In case we want to keep them distinct, we have to duplicate concepts a bit:
+substitution, weakening, and even typing: we have judgments \(\Ga \vdash A\)
+for types and \(\Ga \vdash t : A\) for terms.
+One of the advantages of this, is that no universes are required to say that
+\eg \(\Pi\)-types are in the theory:
+\begin{mathpar}
+  \infer
+    {
+      \Ga \vdash A \\
+      \Ga, A \vdash B
+    }
+    {\Ga \vdash \Pi\ A\ B}
+  %
+\end{mathpar}
+
+This difference become clearer when considering the two main notion of
+universes: namely Tarski and Russel universes.
+
+\paradot{Tarski universes}
+
+I already gave a brief presentation of Tarski universes when looking at
+categorical models of type theory in \nrefch{models}.
+A Tarski universe is a type of \emph{codes} of types, \ie they are terms
+representing types. They can de decoded to types using the \(\CEl\) (element)
+type constructor.
+\begin{mathpar}
+  \infer
+    {\vdash \Ga}
+    {\Ga \vdash \CU}
+  %
+
+  \infer
+    {\Ga \vdash a : \CU}
+    {\Ga \vdash \CEl\ a}
+  %
+\end{mathpar}
+
+We then need a code for each type we want in this universe (otherwise we only
+have variables). For instance here are the codes for \(\Pi\)-types.
+\begin{mathpar}
+  \infer
+    {
+      \Ga \vdash a : \CU \\
+      \Ga \vdash b : \CEl\ a \to \CU
+    }
+    {\Ga \vdash \pi(a,b) : \CU}
+  %
+\end{mathpar}
+To relate them to actual \(\Pi\)-types, we simply add computation rules to
+\(\CEl\).
+\[
+  \CEl(\pi(a,b)) \red \Pi (x : \CEl\ a).\ \CEl\ (b\ x)
+\]
+Arguably we don't even need that, and to avoid duplication we could simply keep
+the \(\CEl\)s everywhere
+\marginnote[1cm]{
+  The \(\lambda (\highlight{x:a}).\ t\) is not a typo. I enfore here \(\lambda\)
+  to use codes in their syntax since one should not be able to abstract over
+  a type that isn't some \(\CEl\ a\).
+}
+\begin{mathpar}
+  \infer
+    {
+      \Ga \vdash a : \CU \\
+      \Ga, x : \CEl\ a \vdash b : \CU \\
+      \Ga, x : \CEl\ a \vdash t : \CEl\ (b\ x)
+    }
+    {\Ga \vdash \lambda (x:a).\ t : \CEl\ (\pi(a,b))}
+  %
+
+  \infer
+    {
+      \Ga \vdash a : \CU \\
+      \Ga, x : \CEl\ a \vdash b : \CU \\
+      \Ga \vdash f : \CEl\ (\pi(a,b)) \\
+      \Ga \vdash u : \CEl\ a
+    }
+    {\Ga \vdash f\ u : \CEl\ (b\ u)}
+  %
+\end{mathpar}
+I still prefer having a notion of \(\Pi\)-types that is independent of universes
+and codes so that their behaviour is defined once and for all for every
+universe.
+
+\paradot{Russel universes}
+
+The other option, the one used in \Coq, \Agda and most type-theory-based proof
+assistants, is to use Russel universes. In this setting types are just terms
+that inhabit a universe:
+\[
+  \Ga \vdash A : \Type
+\]
+As such we don't need something like \(\CEl\) to bridge between the two worlds.
+In a sense, this is a special case of Tarki universes where codes are types
+and \(\CEl\) is the identity function.
+
+With Russel universes \(\Pi\)-types are typed as follows:
+\begin{mathpar}
+  \infer
+    {
+      \Ga \vdash A : \Type \\
+      \Ga, A \vdash B : \Type
+    }
+    {\Ga \vdash \Pi\ A\ B : \Type}
+  %
+\end{mathpar}
+
+When formalising universes there is a trade-off between the concise Russel
+universes and the compartmentalised Tarski universes. On the interface with a
+user however, I think universes are best when they are the least invasive, which
+works better in a Russel setting. This doesn't prevent the system from having
+Tarski universes under the hood.
 
 \subsection{Formalisation of syntax}
 
