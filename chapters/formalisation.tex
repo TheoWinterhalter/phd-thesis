@@ -11,7 +11,12 @@ the same pros and cons.
 I will detail some of them, spending more time on those I ended up choosing
 and will try to motivate my choice.
 
-\section{How to deal with variables}
+\section{Representation of syntax}
+
+I will first focus on the syntactical side of type theory.
+The first important choice being how to represent variables.
+
+\subsection{How to deal with variables}
 
 When writing programs or expressions with binders on paper or on the computer
 we will usually use \emph{names}, identifiers for variables like in
@@ -52,9 +57,9 @@ them substitutions, because the operation yielding \(u\ (\lambda x. u)\)
 is utterly rubbish and not deserving of a name.
 
 Several solutions have been proposed to this ``problem'' like nominal
-sets~\sidecite[-2.1cm]{pitts2001nominal},
-\acrfull{HOAS}~\sidecite[-1.4cm]{pfenning1988higher} and de Bruijn indices or
-levels~\sidecite[-1.1cm]{de1978lambda}.
+sets~\sidecite[-2.0cm]{pitts2001nominal},
+\acrfull{HOAS}~\sidecite[-1.3cm]{pfenning1988higher} and de Bruijn indices or
+levels~\sidecite[-1.0cm]{de1978lambda}.
 In think de Bruijn indices are exactly what we want when dealing with
 \(\lambda\)-terms as they carry the right amount of information.
 The idea is to use natural numbers instead of names to indicate how many binders
@@ -93,6 +98,17 @@ The following diagram should make things more explicit.
     \draw[barrow, bend right] (vc.north) to (lb.north) ;
   \end{tikzpicture}
 \end{center}
+
+Using this representation, both \(\lambda x.x\) and \(\lambda y.y\) are written
+\[
+  \lambda\ \db{0}
+\]
+so that \(\alpha\)-equality is purely syntactic equality.
+\(\alpha\)-renaming is not only a problem for pretty-printing.
+This also solves the problem of substitutions potentially capturing free
+variables: the term \(t \coloneqq x\ (\lambda x.\ x)\) of before is now
+\(\db{n}\ (\lambda\ \db{0})\) where \(n\) is some number which should point to
+somewhere in the context (same as the \(x\) it replaces).
 
 \todo{Explicit substitutions}
 \todo{Maybe this section is about syntax}
