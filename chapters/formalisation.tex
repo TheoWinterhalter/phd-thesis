@@ -215,9 +215,36 @@ own interest.
 Note that in \MetaCoq we go with meta-level substitutions.
 
 \subsection{Annotations}
-\todo{Curry vs Church for annotation of domain}
-\todo{Annotation paranoia formal-type-theory (including typed or untyped equality?)}
-\todo{Cardinal model}
+
+I already touched on this in \nrefch{models}, especially in conclusion of the
+cardinal model of type theory, but I will once again talk about annotations
+in a broader setting.
+
+The fist question regards annotations of \(\lambda\)-abstractions with the
+domain of the function, that is
+\[
+  \begin{array}{rcl}
+    \lambda (x : A).\ t &\vs& \lambda x.\ t
+  \end{array}
+\]
+This opposes the so-called Churh-style (annotation of the domain) to
+Curry-style (no annotation whatsoever).
+There is eve a third option of including the codomain \(\lambda (x:A).B.\ t\)
+that seems necessary for \acrshort{ETT} according to the cardinal model.
+\reminder[-0.7cm]{Uniqueness of type}{
+  A type theory has uniqueness of type when
+  \(\Ga \vdash t : A\) and \(\Ga \vdash t : B\) imply
+  \(A \equiv B\).
+}
+Forgetting the latter there is already a pivot between Church- and Curry-style
+in that plays a determinant role in uniqueness of type.
+Indeed one cannot hope to have uniqueness of type given that
+\(\lambda x.\ x\) has type \(A \to A\) for any \(A\).
+The domain annotation is the minimal information required to get uniqueness of
+type for \(\lambda\)-abstractions. This miminal information is equivalent to the
+minimal information required for infering the type.
+This information is minimal in the sense that any more annotations can be
+recovered from a theory without them.
 
 \subsection{Universes and types}
 \todo{Tarski/Russel universes}
@@ -228,3 +255,4 @@ Note that in \MetaCoq we go with meta-level substitutions.
 \todo{Well-typed syntax that I did not study in depth but needs to be
 mentioned → maybe expose my idea that it isn't exactly the same,
 notion of computation in the meta (→ translations)., HOAS?}
+\todo{paranoia formal-type-theory (including typed or untyped equality?)}
