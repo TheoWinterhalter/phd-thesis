@@ -68,6 +68,10 @@
 \def\Agda{\name{Agda}}
 \def\Epigram{\name{EPIGRAM}}
 
+% Repos
+\def\repo#1{\texttt{#1}\xspace}
+\def\ftt{\repo{formal-type-theory}}
+
 % Often used expressions
 \def\cS{\ensuremath{\mathcal{S}}\xspace}
 \def\cT{\ensuremath{\mathcal{T}}\xspace}
@@ -101,3 +105,11 @@
 
 % de Bruijn indices
 \newcommand{\db}[1]{\underline{#1}}
+
+% formal-type-theory
+\newcommand{\sbzero}[2]{\{#2\}_{#1}}     % substitition of the zeroth index
+\newcommand{\sbweak}[1]{\mathsf{w}_{#1}} % weakening substitution
+\newcommand{\sbshift}[2]{(#2 {\mid} #1)} % shifted substitution
+\newcommand{\sbid}{\mathsf{id}}          % identity substitution
+% \newcommand{\sbcomp}[2]{#1 \circ #2}     % composition of substitutions
+\newcommand{\sbterminal}{\triangleright} % terminal substitution

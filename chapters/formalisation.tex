@@ -11,6 +11,9 @@ the same pros and cons.
 I will detail some of them, spending more time on those I ended up choosing
 and will try to motivate my choice.
 
+In this chapter I will refer to work done in conjunction with Andrej Bauer and
+Philipp Haselwarter called \ftt~\sidecite{formaltypetheory}.
+
 \section{Representation of syntax}
 
 I will first focus on the syntactical side of type theory.
@@ -57,9 +60,9 @@ them substitutions, because the operation yielding \(u\ (\lambda x. u)\)
 is utterly rubbish and not deserving of a name.
 
 Several solutions have been proposed to this ``problem'' like nominal
-sets~\sidecite[-2.0cm]{pitts2001nominal},
-\acrfull{HOAS}~\sidecite[-1.3cm]{pfenning1988higher} and de Bruijn indices or
-levels~\sidecite[-1.0cm]{de1978lambda}.
+sets~\sidecite[-0.4cm]{pitts2001nominal},
+\acrfull{HOAS}~\sidecite[0.3cm]{pfenning1988higher} and de Bruijn indices or
+levels~\sidecite[0.6cm]{de1978lambda}.
 In think de Bruijn indices are exactly what we want when dealing with
 \(\lambda\)-terms as they carry the right amount of information.
 The idea is to use natural numbers instead of names to indicate how many binders
@@ -138,6 +141,78 @@ Another choice that is close to the representation of variable is that of
 substitutions. There are several ways to represent a substitution in itself,
 but I think the main question is whether to make them \emph{explicit} or not,
 \ie part of the syntax or not.
+
+With explicit substitutions \(t[\sigma]\) is a term in itself and things like
+evaluation of substitutions come as reduction rules:
+\[
+  x[\sigma] \red \sigma(x)
+\]
+The question of how you represent substitutions is more curcial in this case,
+and there are several ways to do so, the first being introduced in
+\sidecite{abadi1991explicit}.
+
+In \ftt where we formalised syntax of type theory in \Coq using explicit
+substitutions we settled on the following constructions (I will give them
+using typing rules to make their behaviour explicit):
+\begin{mathpar}
+  \infer
+    {\Ga \vdash u : A}
+    {\sbzero{A}{u} : \Ga \to \Ga,A}
+  %
+
+  \infer
+    {\Ga \vdash A}
+    {\sbweak{A} : \Ga \to \Ga, A}
+  %
+
+  \infer
+    {
+      \sigma : \Ga \to \D \\
+      \D \vdash A
+    }
+    {\sbshift{A}{\sigma} : \Ga, A[\sigma] \to \D, A}
+  %
+
+  \infer
+    {\vdash \Ga}
+    {\sbid : \Ga \to \Ga}
+  %
+
+  \infer
+    {
+      \sigma : \Ga \to \D \\
+      \theta : \D \to \Xi
+    }
+    {\theta \circ \sigma : \Ga \to \Xi}
+  %
+
+  \infer
+    {\vdash \Ga}
+    {\sbterminal : \Ga \to \ctxempty}
+  %
+\end{mathpar}
+
+With computation rules such as
+\[
+  \begin{array}{rcl}
+    \db{0}[\sbzero{A}{u}] &\red& u \\
+    (\db{n+1})[\sbzero{A}{u}] &\red& \db{n} \\
+    \db{n}[\sbweak{A}] &\red& \db{n+1} \\
+    \db{0}[\sbshift{A}{\sigma}] &\red& \db{0} \\
+    (\db{n+1})[\sbshift{A}{\sigma}] &\red& \db{n}[\sigma][\sbweak{A[\sigma]}] \\
+    &\dots&
+  \end{array}
+\]
+
+However, I find the other option of having substitutions as a meta-operation,
+outside of the syntax, more natural. It also helps in keeping the syntax and
+rules to a minimum while turning the substitutions notions above into
+definitions and properties.
+For instance weakening becomes a lemma and not something postulated with the
+constructor \(\sbweak{}\).
+I will not make a strong case for either choice however as they both have their
+own interest.
+Note that in \MetaCoq we go with meta-level substitutions.
 
 \subsection{Annotations}
 \todo{Curry vs Church for annotation of domain}
