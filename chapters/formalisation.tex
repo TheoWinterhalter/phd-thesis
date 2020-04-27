@@ -369,7 +369,157 @@ Tarski universes under the hood.
 
 \subsection{Formalisation of syntax}
 
-\todo{\MetaCoq and/or \ftt?}
+Now that I have laid out a few design choices, I will talk a bit about how to
+formalise the syntax of a type theory.
+As I already mentioned I worked with two such representations, the one in
+\MetaCoq and the one in \ftt, both in \Coq.
+
+In \MetaCoq we use an inductive type to represent terms of which I give an
+excerpt below:
+\begin{minted}{coq}
+Inductive term :=
+| tRel (n : nat)
+| tSort (u : Universe.t)
+| tProd (na : name) (A B : term)
+| tLambda (na : name) (A t : term)
+| tLetIn (na : name) (b B t : term)
+| tApp (u v : term)
+| tConst (k : kername) (ui : Instance.t)
+| tInd (ind : inductive) (ui : Instance.t)
+| tConstruct (ind : inductive) (n : nat) (ui : Instance.t)
+| tCase
+    (indn : inductive * nat)
+    (p c : term)
+    (brs : list (nat * term))
+| tProj (p : projection) (c : term)
+| tFix (mfix : mfixpoint term) (idx : nat).
+\end{minted}
+
+\begin{itemize}
+  \item \mintinline{coq}{tRel n} represents the \(n\)-th de Bruijn index
+  \(\db{n}\);
+  \item \mintinline{coq}{tSort u} is a universe, as described in the
+  \mintinline{coq}{Universe} module;
+  \item \mintinline{coq}{tProd na A B} represents a \(\Pi\)-type, herein
+  \mintinline{coq}{na} is a \mintinline{coq}{name}: even though we use de Bruijn
+  indices, we still have naming annotations for pretty-printing that are
+  irrelevant for typing;
+  \item \mintinline{coq}{tLambda na A t} represents a \(\lambda\)-abstraction;
+  \item \mintinline{coq}{tLetIn na b B t} is a let-binding;
+  \item \mintinline{coq}{tApp u v} is application of \mintinline{coq}{u} to
+  \mintinline{coq}{v};
+  \item the other constructors deal with constants, inductive types and their
+  constructors, pattern-matching and fixed-points.
+\end{itemize}
+
+In \MetaCoq we try to stick as close as possible to the \Coq implementation,
+whereas in \ftt we used a different approach, trying to be modular on the
+syntax. Instead of using an inductive type, we use a record with fields for the
+types of types, terms, etc. as well as the different syntactic constructs.
+Here is also an excerpt of it.
+\begin{minted}{coq}
+Record Syntax := {
+  context      : Type ;
+  type         : Type ;
+  term         : Type ;
+  substitution : Type ;
+
+  ctxempty  : context ;
+  ctxextend : context -> type -> context ;
+
+  Prod  : type -> type -> type ;
+  Subst : type -> substitution -> type ;
+  Uni   : level -> type ;
+  El    : level -> term -> type ;
+
+  var     : nat -> term ;
+  lam     : type -> type -> term -> term ;
+  app     : term -> type -> type -> term -> term ;
+  subst   : term -> substitution -> term ;
+  uniProd : level -> level -> term -> term -> term ;
+
+  sbzero     : type -> term -> substitution ;
+  sbweak     : type -> substitution ;
+  sbshift    : type -> substitution -> substitution ;
+  sbid       : substitution ;
+  sbcomp     : substitution -> substitution -> substitution ;
+  sbterminal : substitution
+}.
+\end{minted}
+We also use de Bruijn indices, but most other choices I presented above aren't
+made. It may seem like we use Tarski universes, separate terms and types, use
+explicit substitutions and fully-annotated terms.
+However, these aren't enforced because these aren't \emph{constructors}.
+Nothing prevents us from providing an instance where \mintinline{coq}{term}
+and \mintinline{coq}{type} are the same and \mintinline{coq}{El} is the identity
+(hence Russel universes), functions that ignore the annotations for
+\mintinline{coq}{app} and \mintinline{coq}{lam}, or meta-level functions for
+the substitutions.
+For instance, here is a version with explicit substitutions, but the rest as I
+mentioned:
+\begin{minted}{coq}
+Inductive context : Type :=
+| ctxempty : context
+| ctxextend : context -> term -> context
+
+with term : Type :=
+(* Types *)
+| Prod : term -> term -> term
+| Uni : syntax.level -> term
+(* Terms *)
+| var : nat -> term
+| lam : term -> term -> term
+| app : term -> term -> term
+| subst : term -> substitution -> term
+
+with substitution : Type :=
+| sbzero : term -> term -> substitution
+| sbweak : term -> substitution
+| sbshift : term -> substitution -> substitution
+| sbid : substitution
+| sbcomp : substitution -> substitution -> substitution
+| sbterminal : substitution
+.
+
+Definition S : Syntax := {|
+  context      := context ;
+  type         := term ;
+  term         := term ;
+  substitution := substitution ;
+
+  ctxempty  := ctxempty ;
+  ctxextend := ctxextend ;
+
+  Prod   := Prod ;
+  Subst  := subst ;
+  Uni    := Uni ;
+  El i T := T ;
+
+  var n           := var n ;
+  lam A B t       := lam A t ;
+  app u A B v     := app u v ;
+  subst u sbs     := subst u sbs ;
+  uniProd i j A B := Prod A B ;
+
+  sbzero     := sbzero ;
+  sbweak     := sbweak ;
+  sbshift    := sbshift ;
+  sbid       := sbid ;
+  sbcomp     := sbcomp ;
+  sbterminal := sbterminal
+|}.
+
+\end{minted}
+
+There is however an important consequence of such a presentation: the syntax is
+no longer inductive, so there is a priori no injectivity of constructors and
+we might well define all those types to be \mintinline{coq}{unit}, identifying
+all those constructs.
+This can make it hard to reason about the syntax, and a lot of properties simply
+do not hold because you cannot distinguish two different constructs.
+As such I am not sure this is the best way to go.
+In the remainder of this thesis, I will focus more on approached like that of
+\MetaCoq.
 
 \section{Representation of typing}
 
