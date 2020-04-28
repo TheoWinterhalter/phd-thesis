@@ -616,12 +616,97 @@ hypotheses.
 
 \subsection{Conversion}
 
-\todo{typed or untyped equality? cite geuvers}
-\todo{from reduction or not}
-\todo{Mutual or not? Maybe in the next section}
+\marginnote[0.5cm]{
+  More recently it also had to be modified to include marks to deal with
+  definitionally proof-irrelevant universe \mintinline{coq}{SProp}.
+}
+Conversion can also come in different flavours. In \Coq, conversion is derived
+from reduction (as a congruence closure) but is also extended to take
+\(\eta\)-expansion into account.
+\begin{mathpar}
+  \infer
+    {
+      u \red w \\
+      w \equiv v
+    }
+    {u \equiv v}
+  %
+
+  \infer
+    {
+      u \equiv w \\
+      v \red w
+    }
+    {u \equiv v}
+  %
+
+  \infer
+    {u =_{\alpha\eta} v}
+    {u \equiv v}
+  %
+\end{mathpar}
+Since it's untyped, we have to make sure the type is well-formed in the
+conversion rule:
+\[
+  \infer
+    {
+      \Ga \vdash t : A \\
+      A \equiv B \\
+      \Ga \vdash B : \Type
+    }
+    {\Ga \vdash t : B}
+  %
+\]
+
+In \Agda on the other hand, conversion is \emph{typed}, that is it is a judgment
+of the form
+\[
+  \Ga \vdash u \equiv v : A
+\]
+This has a serious advantage in that it allows for rules like
+\[
+  \infer
+    { }
+    {\Ga \vdash u \equiv v : \unit}
+  %
+\]
+stating that two terms of the \(\unit\) type are convertible which is not
+feasible in an untyped setting. In general it simplifies all type-based
+conversion rules. As you can see with the rule above,
+\(\Ga \vdash u \equiv v : A\) needn't imply \(\Ga \vdash u : A\) or
+\(\Ga \vdash v : A\). It could however, it is again a design choice.
+If we do not require it then the conversion rule is similar
+\[
+  \infer
+    {
+      \Ga \vdash t : A \\
+      \Ga \vdash A \equiv B : \Type \\
+      \Ga \vdash B : \Type
+    }
+    {\Ga \vdash t : B}
+  %
+\]
+
+Finally, there is a third notion of explicit conversion which stores the
+conversion proof in the term:
+\[
+  \infer
+    {
+      \Ga \vdash t : A \\
+      \Ga \vdash H : A \equiv B \\
+      \Ga \vdash B
+    }
+    {\Ga \vdash t^H : B}
+  %
+\]
+
+All three notions of conversion are proven equivalent in
+\sidecite{van2013explicit}.
 
 \subsection{How intricate need the concepts be?}
 
+\todo{Mutual or not?}
 \todo{Well-typed syntax that I did not study in depth but needs to be
 mentioned → maybe expose my idea that it isn't exactly the same,
 notion of computation in the meta (→ translations).}
+\todo{Will be how we talk about formalisation}
