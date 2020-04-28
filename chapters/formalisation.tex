@@ -747,6 +747,104 @@ with conv (Γ : context) : term -> term -> term -> Type :=
 While in \MetaCoq where conversion is untyped, we first define conversion
 and then typing on top of it.
 
-\todo{Well-typed syntax that I did not study in depth but needs to be
-mentioned → maybe expose my idea that it isn't exactly the same,
-notion of computation in the meta (→ translations).}
+We can push things even further and define syntax at the same time as typing
+as well. This is called well-typed syntax, and is presented
+in~\sidecite{altenkirch2016type} using \acrshortpl{QIT}.
+The idea is define contexts, types, terms and substitutions (very similar to
+categorical models, see \nrefch{models}) mutually, in a typed way:
+\begin{minted}{agda}
+data Con : Set
+data Ty  : Con → Set
+data Tms : Con → Con  → Set
+data Tm  : ∀ Γ → Ty Γ → Set
+\end{minted}
+Contexts are defined with the empty context and the extension as usual, except
+now they are well-formed by construction.
+\begin{minted}{agda}
+data Con where
+  •   : Con
+  _,_ : (Γ : Con) → Ty Γ → Con
+\end{minted}
+For types we will stick to \(\Pi\)-types, but we will also have a constructor
+for (explicit) substitutions.
+\begin{minted}{agda}
+data Ty where
+  _[_]T : ∀ {Γ Δ} → Ty Δ → Tms Γ Δ → Ty Γ
+  Π     : ∀ {Γ} → (A : Ty Γ) (B : Ty (Γ, A)) → Ty Γ
+\end{minted}
+Substitutions which are given like so.
+\begin{minted}{agda}
+data Tms where
+  ε   : ∀ {Γ} → Tms Γ •
+  _,_ : ∀ {Γ Δ A} → (δ : Tms Γ Δ) → Tm Γ (A[δ]T) → Tms Γ (Δ, A)
+  id  : ∀ {Γ} → Tms Γ Γ
+  _∘_ : ∀ {Γ Δ Ξ} → Tms Δ Ξ → Tms Γ Δ → Tms Γ Ξ
+  π₁  : ∀ {Γ Δ A} → Tms Γ (Δ, A) → Tms Γ Δ
+\end{minted}
+Finally for terms we have something like this, pretty standard except the
+application is not the usual\sidenote{
+  In fact I wouldn't call it application at
+  all as it is not application. It's a key element to getting it however, usual
+  application of \mintinline{agda}{(u : Tm Γ (Π A B))} and
+  \mintinline{agda}{(v : Tm Γ A)} is given by
+  \mintinline{agda}{(app u)[id, u]t}.
+} and is rather the inverse operation to
+\(\lambda\)-abstraction.
+\begin{minted}{agda}
+data Tm where
+  _[_]t : ∀ {Γ Δ A} → Tm Δ A → (δ : Tms Γ Δ) → Tm Γ (A[δ]T)
+  π₂    : ∀ {Γ Δ A} → Tms Γ (Δ, A) → Tm Γ (A[π₁ δ]T)
+  app   : ∀ {Γ A B} → Tm Γ (Π A B) → Tm (Γ, A) B
+  lam   : ∀ {Γ A B} → Tm (Γ, A) B → Tm Γ (Π A B)
+\end{minted}
+
+Now for this to work we need to have conversion rules as well. There are two
+ways to do it. The first, possible in \Agda, is to also define those mutually
+with conversion and then rely on explicit conversion:
+\begin{minted}{agda}
+data ConvTy : (Γ : Con) (A B : Ty Γ) → Set
+data ConvTm : (Γ : Con) (A : Ty Γ) (u v : Tm Γ A) → Set
+
+-- ...
+
+data Tm where
+  -- ...
+  coe : ∀ {Γ A B} → ConvTy Γ A B → Tm Γ A → Tm Γ B
+\end{minted}
+The conversion expressed this way is really tedious as we have to deal with
+\mintinline{agda}{coe} itself in the conversion, as well as extend conversion to
+context besides the usual type and term conversion.
+
+The solution with \acrlongpl{QIT}---as the name suggests---is instead to
+quotient the syntax by the equalities it should verify.
+For types those would be things like
+\marginnote[0.6cm]{
+  Note that \mintinline{agda}{≡} corresponds to the propositional equality of
+  \Agda.
+}
+\begin{minted}{agda}
+  [id]T : ∀ {Γ A} → A[id]T ≡ A
+  [][]T : ∀ {Γ Δ Ξ A} → {σ : Tms Γ Δ} {δ : Tms Δ Ξ} →
+            (A[δ]T)[σ]T ≡ A[δ ∘ σ]T
+\end{minted}
+and for terms we would have, among other things, the laws for \(\beta\)- and
+\(\eta\)-equality.
+\begin{minted}{agda}
+  Πβ : ∀ {Γ A B} → {t : Tm (Γ, A) B}  → app (lam t) ≡ t
+  Πη : ∀ {Γ A B} → {t : Tm Γ (Π A B)} → lam (app t) ≡ t
+\end{minted}
+Congruence laws simply come from the fact that equality is already a congruence.
+Note that \acrshortpl{QIT} are not yet available in \Agda.
+
+I think however that well-typed \emph{syntax} is a misnomer because the data we
+are constructing represents derivations rather than terms.
+It is very interesting but does not supersedes the good old syntax and
+derivation above it combination.
+For one, it allows us to manipulate syntax in an untyped way, and later show
+that this manipulation is type-preserving. This is at the core of program
+translations as we will see in \nrefch{translations} and become crucial when
+derivations are \emph{big}\sidenote{This is the case in the translation I show
+in \arefpart{elim-reflection}} since terms (as in untyped syntax) are usually
+much smaller. Another point is that it doesn't really make sense to write a
+type-checker for a well-typed syntax, something that I expose in
+\arefpart{coq-in-coq}.
