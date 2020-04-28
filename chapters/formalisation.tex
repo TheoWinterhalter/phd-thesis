@@ -528,12 +528,100 @@ typing derivations---as well as the notion of conversion.
 Once again, we are faced with many choices.
 
 \subsection{Paranoia of typing rules}
-\todo{paranoia formal-type-theory (including typed or untyped equality?)}
+
+If you have a look at the typing rule of the reflexivity constructor of
+equality:
+\begin{mathpar}
+  \infer
+    {\Ga \vdash u : A}
+    {\Ga \vdash \refl{A} u : u =_A u}
+  %
+\end{mathpar}
+you can see that we require \(u\) to have type \(A\) without asking for
+\(A\) to be a type itself.
+So perhaps we should consider the following rule instead:
+\begin{mathpar}
+  \infer
+    {
+      \Ga \vdash A \\
+      \Ga \vdash u : A
+    }
+    {\Ga \vdash \refl{A} u : u =_A u}
+  %
+\end{mathpar}
+This time, the question can be whether the context \(\Ga\) itself makes sense.
+\begin{mathpar}
+  \infer
+    {
+      \vdash \Ga \\
+      \Ga \vdash A \\
+      \Ga \vdash u : A
+    }
+    {\Ga \vdash \refl{A} u : u =_A u}
+  %
+\end{mathpar}
+
+With Andrej Bauer and Philipp Haselwarter in~\sidecite{formaltypetheory} we
+desribe the two ends of this spectrum as either \emph{economic} or
+\emph{paranoid} versions of the same typing rule.
+There is a real question as to which should be chosen. When building derivations
+it is nicer to be in an economic setting to avoid big and redundant derivations,
+however when building something \emph{from} a derivation, the paranoid version
+gives more hyotheses to work on.
+Leaving aside the practical side, there is of course the question of whether
+they are equivalent or not.
+
+In \ftt we formalise that paranoid and economic type theories are equivalent
+provided rules pertaining to variables and constants require that the context
+is well-formed even in the economic version:
+\[
+  \infer
+    {
+      \vdash \Ga \\
+      (x : A) \in \Ga
+    }
+    {\Ga \vdash x : A}
+  %
+\]
+The proof relies on what we called sanity properties (and that I called validity
+in \nrefch{desirable-props}): when \(\Ga \vdash t : A\) then \(\Ga \vdash A\)
+and when \(\Ga \vdash A\) then \(\vdash \Ga\).
+
+\marginnote[0.2cm]{
+  Note that this approach is assuming you don't really care about the
+  derivations that are produced. If you want to compute on them, having big
+  derivations can be a problem and as such it might be worth it to put in the
+  extra work to show them equivalent to their paranoid versions while keeping
+  the data as small as possible.
+}
+The right approach to this I think is to put as many information required to
+make the proof of sanity/validity \emph{easy} and then use this proof to prove
+that the economic versions are admissible.
+Empirically it seems to me that you put everything that is needed to do
+type inference on the term.
+To infer the type of \(\refl{A} u\) you need to check \(u\) has type \(A\),
+which usually relies on the well-typedness of \(A\), meaning I would use the
+second rule:
+\begin{mathpar}
+  \infer
+    {
+      \Ga \vdash A \\
+      \Ga \vdash u : A
+    }
+    {\Ga \vdash \refl{A} u : u =_A u}
+  %
+\end{mathpar}
+It's also easy to see how proving \(\Ga \vdash u =_A u\) will be direct from the
+hypotheses.
+
+\subsection{Conversion}
+
+\todo{typed or untyped equality? cite geuvers}
+\todo{from reduction or not}
+\todo{Mutual or not? Maybe in the next section}
 
 \subsection{How intricate need the concepts be?}
 
 \todo{Well-typed syntax that I did not study in depth but needs to be
 mentioned → maybe expose my idea that it isn't exactly the same,
 notion of computation in the meta (→ translations).}
-
-\todo{And conversion?}
