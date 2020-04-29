@@ -232,23 +232,20 @@ contradictory). Gentzen describe it in a sequent calculus called
 The syntax is given by
 \[
   \begin{array}{rrl}
-    P, Q, A, B &\bnf& x \bnfor P \wedge Q \bnfor P \vee Q \bnfor P \to Q
-    \bnfor \neg P \\
-    &\bnfor& \forall x.P \bnfor \exists x.P \\
+    P, Q, A, B &\bnf& \top \bnfor \bot \bnfor P \wedge Q \bnfor P \vee Q
+    \bnfor P \to Q \bnfor \neg P \\
     \Ga, \D &\bnf& \ctxempty \bnfor \Ga, P \\
     \mathcal{J} &\bnf& \Ga \vdash \D
   \end{array}
 \]
-which corresponds to first-order logic. Although for quantifiers to be
-interesting we would probably need to extend the syntax a bit to handle
-function symbols and equality.
-
-The inference rules are the following.
+which corresponds to \emph{propositional logic}.
+I will give the rules in separate bundles: the first of which consists of
+the two important rules of \emph{axiom} and \emph{cut}.
 \begin{mathpar}
   \infer
     { }
     {A \vdash A}
-  %
+  (I)
 
   \infer
     {
@@ -257,7 +254,15 @@ The inference rules are the following.
     }
     {\Ga, \Xi \vdash \D, \Theta}
   %
+\end{mathpar}
+While the \emph{axiom} rule has nothing special about it, the \emph{cut} rule
+might seem a bit peculiar. If we forget about \(\D\) and \(\Xi\) it says that if
+\(\Ga\) entails \(A\) which itself entails \(\Theta\) then \(\Ga\) entails
+\(\Theta\), which is not so far from the \emph{modus ponens} after all.
 
+Then we have the logical rules---\ie that pertain to the logical constructors
+of propositional logic:
+\begin{mathpar}
   \infer
     {\Ga, A \vdash \D}
     {\Ga, A \wedge B \vdash \D}
@@ -318,25 +323,38 @@ The inference rules are the following.
   %
 
   \infer
-    {\Ga, A[x \sto t] \vdash \D}
-    {\Ga, \forall x. A \vdash \D}
+    {\Ga \vdash \D}
+    {\Ga, \top \vdash \D}
   %
 
   \infer
-    {\Ga \vdash A[x \sto y], \D}
-    {\Ga \vdash \forall x.A, \D}
+    { }
+    {\Ga \vdash \top, \D}
   %
 
   \infer
-    {\Ga, A[x \sto y] \vdash \D}
-    {\Ga, \exists x.A \vdash \D}
+    { }
+    {\vdash \top}
   %
 
   \infer
-    {\Ga \vdash A[x \sto t], \D}
-    {\Ga \vdash \exists x.A, \D}
+    { }
+    {\bot \vdash}
   %
 
+  \infer
+    { }
+    {\Ga, \bot \vdash \D}
+  %
+
+  \infer
+    {\Ga \vdash \D}
+    {\Ga \vdash \bot, \D}
+  %
+\end{mathpar}
+The rest are structural rules that allow us to weaken the hypotheses or the
+conclusion, or reorder propositions and remove duplicates.
+\begin{mathpar}
   \infer
     {\Ga \vdash \D}
     {\Ga, A \vdash \D}
@@ -365,6 +383,31 @@ The inference rules are the following.
   \infer
     {\Ga \vdash \D, A, B, \Theta}
     {\Ga \vdash \D, B, A, \Theta}
+  %
+\end{mathpar}
+
+\LK is classical because we can derive the \acrlong{LEM} from it.
+\begin{mathpar}
+  \infer*
+    {
+      \infer*
+        {
+          \infer*
+            {
+              \infer*
+                {
+                  \infer*
+                    { }
+                    {P \vdash P}
+                }
+                {\vdash \neg P, P}
+            }
+            {\vdash P \vee \neg P, P}
+        }
+        {\vdash P \vee \neg P, P \vee \neg P}
+      %
+    }
+    {\vdash P \vee \neg P}
   %
 \end{mathpar}
 
