@@ -103,6 +103,11 @@ For instance we have
 \]
 to denote the fact that \(A\) and \(B\) as hypotheses, \emph{entail} the
 proposition \(A \wedge B\).
+\marginnote[0.2cm]{
+  The setting with only one proposition on the right is called
+  \emph{natural deduction} and was introduced by Gentzen; with a list of
+  propositions it is instead called the \emph{sequent calculus}.
+}
 This is called a \emph{judgement}, and in general it can have a list of
 statements on the right: \(A, B, C \vdash D, E, F\) means that, \emph{assuming}
 \(A\), \(B\) \emph{and} \(C\), then \emph{either} \(D\), \(E\) \emph{or} \(F\)
@@ -213,6 +218,157 @@ Because of this, it might seem like implication (\(\to\)), entailement
 They \emph{are}, but at different levels.
 
 \section{Proof frameworks}
+
+There are many proof frameworks and logics and I will not review all of them,
+but I will present the most relevant to the rest of my work.
+
+\subsection{Classical logic}
+
+Classical logic is the logic most people have in mind where any proposition is
+either ``true'' or ``false'' (but not either provable or provably
+contradictory). Gentzen describe it in a sequent calculus called
+\LK~\sidecite{gentzen1935untersuchungen}.
+
+The syntax is given by
+\[
+  \begin{array}{rrl}
+    P, Q, A, B &\bnf& x \bnfor P \wedge Q \bnfor P \vee Q \bnfor P \to Q
+    \bnfor \neg P \\
+    &\bnfor& \forall x.P \bnfor \exists x.P \\
+    \Ga, \D &\bnf& \ctxempty \bnfor \Ga, P \\
+    \mathcal{J} &\bnf& \Ga \vdash \D
+  \end{array}
+\]
+which corresponds to first-order logic. Although for quantifiers to be
+interesting we would probably need to extend the syntax a bit to handle
+function symbols and equality.
+
+The inference rules are the following.
+\begin{mathpar}
+  \infer
+    { }
+    {A \vdash A}
+  %
+
+  \infer
+    {
+      \Ga \vdash \D, A \\
+      A, \Xi \vdash \Theta
+    }
+    {\Ga, \Xi \vdash \D, \Theta}
+  %
+
+  \infer
+    {\Ga, A \vdash \D}
+    {\Ga, A \wedge B \vdash \D}
+  %
+
+  \infer
+    {\Ga \vdash A, \D}
+    {\Ga \vdash A \vee B, \D}
+  %
+
+  \infer
+    {\Ga,B \vdash \D}
+    {\Ga, A \wedge B \vdash \D}
+  %
+
+  \infer
+    {\Ga \vdash B, \D}
+    {\Ga \vdash A \vee B, \D}
+  %
+
+  \infer
+    {
+      \Ga, A \vdash \D \\
+      \Xi, B \vdash \Theta
+    }
+    {\Ga, \Xi, A \vee B \vdash \D, \Theta}
+  %
+
+  \infer
+    {
+      \Ga \vdash A,\D \\
+      \Xi \vdash B, \Theta
+    }
+    {\Ga, \Xi \vdash A \wedge B, \D, \Theta}
+  %
+
+  \infer
+    {
+      \Ga \vdash A, \D \\
+      \Xi, B \vdash \Theta
+    }
+    {\Ga, \Xi, A \to B \vdash \D, \Theta}
+  %
+
+  \infer
+    {\Ga, A \vdash B, \D}
+    {\Ga \vdash A \to B, \D}
+  %
+
+  \infer
+    {\Ga \vdash A, \D}
+    {\Ga, \neg A \vdash \D}
+  %
+
+  \infer
+    {\Ga, A \vdash \D}
+    {\Ga \vdash \neg A, \D}
+  %
+
+  \infer
+    {\Ga, A[x \sto t] \vdash \D}
+    {\Ga, \forall x. A \vdash \D}
+  %
+
+  \infer
+    {\Ga \vdash A[x \sto y], \D}
+    {\Ga \vdash \forall x.A, \D}
+  %
+
+  \infer
+    {\Ga, A[x \sto y] \vdash \D}
+    {\Ga, \exists x.A \vdash \D}
+  %
+
+  \infer
+    {\Ga \vdash A[x \sto t], \D}
+    {\Ga \vdash \exists x.A, \D}
+  %
+
+  \infer
+    {\Ga \vdash \D}
+    {\Ga, A \vdash \D}
+  %
+
+  \infer
+    {\Ga \vdash \D}
+    {\Ga \vdash A, \D}
+  %
+
+  \infer
+    {\Ga, A, A \vdash \D}
+    {\Ga, A \vdash \D}
+  %
+
+  \infer
+    {\Ga \vdash A, A, \D}
+    {\Ga \vdash A, \D}
+  %
+
+  \infer
+    {\Ga, A, B, \Xi \vdash \D}
+    {\Ga, B, A, \Xi \vdash \D}
+  %
+
+  \infer
+    {\Ga \vdash \D, A, B, \Theta}
+    {\Ga \vdash \D, B, A, \Theta}
+  %
+\end{mathpar}
+
+\subsection{Intuitionistic logic}
 
 \todo{Different logics, Constructiveness, classical logic, linear logic}
 \todo{mechanised proofs, proof assistants, automated theorem provers}
