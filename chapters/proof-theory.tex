@@ -567,4 +567,26 @@ occurrences of the \((Cut)\) rule in a derivation, showing at the same time that
 it is \emph{admissible} or redundant.
 
 \subsection{Mechanised proofs}
-\todo{mechanised proofs, proof assistants, automated theorem provers}
+
+Once we have a formal logic it makes sense to \emph{teach} its rules to a
+computer to use it for what we call \emph{mechanised proofs}.
+We nowadays have many those, be it under the name \emph{proof assistants} or
+\emph{automated theorem provers}.
+
+\paragraph{Automated theorem provers} are tools that will take statements as
+inputs and attempt to prove or disprove them, sometimes taking hints from the
+user when stuck.
+They are very attractive because the user usually doesn't have to learn about
+the logic involved, just trust that it \emph{works}\sidenote{Ideally that it is
+consistent}. However it can be a hassle when they fail to prove or disprove
+something and the user has to figure out the right to state things so that it
+manages to go progress.
+
+\paragraph{Proof assistants} require more work from the part of the user but are
+usually more malleable and robust. They constitute a framework in which the user
+can state and prove lemmata. Again there are several proof assistants: \IsaHOL
+is one of the most commonly used and based on
+\acrfull{HOL}~\sidecite[-1.35cm]{10.5555/1791547}, but I am more  familiar with
+proof assistants based on type theory such as \Coq~\sidecite[-1cm]{coq} and
+\Agda~\sidecite[-0.6cm]{norell2007towards}.
+The next introductory chapters will focus on this notion of proof framework.
