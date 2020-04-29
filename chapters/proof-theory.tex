@@ -429,7 +429,7 @@ conclusion, or reorder propositions and remove duplicates.
     }
     {\vdash P \vee \neg P}
 \end{mathpar}
-Negation is involutive in \LK:
+\LK also features double negation elimination:
 \[
   \infer*[Right=\((\to R)\)]
     {
@@ -449,7 +449,7 @@ Negation is involutive in \LK:
 \subsection{Intuitionistic logic}
 
 Intuitionistic logic doesn't abide by the \acrshort{LEM}, so its treatment of
-negation is a bit different so that double negation cannot be simplified as
+negation is a bit different so that double negation cannot be eliminated as
 above. As such we define \LJ in natural deduction (the sequent style was also
 of import to get classical logic), on the same syntax of propositional logic.
 It is pretty similar.
@@ -560,7 +560,11 @@ to rearrange on the right.
   (P)
 \end{mathpar}
 
-\todo{Constructiveness}
+This logic is constructive in that from every proof derivation one can extract
+a proof where the last rule is an introduction rule, \ie a \emph{right} rule.
+This is obtained by a process known as \emph{cut-elimination} which removes all
+occurrences of the \((Cut)\) rule in a derivation, showing at the same time that
+it is \emph{admissible} or redundant.
 
 \subsection{Mechanised proofs}
 \todo{mechanised proofs, proof assistants, automated theorem provers}
