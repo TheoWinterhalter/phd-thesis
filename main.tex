@@ -70,9 +70,9 @@
 \usepackage{stmaryrd}
 
 % Miniature document
-\usepackage{minidocument}
-\def\minidocumentscale{0.25}
-\usepackage{blindtext}
+% \usepackage{minidocument}
+% \def\minidocumentscale{0.25}
+% \usepackage{blindtext}
 
 % Tikz
 \usetikzlibrary{tikzmark, arrows, arrows.meta, decorations.pathmorphing}
@@ -279,6 +279,9 @@
 
 %\input{chapters/preface.tex}
 \input{chapters/ack.tex}
+\pagelayout{margin} % Restore margins
+\input{chapters/how-to-read.tex}
+\pagelayout{wide} % No margins
 
 %----------------------------------------------------------------------------------------
 %	TABLE OF CONTENTS & LIST OF FIGURES/TABLES
@@ -312,8 +315,6 @@
 %----------------------------------------------------------------------------------------
 
 \mainmatter % Denotes the start of the main document content, resets page numbering and uses arabic numbers
-
-\input{chapters/how-to-read.tex}
 
 \setchapterstyle{kao} % Choose the default chapter heading style
 
@@ -381,7 +382,7 @@
 
 % The bibliography needs to be compiled with biber using your LaTeX editor, or on the command line with 'biber main' from the template directory
 
-\defbibnote{bibnote}{Here are the references in citation order.\par\bigskip} % Prepend this text to the bibliography
+\defbibnote{bibnote}{\label{bib}Here are the references in citation order.\par\bigskip} % Prepend this text to the bibliography
 \printbibliography[heading=bibintoc, title=Bibliography, prenote=bibnote] % Add the bibliography heading to the ToC, set the title of the bibliography and output the bibliography note
 
 %----------------------------------------------------------------------------------------
