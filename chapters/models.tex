@@ -75,9 +75,9 @@ interpretation of \(B\):
   \transl{A \to B} \coloneqq \setfun{\transl{A}}{\transl{B}}
 \]
 
-Instead of describing set-theoretic models abstractly I will rather focus on one
-example: the proof-irrelevant model of \acrshort{CIC}. I will actually deal with
-the smaller case of \acrshort{CoC}.
+Instead of describing all set-theoretic models abstractly I will rather focus on
+one example: the proof-irrelevant model of \acrshort{CIC}. I will actually deal
+with the smaller case of \acrshort{CoC}.
 This is exposed
 in~\sidecite[-0.9cm]{miquel2001calcul}---following~\sidecite[-0.3cm]{aczel1998relating,xi2000imperative}---in very clear---and French---way,
 but without accounting for contexts and open terms.
@@ -91,7 +91,7 @@ are interpreted as the singleton \(\{ \emptyset \}\).
 First I will remind what rules we are dealing with. This theory will only have
 two universes: \(\Prop\) and \(\Type\), the model can be adapted to deal with
 more universes but it's a bit more complicated.
-\marginnote[2.7cm]{
+\marginnote[2.3cm]{
   We have two rules for \(\Pi\)-types because we have an impredicative
   universe of propositions \(\Prop\). The rules where \(\Prop\) is on the left
   are unnecessary because we have a weak cumulativity \(\Prop \le \Type\).
@@ -108,14 +108,6 @@ more universes but it's a bit more complicated.
   \infer
     {\Ga \vdash A : \Prop}
     {\Ga \vdash A : \Type}
-  %
-
-  \infer
-    {
-      \Ga \vdash A : \Prop \\
-      \Ga, x : A \vdash B : \Type
-    }
-    {\Ga \vdash \Pi (x:A). B : \Type}
   %
 
   \infer
@@ -187,7 +179,7 @@ As such we will interpret terms together with their context:
     \}
   \end{array}
 \]
-mutually defined with \(\transl{\Ga \vdash t}\):
+mutually with \(\transl{\Ga \vdash t}\):
 \sidedef[-0.7cm]{Dependent product of sets}{
   \(\prod_{x \in A} B(x)\) is defined as the set of functions \(f\) from \(A\)
   to \(\bigcup_{x \in A} B(x)\) such that \(f(x) \in B(x)\).
@@ -214,14 +206,79 @@ where in the last equality
   \Ga = x_n : A_n, \dots x_i : A_i, \dots x_0 : A_0
 \]
 I don't really believe you can distinguish between propositions and usual types
-in the current setting so in\sidecite{aczel1998relating}, Aczel introduces a
+in the current setting so in~\sidecite{aczel1998relating}, Aczel introduces a
 non-standard encoding of set-theoretic functions such that the constant function
 \(x \mapsto 0\) is \emph{equal} to \(0\).
 
-\todo{Talk about how it has to be valid, how it's partial, how to have actual
-propositions like false and bottom and that they are indeed constant functions}
+I didn't precise what \(\mathcal{U}\) was. From \(\mathcal{U}\) we only require
+that it is closed under product and power-sets and contains at least \(2\).
+It needs only be the cardinal \(\omega\) in our case, but if we wanted more
+universes---say a hieraarchy of them---we would need inaccessible cardinals.
+We will see them briefly in \refsec{cat-models}.
+
+Before we can claim it is a model we need to show that whenever
+\(\Ga \vdash t : A\) then \(\transl{\Ga \vdash t} \in \transl{\Ga \vdash A}\).
+This will in particular prove that every proof of a proposition is indeed sent
+to \(0\).
+It also allows us to conclude consistency since the empty type
+\[
+  \bot \coloneqq \Pi (P : \Prop). P
+\]
+is interpreted (in the empty context) as
+\[
+  \transl{\vdash \bot}(0) = \prod_{X \in 2}\ X
+\]
+\ie the set of functions \(f\) such that \(f(0) \in 0\) and \(f(1) \in 1\),
+since there is no element in \(0\) there is no such \(f\) and as such
+\[
+  \transl{\vdash \bot} = 0
+\]
+
+The proof is done by looking at each rule and showing they preserve the
+property: for instance if we take
+\[
+  \infer
+    {
+      \Ga, x : A \vdash t : B \\
+      \Ga \vdash \Pi (x:A). B : \Type
+    }
+    {\Ga \vdash \lambda (x:A). t : \Pi (x:A). B}
+  %
+\]
+we assume we have
+\(\transl{\Ga, x:A \vdash t}(\delta) \in \transl{\Ga, x:A \vdash B}(\delta)\)
+and
+\(\transl{\Ga \vdash \Pi (x:A). B}(\gamma) \in \transl{\Ga \vdash \Type}(\gamma)\)
+for every \(\delta \in \transl{\Ga, x:A}\) and \(\gamma \in \transl{\Ga}\)
+and show that
+\[
+  \transl{\Ga \vdash \lambda (x:A). t}(\gamma) \in
+  \transl{\Ga \vdash \Pi (x:A). B}(\gamma)
+\]
+If we reformulate we want to show that for all \(\gamma \in \Ga\) and
+\(a \in \transl{\Ga \vdash A}(\gamma)\) we have
+\[
+  \transl{\Ga, x : A \vdash t}(\gamma, a) \in
+  \transl{\Ga, x:A \vdash B}(\gamma,a)
+\]
+which corresponds to our hyothesis.
+
+For some other cases like the convertion and application rules we need to show
+that convertible terms are sent to equal sets/functions and that the
+interpretation behaves well with respect to substitution.
+I will not dwell on the details as it has been dealt with nicely in the
+references I put at the beginning of this section.
+
+Set-theoretic models aren't the only way to make models of type theory of
+course. For instance they may not be best-suited to interpretation of
+computational content since \(\beta\)-convertible terms are interpreted as the
+same set. They however provide a nice way of seeing the relation between
+set-theory---the widely accepted framework in which to do mathematics---and type
+theory which we\sidenote{I'll leave that one as imprecise as it is.} advocate
+instead.
 
 \section{Categorical models}
+\labsec{cat-models}
 
 Categorical models are one of the most used way of defining models for type
 theories. There are several notions of categorical models:
