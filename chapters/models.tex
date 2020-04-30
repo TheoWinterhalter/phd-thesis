@@ -58,17 +58,13 @@ can come as surprising for some, especially in a classical mindset.
 }
 Gödel's incompleteness theorems have to do with this.
 
-\subsection{Gödel's incompleteness theorems}
-
-\todo{Is it really the place? Should it even go in the proof theory chapter?}
-
 \section{Set-theoretic models}
 
 Set-theoretic models are models of type-theory where types are interpreted as
 sets. For instance the (non-dependent) type \(A \to B\) will be interpreted as
 the set of set-theoretic functions from the interpretation of \(A\) to the
 interpretation of \(B\):
-\marginnote[0.4cm]{
+\marginnote[0.55cm]{
   It is usual to write \(\transl{A}\) for the interpretation of \(A\).
 }
 \[
@@ -91,7 +87,7 @@ are interpreted as the singleton \(\{ \emptyset \}\).
 First I will remind what rules we are dealing with. This theory will only have
 two universes: \(\Prop\) and \(\Type\), the model can be adapted to deal with
 more universes but it's a bit more complicated.
-\marginnote[2.3cm]{
+\marginnote[1.7cm]{
   We have two rules for \(\Pi\)-types because we have an impredicative
   universe of propositions \(\Prop\). The rules where \(\Prop\) is on the left
   are unnecessary because we have a weak cumulativity \(\Prop \le \Type\).
@@ -180,7 +176,7 @@ As such we will interpret terms together with their context:
   \end{array}
 \]
 mutually with \(\transl{\Ga \vdash t}\):
-\sidedef[-0.7cm]{Dependent product of sets}{
+\sidedef[-0.5cm]{Dependent product of sets}{
   \(\prod_{x \in A} B(x)\) is defined as the set of functions \(f\) from \(A\)
   to \(\bigcup_{x \in A} B(x)\) such that \(f(x) \in B(x)\).
 }
@@ -285,7 +281,7 @@ theories. There are several notions of categorical models:
 contextual categories~\sidecite[-0.9cm]{cartmell1986generalised} from which stem
 categories with attributes~\sidecite[0.2cm]{hofmann1994interpretation} and
 C-systems~\sidecite[0.9cm]{voevodsky2016subsystems},
-\acrfullpl{CwF}~\sidecite[1.7cm]{dybjer1995internal}, and more\dots
+\acrfullpl{CwF}~\sidecite[1.7cm]{dybjer1995internal}, and more...
 I will focus on \acrshortpl{CwF} in this document.
 
 \subsection{Categories with families}
