@@ -65,16 +65,161 @@ Gödel's incompleteness theorems have to do with this.
 \section{Set-theoretic models}
 
 Set-theoretic models are models of type-theory where types are interpreted as
-sets. For instance the type \(A \to B\) will be interpreted as the set of
-set-theoretic functions from the interpretation of \(A\) to the interpretation
-of \(B\):
-\marginnote[0.2cm]{
+sets. For instance the (non-dependent) type \(A \to B\) will be interpreted as
+the set of set-theoretic functions from the interpretation of \(A\) to the
+interpretation of \(B\):
+\marginnote[0.4cm]{
   It is usual to write \(\transl{A}\) for the interpretation of \(A\).
 }
 \[
-  \transl{A \to B} \coloneqq \setfun{\transl{A}}{\transl{B}})
+  \transl{A \to B} \coloneqq \setfun{\transl{A}}{\transl{B}}
 \]
-\todo{I'm missing a ref here on how to do this...}
+
+Instead of describing set-theoretic models abstractly I will rather focus on one
+example: the proof-irrelevant model of \acrshort{CIC}. I will actually deal with
+the smaller case of \acrshort{CoC}.
+This is exposed
+in~\sidecite[-0.9cm]{miquel2001calcul}---following~\sidecite[-0.3cm]{aczel1998relating,xi2000imperative}---in very clear---and French---way,
+but without accounting for contexts and open terms.
+I will instead base my own exposition on that of~\sidecite[0.3cm]{werner1997sets},
+itself based upon the folklore model seen
+in~\sidecite[0.95cm]{coquand1989metamathematical,dybjerinductive,howe1991computational}.
+The model is called \emph{proof-irrelevant} because proofs of propositions
+(proofs of \(P : \Prop\)) all collapse in the model: provable propositions
+are interpreted as the singleton \(\{ \emptyset \}\).
+
+First I will remind what rules we are dealing with. This theory will only have
+two universes: \(\Prop\) and \(\Type\), the model can be adapted to deal with
+more universes but it's a bit more complicated.
+\marginnote[2.7cm]{
+  We have two rules for \(\Pi\)-types because we have an impredicative
+  universe of propositions \(\Prop\). The rules where \(\Prop\) is on the left
+  are unnecessary because we have a weak cumulativity \(\Prop \le \Type\).
+}
+\marginnote[5.3cm]{
+  \(s\) stands for any sort, \ie \(\Prop\) or \(\Type\).
+}
+\begin{mathpar}
+  \infer
+    {\vdash \Ga}
+    {\Ga \vdash \Prop : \Type}
+  %
+
+  \infer
+    {\Ga \vdash A : \Prop}
+    {\Ga \vdash A : \Type}
+  %
+
+  \infer
+    {
+      \Ga \vdash A : \Prop \\
+      \Ga, x : A \vdash B : \Type
+    }
+    {\Ga \vdash \Pi (x:A). B : \Type}
+  %
+
+  \infer
+    {
+      \Ga \vdash A : \Type \\
+      \Ga, x : A \vdash B : \Type
+    }
+    {\Ga \vdash \Pi (x:A). B : \Type}
+  %
+
+  \infer
+    {
+      \Ga \vdash A : \Type \\
+      \Ga, x : A \vdash B : \Prop
+    }
+    {\Ga \vdash \Pi (x:A). B : \Prop}
+  %
+
+  \infer
+    {
+      \Ga, x : A \vdash t : B \\
+      \Ga \vdash \Pi (x:A). B : s
+    }
+    {\Ga \vdash \lambda (x:A). t : \Pi (x:A). B}
+  %
+
+  \infer
+    {
+      \Ga \vdash u : \Pi (x:A). B \\
+      \Ga \vdash v : A
+    }
+    {\Ga \vdash u\ v : B[x \sto v]}
+  %
+
+  \infer
+    {
+      \Ga \vdash t : A \\
+      \Ga \vdash B : s \\
+      A \equiv B
+    }
+    {\Ga \vdash t : B}
+  %
+\end{mathpar}
+Conversion \(A \equiv B\) is simply the congruent closure of
+\(\beta\)-reduction.
+
+As I already said, the idea in this proof-irrelevant model is to interpret
+propositions as either the empty set (\(\emptyset\)) for uninhabited
+propositions, or as the singleton \(\{ \emptyset \}\) for inhabited ones.
+These two sets are the ordinals \(0\) and \(1\) and will write them as such.
+The interpretation of \(\Prop\) is then \(2 \coloneqq \{ 0, 1 \}\).
+
+As you can see in the typing rules we have to deal with terms in a context
+\(\Ga\), \ie open terms. The interpretation of such a term is dependent on the
+context, this can be easily seen when considering \(x : A \vdash x\)
+and \(x : B \vdash x\), the two \(x\) don't necessarily mean the same thing.
+As such we will interpret terms together with their context:
+\(\transl{\Ga \vdash t}\), which will be set-theoretic functions of domain
+\(\transl{\Ga}\), without a precise codomain.
+
+\(\transl{\Ga}\) is defined as follows:
+\[
+  \begin{array}{rcl}
+    \transl{\ctxempty} &\coloneqq& 1 \\
+    \transl{\Ga, x:A} &\coloneqq&
+    \{
+      (\gamma, a) \mid
+      \gamma \in \transl{\Ga} \wedge a \in \transl{\Ga \vdash A}(\gamma)
+    \}
+  \end{array}
+\]
+mutually defined with \(\transl{\Ga \vdash t}\):
+\sidedef[-0.7cm]{Dependent product of sets}{
+  \(\prod_{x \in A} B(x)\) is defined as the set of functions \(f\) from \(A\)
+  to \(\bigcup_{x \in A} B(x)\) such that \(f(x) \in B(x)\).
+}
+\[
+  \begin{array}{rcl}
+    \transl{\Ga \vdash \Pi (x:A). B}(\gamma)
+    &\coloneqq&
+    \prod_{a \in \transl{\Ga \vdash A}(\gamma)}\
+    \transl{\Ga, x:A \vdash B}(\gamma, a) \\
+    \transl{\Ga \vdash \Prop}(\gamma) &\coloneqq& 2 \\
+    \transl{\Ga \vdash \Type}(\gamma) &\coloneqq& \mathcal{U} \\
+    \transl{\Ga \vdash \lambda (x:A). t}(\gamma)
+    &\coloneqq&
+    a \in \transl{\Ga \vdash A}(\gamma) \mapsto
+    \transl{\Ga, x:A \vdash t}(\gamma,a) \\
+    \transl{\Ga \vdash u\ v}(\gamma) &\coloneqq&
+    \transl{\Ga \vdash u}(\gamma)(\transl{\Ga \vdash v}(\gamma)) \\
+    \transl{\Ga \vdash x_i}(\gamma) &\coloneqq& \pi_2 \circ \pi_1^i (\gamma)
+  \end{array}
+\]
+where in the last equality
+\[
+  \Ga = x_n : A_n, \dots x_i : A_i, \dots x_0 : A_0
+\]
+I don't really believe you can distinguish between propositions and usual types
+in the current setting so in\sidecite{aczel1998relating}, Aczel introduces a
+non-standard encoding of set-theoretic functions such that the constant function
+\(x \mapsto 0\) is \emph{equal} to \(0\).
+
+\todo{Talk about how it has to be valid, how it's partial, how to have actual
+propositions like false and bottom and that they are indeed constant functions}
 
 \section{Categorical models}
 
@@ -382,10 +527,6 @@ constructions I introduced then.
 
 \paradot{Dependent products}
 
-\sidedef[-0.7cm]{Dependent product of sets}{
-  \(\prod_{x \in A} B(x)\) is defined as the set of functions \(f\) from \(A\)
-  to \(\bigcup_{x \in A} B(x)\) such that \(f(x) \in B(x)\).
-}
 Given \(A : \CTy\ \Ga\) and \(B : \CTy\ (\Ga, A)\) we define
 \(\Pi\ A\ B : \CTy\ \Ga\) as
 \[
