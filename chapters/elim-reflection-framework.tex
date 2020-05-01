@@ -38,8 +38,13 @@ unrestricted. With the sorts should come the sort of a sort (or successor
 sort) \(\succs{s}\), the sort of a \(\Pi\)-type \(\pisort{s_1}{s_2}\)
 where \(s_1\) and \(s_2\) are the sorts of the domain and codomain respecitvely,
 and likewise for each constructor.
+\sidedef[-0.9cm]{Functional \acrshort{PTS}}{
+  A \acrshort{PTS} is \emph{functional} when \(\Ax\) and \(\Rl\) are functional,
+  \ie for each \(s\) there is at most one \(s'\) such that \((s, s') \in \Ax\)
+  and given \(s\) and \(s'\) there is at most one \(s''\) such that
+  \((s,s',s'') \in \Rl\).
+}
 These are functions, so the underlying \acrshort{PTS} is functional.
-\todo{Define fun PTS}
 Additionally, we ask that equality of sorts is decidable and that the successor
 function is injective:
 \[
@@ -62,8 +67,7 @@ Oury~\sidecite[0.7cm]{oury2005extensionality}.
 \marginnote[1cm]{
   See \nrefsubsec{card-model} of \nrefch{models} for more on this.
 }
-Indeed, by using the standard model where types are interpreted as
-cardinals rather than sets, it is possible to see that the equality
+Indeed, using the cardinal model, it is possible to see that the equality
 $\nat \to \nat = \nat \to \bool$ is independent from the theory, it is
 thus possible to assume it (as an axiom, or for those that would still
 not be convinced, simply under a $\lambda$ that would introduce this
@@ -97,8 +101,6 @@ his proof, he needs to assume the congruence rule for heterogeneous
 equality of applications, which is not provable when formulated with
 \acrshort{JMeq}. Thanks to annotations and our notion of heterogeneous equality,
 we can prove this congruence rule for applications.
-\todo{Maybe move this earlier? At least part of this discussion should already
-be treated.}
 
 \paragraph{Axioms.}
 
@@ -207,7 +209,6 @@ respective proofs in \acrshort{ETT}, \acrshort{ETT} is conservative over
 \(\vdash t' : A\).
 
 \section{Typing rules}
-\todo{Mention no cumulativity}
 
 Similarly to the syntax I will present first the common rules of all involved
 theories and then detail the specificities of each.
@@ -451,6 +452,10 @@ conversion without relying on reduction, but instead in a typed way.
 
 \paradot{Conversion}
 
+\marginnote[0.8cm]{
+  Notice that I use conversion and not cumulativity as I need uniqueness of
+  types to proceed.
+}
 \begin{mathpar}
   \infer[]
     {\eqterm{\Ga}{t_1}{t_2}{T_1} \\
@@ -562,7 +567,6 @@ reduction.
 The idea is that two terms are convertible if and only if they reduce to the
 same term. This property only follows from confluence and termination of the
 reduction however (see \nrefch{desirable-props}).
-\todo{Probably should have a proof of this somewhere.}
 
 \paradot{Typing}
 

@@ -234,7 +234,8 @@ which gives a more comprehensive treatment of this and other translations.
 \section{Other translations}
 
 As I mentioned earlier, it's not alaways the case that contexts are translated
-homomorphically. In the binary parametricity translation~\misref{} a variable
+homomorphically. In the binary parametricity
+translation~\sidecite{bernardy2012proofs} a variable
 \(a : A\) in the context is sent to three varaibles:
 \[
   a_0 : \transl{A}_0, a_1 : \transl{A}_1, a_\varepsilon : \transl{A}\ a_0\ a_1
@@ -245,8 +246,8 @@ but that can still be encoded as a unique variable
 \]
 
 Sometimes, the empty context itself is not translated to the empty context
-as is the case in the forcing translation~\misref{} and such an encoding becomes
-impossible.
+as is the case in the forcing translation~\sidecite{jaber2016definitional} and
+such an encoding becomes impossible.
 Even worse, in this document, in \arefpart{elim-reflection}, I'm going to
 present a translation that isn't even syntactic! Indeed, sometimes the
 translation can only be conducted at the derivation level: derivations in \cS
@@ -256,7 +257,7 @@ type-checking is undecidable.}.
 We could however imagine performing the translation on some intermediary between
 the judgment and its derivation, containing just the right amount of
 information. This brings us back to the discussion on the notion of
-proof~\misref.
+proof.
 
 In those cases, the definitions and properties have to be adapted. This usually
 has to be done on a case-by-case basis as for now there is no general framework
@@ -288,7 +289,6 @@ type theory which is that of \emph{conservative extension}.
   An extension of a theory is a theory that proves at least as many theorems as
   the one it extends.
 }
-\todo{More on this in the proof theory chapter?}
 
 In the context of type theories it can be reformulated as follows.
 
@@ -298,7 +298,6 @@ In the context of type theories it can be reformulated as follows.
   (\ie \(A\) is a type in \(\cT_1\)), there exists \(t'\) such that
   \(\vdash_1 t' : A\).
 \end{definition}
-\todo{Define the notion of extension of type theory earlier?}
 
 We will call a translation \emph{conservative} when it allows to exhibit that
 the source theory \cS is a conservative extension of the target \cT, typically

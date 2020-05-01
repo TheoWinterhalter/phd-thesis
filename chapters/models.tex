@@ -450,13 +450,6 @@ such that
 \paradot{Natural numbers}
 
 A \acrshort{CwF} has natural numbers when, given \(\Ga : \Con\), it has
-\marginnote[0.1cm]{
-  For the successor I use \(\Pi\)-types when I could have instead put things
-  in the context. Both are valid and I'm often favorable to the idea that things
-  should be kept separate as much as possible, but the reliance on application
-  and everything allows us to avoid proving the same things several times,
-  especially since manipulating contexts is so tedious with categories.
-}
 \begin{itemize}
   \item \(\nat : \CTy\ \Ga\);
   \item \(\czero : \CTm\ \Ga\ \nat\);
@@ -466,6 +459,13 @@ A \acrshort{CwF} has natural numbers when, given \(\Ga : \Con\), it has
   \(s : \CTm\ \Ga\ (\Pi\ \nat\ \Pi\ C\ C[(\pp, \csucc\ \pq) \circ \pp])\),
   there exists \(\natrec_C\ n\ z\ s : \CTm\ \Ga\ C[\cid, n]\)
 \end{itemize}
+\marginnote[-1.3cm]{
+  For the successor I use \(\Pi\)-types when I could have instead put things
+  in the context. Both are valid and I'm often favorable to the idea that things
+  should be kept separate as much as possible, but the reliance on application
+  and everything allows us to avoid proving the same things several times,
+  especially since manipulating contexts is so tedious with categories.
+}
 such that
 \[
   \begin{array}{rcl}
