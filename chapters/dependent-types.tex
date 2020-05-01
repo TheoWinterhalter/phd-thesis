@@ -2,13 +2,6 @@
 \chapter{Dependent types}
 \labch{dependent-types}
 
-\todo{
-  For programming,
-  For verification,
-  For maths,
-  Constructiveness by computation (forward ref canonicity)
-}
-
 The idea between dependent types is that they now can \emph{depend} on terms,
 \ie terms can appear in types. This is very interesting because we can talk
 about things like \(P\ n\) for a property on a natural number \(n\),
@@ -207,4 +200,110 @@ comprised of types that make sense and that the dependencies are in order:
 
 \section{Dependent types in \Coq}
 
-\todo{Maybe present \Agda a bit too?}
+In this thesis I will often refer to the type theory of \Coq as well as give
+some definitions in it. I will give here a brief introduction to it with
+examples, but this does not aim at being a tutorial or a manual for \Coq.
+
+In \Coq, \(\Pi\)-types are written
+\begin{minted}{coq}
+forall (x : A), B
+\end{minted}
+and \(\lambda\)-abstractions are written
+\begin{minted}{coq}
+fun (x : A) => t
+\end{minted}
+In both cases the domain (\mintinline{coq}{A}) can be left out if \Coq manages
+to infer it from the context:
+\marginnote[0.4cm]{
+  \mintinline{coq}{nat} is the built-in type of natural numbers.
+}
+\begin{minted}{coq}
+fun x => x + 0 : nat -> nat
+\end{minted}
+
+The polymorphic identity function of earlier is
+\begin{minted}{coq}
+fun A x => x : forall A, A -> A
+\end{minted}
+We can write it as a definition in the systems as follows:
+\marginnote[0.4cm]{
+  The squigly brackets indicate that the argument \mintinline{coq}{A} is
+  implicit so that we can later write \mintinline{coq}{id 0} so that \Coq infers
+  that \mintinline{coq}{A} is \mintinline{coq}{nat}.
+}
+\begin{minted}{coq}
+Definition id {A : Type} (x : A) : A := x.
+\end{minted}
+
+Writing down functions is not the only to define terms in \Coq however. One of
+its strengths is the tactic mechanism that it is equipped with which allows the
+user to write proofs in an interactive way.
+Instead of writing the polymorphic identity function we could prove the
+mathematical statement \(\forall A, A \to A\).
+\begin{minted}{coq}
+Fact id_as_proof :
+  forall A, A -> A.
+Proof.
+  intro A.
+  intro x.
+  assumption.
+Qed.
+\end{minted}
+The way this works is that we first state what we wish to prove
+\begin{minted}{coq}
+forall A, A -> A
+\end{minted}
+and how we want to refer to that fact afterwards
+(\mintinline{coq}{id_as_proof}).
+After the keyword \mintinline{coq}{Proof}, \Coq is in interactive mode,
+telling the user what they have to prove to conclude the proof.
+At the beginning this is still the full statement
+\marginnote[0.4cm]{
+  The horizontal bar separates the hypotheses (above) from the goal to prove
+  (below).
+}
+\begin{minted}{coq}
+-----------------
+forall A, A -> A
+\end{minted}
+The user can then write tactics to progress with the proof. To prove a
+quantified statement, as usual, you want to assume some element in particular
+and prove the statement for that one. This is what the tactic
+\mintinline{coq}{intro} does.
+After writing
+\begin{minted}{coq}
+  intro A.
+\end{minted}
+the \emph{goal} becomes
+\begin{minted}{coq}
+A : Type
+-----------------
+A -> A
+\end{minted}
+We have now \emph{introduced} \mintinline{coq}{A} in our context and need to
+prove \mintinline{coq}{A -> A}.
+\begin{minted}{coq}
+  intro x.
+\end{minted}
+will take some \mintinline{coq}{x : A}, bringing us to the new goal
+\begin{minted}{coq}
+A : Type
+x : A
+-----------------
+A
+\end{minted}
+Proving \mintinline{coq}{A}, when we have \mintinline{coq}{A} as an hypothesis
+should be pretty straightforward. The tatic \mintinline{coq}{assumption}
+tells \Coq that the goal can be concluded using one of the assumptions in the
+context (here \mintinline{coq}{x}).
+This generates a term, and when we write \mintinline{coq}{Qed} it is checked
+by \Coq to be correct.
+
+As one should expect this produces the same term as before
+\begin{minted}{coq}
+id_as_proof = fun A x => x
+            : forall A, A -> A
+\end{minted}
+
+There is of course much more to it and \nrefch{usual-defs} will offer some
+usual definitions in type theory and in the context of \Coq.
