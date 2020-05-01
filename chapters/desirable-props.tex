@@ -417,35 +417,39 @@ placed in either \ref{item:coq} or \ref{item:agda} depending on whether it
 features cumulativity or not.
 Likewise, \acrshort{ITT} could go in either \ref{item:coq} or \ref{item:agda}.
 
+I will write -- for properties that don't apply like properties on reduction
+for a theory without.
+
 \begin{table*}
   \rowcolors{1}{SkyBlue!10!White}{}
   \caption[Properties of type theories]{Properties of type theories.}
+  \def\arraystretch{1.5}
   \begin{tabular}{l|c|c|c|c|}
     \cline{2-5}
     & \ref{item:coq} & \ref{item:agda} & \ref{item:ett} & \ref{item:wtt} \\
     \hline
-    \multicolumn{1}{ |c|  }{Unique (U) / Principal type (P)} &
+    \multicolumn{1}{ |l|  }{Unique (U) / Principal type (P)} &
     P & U & U & U \\
     \hline
-    \multicolumn{1}{ |c|  }{Confluence} &
-    yes & yes & N/A & N/A \\
+    \multicolumn{1}{ |l|  }{Confluence} &
+    yes & yes & -- & -- \\
     \hline
-    \multicolumn{1}{ |c|  }{Normalisation} &
-    yes & yes & N/A & N/A \\
+    \multicolumn{1}{ |l|  }{Normalisation} &
+    yes & yes & -- & -- \\
     \hline
-    \multicolumn{1}{ |c|  }{Subjcet reduction} &
-    yes & yes & N/A & N/A \\
+    \multicolumn{1}{ |l|  }{Subjcet reduction} &
+    yes & yes & -- & -- \\
     \hline
-    \multicolumn{1}{ |c|  }{Injectivity of \(\Pi\)-types} &
+    \multicolumn{1}{ |l|  }{Injectivity of \(\Pi\)-types} &
     yes & yes & no & no \\
     \hline
-    \multicolumn{1}{ |c|  }{Computational (comp) or regular (reg) canonicity} &
+    \multicolumn{1}{ |l|  }{Computational (comp) or regular (reg) canonicity} &
     comp & comp & reg & no \\
     \hline
-    \multicolumn{1}{ |c|  }{Decidability of type checking} &
+    \multicolumn{1}{ |l|  }{Decidability of type checking} &
     yes & yes & no & yes \\
     \hline
-    \multicolumn{1}{ |c|  }{Consistency} &
+    \multicolumn{1}{ |l|  }{Consistency} &
     yes & yes & yes & yes \\
     \hline
   \end{tabular}
