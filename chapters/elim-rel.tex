@@ -276,22 +276,10 @@ doest it fall short of being an equivalence relation.
 The goal is to prove that two terms in this relation, that are well-typed in the
 target type theory, are heterogeneously equal.
 
-\todo{Properties on heterogeneous equality should have their own section.
-Maybe with its def in usual defs, and a reminder here.}
-Heterogeneous equality is reflexive, symmetric and transitive.
+Heterogeneous equality, as seen in \nrefsubsec{hetero-eq-def} of
+\refch{usual-defs}, is reflexive, symmetric and transitive.
 Thanks to \acrshort{UIP}, heterogeneous equality collapses to regular equality
 when taken on the same type on both sides.
-
-\begin{lemma}
-  \lablemma{uip-cong}
-  If $\isterm{\Ga}{e}{\Heq{A}{u}{A}{v}}$
-  then there exists $p$ such that $\isterm{\Ga}{p}{\Eq{A}{u}{v}}$.
-\end{lemma}
-
-\begin{proof}
-  This holds thanks to \acrshort{UIP} on equality, which implies K, and so the
-  proof of $A = A$ can be taken to be reflexivity.
-\end{proof}
 
 \begin{remark}
   As a corollary, $\Heqs$ on types corresponds to equality.

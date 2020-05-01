@@ -1105,6 +1105,7 @@ Some systems support it natively with computational content like
 
 
 \subsection{Heterogenous equality}
+\labsubsec{hetero-eq-def}
 
 Sometimes, you want to be able to compare terms of different types. This will
 happen typically with dependent types, \eg with vectors \(u : \tvec_A\ (n + m)\)
@@ -1149,3 +1150,9 @@ When we have \(\Heq{A}{u}{A}{v}\), it means we have a proof of equality
 \(p : A = A\) and a proof of \(\transpo{p}\ u = v\). It becomes apparent that
 we need \acrshort{UIP} to rewrite \(p\) to \(\mathsf{refl}\) such that the
 second equality becomes \(u = v\) as wanted.
+
+\begin{lemma}
+  \lablemma{uip-cong}
+  If $\isterm{\Ga}{e}{\Heq{A}{u}{A}{v}}$
+  then there exists $p$ such that $\isterm{\Ga}{p}{\Eq{A}{u}{v}}$.
+\end{lemma}
