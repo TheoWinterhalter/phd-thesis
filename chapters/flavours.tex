@@ -21,7 +21,7 @@ it to investigate theories where conversion is defined differently.
 
 \acrfull{ITT} is the name given to a wide range of type theories actually.
 Those could be described in the setting of \acrfullpl{PTS}.
-The theories behind the proof assistans \Coq and
+The theories behind the proof assistants \Coq and
 \Agda~\sidecite[-0.4cm]{norell2007towards}--respectively \acrfull{PCUIC} and
 \acrfull{MLTT}\sidenote{Note that \acrshort{MLTT} also has various
 forms.}---are variants of \acrshort{ITT}.
@@ -121,9 +121,9 @@ common being \(\eta\)-expansion of functions.
 \[
   f \equiv_\eta \lambda (x:A). f\ x
 \]
-For it to make sense expansion has to be limited to functions which requires
+For it to make sense, expansion has to be limited to functions which require
 type information\sidenote{Also, the \(A\)---domain of the function---has to
-be sumrised somehow.}, this is why is certain contexts---like \Agda---the
+be sumrised somehow.}, this is why in certain contexts---like \Agda---the
 conversion is also typed.
 The relation between typed and untyped conversion has been explored at several
 occasions~\sidecite[1.8cm]{van2013explicit}.
@@ -192,7 +192,7 @@ A \acrfull{WTT} is on the other end of the spectrum: instead of extending
 conversion with everything that can be proven equal, conversion is removed
 altogether. Computation (like \(\beta\)-reduction) is now handled by
 propositional equality alone, and conversion of types is done using transports
-of said equality.
+along said equality.
 
 \begin{mathpar}
   \infer
@@ -290,7 +290,7 @@ two proofs of the same proposition are considered to be convertible.
   For \(P : \SProp\) and \(p_1 : P\) and \(p_2 : P\) then \(p_1 \equiv p_2\).
 }
 In other words, there is no computational content to proofs of strict
-propositions, and as such proofs are \emph{irrelevant}, only there mere
+propositions, and as such proofs are \emph{irrelevant}, only their mere
 existence matters.
 Although this addition is a really interesting subject, it goes a bit beyond
 the scope of this thesis, in particular I do not consider it in my
@@ -354,7 +354,7 @@ it's attached to the constant definition and not on the right-hand side; that's
 because universe levels are only quantified in a prenex-style, meaning you
 must quantify over \emph{all} universe levels before introducing other
 variables. In particular there is no type of polymorphic
-identities\sidenote{Although there is just the one.}.
+identities.
 
 One might notice that currently, universe polymorphism only talks about
 \(\Type\) and does not make mention of \(\Prop\). This is a shortcoming that
@@ -470,7 +470,7 @@ impossible---to prove them.
 This gives rise to axioms like \acrshort{UIP} and \acrshort{funext}, but axioms
 lack computational content.
 
-Variant of type theory give different definitions and properties to equality.
+Variants of type theory give different definitions and properties to equality.
 
 \subsection{\acrfull{OTT}}
 
@@ -485,13 +485,13 @@ In this world, reflexivity becomes a property and is no longer part of the
 definition.
 More recently, this work has been extended to
 \acrfull{STT}~\sidecite{altenkirch2019setoid} to support heterogenous equality
-and better fit the Setoïd model~\sidecite[0.3cm]{altenkirch1999extensional}.
+and better fit the Setoid model~\sidecite[0.3cm]{altenkirch1999extensional}.
 
 \subsection{\acrfull{HoTT}}
 
 \acrshort{HoTT}~\sidecite{hottbook} is rather based on the idea that
 \acrshort{UIP} shouldn't hold and that instead, higher equalities matter.
-Some times still enjoy a certain form of \acrshort{UIP} however: they are called
+Some types still enjoy a certain form of \acrshort{UIP} however: they are called
 sets, or homotopy sets (hSet). This actually defines a hierarchy of types, by
 looking at their type of equality.
 
@@ -507,10 +507,10 @@ equivalent types are equal.
   Equivalence \(A \cong B\) means roughly that there exist maps \(f : A \to B\)
   and \(g : B \to A\) such that they are both inverse of each other.
 }
-The axioms is a bit more precise in that it states that the trivial map
+The axiom is a bit more precise in that it states that the trivial map
 taking an equality of types \(A = B\) to an equivalence \(A \cong B\)
 is itself an equivalence.
-Univalence allows us to \emph{trasport} a result onto another equivalent
+Univalence allows us to \emph{transport} a result onto another equivalent
 setting.
 An interesting consequence of the univalence axiom is that it implies
 \acrshort{funext}.
@@ -545,9 +545,10 @@ amongst other efforts.
 \paradot{\acrfullpl{2TT}}
 
 \acrshort{UIP} and univalence are inconsistent together for a simple reason:
-univalence allows \(\bool = \bool\) two \emph{distinct} proofs: one given by
-the identity equivalence, the other by the equivalence that swaps \(\ttrue\)
-and \(\ffalse\), while \acrshort{UIP} states there must be only one such proof.
+univalence allows \(\bool = \bool\) to have two \emph{distinct} proofs: one
+given by the identity equivalence, the other by the equivalence that swaps
+\(\ttrue\) and \(\ffalse\), while \acrshort{UIP} states there must be only one
+such proof.
 This in particular means that univalence is inconsistent in \acrshort{ETT}.
 There is a solution to this which consists in assuming two equalities.
 This cannot be done naively however, since two equalities that cohabit
