@@ -9,10 +9,202 @@
   Constructiveness by computation (forward ref canonicity)
 }
 
-\todo{
-  Need to introduce \Coq syntax a bit, cause used in following chapter,
-  also need \(\Pi\)-types and a discussion on universes (note russel/tarski
-  is addressed later)
+The idea between dependent types is that they now can \emph{depend} on terms,
+\ie terms can appear in types. This is very interesting because we can talk
+about things like \(P\ n\) for a property on a natural number \(n\),
+equality \(x = y\), and with it we can support quantifiers.
+
+It is not only useful on the logic side, but also on the programming language
+side: with it programs can be given much more precise types.
+For instance, you might want to specify that the division operator doesn't
+accept \(0\) for the denominator, or that the operation returning the tail of
+list only applies to non-empty lists.
+Finally, we can take advantage of both and write \emph{proofs} about the
+programs we wrote, using the very same language.
+
+\section{A minimal dependent type theory}
+
+Let me describe a very basic type theory with dependent types.
+
+\paradot{\(\Pi\)-types}
+
+The simplest way to get dependent types is to extend simply type theory---which
+only features arrow or function types---with dependent function types or
+\(\Pi\)-types.
+\[
+  \infer
+    {\Ga, x :A \vdash t : B}
+    {\Ga \vdash \lambda (x:A).t : \Pi (x:A).\ B}
+  %
+\]
+As you can see, we keep the \(\lambda\)-terms of earlier but now they represent
+dependent functions. Now, not only \(t\) can mention \(x\), but \(B\) also.
+For instance we can write the polymorphic identity function as follows
+\marginnote[0.7cm]{
+  I will explain later what the \(\Type\) here means, but it should be
+  intuitive: I am taking a \emph{type} \(A\) as argument and then an element
+  \(a\) of that type.
 }
+\[
+  \lambda (A : \Type).\ \lambda (a : A).\ a
+\]
+and it has type
+\[
+  \Pi (A : \Type).\ \Pi (a : A).\ A
+\]
+which will write more concisely as
+\[
+  \lambda\ (A : \Type)\ (a : A).\ a
+  : \Pi\ (A : \Type)\ (a : A).\ A
+\]
+or even as
+\marginnote[0.5cm]{
+  \(A \to B\) is no longer a definition, but a notation for the dependent
+  function type which is not actually dependent \(\Pi (\_ : A).\ B\).
+}
+\[
+  \lambda\ (A : \Type)\ (a : A).\ a
+  : \Pi\ (A : \Type).\ A \to A
+\]
+since \(a\) is not mentioned.
+Now we should be able to see the dependency on \(A\).
+One can argue that \(A\) is a \emph{type} and not a term, but in this setting,
+types are just a special kind of terms that happen to be of type \(\Type\).
+
+If we have some \(B : \Type\) we might want to apply our polymorphic identity
+function to it to get the identity function on \(B\), \ie
+\[
+  \lambda (a:B).\ a : B \to B
+\]
+
+For this we have to rely on substitutions again, not only in the terms after
+\(\beta\)-reduction, but also in types.
+This can be seen in the application rule:
+\[
+  \infer
+    {
+      \Ga \vdash u : \Pi (x:A).\ B \\
+      \Ga \vdash v : A
+    }
+    {\Ga \vdash u\ v : B[x \sto v]}
+  %
+\]
+Once again it is pretty similar to the application rule of simple type theory
+except we have to account for the dependency. In our example---writing \(\cid\)
+for the polymorphic identity function---we have
+\marginnote[0.7cm]{
+  What happens is the type of the application is
+  \[
+    (A \to A)[A \sto B] = B \to B
+  \]
+}
+\[
+  \infer
+    {
+      \Ga \vdash \cid : \Pi (A:\Type).\ A \to A \\
+      \Ga \vdash B : \Type
+    }
+    {\Ga \vdash \cid\ B : B \to B}
+  %
+\]
+
+\paradot{Universes}
+
+In the example above there is the peculiar type \(\Type\).
+This can be thought of as the type of types. If you know about Russel's paradox
+stating that there can be no set of all sets, you might be skeptical and indeed
+having \(\Type\) of type \(\Type\) is inconsistent.
+We will address this in more details in \refsubsec{coq-univ} in
+\nrefch{flavours}.
+In this case, \(\Type\) will be a special type---which we call universe as it
+is inhabited solely by types---that doesn't have a type itself.
+Having it is mainly to allow for quantifying over types, but we could also of
+course define some base types like the natural numbers \(\nat\) and put it in
+\[
+  \nat : \Type
+\]
+We will more example of types in \nrefch{usual-defs}. For now we only have
+\(\Pi\)-types in them:
+\[
+  \infer
+    {
+      \Ga \vdash A : \Type \\
+      \Ga, x : A \vdash B : \Type
+    }
+    {\Ga \vdash \Pi (x:A).\ B : \Type}
+  %
+\]
+Here we evidence the fact \(B\) is indeed dependent over \(x : A\).
+This kind of universe is called a Russel universe, and there are also Tarski
+universes, the difference will be explained in \refsubsec{univ-and-types}
+of \nrefch{formalisation}.
+
+I will not put the syntax and the rules together for clarity, at the risk of
+repeating myself.
+\[
+  \begin{array}{rcl}
+    A, B, t, u &\bnf& x \bnfor \lambda (x:A).t \bnfor t\ u \bnfor \Pi (x:A). B
+    \bnfor \Type \\
+    \Ga, \D &\bnfor& \ctxempty \bnfor \Ga, x:A
+  \end{array}
+\]
+
+\begin{mathpar}
+  \infer
+    {(x : A) \in \Ga}
+    {\Ga \vdash x : A}
+  %
+
+  \infer
+    {
+      \Ga \vdash A : \Type \\
+      \Ga, x : A \vdash B : \Type
+    }
+    {\Ga \vdash \Pi (x:A).\ B : \Type}
+  %
+
+  \infer
+    {
+      \Ga, x :A \vdash t : B \\
+      \Ga \vdash \Pi (x:A).\ B : \Type
+    }
+    {\Ga \vdash \lambda (x:A).t : \Pi (x:A).\ B}
+  %
+
+  \infer
+    {
+      \Ga \vdash u : \Pi (x:A).\ B \\
+      \Ga \vdash v : A
+    }
+    {\Ga \vdash u\ v : B[x \sto v]}
+  %
+\end{mathpar}
+\marginnote[-3cm]{
+  Here I changed a bit the typing rule for \(\lambda\)-abstraction to also ask
+  for its type to be well-formed. This is necessary to ensure we put legitimate
+  types in the context.
+}
+
+We usually also add a definition of well-formed context to ensure it is
+comprised of types that make sense and that the dependencies are in order:
+\marginnote[1cm]{
+  As you can see, each type might depend on the previous variables.
+}
+\begin{mathpar}
+  \infer
+    { }
+    {\vdash \ctxempty}
+  %
+
+  \infer
+    {
+      \vdash \Ga \\
+      \Ga \vdash A : \Type
+    }
+    {\vdash \Ga, x:A}
+  %
+\end{mathpar}
+
+\section{Dependent types in \Coq}
 
 \todo{Maybe present \Agda a bit too?}
