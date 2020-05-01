@@ -258,5 +258,22 @@ the proof, it only becomes interesting when exploiting the constructiveness of
 the formalised proof to get translated terms and the corresponding derivations
 from a derivation in \acrshort{ETT}.
 
-\todo{Since I added axioms to the syntax, I should also talk about their
-translation.}
+\section{Translation of axioms}
+
+After introducing them, I barely mentioned axioms \(\ax{n}\).
+The idea is that when dealing with the translation of \(\Ga \vdash t : A\)
+which can contain some mentiones to the global environment \(\Sigma\),
+we assume we are given some \(\overline{\Sigma} \in \transl{\Sigma}\)
+a global context of translations of the types of \(\Sigma\).
+Then, \(\ax{n}\) is simply translated to itself.
+
+This is very similar to how we treat local contexts \(\Ga\).
+Once that we know how to translate a judgment, given a translation of the
+global context, it suffices to apply this to the types of \(\Sigma\) which all
+live in smaller global contexts to finally reach a point where the global
+context is empty and thus with a trivial translation.
+This is merely a formality.
+
+In the target, the axioms need no longer be axioms usually because they can be
+given content, but I find it easier to replace them by some definitions after
+the translation is done rather than trying to do it all at once.
