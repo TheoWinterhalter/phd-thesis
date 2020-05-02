@@ -189,7 +189,7 @@ Here we are able to conjure some inhabitant of \(P[x \sto t]\) from thin air.
 The \(P\) is typically not dependent on the proof of \(\bot\), meaning that from
 an inhabitant of \(\bot\) we can get an inhabitant of \emph{any} type.
 
-\subsection{Recusrive types}
+\subsection{Recursive types}
 
 Inductive types are morally types of trees. For now I only prensented types
 consisting only of leaves. To allow for nodes with subtrees, constructors can
@@ -1153,6 +1153,6 @@ second equality becomes \(u = v\) as wanted.
 
 \begin{lemma}
   \lablemma{uip-cong}
-  If $\isterm{\Ga}{e}{\Heq{A}{u}{A}{v}}$
+  Assuming \acrshort{UIP}, if $\isterm{\Ga}{e}{\Heq{A}{u}{A}{v}}$
   then there exists $p$ such that $\isterm{\Ga}{p}{\Eq{A}{u}{v}}$.
 \end{lemma}
