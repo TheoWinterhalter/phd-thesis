@@ -3,7 +3,7 @@
 \labch{desirable-props}
 
 To compare different type theories there are several measures we can use in
-form of usual or desirable properties that they migh satisfy or not.
+form of usual or desirable properties that they might satisfy or not.
 After a brief presentation of the main ones I will summarise which of the
 theories of \nrefch{flavours} has which properties in a table.
 
@@ -146,7 +146,7 @@ rules of things like sorts and variables ask for the context to be well-formed.
 %
 In a theory which does not have this requirement / property, many lemmata will
 only apply assuming the contexts involved are well-formed.
-The difference of presentation like this will be studied in
+The difference between presentations like this will be studied in
 \nrefch{formalisation}.
 
 \subsection{Unique / principal typing}
@@ -276,7 +276,7 @@ subject reduction, sometimes called type safety or type preservation.
 
 This means simplifying a proof does not break its status of proof. This is a
 very sensible property to have in a programming language or a proof assistant.
-It's absence is usually a sign that something is very wrong with the considered
+Its absence is usually a sign that something is very wrong with the considered
 system: if evaluation might break things, why have evaluation at all?
 
 \subsection{Injectivity of \(\Pi\)-types}
@@ -303,13 +303,14 @@ type-preserving, one of the key elements to the proof of subject reduction.
 Injectivity of constructors states that for instance
 \(\natsucc\ n \equiv \natsucc\ m\) implies \(n \equiv m\) while non-confusion
 says that \(\zero \not\equiv \natsucc\ n\) or \(\Type \not\equiv A \to B\).
-Those are useful to achive consistency which we will see later.
+Those are useful to achieve consistency which we will see later.
 
 \subsection{Canonicity}
 
 Canonicity is a way of saying that, for instance, booleans \emph{really} are
 booleans \ie they are either \(\ttrue\) or \(\ffalse\).
-It is an important property, especially when seen in the constructivism prism.
+It is an important property, especially when seen through the constructivism
+prism.
 When expressed for \(\Sigma\)-types, this corresponds to the so-called
 \emph{witness property}: a proof of \(\Sigma (x:A).\ P\ x\) (in the empty
 context, so without assumption) is necessarily of the form \((t;p)\)
@@ -419,7 +420,7 @@ Likewise, \acrshort{ITT} could go in either \ref{item:coq} or \ref{item:agda}.
 
 \marginnote[1.3cm]{
   I write -- for properties that don't apply like properties on reduction
-  for a theory without.
+  for any theory without.
 }
 \begingroup
 
@@ -439,7 +440,7 @@ Likewise, \acrshort{ITT} could go in either \ref{item:coq} or \ref{item:agda}.
     \multicolumn{1}{ |l|  }{Normalisation} &
     yes & yes & -- & -- \\
     \hline
-    \multicolumn{1}{ |l|  }{Subjcet reduction} &
+    \multicolumn{1}{ |l|  }{Subject reduction} &
     yes & yes & -- & -- \\
     \hline
     \multicolumn{1}{ |l|  }{Injectivity of \(\Pi\)-types} &

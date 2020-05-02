@@ -6,7 +6,7 @@ Justifying a logic is often achieved using \emph{models}. A model consists
 in giving an interpretation to all constructs of the logic we want to study,
 such that its rules are still verified.
 There are several ways to get models of type theory, I will present some of the
-most common ones in this chapter, though my means of choice will presented in
+most common ones in this chapter, though my means of choice will be presented in
 depth in \nrefch{translations}.
 
 \section{What is a model?}
@@ -36,7 +36,7 @@ the consistency of too complicated objects.
 
 \paragraph{Independence.}
 
-Another interesing application of models is showing \emph{independence} of a
+Another interesting application of models is showing \emph{independence} of a
 proposition.
 
 \begin{definition}[Independent proposition]
@@ -153,7 +153,7 @@ Conversion \(A \equiv B\) is simply the congruent closure of
 As I already said, the idea in this proof-irrelevant model is to interpret
 propositions as either the empty set (\(\emptyset\)) for uninhabited
 propositions, or as the singleton \(\{ \emptyset \}\) for inhabited ones.
-These two sets are the ordinals \(0\) and \(1\) and will write them as such.
+These two sets are the ordinals \(0\) and \(1\) and I will write them as such.
 The interpretation of \(\Prop\) is then \(2 \coloneqq \{ 0, 1 \}\).
 
 As you can see in the typing rules we have to deal with terms in a context
@@ -208,8 +208,8 @@ non-standard encoding of set-theoretic functions such that the constant function
 
 I didn't precise what \(\mathcal{U}\) was. From \(\mathcal{U}\) we only require
 that it is closed under product and power-sets and contains at least \(2\).
-It needs only be the cardinal \(\omega\) in our case, but if we wanted more
-universes---say a hieraarchy of them---we would need inaccessible cardinals.
+It needs only be the cardinal \(\aleph_0\) in our case, but if we wanted more
+universes---say a hierarchy of them---we could use inaccessible cardinals.
 We will see them briefly in \refsec{cat-models}.
 
 Before we can claim it is a model we need to show that whenever
@@ -259,7 +259,7 @@ If we reformulate we want to show that for all \(\gamma \in \Ga\) and
 \]
 which corresponds to our hyothesis.
 
-For some other cases like the convertion and application rules we need to show
+For some other cases like the conversion and application rules we need to show
 that convertible terms are sent to equal sets/functions and that the
 interpretation behaves well with respect to substitution.
 I will not dwell on the details as it has been dealt with nicely in the
@@ -328,7 +328,7 @@ The category \(\Set\) of sets is a \acrshort{CwF}:
   \(t \in \setfun{\Ga}{\bigcup_{\gamma \in \Ga} A_\gamma}\) such that
   \(t(\gamma) \in A_\gamma\) for every \(\gamma \in \Ga\);
   \item given \(\sigma : \Ga \to \D\) and \(A : \CTy\ \D\), \(A[\sigma]\)
-  is defined as the \(\Ga\)-index family \((A_{\sigma(\gamma)})_\gamma\);
+  is defined as the \(\Ga\)-indexed family \((A_{\sigma(\gamma)})_\gamma\);
   \item given \(\sigma : \Ga \to \D\) and \(t : \CTm\ \D\ A\), \(t[\sigma]\)
   is defined as the choice function \(t \circ \sigma\);
   \item the empty context is given as the singleton \(\{ \emptyset \}\);
@@ -374,14 +374,16 @@ following equations hold:
   \]
   \(\eta\)-contraction is the opposite relation.
 }
-The four first equations are simply there to attest to the good behaviour of
+The first four equations are simply there to attest to the good behaviour of
 substitution. The last two are more interesting, corresponding to
 \(\beta\)-reduction and \(\eta\)-contraction respectively.
 
 \paradot{Dependent sums}
 
-A \acrshort{CwF} has (negative\sidenote{See \nrefch{flavours}.}) dependent sums
+A \acrshort{CwF} has (negative) dependent sums
 when:
+\marginnote{See \nrefch{flavours} for a discussion on negative vs positive
+sums.}
 \begin{itemize}
   \item for any \(A : \CTy\ \Ga\) and \(B : \CTy\ (\Ga, A)\) there exists
   \(\Sigma\ A\ B : \CTy\ \Ga\);
@@ -420,8 +422,10 @@ such that
     (\crefl_a)[\sigma] &=& \crefl_{a[\sigma]}
   \end{array}
 \]
-In a lot of models, equality end up being interpreted as the equality of the
+In a lot of models, equality ends up being interpreted as the equality of the
 model meaning the eliminator is not necessary, hence my not requiring it.
+Models that deal with equality differently are of course interesting but I
+will keep things simple in this chapter.
 
 \paradot{Booleans}
 
@@ -511,6 +515,10 @@ detail the cardinal model of type theory that we initially wrote with Andrej
 Bauer. It teaches us interesting things about syntax and especially about
 \acrshort{ETT}.
 
+\marginnote[0.1cm]{
+  The existence of such a bijection and this definition of cardinal relies on
+  the axiom of choice. This is not constructive at all.
+}
 For every set \(X\) there is a unique cardinal \(\card{X}\) such that
 \(X \cong \card{X}\). We choose a bijection \(\beta_X : \setfun{X}{\card{X}}\).
 I will write \(\beta\) for \(\beta_X\) when the \(X\) is understood.
@@ -766,7 +774,7 @@ We check
   \end{array}
 \]
 
-Now that we have equality I will why we don't need an eliminator in this
+Now that we have equality I will show why we don't need an eliminator in this
 particular case.
 
 \begin{theorem}
@@ -814,7 +822,7 @@ cannot be distinguished. Another invariance principle is the univalence axiom.
 \end{theorem}
 
 \begin{proof}
-  Assume we are given isomorphic type \(A, B : \CTy\ \Ga\), that is two
+  Assume we are given isomorphic types \(A, B : \CTy\ \Ga\), that is two
   functions \(f : \CTm\ \Ga\ (\Pi\ A\ B[\pp])\) and
   \(g : \CTm\ \Ga\ (\Pi\ B\ A[\pp])\) as well as two equalities showing they
   are mutual inverses:
@@ -860,7 +868,7 @@ cannot be distinguished. Another invariance principle is the univalence axiom.
   Whenever \(\Pi (x:A).B \equiv \Pi (x:A').B'\)
   then we have both \(A \equiv A'\) and \(B \equiv B'\).
 }
-This means that the cardinal model validates strange equalities like that of
+Similarly the cardinal model validates strange equalities like that of
 Cantor space and Baire space \(2^{\mathbb{N}} = \mathbb{N}^{\mathbb{N}}\)
 which violates injectivity of \(\Pi\)-types.
 
@@ -938,7 +946,7 @@ The first three hold trivially. I prove the remaining below.
 
 We define natural numbers as the cardinal of \(\mathbb{N}\):
 \[
-  \nat(\gamma) \coloneqq \omega
+  \nat(\gamma) \coloneqq \aleph_0
 \]
 Zero is the constant function
 \[
@@ -1082,7 +1090,7 @@ where simplify the expression \(\beta^{-1} \circ \beta\) to the identity
 function. As usual I left the subscripts implicit, but that's where the error
 is coming from: we actually have
 \[
-  \beta_{2^\omega}^{-1} \circ \beta_{\omega^\omega}
+  \beta_{2^\aleph_0}^{-1} \circ \beta_{{\aleph_0}^{\aleph_0}}
 \]
 which do not cancel each other out.
 
