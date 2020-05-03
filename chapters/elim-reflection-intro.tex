@@ -100,7 +100,7 @@ derivations there is no guarantee that the same term \(t\) in
 \(\xisterm{\Gamma}{t}{A}\) and \(\xisterm{\Delta}{t}{B}\) will be translated
 twice to the same term, this actually goes even for two different derivations
 of the same judgement \(\xisterm{\Gamma}{t}{A}\).
-This seems like a big obstacle to compositionality and would be iredeemable
+This seems like a big obstacle to compositionality and would be irredeemable
 without extra care regarding how individual judgements are translated.
 
 We solve these problems by relating translations of a term (respectively
@@ -138,7 +138,7 @@ justfies that adding the reflection rule preserves consistency.
 The main take-away however comes from the fact that we can show that
 \acrshort{ETT} is conservative over both \acrshort{ITT} and \acrshort{WTT},
 meaning that in order to prove a statement in one of those, it is enough
-to prove it using the refleciton rule.
+to prove it using the reflection rule.
 %
 \reminder[-2.3cm]{Conservativity (roughly)}{
   A theory \cS is said to be \emph{conservative} over a
@@ -158,7 +158,7 @@ exploit any computational behaviour.
 \section{Extensionality principles on equality}
 \labsec{ext-principles}
 
-As we said earier, the \acrshort{ITT} and \acrshort{WTT} we consider are
+As we said earlier, the \acrshort{ITT} and \acrshort{WTT} we consider are
 actually extended with extensional principles on equality.
 The main principles we require are \acrshort{UIP} and fonctional extensionality.
 These two principles are valid statements of \acrshort{ITT} and \acrshort{WTT}
@@ -172,7 +172,7 @@ to extend the target with those principles.
 \[ \Pi\ f \ g .\ (\Pi x.\ f\ x = g\ x) \to f = g \]
 }
 
-For \acrshort{UIP} it can be show equivalent to Streicher's axiom K
+For \acrshort{UIP} it can be shown equivalent to Streicher's axiom K
 \[
 \begin{array}{rcl}
   \mathtt{K} & : & \Prod{A: s} \Prod{x :A} \Prod{e : x = x} e = \refl{x} \\
@@ -229,15 +229,15 @@ Transport turns an equality \(e : A = B\) into a map
 }
 
 This means however that for two terms \(a : A\) and \(b : B\) such that
-\(A \equiv B\) and \(u \equiv v\) in \acrshort{ETT}, there translations
+\(A \equiv B\) and \(u \equiv v\) in \acrshort{ETT}, their translations
 become comparable in the target only up-to the equality
-between the two types. \([u] =_{[A]} [v]\) doesn't necessarilly make sense
+between the two types. \([u] =_{[A]} [v]\) doesn't necessarily make sense
 anymore.
 
-To solve this proper we use instead a notion of heterogeneous equality.
+To solve this problem we use instead a notion of heterogeneous equality.
 This is also the approach followed by
 Oury~\sidecite[1.7cm]{oury2005extensionality}
-although we decided on a slightly different presentations of heterogeneous
+although we decided on a slightly different presentation of heterogeneous
 equality to avoid the axioms involved with the use of \acrshort{JMeq}.
 \reminder[-2.3cm]{Heterogenous equality}{
 \(\Heq{T}{t}{U}{u}\), equality between \(t : T\) and \(u : U\) is defined as
@@ -277,7 +277,7 @@ consisting of two variables plus a witness that they are in the
 parametric relation: \(x : A\) is (roughly) sent to
 \(x_1 : A_1, x_2 : A_2, x_\varepsilon : A_\varepsilon\ x_1\ x_2\).
 %
-In our setting, this amounts to consider telescope of triples
+In our setting, this amounts to considering telescope of triples
 consisting of two variables plus a witness that they are
 heterogeneously equal. We can express this by considering the
 following dependent sums:
