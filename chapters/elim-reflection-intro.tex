@@ -73,14 +73,29 @@ that both \(\bot\) and \(\mathbb{N}\) should be translated to similar things
 being able to exploit the knowledge that \(\Gamma_\bot\) is inconsistent
 because of the syntactical nature of the translation.
 
-\todo{Make things clearer}
-Even worse, translations should preserve falsehood meaning in particular that
-the translation of \(0\) should imply a proof of \(\bot\) in the target.
-This is not a concrete proof that it is impossible but rather an argument
-to see that such a translation would not behave well. One of the reasons is
-that it would translate terms, types and contexts independently when it cannot.
-Another is that an \acrshort{ETT} term does not contain any hints with respect
-to the uses of reflection.
+If moreover \(\transl{\ctxempty} = \ctxempty\), knowing that we also have
+\(\vdash 0 : \mathbb{N}\), we get \(\vdash [0] : \transl{\mathbb{N}}\)
+which means that \([0]\) is a closed term.
+\reminder[-1.7cm]{Preservation of falsehood}{
+  A translation preserves falsehood when there exists \(t\) such that
+  \[
+    \vdash t : \transl{\bot} \to \bot
+  \]
+}
+\sidedef[0.9cm]{Strengthening}{
+  A theory has strengthening if for \(\Ga \vdash t : A\) with \(t\) and \(A\)
+  closed, then \(\vdash t : A\) also holds
+}
+By preservation of falsehood we get a closed term of type \(\bot\) in the target
+which by strengthening is a proof of \(\bot\) in the empty context.
+
+This ``proof'' makes a lot of assumptions so it I cannot conclude in a more
+general setting. For instance strengthening is a strong property to have,
+it doesn't hold in \acrshort{ETT} but it does in \acrshort{ITT} and
+\acrshort{WTT}, as such I believe my assumptions aren't that restrictive.
+One of the reasons such a translation isn't possible is that it would translate
+terms, types and contexts independently when it cannot as \acrshort{ETT} terms
+do not contain any hints with respect to the uses of reflection.
 
 \subsection{Our translation(s)}
 
