@@ -23,8 +23,8 @@ sequence of sentences and argument that convince the same readers.
 
 With this definition, a proof is a subjective concept, it depends on the
 reader's capacity to understand and potentially fill the gap themselves about
-understood statements and properties. It also involves a fair bit of
-\emph{trusting} usually: you may not understand a proof, but will believe in
+understood statements and properties. It also usually involves a fair bit of
+\emph{trusting}: you may not understand a proof, but will believe in
 the common effort of the community to verify the proof or, even better,
 reproduce it.
 As such, \emph{consensus} seems key in the scientific community.
@@ -38,7 +38,8 @@ To me this calls for computer-verified proofs---and maybe even automated or
 computer aided proofs---so that the reader can focus on the interesting part of
 the proof while trusting only the tool and not the human that used it.
 
-Even there is room for question on whether this really constitutes a proof.
+Even then, there is room for question on whether this really constitutes a
+proof.
 For instance, how \emph{hard} is it for the computer to \emph{see} that the
 proof is indeed correct? One definition would be to say, as long as it takes
 a finite amount of time, it's good, but if it takes ages, we won't have any
@@ -87,8 +88,8 @@ we also have to provide a syntax for those, and maybe one for function symbols.
 \]
 
 Coming up with a correct syntax like those can be pretty painful so formalisms
-tend to be as minimal as possible, the other advantage being that is much easier
-to reason on the statements when there aren't hundreds of syntactical
+tend to be as minimal as possible, the other advantage being that it is much
+easier to reason on the statements when there aren't hundreds of syntactical
 constructs.
 
 Of course, giving a syntax of statements is not enough. We must give these
@@ -120,7 +121,7 @@ of one proposition.
     \mathcal{J} &\bnf& \Ga \vdash \D
   \end{array}
 \]
-We can now move on to the notion of inference rules. They are what define the
+We can now move on to the notion of inference rules. They are what defines the
 logic in which we place ourselves, they dictate what judgements can be
 \emph{derived}---\ie proven---and how.
 The simplest of rules usually is the so-called \emph{axiom} rule stating that
@@ -451,7 +452,8 @@ conclusion, or reorder propositions and remove duplicates.
 Intuitionistic logic doesn't abide by the \acrshort{LEM}, so its treatment of
 negation is a bit different so that double negation cannot be eliminated as
 above. As such we define \LJ in natural deduction (the sequent style was also
-of import to get classical logic), on the same syntax of propositional logic.
+of importance to get classical logic), on the same syntax of propositional
+logic.
 It is pretty similar.
 \begin{mathpar}
   \infer
@@ -570,7 +572,7 @@ it is \emph{admissible} or redundant.
 
 Once we have a formal logic it makes sense to \emph{teach} its rules to a
 computer to use it for what we call \emph{mechanised proofs}.
-We nowadays have many those, be it under the name \emph{proof assistants} or
+We nowadays have many of those, be it under the name \emph{proof assistants} or
 \emph{automated theorem provers}.
 
 \paragraph{Automated theorem provers} are tools that will take statements as
@@ -579,8 +581,8 @@ user when stuck.
 They are very attractive because the user usually doesn't have to learn about
 the logic involved, just trust that it \emph{works}\sidenote{Ideally that it is
 consistent}. However it can be a hassle when they fail to prove or disprove
-something and the user has to figure out the right to state things so that it
-manages to go progress.
+something and the user has to figure out the right way to state things so that
+the tool manages to progress.
 
 \paragraph{Proof assistants} require more work from the part of the user but are
 usually more malleable and robust. They constitute a framework in which the user
@@ -604,11 +606,11 @@ know about it:
 
 Consistency can be reformulated equivalently as the absence of proof of false
 \(\bot\).
-Completeness is not to be confuse with the \acrshort{LEM} which gives a proof
+Completeness is not to be confused with the \acrshort{LEM} which gives a proof
 of \(P \vee \neg P\) for each \(P\) but not a proof of either \(P\) or
 \(\neg P\) for every \(P\).
 
-Ideally one would want their favourite system to enjoy \emph{both} these
+Ideally one would want their favourite system to enjoy \emph{both} of these
 properties, the proof of which would be conducted in the very same system.
 In 1931~\sidecite{godel1931formal} Gödel shattered all hopes of ever
 accomplishing that.
@@ -657,10 +659,10 @@ The axioms are the following.
 \]
 
 I have not made the statements of Gödel's incompleteness theorems very precise
-as it is beyond the scope of my work. It is very to find references that are not
-in German on the subject.
+as it is beyond the scope of my work. It is very easy to find references that
+are not in German on the subject.
 
-There is still question however as to whether---or rather \emph{how}---the
-original argument adapts to the setting of type theory but it is mainly for
-technical reasons and it is widely believed that the same---or very similar
-restrictions---apply to it.
+Whether---or rather \emph{how}---the original argument adapts to the setting of
+type theory is still an open problem, but it is so mainly for technical reasons
+and it is widely believed that the same---or very similar restrictions---apply
+to it.

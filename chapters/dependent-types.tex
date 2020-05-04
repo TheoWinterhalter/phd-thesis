@@ -2,12 +2,12 @@
 \chapter{Dependent types}
 \labch{dependent-types}
 
-The idea between dependent types is that they now can \emph{depend} on terms,
+The idea behind dependent types is that they now can \emph{depend} on terms,
 \ie terms can appear in types. This is very interesting because we can talk
 about things like \(P\ n\) for a property on a natural number \(n\),
 equality \(x = y\), and with it we can support quantifiers.
 
-It is not only useful on the logic side, but also on the programming language
+It is not only useful on the logical side, but also on the programming language
 side: with it programs can be given much more precise types.
 For instance, you might want to specify that the division operator doesn't
 accept \(0\) for the denominator, or that the operation returning the tail of
@@ -21,7 +21,7 @@ Let me describe a very basic type theory with dependent types.
 
 \paradot{\(\Pi\)-types}
 
-The simplest way to get dependent types is to extend simply type theory---which
+The simplest way to get dependent types is to extend the \acrshort{STL}---which
 only features arrow or function types---with dependent function types or
 \(\Pi\)-types.
 \[
@@ -116,7 +116,7 @@ course define some base types like the natural numbers \(\nat\) and put it in
 \[
   \nat : \Type
 \]
-We will more example of types in \nrefch{usual-defs}. For now we only have
+We will see more example of types in \nrefch{usual-defs}. For now we only have
 \(\Pi\)-types in them:
 \[
   \infer
@@ -132,7 +132,7 @@ This kind of universe is called a Russel universe, and there are also Tarski
 universes, the difference will be explained in \refsubsec{univ-and-types}
 of \nrefch{formalisation}.
 
-I will not put the syntax and the rules together for clarity, at the risk of
+I will now put the syntax and the rules together for clarity, at the risk of
 repeating myself.
 \[
   \begin{array}{rcl}
@@ -235,9 +235,9 @@ We can write it as a definition in the systems as follows:
 Definition id {A : Type} (x : A) : A := x.
 \end{minted}
 
-Writing down functions is not the only to define terms in \Coq however. One of
-its strengths is the tactic mechanism that it is equipped with which allows the
-user to write proofs in an interactive way.
+Writing down functions is not the only way to define terms in \Coq however.
+One of its strengths is the tactic mechanism that it is equipped with which
+allows the user to write proofs in an interactive way.
 Instead of writing the polymorphic identity function we could prove the
 mathematical statement \(\forall A, A \to A\).
 \begin{minted}{coq}

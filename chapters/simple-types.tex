@@ -4,7 +4,7 @@
 
 When studying programming languages theoretically, \(\lambda\)-calculus imposes
 itself as the prototypical example. A model of computation much simpler than
-Turing machines, it becomes extermely useful in combination with a so-called
+Turing machines, it becomes extremely useful in combination with a so-called
 type-system. This combination culminates into the Curry-Howard isomorphism that
 relates programming and logic in profound ways, serving as a foundation for
 type theory and modern logic.
@@ -36,7 +36,7 @@ numbers) as follows.
   \end{array}
   \right)
 \]
-The whole expression written \(\mathit{id}(u)\).
+The whole expression would be written \(\mathit{id}(u)\).
 
 \(\lambda\)-calculus is a third way of writing the same thing.
 \[
@@ -304,9 +304,9 @@ This yields a simpler term with a simpler typing derivation.
     {y : A \vdash y : A}
 \]
 This means that \(\beta\)-reduction allows for simplification of proofs.
-In proof theory, this property is called \emph{cut-elimination}, as the
-\emph{modus ponens} rules is called a \emph{cut}, in that it removes all
-superfluous applications of \emph{cut} in the proof.
+In proof theory, this property is called \emph{cut-elimination} in that it
+removes all superfluous applications of \emph{cut} (or \emph{modus ponens} in
+our case) in the proof.
 Thanks to that, a proof of \(A \to B\) is in fact an algorithm turning a proof
 of \(A\) into a proof of \(B\).
 
