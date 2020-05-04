@@ -2,8 +2,8 @@
 \chapter{Syntax and formalisation of type theory}
 \labch{formalisation}
 
-An interesting fact of type theory (and perhaps one its main selling points) is
-that it is a suitable framework in which to reason about type theory.
+An interesting fact of type theory (and perhaps one of its main selling points)
+is that it is a suitable framework in which to reason about type theory.
 That being said, representing type theory in itself isn't entirely
 straightforward, and some care must be taken. There are actually several choices
 to be made when representing type theory and they are not all equivalent or with
@@ -23,8 +23,8 @@ The first important choice being how to represent variables.
 
 When writing programs or expressions with binders on paper or on the computer
 we will usually use \emph{names}, identifiers for variables like in
-\(\lambda x. \lambda y. x\ y\), \(x\) refers to the variable bound by le
-outermost \(\lambda\), while \(y\) referes to the variable bound by the
+\(\lambda x. \lambda y. x\ y\), \(x\) refers to the variable bound by the
+outermost \(\lambda\), while \(y\) refers to the variable bound by the
 innermost.
 The names aren't fundamental in what the term represents:
 \(\lambda z. \lambda w. z\ w\) represents \emph{exactly} the same term.
@@ -63,7 +63,7 @@ Several solutions have been proposed to this ``problem'' like nominal
 sets~\sidecite[-0.4cm]{pitts2001nominal},
 \acrfull{HOAS}~\sidecite[0.3cm]{pfenning1988higher} and de Bruijn indices or
 levels~\sidecite[0.6cm]{de1978lambda}.
-In think de Bruijn indices are exactly what we want when dealing with
+I think de Bruijn indices are exactly what we want when dealing with
 \(\lambda\)-terms as they carry the right amount of information.
 The idea is to use natural numbers instead of names to indicate how many binders
 to traverse before reaching the one introducing the variable.
@@ -228,9 +228,9 @@ domain of the function, that is
     \lambda (x : A).\ t &\vs& \lambda x.\ t
   \end{array}
 \]
-This opposes the so-called Churh-style (annotation of the domain) to
+This opposes the so-called Church-style (annotation of the domain) to
 Curry-style (no annotation whatsoever).
-There is eve a third option of including the codomain \(\lambda (x:A).B.\ t\)
+There is even a third option of including the codomain \(\lambda (x:A).B.\ t\)
 that seems necessary for \acrshort{ETT} according to the cardinal model.
 \reminder[-0.7cm]{Uniqueness of type}{
   A type theory has uniqueness of type when
@@ -311,9 +311,9 @@ To relate them to actual \(\Pi\)-types, we simply add computation rules to
 Arguably we don't even need that, and to avoid duplication we could simply keep
 the \(\CEl\)s everywhere
 \marginnote[1cm]{
-  The \(\lambda (\highlight{x:a}).\ t\) is not a typo. I enfore here \(\lambda\)
-  to use codes in their syntax since one should not be able to abstract over
-  a type that isn't some \(\CEl\ a\).
+  The \(\lambda (\highlight{x:a}).\ t\) is not a typo. I enforce here
+  \(\lambda\) to use codes in their syntax since one should not be able to
+  abstract over a type that isn't some \(\CEl\ a\).
 }
 \begin{mathpar}
   \infer
@@ -519,7 +519,7 @@ all those constructs.
 This can make it hard to reason about the syntax, and a lot of properties simply
 do not hold because you cannot distinguish two different constructs.
 As such I am not sure this is the best way to go.
-In the remainder of this thesis, I will focus more on approached like that of
+In the remainder of this thesis, I will focus more on approaches like that of
 \MetaCoq.
 
 \section{Representation of typing}
@@ -706,7 +706,7 @@ All three notions of conversion are proven equivalent in
 
 \subsection{How intricate need the concepts be?}
 
-If we go back to the notion of typed equality, I mentioned we could enfore
+If we go back to the notion of typed equality, I mentioned we could enforce
 typedness by having rules more like
 \[
   \infer
