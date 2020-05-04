@@ -339,33 +339,18 @@ of propositional logic:
   \infer
     { }
     {\Ga \vdash \top, \D}
-  (\top R_1)
-
-  \infer
-    { }
-    {\vdash \top}
-  (\top R_2)
-
-  \infer
-    { }
-    {\bot \vdash}
-  (\bot L_1)
+  (\top R)
 
   \infer
     { }
     {\Ga, \bot \vdash \D}
-  (\bot L_2)
+  (\bot L)
 
   \infer
     {\Ga \vdash \D}
     {\Ga \vdash \bot, \D}
   (\bot R)
 \end{mathpar}
-\marginnote[-2.5cm]{
-  \(\bot L_2\) and \(\top R_1\) are redundant with weakening and \(\bot L_1\)
-  and \(\top R_2\) but I keep them as weakening is sometimes omitted from the
-  structural rules.
-}
 
 The rest are structural rules that allow us to weaken the hypotheses or the
 conclusion, or reorder propositions and remove duplicates.
