@@ -842,9 +842,10 @@ are constructing represents derivations rather than terms.
 It is very interesting but does not supersedes the good old syntax and
 derivation above it combination.
 For one, it allows us to manipulate syntax in an untyped way, and later show
-that this manipulation is type-preserving. This is at the core of program
-translations as we will see in \nrefch{translations} and become crucial when
-derivations are \emph{big}\sidenote{This is the case in the translation I show
+that this manipulation is type-preserving. It is important to have program
+translations compute relatively efficiently as we will see in
+\nrefch{translations} and become crucial when derivations are
+\emph{big}\sidenote{This is the case in the translation I show
 in \arefpart{elim-reflection}} since terms (as in untyped syntax) are usually
 much smaller. Another point is that it doesn't really make sense to write a
 type-checker for a well-typed syntax, something that I expose in
