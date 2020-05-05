@@ -183,6 +183,7 @@ Like inductive types, fixed-points can be defined mutually, as such
 Definition mfixpoint term :=
   list (def term).
 \end{minted}
+while \mintinline{coq}{idx} tells which one we are referring to.
 Definitions which are given as
 \begin{minted}{coq}
 Record def term := mkdef {
@@ -277,7 +278,9 @@ Pattern-matching reduces when the term under scrutiny is a constructor
 \mintinline{coq}{iota_red} is defined as follows
 \begin{minted}{coq}
 Definition iota_red npar c args brs :=
-  mkApps (snd (List.nth c brs (0, tDummy))) (List.skipn npar args).
+  mkApps
+    (snd (List.nth c brs (0, tDummy)))
+    (List.skipn npar args).
 \end{minted}
 \mintinline{coq}{List.nth} takes a default value, so
 \mintinline{coq}{(0, tDummy)} can be safely ignored. \mintinline{coq}{iota_red}
@@ -285,15 +288,58 @@ basically picks the branch corresponding to the constructor giving it the list
 of indices \mintinline{coq}{List.skipn npar args}.
 
 \paradot{Fixed-point unfolding}
-\todo{TODO}
+\begin{minted}{coq}
+red_fix mfix idx args narg fn :
+  unfold_fix mfix idx = Some (narg, fn) ->
+  is_constructor narg args = true ->
+  red1 Σ Γ (mkApps (tFix mfix idx) args) (mkApps fn args)
+\end{minted}
+Here we can witness the syntactic guard I talked about when describing
+fixed-points: when a fixed-point is applied to arguments such that its recursive
+argument is an applied constructor, it can safely be unfolded.
+\mintinline{coq}{unfold_fix mfix idx} returns the recursive argument
+\mintinline{coq}{narg} and the body of the fixed-point \mintinline{coq}{fn}.
 
 \paradot{Cofixed-point unfolding}
-\todo{TODO}
+There are two rules to deal with unfolding of cofixed-points: one when it is
+pattern-matched, the other when it is projected.
+\begin{minted}{coq}
+red_cofix_case ip p mfix idx args narg fn brs :
+  unfold_cofix mfix idx = Some (narg, fn) ->
+  red1 Σ Γ
+    (tCase ip p (mkApps (tCoFix mfix idx) args) brs)
+    (tCase ip p (mkApps fn args) brs)
+
+red_cofix_proj p mfix idx args narg fn :
+  unfold_cofix mfix idx = Some (narg, fn) ->
+  red1 Σ Γ
+    (tProj p (mkApps (tCoFix mfix idx) args))
+    (tProj p (mkApps fn args))
+\end{minted}
+The are very similar to fixed-points except this time there is no syntactic
+guard with respect to a recursive argument.
 
 \paradot{\(\delta\)-reduction}
-\todo{TODO}
+\begin{minted}{coq}
+red_delta c decl body (isdecl : declared_constant Σ c decl) u :
+  decl.(cst_body) = Some body ->
+  red1 Σ Γ (tConst c u) (subst_instance_constr u body)
+\end{minted}
+A constant can reduce to its definition in the global environment (if it has
+one, \ie if it is not an axiom). Since the definition is potentially universe
+polymorphic, we instantiate its universes with the one the constant was used
+with.
 
 \paradot{Projection}
+\begin{minted}{coq}
+red_proj i pars narg args k u arg:
+  nth_error args (pars + narg) = Some arg ->
+  red1 Σ Γ
+    (tProj (i, pars, narg) (mkApps (tConstruct i k u) args))
+    arg
+\end{minted}
+When a constructor of a record (that is the record is given with its fields) is
+projected, it reduces to the corresponding field.
 
 \paradot{Congruence rules}
 All remaining rules are congruence rules we have for instance the two congruence
