@@ -133,6 +133,28 @@
 }
 \fallbackchardejavusans{ᵗ}
 \fallbackchardejavusans{∘}
+% \fallbackchardejavusans{⟦}
+% \fallbackchardejavusans{⟧}
+% \fallbackchardejavusans{∈}
+
+\newfontfamily{\dejavusansmonofont}{DejaVu Sans Mono}[Scale=MatchLowercase]
+\DeclareTextFontCommand{\textfallbackdejavusansmono}{\dejavusansmonofont}
+\newcommand{\fallbackchardejavusansmono}[2][\textfallbackdejavusansmono]{%
+    \newunicodechar{#2}{#1{#2}}%
+}
+% \fallbackchardejavusansmono{∈}
+\fallbackchardejavusansmono{⟦}
+\fallbackchardejavusansmono{⟧}
+
+\newfontfamily{\firamathfont}{Fira Math}[Scale=MatchLowercase]
+\DeclareTextFontCommand{\textfallbackfiramath}{\firamathfont}
+\newcommand{\fallbackcharfiramath}[2][\textfallbackfiramath]{%
+    \newunicodechar{#2}{#1{#2}}%
+}
+\fallbackcharfiramath{∈}
+\fallbackcharfiramath{⊢}
+% \fallbackcharfiramath{⟦}
+% \fallbackcharfiramath{⟧}
 
 %----------------------------------------------------------------------------------------
 

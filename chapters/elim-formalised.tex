@@ -3,7 +3,7 @@
 \labch{elim-formalised}
 
 The formalisation is inspired from that of \Coq in \MetaCoq and \emph{besides}
-\MetaCoq to allow for some interoperability to bring about faily realistic
+\MetaCoq to allow for some interoperability to bring about fairly realistic
 examples. This provides evidence that the translation is constructive \emph{and}
 computes!
 Note that we also rely on the
@@ -97,17 +97,16 @@ and the translation are formalised: \rpath{FundamentalLemma.v} and
 \rpath{Translation.v}.
 For instance, here is the main theorem, as stated in our formalisation:
 %
-\todo{Fix and update (after updating master to 8.11?)}
 \begin{minted}{coq}
-Theorem complete_translation Σ :
+Theorem complete_translation {Σ} :
   type_glob Σ ->
-  (forall Γ (h : XTyping.wf Σ Γ), ∑ Γ', Σ |--i Γ' # ⟦ Γ ⟧ ) *
-  (forall Γ t A (h : Σ ;;; Γ |-x t : A)
-   Γ' (hΓ : Σ |--i Γ' # ⟦ Γ ⟧),
-    ∑ A' t', Σ ;;;; Γ' |--- [t'] : A' # ⟦ Γ |--- [t] : A ⟧) *
-  (forall Γ u v A (h : Σ ;;; Γ |-x u = v : A)
-   Γ' (hΓ : Σ |--i Γ' # ⟦ Γ ⟧),
-    ∑ A' A'' u' v' p', eqtrans Σ Γ A u v Γ' A' A'' u' v' p').
+  (forall {Γ t A} (h : Σ ;;; Γ |-x t : A)
+     {Γ'} (hΓ : Σ |--i Γ' ∈ ⟦ Γ ⟧),
+      ∑ A' t', Σ ;;;; Γ' ⊢ [t'] : A' ∈ ⟦ Γ ⊢ [t] : A ⟧) *
+  (forall {Γ u v A} (h : Σ ;;; Γ |-x u ≡ v : A)
+     {Γ'} (hΓ : Σ |--i Γ' ∈ ⟦ Γ ⟧),
+      ∑ A' A'' u' v' p',
+        eqtrans Σ Γ A u v Γ' A' A'' u' v' p').
 \end{minted}
 %
 Herein \mintinline{coq}{type_glob Σ} refers to the fact that the global

@@ -2,12 +2,15 @@
 
 ## Prerequisites
 
-You need the Fira Sans and Fira Mono fonts to build the thesis.
-For instance you can find them on https://fonts.google.com/specimen/Fira+Sans
-and https://fonts.google.com/specimen/Fira+Mono.
+You need the [Fira Sans] and [Fira Mono] fonts to build the thesis.
 You also need Symbola because I use it as a fallback for some special unicode
 characters.
-I also now use DejaVu Sans as another fallback font.
+I also now use DejaVu Sans and DejaVu Sans Mono as fallback fonts.
+I will use [Fira Math] as fallback as well.
+
+[Fira Sans]: https://fonts.google.com/specimen/Fira+Sans
+[Fira Mono]: https://fonts.google.com/specimen/Fira+Mono
+[Fira Math]: https://github.com/firamath/firamath
 
 ## Compilation
 
