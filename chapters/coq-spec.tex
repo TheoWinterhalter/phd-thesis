@@ -209,15 +209,26 @@ argument. That is all recursive calls must be structually decreasing on
 syntactic guard to avoid unfolding fixed-points indefinitely: only when the
 recursive argument is a constructor can the fixed-point be unfolded.
 
-\section{Typing of \acrshort{PCUIC}}
+Now that the syntax is out of the way we can move to the semantics.
+
+\section{Semantics of \acrshort{PCUIC}}
+
+There are two important properties defined on the syntax: reduction and typing.
+The former being necessary for the latter as it is the base for conversion.
+
+\subsection{Reduction}
+
+\subsection{Conversion}
 
 \todo{
-  Give definition of term and typing, while focusing on ind, match and fix as
-  they have not been really explained earlier.
-  Talk about universes and constraints.
-  Reduction before typing?
-  Arities.
-  Spec of guards.
   Discussion on eta, stating it is WIP, mention here how it is dealt with in the
   type checker?
+}
+
+\subsection{Typing}
+
+\todo{
+  Talk about universes and constraints.
+  Arities.
+  Spec of guards.
 }
