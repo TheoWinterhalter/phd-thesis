@@ -218,6 +218,97 @@ The former being necessary for the latter as it is the base for conversion.
 
 \subsection{Reduction}
 
+We define reduction as a relation on terms, however, unlike for \acrshort{STL}
+or many systems, because of constants and let-bindings which can be unfolded
+to their definitions, the relation has to mention the global and local
+environment. Note also that the relation is not functional, that is that the
+reduction we define is not deterministic.
+
+The inductive type of \(1\)-step reduction is
+\begin{minted}{coq}
+Inductive red1 (Σ : global_env) (Γ : context) :
+  term -> term -> Type
+\end{minted}
+I will give the different constructors one by one, while explaining them,
+focusing on the computation rules.
+
+\paradot{\(\beta\)-reduction}
+\begin{minted}{coq}
+red_beta na t b a :
+  red1 Σ Γ (tApp (tLambda na t b) a) (subst10 a b)
+\end{minted}
+This is the usual \(\beta\)-reduction rule, \mintinline{coq}{subst10 a b}
+is just the term \mintinline{coq}{b} where the \(0\)-th variable is substituted
+by \mintinline{coq}{a}.
+
+\paradot{\(\zeta\)-reduction}
+\begin{minted}{coq}
+red_zeta na b t b' :
+  red1 Σ Γ (tLetIn na b t b') (subst10 b b')
+\end{minted}
+This rule is similar to \(\beta\)-reduction, it states that the expression
+\begin{minted}{coq}
+let x := b in t x
+\end{minted}
+reduces to \mintinline{coq}{t b}.
+
+\paradot{Local definition unfolding}
+\begin{minted}{coq}
+red_rel i body :
+  option_map decl_body (nth_error Γ i) = Some (Some body) ->
+  red1 Σ Γ (tRel i) (lift0 (S i) body)
+\end{minted}
+If the context contains some local definition \(x := t\) then the variable
+\(x\) \emph{reduces} to \(t\). Because the definition makes sense in a
+smaller context, it needs to be weakened, hence the \mintinline{coq}{lift}.
+
+\paradot{\(\iota\)-reduction}
+\marginnote[1.5cm]{
+  \mintinline{coq}{mkApps} is a shortcut to apply a term to a list of arguments.
+}
+\begin{minted}{coq}
+red_iota ind pars c u args p brs :
+  red1 Σ Γ
+    (tCase (ind, pars) p (mkApps (tConstruct ind c u) args) brs)
+    (iota_red pars c args brs)
+\end{minted}
+Pattern-matching reduces when the term under scrutiny is a constructor
+(potentially applied to some arguments).
+\mintinline{coq}{iota_red} is defined as follows
+\begin{minted}{coq}
+Definition iota_red npar c args brs :=
+  mkApps (snd (List.nth c brs (0, tDummy))) (List.skipn npar args).
+\end{minted}
+\mintinline{coq}{List.nth} takes a default value, so
+\mintinline{coq}{(0, tDummy)} can be safely ignored. \mintinline{coq}{iota_red}
+basically picks the branch corresponding to the constructor giving it the list
+of indices \mintinline{coq}{List.skipn npar args}.
+
+\paradot{Fixed-point unfolding}
+\todo{TODO}
+
+\paradot{Cofixed-point unfolding}
+\todo{TODO}
+
+\paradot{\(\delta\)-reduction}
+\todo{TODO}
+
+\paradot{Projection}
+
+\paradot{Congruence rules}
+All remaining rules are congruence rules we have for instance the two congruence
+rules for \mintinline{coq}{tLambda}:
+\begin{minted}{coq}
+| abs_red_l na M M' N :
+    red1 Σ Γ M M' ->
+    red1 Σ Γ (tLambda na M N) (tLambda na M' N)
+
+| abs_red_r na M M' N :
+    red1 Σ (Γ ,, vass na N) M M' ->
+    red1 Σ Γ (tLambda na N M) (tLambda na N M')
+\end{minted}
+They state that you can reduce either subterm.
+
 \subsection{Conversion}
 
 \todo{
