@@ -8,6 +8,8 @@ representation inside \Coq itself. In this chapter I will recall a few things
 focusing on the points that were not discussed in those chapters like
 representation of fixed-points and inductive types, as well as typing.
 
+All this is the subject of~\sidecite{sozeau2019coq}.
+
 \section{Syntax of \acrshort{PCUIC}}
 
 In \MetaCoq, the syntax of \acrshort{PCUIC} is defined as the following
@@ -60,7 +62,152 @@ different in that universes aren't fixed but floating.
 \begin{minted}{coq}
 Type@{i} : Type@{j}
 \end{minted}
-holds in \Coq as long as the constraint \(i < j\) is satisfied.
+holds in \Coq as long as the constraint \(i < j\) is satisfied but neither \(i\)
+nor \(j\) correspond to natural numbers. Satisfying the constraints means that
+there exist a valuation in the natural numbers preserving the constraints.
+We also have local universes and constraints for polymorphic definitions;
+universe instances (of type \mintinline{coq}{Instance.t}) are there to
+substitute those for other universes.
+Aside from \mintinline{coq}{Type}, we also represent \mintinline{coq}{Set}
+and \mintinline{coq}{Prop}. We do not deal with \mintinline{coq}{SProp} yet.
+
+\paradot{Constants}
+
+\mintinline{coq}{tConst k ui} represents a definition or axiom declared in the
+environment under name \mintinline{coq}{k}. Constant declarations are
+inhabitants of the following record type.
+\begin{minted}{coq}
+Record constant_body := {
+  cst_type : term ;
+  cst_body : option term ;
+  cst_universes : universes_decl
+}.
+\end{minted}
+A constant comes with its type and an optional definition. Constants without
+definitions are simply axioms.
+The \mintinline{coq}{universes_decl} is there in case the constant happens to
+be universe polymorphic.
+
+\paradot{Inductive types}
+
+\mintinline{coq}{tInd ind ui} represents an inductive type defined in the global
+context. The type inductive is
+\begin{minted}{coq}
+Record inductive : Set := mkInd {
+  inductive_mind : kername ;
+  inductive_ind : nat
+}.
+\end{minted}
+It is not just \mintinline{coq}{kername} because inductive types can be mutually
+defined: the kername points to the mutual block, \mintinline{coq}{inductive_ind}
+points to one inductive in the block. Note that this term refers to the
+inductive type, without its parameters or indices. For vectors this would be
+\begin{minted}{coq}
+vec : Type -> nat -> Type
+\end{minted}
+In the global environment an inductive declaration provides the following
+information.
+\begin{minted}{coq}
+Record mutual_inductive_body := {
+  ind_finite    : recursivity_kind ;
+  ind_npars     : nat ;
+  ind_params    : context ;
+  ind_bodies    : list one_inductive_body ;
+  ind_universes : universes_decl ;
+  ind_variance  : option (list Universes.Variance.t)
+}.
+\end{minted}
+These informations include the number of parameters, the type of these
+parameters in the form of a context and the universe declarations.
+\mintinline{coq}{ind_variance} deals with variance of universes in the case
+of cumulative inductive types.
+The \mintinline{coq}{recursivity_kind} determines what kind of inductive type
+we are building, this in fact include the usual inductive types, but also
+record types and coinductive types.
+Finally, \mintinline{coq}{ind_bodies} is a list of declarations for each of
+the inductive types in the mutual block.
+\begin{minted}{coq}
+Record one_inductive_body := {
+  ind_name  : ident ;
+  ind_type  : term ;
+  ind_kelim : sort_family ;
+  ind_ctors : list (ident * term * nat) ;
+  ind_projs : list (ident * term)
+}.
+\end{minted}
+Each of those comes with its name and type.
+\mintinline{coq}{ind_kelim} states in which univeres the definition can be
+eliminated (in most cases inductive types living in \mintinline{coq}{Prop}
+cannot be scrutinised to build terms in \mintinline{coq}{Type}).
+Then we either have a list of constructors for (co)inductive types, or a list
+of projections for (negative) records.
+
+\paradot{Constructors}
+
+\mintinline{coq}{tConstruct ind n ui} has \mintinline{coq}{ind} to point to the
+right inductive type while \mintinline{coq}{n} tells us which constructor it is.
+For instance it would be \mintinline{coq}{0} for \mintinline{coq}{true} and
+\mintinline{coq}{1} for \mintinline{coq}{false}.
+Each constructor is given by a term of type
+\begin{minted}{coq}
+ident * term * nat
+\end{minted}
+as we saw in the previous paragraph. It consists in a name, a type and an arity.
+
+\paradot{Pattern-matching}
+\mintinline{coq}{tCase (ind, n) p c brs} represents pattern-matching on
+\mintinline{coq}{c} of inductive type \mintinline{coq}{ind} with
+\mintinline{coq}{n} parameters, return predicate \mintinline{coq}{p}
+and branches \mintinline{coq}{brs}.
+There is one branch for each constructor and it contains the arity of the
+constructor and the term corresponding to the branch.
+
+\paradot{Projections}
+\mintinline{coq}{tProj p c} represents the projection \mintinline{coq}{p}
+applied to term \mintinline{coq}{c}.
+\begin{minted}{coq}
+Definition projection :=
+  inductive * nat * nat.
+\end{minted}
+A projection is described by the inductive (or rather record) to which it
+belongs, the number of parameters of the record, and the index of the projected
+argument. In the case of dependent pairs, the latter will be \mintinline{coq}{0}
+for the first projection and \mintinline{coq}{1} for the second.
+
+\paradot{Fixed-points}
+Finally we have \mintinline{coq}{tFix mfix idx} and
+\mintinline{coq}{tCoFix mfix idx} to represent (co)fixed-points.
+Like inductive types, fixed-points can be defined mutually, as such
+\mintinline{coq}{mfix} is a list of (mutual) definitions:
+\begin{minted}{coq}
+Definition mfixpoint term :=
+  list (def term).
+\end{minted}
+Definitions which are given as
+\begin{minted}{coq}
+Record def term := mkdef {
+  dname : name ;
+  dtype : term ;
+  dbody : term ;
+  rarg  : nat
+}.
+\end{minted}
+that is with a name, a type and a body (the definition itself).
+\mintinline{coq}{rarg} points to the recursive argument of the fixed-point.
+For instance in
+\begin{minted}{coq}
+Fixpoint map {A B : Type} (f : A -> B) (l : list A) {struct l}
+  : list B :=
+  match l with
+  | [] => []
+  | x :: l => f x :: map f l
+  end.
+\end{minted}
+the \mintinline{coq}{{struct l}} means that \mintinline{coq}{l} is the recursive
+argument. That is all recursive calls must be structually decreasing on
+\mintinline{coq}{l}. It is part of the syntax because \Coq uses it as a
+syntactic guard to avoid unfolding fixed-points indefinitely: only when the
+recursive argument is a constructor can the fixed-point be unfolded.
 
 \section{Typing of \acrshort{PCUIC}}
 
