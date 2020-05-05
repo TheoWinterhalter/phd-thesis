@@ -2,8 +2,67 @@
 \chapter{A specification of \Coq}
 \labch{coq-spec}
 
-See \nrefsec{coq-theory}
-maybe also \nrefch{formalisation}
+In \nrefsec{coq-theory} I already talked about the type theory of \Coq we call
+\acrshort{PCUIC} while in \nrefch{formalisation} you caught a glimpse of its
+representation inside \Coq itself. In this chapter I will recall a few things
+focusing on the points that were not discussed in those chapters like
+representation of fixed-points and inductive types, as well as typing.
+
+\section{Syntax of \acrshort{PCUIC}}
+
+In \MetaCoq, the syntax of \acrshort{PCUIC} is defined as the following
+inductive type.
+\begin{minted}{coq}
+Inductive term :=
+| tRel (n : nat)
+| tSort (u : Universe.t)
+| tProd (na : name) (A B : term)
+| tLambda (na : name) (A t : term)
+| tLetIn (na : name) (b B t : term)
+| tApp (u v : term)
+| tConst (k : kername) (ui : Instance.t)
+| tInd (ind : inductive) (ui : Instance.t)
+| tConstruct (ind : inductive) (n : nat) (ui : Instance.t)
+| tCase
+    (indn : inductive * nat)
+    (p c : term)
+    (brs : list (nat * term))
+| tProj (p : projection) (c : term)
+| tFix (mfix : mfixpoint term) (idx : nat)
+| tCoFix (mfix : mfixpoint term) (idx : nat).
+\end{minted}
+
+I won't present again variables, \(\Pi\)-types, etc. and will focus on
+the other constructors, for this I need to introduce the global environment.
+% \mintinline{coq}{tConst}, \mintinline{coq}{tInd}, \mintinline{coq}{tConstruct},
+% \mintinline{coq}{tCase}, \mintinline{coq}{tProj}, \mintinline{coq}{tFix}
+% and \mintinline{coq}{tCoFix}.
+
+\paradot{Global environment}
+
+Just as for the translation presented in \arefpart{elim-reflection}, we have
+a global environment \(\Sigma\) containing the axioms, definitions and
+declarations of inductive types. Instead of using de Bruijn indices we use
+strings to refer to these declarations. In fact, \mintinline{coq}{kername}
+is simply a notation for \mintinline{coq}{string} which we use to lift
+ambiguity as to its purpose.
+
+
+\paradot{Universes}
+
+Besides the global environment we have a set of universes with their
+constraints. Indeed, although we usually present the hierarchy of universes in
+\Coq using \(\Type_i\) with \(i \in \mathbb{N}\), the implementation is a bit
+different in that universes aren't fixed but floating.
+\marginnote[0.65cm]{
+  In \Coq, \(\Type_i\) is written \mintinline{coq}{Type@{i}}.
+}
+\begin{minted}{coq}
+Type@{i} : Type@{j}
+\end{minted}
+holds in \Coq as long as the constraint \(i < j\) is satisfied.
+
+\section{Typing of \acrshort{PCUIC}}
 
 \todo{
   Give definition of term and typing, while focusing on ind, match and fix as
