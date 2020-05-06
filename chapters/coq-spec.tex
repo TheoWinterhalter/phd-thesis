@@ -357,10 +357,200 @@ They state that you can reduce either subterm.
 
 \subsection{Conversion}
 
-\todo{
-  Discussion on eta, stating it is WIP, mention here how it is dealt with in the
-  type checker?
+Unlike \Agda, conversion in \Coq isn't typed but rather based primarily on
+reduction. Its definition is the following, corresponding basically to the
+reflexive, symmetric and transitive closure of reduction:
+\marginnote[1cm]{
+  Here \mintinline{coq}{Σ} is a pair comprised of a global environment and the
+  universe declarations.
 }
+\begin{minted}{coq}
+Inductive conv Σ Γ : term -> term -> Type :=
+| conv_refl t u :
+    eq_term (global_ext_constraints Σ) t u ->
+    Σ ;;; Γ |- t = u
+
+| conv_red_l t u v :
+    red1 Σ Γ t v ->
+    Σ ;;; Γ |- v = u ->
+    Σ ;;; Γ |- t = u
+
+| conv_red_r t u v :
+    Σ ;;; Γ |- t = v ->
+    red1 (fst Σ) Γ u v ->
+    Σ ;;; Γ |- t = u
+
+where " Σ ;;; Γ |- t = u " := (@conv _ Σ Γ t u) : type_scope.
+\end{minted}
+
+In terms of inference rules this would be written
+\begin{mathpar}
+  \infer
+    {t =_{\alpha} u}
+    {\Sigma ; \Ga \vdash t \equiv u}
+  %
+
+  \infer
+    {
+      \Sigma ; \Ga \vdash t \red v \\
+      \Sigma ; \Ga \vdash v \equiv u
+    }
+    {\Sigma ; \Ga \vdash t \equiv u}
+  %
+
+  \infer
+    {
+      \Sigma ; \Ga \vdash t \equiv v \\
+      \Sigma ; \Ga \vdash u \red v
+    }
+    {\Sigma ; \Ga \vdash t \equiv u}
+  %
+\end{mathpar}
+This is similar except that we don't merely use \(\alpha\)-conversion in the
+reflexive case, we also equate the terms up to universes.
+Indeed sometimes, two universes may be syntactically different but still be the
+same like \(i\) and \(j\) with constraints \(i \le j\) and \(j \le i\).
+
+This becomes more apparent in the cumulativity definition.
+\begin{minted}{coq}
+Inductive cumul Σ Γ : term -> term -> Type :=
+| cumul_refl t u :
+    leq_term (global_ext_constraints Σ) t u ->
+    Σ ;;; Γ |- t <= u
+
+| cumul_red_l t u v :
+    red1 Σ Γ t v ->
+    Σ ;;; Γ |- v <= u ->
+    Σ ;;; Γ |- t <= u
+
+| cumul_red_r t u v :
+    Σ ;;; Γ |- t <= v ->
+    red1 Σ Γ u v ->
+    Σ ;;; Γ |- t <= u
+
+where " Σ ;;; Γ |- t <= u " := (cumul Σ Γ t u) : type_scope.
+\end{minted}
+
+\begin{mathpar}
+  \infer
+    {t \le_{\alpha} u}
+    {\Sigma ; \Ga \vdash t \cumul u}
+  %
+
+  \infer
+    {
+      \Sigma ; \Ga \vdash t \red v \\
+      \Sigma ; \Ga \vdash v \cumul u
+    }
+    {\Sigma ; \Ga \vdash t \cumul u}
+  %
+
+  \infer
+    {
+      \Sigma ; \Ga \vdash t \cumul v \\
+      \Sigma ; \Ga \vdash u \red v
+    }
+    {\Sigma ; \Ga \vdash t \cumul u}
+  %
+\end{mathpar}
+Of course this time it is not symmetric. We break symmetry by using
+\mintinline{coq}{leq_term} to perform \(\alpha\)-equlity up to universes.
+In a sense this is what does all the work regarding cumulativity.
+
+We define \mintinline{coq}{eq_term} and \mintinline{coq}{leq_term} at the same
+time using a more general definition.
+\marginnote[0.5cm]{
+  \mintinline{coq}{φ} represents the universe constraints.
+  \mintinline{coq}{eq_universe} and \mintinline{coq}{leq_universe} are relations
+  on universes with self-explanatory names.
+}
+\begin{minted}{coq}
+Definition eq_term φ :=
+  eq_term_upto_univ (eq_universe φ) (eq_universe φ).
+
+Definition leq_term φ :=
+  eq_term_upto_univ (eq_universe φ) (leq_universe φ).
+\end{minted}
+
+The definition of \mintinline{coq}{eq_term_upto_univ} is rather long so I will
+give an excerpt of it.
+\begin{minted}{coq}
+Inductive eq_term_upto_univ
+  (Re Rle : Universe.t -> Universe.t -> Prop)
+  : term -> term -> Type :=
+
+| eq_Rel n  :
+    eq_term_upto_univ Re Rle (tRel n) (tRel n)
+
+| eq_Sort s s' :
+    Rle s s' ->
+    eq_term_upto_univ Re Rle (tSort s) (tSort s')
+
+| eq_App t t' u u' :
+    eq_term_upto_univ Re Rle t t' ->
+    eq_term_upto_univ Re Re u u' ->
+    eq_term_upto_univ Re Rle (tApp t u) (tApp t' u')
+
+| eq_Const c u u' :
+    R_universe_instance Re u u' ->
+    eq_term_upto_univ Re Rle (tConst c u) (tConst c u')
+
+| eq_Lambda na na' ty ty' t t' :
+    eq_term_upto_univ Re Re ty ty' ->
+    eq_term_upto_univ Re Rle t t' ->
+    eq_term_upto_univ Re Rle (tLambda na ty t) (tLambda na' ty' t')
+
+| eq_Prod na na' a a' b b' :
+    eq_term_upto_univ Re Re a a' ->
+    eq_term_upto_univ Re Rle b b' ->
+    eq_term_upto_univ Re Rle (tProd na a b) (tProd na' a' b')
+
+(* ... *)
+.
+\end{minted}
+As you can see, when comparing sorts we simply compare the universes with
+\mintinline{coq}{Rle}. Otherwise, we simply compare the subterms with the same
+relations. There is the exception of domains however, indeed they are in
+contravariant positions and as such they should need to be compared in reverse
+order. In \Coq we simply use conversion rather that cumulativity in
+contravariant positions:
+\begin{mathpar}
+  \infer
+    {
+      A =_\alpha A' \\
+      B \le_\alpha B'
+    }
+    {\Pi (x:A). B \le_\alpha \Pi (x:A'). B'}
+  %
+\end{mathpar}
+We also compare universe instances for polymorphic constants.
+
+\paradot{About \(\eta\)}
+\reminder[-0.7cm]{\(\eta\)-expansion}{
+  \(\eta\)-expansion is defined as follows
+  \[
+    t \red_\eta \lambda x.\ t\ x
+  \]
+}
+\Coq supports \(\eta\)-expansion in the conversion. In a typed setting like
+\Agda's conversion it is rather easy to add it. In \Agda the conversion rule can
+be given as
+\[
+  \infer
+    { }
+    {\Ga \vdash t \equiv \lambda x.\ t\ x : \Pi (x:A). B}
+  %
+\]
+or even in a more directed way as
+\[
+  \infer
+    {\Ga, x:A \vdash f\ x \equiv g\ x : B}
+    {\Ga \vdash f \equiv g : \Pi (x:A). B}
+  %
+\]
+In an untyped setting the question is a bit more complex, we have several
+candidates but are struggling to find a formulation that lets us preserve good
+properties about conversion/cumulativity without going through to much trouble.
 
 \subsection{Typing}
 
