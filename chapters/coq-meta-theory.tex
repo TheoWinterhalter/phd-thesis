@@ -100,8 +100,8 @@ this is reassuring because a substitution should not overwrite definitions.
 
 \paradot{Confluence}
 
-Confluence is an import result that we have on \Coq's theory. In particular it
-allows us to simplify greatly what it means to be convertible.
+Confluence is an important result that we have on \Coq's theory. In particular
+it allows us to simplify greatly what it means to be convertible.
 Indeed, right now, conversion involves reduction going in both directions so
 that \(u\) and \(v\) can be convertible by something like the following picture.
 \begin{center}
@@ -121,13 +121,13 @@ Thanks to confluence this picture can be completed into
 \begin{center}
   \begin{tikzpicture}[baseline=(u.base), node distance=1cm]
     \node (u) { \(u\) } ;
-    \node (d1) [above right = of u] {} ;
-    \node (d2) [below right = of d1] {} ;
-    \node (d3) [above right = of d2] {} ;
-    \node (v) [below right = of d3] { \(v\) } ;
-    \node (a) [below right = of u] {} ;
-    \node (b) [below right = of d2] {} ;
-    \node (c) [below right = of a] {} ;
+    \node (d1) [above right = of u.center] {} ;
+    \node (d2) [below right = of d1.center] {} ;
+    \node (d3) [above right = of d2.center] {} ;
+    \node (v) [below right = of d3.center] { \(v\) } ;
+    \node (a) [below right = of u.center] {} ;
+    \node (b) [below right = of d2.center] {} ;
+    \node (c) [below right = of a.center] {} ;
     \path (d1.center) edge[to*, tred] (u) ;
     \path (d1.center) edge[to*, tred] (d2) ;
     \path (d3.center) edge[to*, tred] (d2) ;
@@ -140,6 +140,8 @@ Thanks to confluence this picture can be completed into
     \path (b.center) edge[to*, tred, dashed] (c) ;
   \end{tikzpicture}
 \end{center}
+This means that we can only regard conversion as \(u\) and \(v\) reducing to
+the same term (up to names and universes).
 
 \paradot{Context conversion}
 
