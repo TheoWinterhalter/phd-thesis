@@ -111,10 +111,33 @@ that \(u\) and \(v\) can be convertible by something like the following picture.
     \node (d2) [below right = of d1] {} ;
     \node (d3) [above right = of d2] {} ;
     \node (v) [below right = of d3] { \(v\) } ;
-    \draw[tred] (d1.center) to (u) ;
-    \draw[tred] (d1.center) to (d2.center) ;
-    \draw[tred] (d3.center) to (d2.center) ;
-    \draw[tred] (d3.center) to (v) ;
+    \path (d1.center) edge[to*, tred] (u) ;
+    \path (d1.center) edge[to*, tred] (d2.center) ;
+    \path (d3.center) edge[to*, tred] (d2.center) ;
+    \path (d3.center) edge[to*, tred] (v) ;
+  \end{tikzpicture}
+\end{center}
+Thanks to confluence this picture can be completed into
+\begin{center}
+  \begin{tikzpicture}[baseline=(u.base), node distance=1cm]
+    \node (u) { \(u\) } ;
+    \node (d1) [above right = of u] {} ;
+    \node (d2) [below right = of d1] {} ;
+    \node (d3) [above right = of d2] {} ;
+    \node (v) [below right = of d3] { \(v\) } ;
+    \node (a) [below right = of u] {} ;
+    \node (b) [below right = of d2] {} ;
+    \node (c) [below right = of a] {} ;
+    \path (d1.center) edge[to*, tred] (u) ;
+    \path (d1.center) edge[to*, tred] (d2.center) ;
+    \path (d3.center) edge[to*, tred] (d2.center) ;
+    \path (d3.center) edge[to*, tred] (v) ;
+    \path (u) edge[to*, tred, dashed] (a.center) ;
+    \path (d2.center) edge[to*, tred, dashed] (a.center) ;
+    \path (d2.center) edge[to*, tred, dashed] (b.center) ;
+    \path (v) edge[to*, tred, dashed] (b.center) ;
+    \path (a.center) edge[to*, tred, dashed] (c.center) ;
+    \path (b.center) edge[to*, tred, dashed] (c.center) ;
   \end{tikzpicture}
 \end{center}
 
