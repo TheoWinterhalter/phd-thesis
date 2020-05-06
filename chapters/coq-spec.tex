@@ -98,10 +98,11 @@ Record inductive : Set := mkInd {
   inductive_ind : nat
 }.
 \end{minted}
-It is not just \mintinline{coq}{kername} because inductive types can be mutually
-defined: the kername points to the mutual block, \mintinline{coq}{inductive_ind}
-points to one inductive in the block. Note that this term refers to the
-inductive type, without its parameters or indices. For vectors this would be
+It is not just a \mintinline{coq}{kername} because inductive types can be
+mutually defined: the kername points to the mutual block,
+\mintinline{coq}{inductive_ind} points to one inductive in the block.
+Note that this term refers to the inductive type, without its parameters or
+indices. For vectors this would be
 \begin{minted}{coq}
 vec : Type -> nat -> Type
 \end{minted}
@@ -144,8 +145,9 @@ of projections for (negative) records.
 
 \paradot{Constructors}
 
-\mintinline{coq}{tConstruct ind n ui} has \mintinline{coq}{ind} to point to the
-right inductive type while \mintinline{coq}{n} tells us which constructor it is.
+\mintinline{coq}{tConstruct ind n ui} comes with \mintinline{coq}{ind} to point
+to the right inductive type while \mintinline{coq}{n} tells us which constructor
+it is.
 For instance it would be \mintinline{coq}{0} for \mintinline{coq}{true} and
 \mintinline{coq}{1} for \mintinline{coq}{false}.
 Each constructor is given by a term of type
@@ -155,9 +157,9 @@ ident * term * nat
 as we saw in the previous paragraph. It consists in a name, a type and an arity.
 
 \paradot{Pattern-matching}
-\mintinline{coq}{tCase (ind, n) p c brs} represents pattern-matching on
-\mintinline{coq}{c} of inductive type \mintinline{coq}{ind} with
-\mintinline{coq}{n} parameters, return predicate \mintinline{coq}{p}
+\mintinline{coq}{tCase (ind, n) p c brs} is the representation of the
+pattern-matching on \mintinline{coq}{c} of inductive type \mintinline{coq}{ind}
+with \mintinline{coq}{n} parameters, return predicate \mintinline{coq}{p}
 and branches \mintinline{coq}{brs}.
 There is one branch for each constructor and it contains the arity of the
 constructor and the term corresponding to the branch.
@@ -175,8 +177,8 @@ argument. In the case of dependent pairs, the latter will be \mintinline{coq}{0}
 for the first projection and \mintinline{coq}{1} for the second.
 
 \paradot{Fixed-points}
-Finally we have \mintinline{coq}{tFix mfix idx} and
-\mintinline{coq}{tCoFix mfix idx} to represent (co)fixed-points.
+Finally we have \mintinline{coq}{tFix mfix idx} representing fixed-points and
+\mintinline{coq}{tCoFix mfix idx} for cofixed-points.
 Like inductive types, fixed-points can be defined mutually, as such
 \mintinline{coq}{mfix} is a list of (mutual) definitions:
 \begin{minted}{coq}
@@ -583,7 +585,10 @@ Herein \mintinline{coq}{All_local_env (lift_typing typing Σ) Γ} will later on
 be written \mintinline{coq}{wf_local Σ Γ}, it corresponds to well-formedness
 of the local environment \(\Sigma \vdash \Ga\). This basically means that
 the types and local definitions in it are well-typed.
-\mintinline{coq}{nth_error Γ n = Some decl} verifies that the variable
+\begin{minted}{coq}
+nth_error Γ n = Some decl
+\end{minted}
+verifies that the variable
 \mintinline{coq}{n} corresponds to a declaration in \mintinline{coq}{Γ}.
 The type of the variable is thus the type stored in this declaration. As always
 it has to be \emph{lifted}, \ie weakened to account for the declarations
