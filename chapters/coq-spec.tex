@@ -626,8 +626,196 @@ type_Lambda na A t s1 B :
   Σ ;;; Γ |- tLambda na A t : tProd na A B
 \end{minted}
 
-\paradot{TODO}
-\todo{
-  Arities.
-  Spec of guards.
-}
+\paradot{let-bindings}
+\begin{minted}{coq}
+type_LetIn na b B t s1 A :
+  Σ ;;; Γ |- B : tSort s1 ->
+  Σ ;;; Γ |- b : B ->
+  Σ ;;; Γ ,, vdef na b B |- t : A ->
+  Σ ;;; Γ |- tLetIn na b B t : tLetIn na b B A
+\end{minted}
+Here we see the interesting fact that let-bindings are typed by let-bindings
+themselves. That is because the type \mintinline{coq}{A} also makes sense in
+\mintinline{coq}{Γ ,, vdef na b B} that is an environment extended with a local
+definition.
+
+\paradot{Application}
+\begin{minted}{coq}
+type_App t na A B u :
+  Σ ;;; Γ |- t : tProd na A B ->
+  Σ ;;; Γ |- u : A ->
+  Σ ;;; Γ |- tApp t u : B{0 := u}
+\end{minted}
+Here \mintinline{coq}{B{0 := u}} stands for \mintinline{coq}{B} where the
+\(0\)-th variable is substituted by \mintinline{coq}{u}.
+
+\paradot{Constants}
+\begin{minted}{coq}
+type_Const k u :
+  wf_local Σ Γ ->
+  forall d (isdecl : declared_constant Σ.1 k d),
+  consistent_instance_ext Σ d.(cst_universes) u ->
+  Σ ;;; Γ |- tConst k u : subst_instance_constr u d.(cst_type)
+\end{minted}
+The rule is a complicated way of saying that if the constant
+\mintinline{coq}{k} is declared in the global environment and used with
+a consistent instance of universes, it has the type prescribed by
+\mintinline{coq}{Σ} instantiated with those universes.
+
+\paradot{Inductive types}
+\begin{minted}{coq}
+type_Ind ind u :
+  wf_local Σ Γ ->
+  forall md id (isdecl : declared_inductive Σ.1 md ind id),
+  consistent_instance_ext Σ md.(ind_universes) u ->
+  Σ ;;; Γ |- tInd ind u : subst_instance_constr u id.(ind_type)
+\end{minted}
+This rule is pretty similar to constants because without their constructors,
+inductive types are really just constants.
+
+\paradot{Constructors}
+\begin{minted}{coq}
+type_Construct ind i u :
+  wf_local Σ Γ ->
+  forall md id cd
+    (isdecl : declared_constructor Σ.1 md id (ind, i) cd),
+    consistent_instance_ext Σ md.(ind_universes) u ->
+    Σ ;;; Γ |- tConstruct ind i u :
+               type_of_constructor md cd (ind, i) u
+\end{minted}
+A constructor is well-typed when the inductive it refers to is declared and
+the constructor itself is declared in it.
+\mintinline{coq}{type_of_constructor} recovers the corresponding type and put it
+in context, substituting the universes.
+
+\paradot{Pattern-matching}
+\begin{minted}{coq}
+type_Case in u p c brs args :
+  let ind := in.1 in
+  let npar := in.2 in
+  forall md id (isdecl : declared_inductive Σ.1 md ind id),
+  md.(ind_npars) = npar ->
+  let params := List.firstn npar args in
+  forall ps pty,
+  build_case_predicate_type ind md id params u ps = Some pty ->
+  Σ ;;; Γ |- p : pty ->
+  leb_sort_family (universe_family ps) id.(ind_kelim) ->
+  Σ ;;; Γ |- c : mkApps (tInd ind u) args ->
+  forall btys,
+  map_option_out (build_branches_type ind md id params u p) =
+  Some btys ->
+  All2 (fun br bty =>
+    (br.1 = bty.1) *
+    (Σ ;;; Γ |- br.2 : bty.2) *
+    (Σ ;;; Γ |- bty.2 : tSort ps)
+  ) brs btys ->
+  Σ ;;; Γ |- tCase in p c brs :
+             mkApps p (skipn npar args ++ [c])
+\end{minted}
+This rule is rather hairy. We verify that the inductive type given for the
+scrutiny is declared; we verify that the return predicate has the right type and
+is in a sort which can be eliminated to; we verify that the scrutiny is indeed
+typed in the inductive type and we recover the indices from its type, they will
+be used in the return type; finally we verify that each branch is well-typed
+using the other information.
+
+\paradot{Projection}
+\begin{minted}{coq}
+type_Proj p c u :
+  forall md id pd
+    (isdecl : declared_projection Σ.1 md id p pd) args,
+    Σ ;;; Γ |- c : mkApps (tInd (fst (fst p)) u) args ->
+    #|args| = ind_npars md ->
+    let ty := snd pd in
+    Σ ;;; Γ |- tProj p c :
+    subst0 (c :: List.rev args) (subst_instance_constr u ty)
+\end{minted}
+As usual we verify that the projection is declared and corresponds to a declared
+record type. The projected term must be of that record type, where universes
+are instantited. The projection has then the type of the corresponding field
+with these universes.
+
+\paradot{Fixed-points}
+\begin{minted}{coq}
+type_Fix mfix n decl :
+  fix_guard mfix ->
+  nth_error mfix n = Some decl ->
+  wf_local Σ Γ ->
+  All (fun d => {s & Σ ;;; Γ |- d.(dtype) :  tSort s}) mfix ->
+  All (fun d =>
+    (Σ ;;; Γ ,,, fix_context mfix |-
+      d.(dbody) :
+      lift0 #|fix_context mfix| d.(dtype)
+    ) *
+    (isLambda d.(dbody) = true)
+  ) mfix ->
+  Σ ;;; Γ |- tFix mfix n : decl.(dtype)
+\end{minted}
+A fixed-point is well-typed if all the types of the different mutual functions
+are sorted (\ie are typed in a universe) and if the bodies have their ascribed
+types in the context extended with the mutual functions (the bodies can refer
+to other functions or do a recusrive call to themselves).
+We also ask that each body is at least a \(\lambda\)-abstraction to make sure it
+takes at least one argument explicitly.
+The interesting point however is
+\begin{minted}{coq}
+fix_guard mfix
+\end{minted}
+This is our own representation of the guard condition ensuring that the
+fixed-point is terminating. As the guard condition of \Coq is rather complicated
+and perhaps ad-hoc we instead assume we have such a guard condition satisfying
+some properties and work with it in generality.
+For this we use axioms
+\begin{minted}{coq}
+Axiom fix_guard : mfixpoint term -> bool.
+
+Axiom fix_guard_red1 :
+  forall Σ Γ mfix mfix' idx,
+    fix_guard mfix ->
+    red1 Σ Γ (tFix mfix idx) (tFix mfix' idx) ->
+    fix_guard mfix'.
+
+(* ... *)
+\end{minted}
+which has the drawback that they cannot be instantiated with actual guard
+conditions. We will probably change this at some point in the future.
+
+\paradot{Cofixed-points}
+\begin{minted}{coq}
+type_CoFix mfix n decl :
+  allow_cofix ->
+  nth_error mfix n = Some decl ->
+  wf_local Σ Γ ->
+  All (fun d => {s & Σ ;;; Γ |- d.(dtype) :  tSort s}) mfix ->
+  All (fun d =>
+    Σ ;;; Γ ,,, fix_context mfix |-
+      d.(dbody) :
+      lift0 #|fix_context mfix| d.(dtype)
+  ) mfix ->
+  Σ ;;; Γ |- tCoFix mfix n : decl.(dtype)
+\end{minted}
+Cofixed-points are pretty similar to fixed-points except we don't even check
+productivity, so that is still something that we need to work on.
+
+\paradot{Cumulativity}
+\begin{minted}{coq}
+type_Cumul t A B :
+  Σ ;;; Γ |- t : A ->
+  (isWfArity typing Σ Γ B + {s & Σ ;;; Γ |- B : tSort s}) ->
+  Σ ;;; Γ |- A <= B ->
+  Σ ;;; Γ |- t : B
+\end{minted}
+The cumulativity rule is mostly unsurprising, if \(t : A\) and \(A \cumul B\)
+then \(t : B\). As I have showed several times we require \(B\) to be
+well-formed because conversion is untyped.
+The way it is written here might be surprising however: we ask for the existence
+of a sort typing \(B\) \emph{or} that \(B\) is a well-formed \emph{arity}.
+This is an oddity of \Coq coming from the presence of so-called
+\emph{algebraic universes} consisting of things such as \(i+1\) or
+\(\max\ i\ j\). These universes should only appear on the right-hand side of
+the colon, \ie in types.
+An arity is a well-formed quantification over a universe that may be
+algebraic. As those can appear in types, we allow them in the cumulativity
+rule.
+This peculiar aspect can be mostly ignored for the rest of this document,
+and well-formedness of types can be thought of as the usual.
