@@ -2,12 +2,131 @@
 \chapter{Meta-theoretical properties}
 \labch{coq-meta-theory}
 
-\todo{
-  Give an overview of what is proven without dwelling on the how.
-  Maybe wait before things settle?
+\marginnote[0.5cm]{
+  Most of these properties are defined in \nrefch{desirable-props}.
 }
+Before we can formalise the type checker, we need to develop some of the
+meta-theory. In particular the type checker relies on subject reduction,
+confluence and strong normalisation of the reduction.
+As I already said in \nrefch{coq-overview}, these properties can be part of
+the trusted base (and some of them like strong normalisation have to be in it
+lest we prove consistency of \Coq whithin \Coq). Moreover they are not the
+subject of this work. I will thus focus on their statements and not their
+potential proofs, those are explained in~\sidecite{sozeau2019coq} or will be
+in upcoming publications regarding the \MetaCoq project.
+
+\paradot{Substitutivity and weakening}
+
+Weakening and substitution preserve typing, a fact which we prove rather early
+in the development. Such statements cannot really be assumed anyway since it is
+really easy to make mistakes while manipulating de Bruijn indices.
+
+The weakening theorem is rather simple:
+\begin{minted}{coq}
+Lemma weakening :
+  forall Σ Γ Γ' (t : term) T,
+    wf Σ ->
+    wf_local Σ (Γ ,,, Γ') ->
+    Σ ;;; Γ |- t : T ->
+    Σ ;;; Γ ,,, Γ' |- lift0 #|Γ'| t : lift0 #|Γ'| T.
+\end{minted}
+It asks for the global environment and the extended local environment to make
+sense as a precondition.
+
+Substitution is slightly more complex
+\begin{minted}{coq}
+Lemma substitution :
+  forall Σ Γ Γ' s Δ (t : term) T,
+    wf Σ ->
+    subslet Σ Γ s Γ' ->
+    Σ ;;; Γ ,,, Γ' ,,, Δ |- t : T ->
+    Σ ;;; Γ ,,, subst_context s 0 Δ |-
+      subst s #|Δ| t : subst s #|Δ| T.
+\end{minted}
+This time we are replacing a bunch of variables at once using parallel
+substitutions. Not only the term and type, but also the context that was built
+on top of the substituted variables are substituted.
+Unlike weakening, the substitution itself needs to be well-typed, this is
+defined as follows.
+\begin{minted}{coq}
+Inductive subslet {cf:checker_flags} Σ (Γ : context)
+  : list term -> context -> Type :=
+
+| emptyslet :
+    subslet Σ Γ [] []
+
+| cons_let_ass Δ s na t T :
+    subslet Σ Γ s Δ ->
+    Σ ;;; Γ |- t : subst0 s T ->
+    subslet Σ Γ (t :: s) (Δ ,, vass na T)
+
+| cons_let_def Δ s na t T :
+    subslet Σ Γ s Δ ->
+    Σ ;;; Γ |- subst0 s t : subst0 s T ->
+    subslet Σ Γ (subst0 s t :: s) (Δ ,, vdef na t T).
+\end{minted}
+Unlike substitution typing I presented earlier this needs to account for local
+definitions (\ie let-bindings) in the environment.
+In a more understable language this becomes
+\marginnote[1cm]{
+  This time I write \(\Ga \vdash \sigma : \D\) were earlier I wrote
+  \(\sigma : \Ga \to \D\). This is because in this case \(\sigma\) is a list
+  of terms.
+}
+\begin{mathpar}
+  \infer
+    { }
+    {\Sigma ; \Ga \vdash \bullet : \ctxempty}
+  %
+
+  \infer
+    {
+      \Sigma ; \Ga \vdash \sigma : \D \\
+      \Sigma ; \Ga \vdash t : A[\sigma]
+    }
+    {\Sigma ; \Ga \vdash \sigma, x \sto t : \D, x:A}
+  %
+
+  \infer
+    {
+      \Sigma ; \Ga \vdash \sigma : \D \\
+      \Sigma ; \Ga \vdash t[\sigma] : A[\sigma]
+    }
+    {\Sigma ; \Ga \vdash \sigma, x \sto t[\sigma] : \D, x : A \coloneqq t}
+  %
+\end{mathpar}
+Notice how the term of the substitution is forced when it targets a definition,
+this is reassuring because a substitution should not overwrite definitions.
+
+\paradot{Confluence}
+
+Confluence is an import result that we have on \Coq's theory. In particular it
+allows us to simplify greatly what it means to be convertible.
+Indeed, right now, conversion involves reduction going in both directions so
+that \(u\) and \(v\) can be convertible by something like the following picture.
+\begin{center}
+  \begin{tikzpicture}[baseline=(u.base), node distance=1cm]
+    \node (u) { \(u\) } ;
+    \node (d1) [above right = of u] {} ;
+    \node (d2) [below right = of d1] {} ;
+    \node (d3) [above right = of d2] {} ;
+    \node (v) [below right = of d3] { \(v\) } ;
+    \draw[tred] (d1.center) to (u) ;
+    \draw[tred] (d1.center) to (d2.center) ;
+    \draw[tred] (d3.center) to (d2.center) ;
+    \draw[tred] (d3.center) to (v) ;
+  \end{tikzpicture}
+\end{center}
+
+\paradot{Context conversion}
+
+\paradot{Subject reduction}
+
+\paradot{Principality}
+
+\paradot{Strong normalisation}
 
 \todo{
-  Put SN here?
+  Put SN here
   This is where fixguard and co make sense.
 }
