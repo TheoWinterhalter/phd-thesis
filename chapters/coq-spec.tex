@@ -819,3 +819,17 @@ algebraic. As those can appear in types, we allow them in the cumulativity
 rule.
 This peculiar aspect can be mostly ignored for the rest of this document,
 and well-formedness of types can be thought of as the usual.
+
+
+Note that I did not talk about typing of environments, local and global, but
+they of course are also specified in the formalisation.
+For inductive type declarations there is another guard condition that we
+axiomatise:
+\begin{minted}{coq}
+Axiom ind_guard : mutual_inductive_body -> bool.
+\end{minted}
+In \Coq this is implemented as the strict positivity condition but we once again
+remain abstract and simply ask for some way of determining if an inductive type
+is well-founded.
+These axioms will become meaningful when we reach the question of strong
+normalisation in \nrefch{coq-meta-theory}.
