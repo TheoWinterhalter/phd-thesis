@@ -495,11 +495,6 @@ Inductive eq_term_upto_univ
     R_universe_instance Re u u' ->
     eq_term_upto_univ Re Rle (tConst c u) (tConst c u')
 
-| eq_Lambda na na' ty ty' t t' :
-    eq_term_upto_univ Re Re ty ty' ->
-    eq_term_upto_univ Re Rle t t' ->
-    eq_term_upto_univ Re Rle (tLambda na ty t) (tLambda na' ty' t')
-
 | eq_Prod na na' a a' b b' :
     eq_term_upto_univ Re Re a a' ->
     eq_term_upto_univ Re Rle b b' ->
@@ -554,6 +549,65 @@ properties about conversion/cumulativity without going through to much trouble.
 
 \subsection{Typing}
 
+Again, typing is defined inductively.
+\begin{minted}{coq}
+Inductive typing (Σ : global_env_ext) (Γ : context)
+  : term -> term -> Type
+(* ... *)
+where " Σ ;;; Γ |- t : T " := (typing Σ Γ t T) : type_scope.
+\end{minted}
+I will go over the rules one by one.
+
+\paradot{Variables}
+\begin{minted}{coq}
+type_Rel n decl :
+  All_local_env (lift_typing typing Σ) Γ ->
+  nth_error Γ n = Some decl ->
+  Σ ;;; Γ |- tRel n : lift0 (S n) decl.(decl_type)
+\end{minted}
+Herein \mintinline{coq}{All_local_env (lift_typing typing Σ) Γ} will later on
+be written \mintinline{coq}{wf_local Σ Γ}, it corresponds to well-formedness
+of the local environment \(\Sigma \vdash \Ga\). This basically means that
+the types and local definitions in it are well-typed.
+\mintinline{coq}{nth_error Γ n = Some decl} verifies that the variable
+\mintinline{coq}{n} corresponds to a declaration in \mintinline{coq}{Γ}.
+The type of the variable is thus the type stored in this declaration. As always
+it has to be \emph{lifted}, \ie weakened to account for the declarations
+that were added successively in \mintinline{coq}{Γ}.
+
+\paradot{Sorts}
+\begin{minted}{coq}
+type_Sort l :
+  wf_local Σ Γ ->
+  LevelSet.In l (global_ext_levels Σ) ->
+  Σ ;;; Γ |- tSort (Universe.make l) : tSort (Universe.super l)
+\end{minted}
+For universes we once again require to local environment to be well-formed.
+The universe should also make sense in the global environment, in which case it
+is typed in its successor universe.
+
+\paradot{\(\Pi\)-types}
+\begin{minted}{coq}
+type_Prod na A B s1 s2 :
+  Σ ;;; Γ |- A : tSort s1 ->
+  Σ ;;; Γ ,, vass na A |- B : tSort s2 ->
+  Σ ;;; Γ |- tProd na A B : tSort (sort_of_product s1 s2)
+\end{minted}
+\(\Pi (x:A).B\) is well-typed if \(A\) and \(B\) are well-typed too.
+The \(\Pi\)-types lives in another universe computed from the universes of
+\(A\) and \(B\), if those are \(\Type_i\) and \(\Type_j\) this will be
+\(\Type_{\max\ i\ j}\) but if the second is \(\Prop\), then the \(\Pi\)-type
+lives in \(\Prop\) too thanks to impredicativity.
+
+\paradot{\(\lambda\)-abstractions}
+\begin{minted}{coq}
+type_Lambda na A t s1 B :
+  Σ ;;; Γ |- A : tSort s1 ->
+  Σ ;;; Γ ,, vass na A |- t : B ->
+  Σ ;;; Γ |- tLambda na A t : tProd na A B
+\end{minted}
+
+\paradot{TODO}
 \todo{
   Arities.
   Spec of guards.
