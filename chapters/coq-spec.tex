@@ -194,7 +194,8 @@ Record def term := mkdef {
 }.
 \end{minted}
 that is with a name, a type and a body (the definition itself).
-\mintinline{coq}{rarg} points to the recursive argument of the fixed-point.
+The \mintinline{coq}{rarg} field points to the recursive argument of the
+fixed-point.
 For instance in
 \begin{minted}{coq}
 Fixpoint map {A B : Type} (f : A -> B) (l : list A) {struct l}
@@ -209,6 +210,19 @@ argument. That is all recursive calls must be structually decreasing on
 \mintinline{coq}{l}. It is part of the syntax because \Coq uses it as a
 syntactic guard to avoid unfolding fixed-points indefinitely: only when the
 recursive argument is a constructor can the fixed-point be unfolded.
+
+\paradot{Local environments}
+Local environments or contexts are lists of declarations we write in \emph{snoc}
+order:
+\begin{itemize}
+  \item \mintinline{coq}{[]} is the empty context;
+  \item \mintinline{coq}{Γ ,, vass na A} extends \mintinline{coq}{Γ} with
+  an \emph{assumption} variable of type \mintinline{coq}{A}, named
+  \mintinline{coq}{na};
+  \item \mintinline{coq}{Γ ,, vdef na a A} extends \mintinline{coq}{Γ} with
+  a \emph{local definition} \mintinline{coq}{a} of type \mintinline{coq}{A},
+  named \mintinline{coq}{na}.
+\end{itemize}
 
 Now that the syntax is out of the way we can move to the semantics.
 
