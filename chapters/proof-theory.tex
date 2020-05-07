@@ -614,7 +614,7 @@ can state and prove lemmata. Again there are several proof assistants: \IsaHOL
 is one of the most commonly used and based on
 \acrfull{HOL}~\sidecite[-1.35cm]{10.5555/1791547}, but I am more  familiar with
 proof assistants based on type theory such as \Coq~\sidecite[-1cm]{coq} and
-\Agda~\sidecite[-0.6cm]{norell2007towards}.
+\Agda~\sidecite[-0.4cm]{norell2007towards}.
 The next introductory chapters will focus on this notion of proof framework.
 
 \section{Limitations: Gödel's incompleteness theorems}
@@ -657,7 +657,7 @@ of much interest.
   own consistency.
 \end{theorem}
 A system that is able to prove itself consistent is actually inconsistent.
-This means that we have to rely on the \emph{social construct} I mentioned
+This means that we have to rely on the scientific \emph{consensus} I mentioned
 ealier, because the system in which you prove one system consistent is stronger
 and needs to be trusted as well.
 
@@ -682,11 +682,27 @@ The axioms are the following.
   \end{array}
 \]
 
+The first axiom states that \(0\) cannot be the successor of another natural
+number (\ie some \(n + 1\)). The second says that the successor operation is
+injective: if the successors of \(x\) and \(y\) are equal, then \(x = y\).
+The third says that every natural number is either \(0\) or the sucessor of
+another natural number, this means that every natural number is a succession of
+\(\So\) and then \(0\).
+\[
+  \begin{array}{cccccc}
+    0 & \So\ 0 & \So\ (\So\ 0) & \So\ (\So\ (\So\ 0))
+    & \So\ (\So\ (\So\ (\So\ 0)))
+    & \dots \\
+    0 & 1 & 2 & 3 & 4 & \dots
+  \end{array}
+\]
+
 I have not made the statements of Gödel's incompleteness theorems very precise
 as it is beyond the scope of my work. It is very easy to find references that
-are not in German on the subject.
+are not in German on the subject, like the well-written Wikipedia page dedicated
+to the subject.
 
-Whether---or rather \emph{how}---the original argument adapts to the setting of
-type theory is still an open problem, but it is so mainly for technical reasons
-and it is widely believed that the same---or very similar restrictions---apply
-to it.
+% Whether---or rather \emph{how}---the original argument adapts to the setting of
+% type theory is still an open problem, but it is so mainly for technical reasons
+% and it is widely believed that the same---or very similar restrictions---apply
+% to it.
