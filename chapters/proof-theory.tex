@@ -3,7 +3,10 @@
 \labch{proof-theory}
 
 My work is done in the wide domain of proof theory. Proof theorists are
-interested in the way to prove things, in the `proof' object itself.
+interested in the way to prove things, in the `proof' object itself, \eg we
+might want to check that a proof uses some specific rules of deduction.
+We may also want to prove that a system is not contradictory, \ie that it does
+not entail both an assertion and its negation.
 This allows us to understand more about proof reuse, about transposition of a
 property to another system, or about some intrinsinc properties of the proof
 itself. The study of proofs also allows to define clear systems outlining
@@ -21,6 +24,10 @@ prove. In informal mathematics, the statement will be a sentence, involving
 concepts that the writer and reader agree on. The proof then consists in a
 sequence of sentences and argument that convince the same readers.
 
+For instance, the Pythagorean theorem states that
+``the area of the square whose side is the hypothenuse of a right triangle is
+equal to the sum of the areas of the squares on the other two sides.''
+
 With this definition, a proof is a subjective concept, it depends on the
 reader's capacity to understand and potentially fill the gap themselves about
 understood statements and properties. It also usually involves a fair bit of
@@ -32,10 +39,11 @@ As such, \emph{consensus} seems key in the scientific community.
 One way to reach consensus much faster is to have statements and proofs really
 precise and unambiguous, described in formal systems. This approach still has
 shortcomings, will all readers check every tiny detail of the proof once it's
-laid out extensively? This poses the risk of having the \emph{idea} lost in a
+laid out extensively? This runs the risk of having the \emph{idea} lost in a
 sea of information.
-To me this calls for computer-verified proofs---and maybe even automated or
-computer aided proofs---so that the reader can focus on the interesting part of
+To me, this calls for computer-verified proofs---and maybe even automated or
+computer aided proofs---coming with paper proofs exposing the ideas
+so that the reader can focus on the interesting part of
 the proof while trusting only the tool and not the human that used it.
 
 Even then, there is room for question on whether this really constitutes a
@@ -87,13 +95,34 @@ we also have to provide a syntax for those, and maybe one for function symbols.
   \end{array}
 \]
 
+\marginnote[0.5cm]{
+  Parentheses are not part of the syntax but are there to lift any ambiguity
+  and distinguish \(P \wedge (Q \vee R)\) from \((P \wedge Q) \vee R\)
+  for example.
+}
+This presentation of syntax is called \acrfull{BNF} and it says that there are
+expressions that we will write with \(P\) or \(Q\) that can be either \(\top\)
+or \(\bot\) or \(P \wedge Q\) where \(P\) and \(Q\) are both of the same form,
+and so on.
+For instance, \(\bot \wedge (\top \vee (\top \to \bot))\) is one such
+expression.
+
+Here \(P,Q\) are propositions, \(E\) stands for a set, \(u,v\) are mathematical
+expressions whereas \(f,g,h\) are function symbols.
+
+Logical connectives (\(\wedge, \vee, \forall\), \dots) and operations
+(\(+, \times\), \dots) are the building blocks of statements, as such we call
+them \emph{constructors}.
+
 Coming up with a correct syntax like those can be pretty painful so formalisms
 tend to be as minimal as possible, the other advantage being that it is much
 easier to reason on the statements when there aren't hundreds of syntactical
 constructs.
 
 Of course, giving a syntax of statements is not enough. We must give these
-symbols a semantics to know what it means to prove them.
+symbols a semantics (\ie a meaning) to know what it means to prove them.
+For instance, we might want to sepcify that the symbol \(+\) has the properties
+which are expected of addition.
 
 \subsection{Inference rules}
 
@@ -103,16 +132,17 @@ For instance we have
   A, B \vdash A \wedge B
 \]
 to denote the fact that \(A\) and \(B\) as hypotheses, \emph{entail} the
-proposition \(A \wedge B\).
+proposition \(A \wedge B\) (read `\(A\) \emph{and} \(B\)').
 \marginnote[0.2cm]{
   The setting with only one proposition on the right is called
   \emph{natural deduction} and was introduced by Gentzen; with a list of
-  propositions it is instead called the \emph{sequent calculus}.
+  propositions and just introduction rules it is instead called the
+  \emph{sequent calculus}.
 }
 This is called a \emph{judgement}, and in general it can have a list of
 statements on the right: \(A, B, C \vdash D, E, F\) means that, \emph{assuming}
 \(A\), \(B\) \emph{and} \(C\), then \emph{either} \(D\), \(E\) \emph{or} \(F\)
-is provable.
+hold.
 I will focus mostly on cases where the right-hand side consists only
 of one proposition.
 \[
@@ -121,8 +151,8 @@ of one proposition.
     \mathcal{J} &\bnf& \Ga \vdash \D
   \end{array}
 \]
-We can now move on to the notion of inference rules. They are what defines the
-logic in which we place ourselves, they dictate what judgements can be
+We can now move on to the notion of \emph{inference} rule. They are what defines
+the logic that we consider, they dictate what judgements can be
 \emph{derived}---\ie proven---and how.
 The simplest of rules usually is the so-called \emph{axiom} rule stating that
 assuming \(A\), you can prove \(A\).
@@ -141,7 +171,7 @@ assuming \(A\), you can prove \(A\).
 \]
 The line separates one judgement below, the conclusion, to one, several or
 possibly no judgements above. They represent requirements to conclude the below
-part. In this case, one doesn't need to assume anything to conclude that \(A\)
+part. In this case, one does not need to assume anything to conclude that \(A\)
 entails \(A\).
 Going back to conjunction, the rule\sidenote{It is actually one of many possible
 rules. It all depends on the logic.} to prove one is the following.
@@ -161,13 +191,19 @@ Sometimes, we want to be able to conclude something from a complex assumption
 like \(A \wedge B\), this is instead called an \emph{elimination} rule.
 \begin{mathpar}
   \infer
-    {\Ga, A, B \vdash P}
-    {\Ga, A \wedge B \vdash P}
+    {\Ga, \vdash A \wedge B}
+    {\Ga \vdash A}
+  %
+
+  \infer
+    {\Ga, \vdash A \wedge B}
+    {\Ga \vdash B}
   %
 \end{mathpar}
-To prove \(P\) assuming \(A \wedge B\), it is enough to prove \(P\) assuming
-both \(A\) and \(B\).
-We then have similar rules for disjunction.
+If you can prove \(A \wedge B\) then you can prove \(A\) (you can also prove
+\(B\) but that is another rule).
+We then have similar rules for disjunction
+(\(A \vee B\) reads `\(A\) \emph{or} \(B\)').
 \marginnote[0.5cm]{
   To prove \(A \vee B\) you only need to prove either \(A\) or \(B\), hence the
   two introduction rules. On the contrary if you want to prove \(P\) assuming
@@ -214,14 +250,14 @@ entailement and the implication. To prove that \(A \to B\), you only assume
 \(A\) and show \(B\). Moreover, if you know \(A \to B\) and \(A\), then you
 have \(B\). This last rule is called the \emph{modus ponens}.
 
-Because of this, it might seem like implication (\(\to\)), entailement
-(\(\vdash\)) and inference (---) are three forms of logical implication.
-They \emph{are}, but at different levels.
+% Because of this, it might seem like implication (\(\to\)), entailement
+% (\(\vdash\)) and inference (---) are three forms of logical implication.
+% They \emph{are}, but at different levels.
 
 \section{Proof frameworks}
 
 There are many proof frameworks and logics and I will not review all of them,
-but I will present the most relevant to the rest of my work.
+but I will present the most relevant ones to the rest of my work.
 
 \subsection{Classical logic}
 
@@ -261,8 +297,8 @@ the two important rules of \emph{axiom} and \emph{cut}.
   (Cut)
 \end{mathpar}
 While the \emph{axiom} rule has nothing special about it, the \emph{cut} rule
-might seem a bit peculiar. If we forget about \(\D\) and \(\Xi\) it says that if
-\(\Ga\) entails \(A\) which itself entails \(\Theta\) then \(\Ga\) entails
+might seem a bit peculiar. If we forget about \(\D\) and \(\Xi\), it says that
+if \(\Ga\) entails \(A\) which itself entails \(\Theta\) then \(\Ga\) entails
 \(\Theta\), which is not so far from the \emph{modus ponens} after all.
 
 Then we have the logical rules---\ie that pertain to the logical constructors
@@ -352,8 +388,9 @@ of propositional logic:
   (\bot R)
 \end{mathpar}
 
-The rest are structural rules that allow us to weaken the hypotheses or the
-conclusion, or reorder propositions and remove duplicates.
+The rest are structural rules that allow us to weaken the hypotheses (\ie add
+a new, unused hypothesis in the context) or the conclusion, or reorder
+propositions and remove duplicates.
 \marginnote[1cm]{
   \(W\) stands for weakening, \(C\) for contraction and \(P\) for permutation.
 }
@@ -389,7 +426,7 @@ conclusion, or reorder propositions and remove duplicates.
   (PR)
 \end{mathpar}
 
-\LK is classical because we can derive the \acrlong{LEM} from it.
+\LK is classical because we can derive the \acrfull{LEM} from it.
 \begin{mathpar}
   \infer*[Right=\((CR)\)]
     {
@@ -434,7 +471,7 @@ conclusion, or reorder propositions and remove duplicates.
 
 \subsection{Intuitionistic logic}
 
-Intuitionistic logic doesn't abide by the \acrshort{LEM}, so its treatment of
+Intuitionistic logic does not abide by the \acrshort{LEM}, so its treatment of
 negation is a bit different so that double negation cannot be eliminated as
 above. As such we define \LJ in natural deduction (the sequent style was also
 of importance to get classical logic), on the same syntax of propositional
@@ -455,8 +492,8 @@ It is pretty similar.
   (Cut)
 \end{mathpar}
 
-We have less rules because some don't make sense anymore with only one
-proposition on the right.
+We have less rules because some are no longer useful with only one
+proposition on the right-hand side.
 \begin{mathpar}
   \infer
     {\Ga, A, B \vdash C}
@@ -547,15 +584,17 @@ to rearrange on the right.
   (P)
 \end{mathpar}
 
-This logic is constructive in that from every proof derivation one can extract
+This logic is constructive in that, from every proof derivation one can extract
 a proof where the last rule is an introduction rule, \ie a \emph{right} rule.
+For instance every proof of \(A \vee B\) must contain either a proof of \(A\)
+or a proof of \(B\).
 This is obtained by a process known as \emph{cut-elimination} which removes all
 occurrences of the \((Cut)\) rule in a derivation, showing at the same time that
 it is \emph{admissible} or redundant.
 
 \subsection{Mechanised proofs}
 
-Once we have a formal logic it makes sense to \emph{teach} its rules to a
+Once we have a formal logic, it makes sense to \emph{teach} its rules to a
 computer to use it for what we call \emph{mechanised proofs}.
 We nowadays have many of those, be it under the name \emph{proof assistants} or
 \emph{automated theorem provers}.
@@ -563,7 +602,7 @@ We nowadays have many of those, be it under the name \emph{proof assistants} or
 \paragraph{Automated theorem provers} are tools that will take statements as
 inputs and attempt to prove or disprove them, sometimes taking hints from the
 user when stuck.
-They are very attractive because the user usually doesn't have to learn about
+They are very attractive because the user usually does not have to learn about
 the logic involved, just trust that it \emph{works}\sidenote{Ideally that it is
 consistent}. However it can be a hassle when they fail to prove or disprove
 something and the user has to figure out the right way to state things so that
@@ -583,8 +622,8 @@ The next introductory chapters will focus on this notion of proof framework.
 When you have a proof framework or logic, there are two main things you want to
 know about it:
 \begin{itemize}
-  \item Is it \emph{consistent}? That is are there things my system doesn't
-  prove?
+  \item Is it \emph{consistent}? An inconsistent system is one in which every
+  proposition is valid.
   \item Is it \emph{complete}? That is, are all propositions either provable
   or provably contradictory (\ie the negation is provable)?
 \end{itemize}
@@ -595,7 +634,7 @@ Completeness is not to be confused with the \acrshort{LEM} which gives a proof
 of \(P \vee \neg P\) for each \(P\) but not a proof of either \(P\) or
 \(\neg P\) for every \(P\).
 
-Ideally one would want their favourite system to enjoy \emph{both} of these
+Ideally we would our their favourite system to enjoy \emph{both} of these
 properties, the proof of which would be conducted in the very same system.
 In 1931~\sidecite{godel1931formal} Gödel shattered all hopes of ever
 accomplishing that.
