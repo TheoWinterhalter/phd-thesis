@@ -181,7 +181,7 @@ Conjecture subject_reduction :
 Because of cumulativity, \acrshort{PCUIC} cannot have uniqueness of type, it
 however has principal types which we express as follows.
 \begin{minted}{coq}
-Theorem principal_typing :
+Conjecture principal_typing :
   forall Σ Γ u A B,
     Σ ;;; Γ |- u : A ->
     Σ ;;; Γ |- u : B ->
@@ -191,9 +191,47 @@ Theorem principal_typing :
       Σ ;;; Γ |- u : C.
 \end{minted}
 If a term \(u\) has two types, then there is a smaller type typing \(u\).
+That property is also work-in-progress.
 
 \paradot{Strong normalisation}
 
-\todo{
-  This is where fixguard and co make sense.
+Unlike for principality and subject reduction, there is no hope of proving
+strong normalisation of \acrshort{PCUIC} inside \Coq. As such it won't be stated
+as a conjecture but rather as an axiom.
+
+\marginnote[1cm]{
+  An infinite decreasing sequence for the opposite of reduction is simply an
+  infinite reduction sequence, so we are indeed talking about the same concept.
 }
+The usual presentation of strong normalisation stating that there is no infinite
+reduction sequence is ill-suited in a constructive setting so we instead show
+that the opposite of reduction is well-founded.
+This opposite, which I call coreduction, is defined as follows:
+\begin{minted}{coq}
+Inductive cored Σ Γ : term -> term -> Prop :=
+| cored1 :
+    forall u v,
+      red1 Σ Γ u v ->
+      cored Σ Γ v u
+
+| cored_trans :
+    forall u v w,
+      cored Σ Γ v u ->
+      red1 Σ Γ v w ->
+      cored Σ Γ w u.
+\end{minted}
+It is the transitive closure of the symmetric of \(1\)-step reduction.
+
+As I will explain in more depth in \nrefch{coq-orders}, we use accessiblity
+predicates to state that a relation is well-founded constructively.
+As such the axiom of strong normalisation is
+\begin{minted}{coq}
+Axiom normalisation :
+  forall Γ t,
+    wf Σ ->
+    wellformed Σ Γ t ->
+    Acc (cored (fst Σ) Γ) t.
+\end{minted}
+Herein \mintinline{coq}{wellformed Σ Γ t} states that \(t\) is either a
+well-typed term or a well-formed arity. \mintinline{coq}{wellformed} also lands
+in \mintinline{coq}{Prop} so that it gets erased during extraction to \ocaml.
