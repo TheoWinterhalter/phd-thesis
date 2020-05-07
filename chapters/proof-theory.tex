@@ -191,12 +191,12 @@ Sometimes, we want to be able to conclude something from a complex assumption
 like \(A \wedge B\), this is instead called an \emph{elimination} rule.
 \begin{mathpar}
   \infer
-    {\Ga, \vdash A \wedge B}
+    {\Ga \vdash A \wedge B}
     {\Ga \vdash A}
   %
 
   \infer
-    {\Ga, \vdash A \wedge B}
+    {\Ga \vdash A \wedge B}
     {\Ga \vdash B}
   %
 \end{mathpar}
@@ -206,7 +206,7 @@ We then have similar rules for disjunction
 (\(A \vee B\) reads `\(A\) \emph{or} \(B\)').
 \marginnote[0.5cm]{
   To prove \(A \vee B\) you only need to prove either \(A\) or \(B\), hence the
-  two introduction rules. On the contrary if you want to prove \(P\) assuming
+  two introduction rules. On the contrary if you want to prove \(P\) knowing
   \(A \vee B\), you have to provide a proof for the two different cases: either
   \(A\) holds, or \(B\) holds, in both instances \(P\) should hold.
 }
@@ -223,10 +223,11 @@ We then have similar rules for disjunction
 
   \infer
     {
+      \Ga \vdash A \vee B \\
       \Ga, A \vdash P \\
       \Ga, B \vdash P
     }
-    {\Ga, A \vee B \vdash P}
+    {\Ga \vdash P}
   %
 \end{mathpar}
 
@@ -248,7 +249,8 @@ Amongst the most important rules are those related to implication.
 They are interesting because they show a level of interaction between the
 entailement and the implication. To prove that \(A \to B\), you only assume
 \(A\) and show \(B\). Moreover, if you know \(A \to B\) and \(A\), then you
-have \(B\). This last rule is called the \emph{modus ponens}.
+have \(B\). This last rule is called the \emph{modus ponens}, that is the
+elimination of the implication.
 
 % Because of this, it might seem like implication (\(\to\)), entailement
 % (\(\vdash\)) and inference (---) are three forms of logical implication.
@@ -586,7 +588,7 @@ to rearrange on the right.
 
 This logic is constructive in that, from every proof derivation one can extract
 a proof where the last rule is an introduction rule, \ie a \emph{right} rule.
-For instance every proof of \(A \vee B\) must contain either a proof of \(A\)
+For instance, every proof of \(A \vee B\) must contain either a proof of \(A\)
 or a proof of \(B\).
 This is obtained by a process known as \emph{cut-elimination} which removes all
 occurrences of the \((Cut)\) rule in a derivation, showing at the same time that
@@ -622,8 +624,8 @@ The next introductory chapters will focus on this notion of proof framework.
 When you have a proof framework or logic, there are two main things you want to
 know about it:
 \begin{itemize}
-  \item Is it \emph{consistent}? An inconsistent system is one in which every
-  proposition is valid.
+  \item Is it \emph{consistent}? An inconsistent system is one in which we can
+  prove that an assertion and its negation.
   \item Is it \emph{complete}? That is, are all propositions either provable
   or provably contradictory (\ie the negation is provable)?
 \end{itemize}
