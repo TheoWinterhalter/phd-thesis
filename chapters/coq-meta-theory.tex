@@ -153,15 +153,44 @@ This will often be used to replace \(\Ga, x:A\) by \(\Ga, x:A'\) with
 
 \paradot{Validity}
 
-\todo{whatch out for arities}
+In \acrshort{PCUIC}, validity differs from the usual because of arities.
+\begin{minted}{coq}
+Lemma validity_term :
+  forall Σ Γ t T,
+    wf Σ ->
+    Σ ;;; Γ |- t : T ->
+    isWfArity_or_Type Σ Γ T.
+\end{minted}
+As you can see, \mintinline{coq}{T} is guaranteed to either be a type (as in
+be typed in a universe) or a well-formed arity.
 
 \paradot{Subject reduction}
 
-\todo{just statement}
+At the time of writing, subject reduction is not entierly proven.
+\begin{minted}{coq}
+Conjecture subject_reduction :
+  forall Σ Γ t A B,
+    wf Σ ->
+    Σ ;;; Γ |- t : A ->
+    red Σ Γ A B ->
+    Σ ;;; Γ |- t : B.
+\end{minted}
 
 \paradot{Principality}
 
-\todo{just statement}
+Because of cumulativity, \acrshort{PCUIC} cannot have uniqueness of type, it
+however has principal types which we express as follows.
+\begin{minted}{coq}
+Theorem principal_typing :
+  forall Σ Γ u A B,
+    Σ ;;; Γ |- u : A ->
+    Σ ;;; Γ |- u : B ->
+    ∑ C,
+      Σ ;;; Γ |- C <= A ×
+      Σ ;;; Γ |- C <= B ×
+      Σ ;;; Γ |- u : C.
+\end{minted}
+If a term \(u\) has two types, then there is a smaller type typing \(u\).
 
 \paradot{Strong normalisation}
 
