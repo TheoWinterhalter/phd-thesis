@@ -2,14 +2,19 @@
 \chapter{Introduction}
 \labch{intro}
 
-Type theory places itself at the interface between programming and formal logic,
+Type theory is set at the interface between programming and formal logic,
 feeding off and nourishing both worlds. Proof assistants can be built on it,
-making them full-fledged programming languages as well.
+making them full-fledged programming languages as well, with the added benifit
+of producing certified programs.
 
 My main interest lies in the study of type theory while relying on the tools it
-provides: I study type theory \emph{in} type theory.
+provides: I study type theory \emph{within} type theory.
 As such I focused on the formalisation of type theory in the \Coq proof
-assistant~\sidecite{coq} and particularly on two points:
+assistant~\sidecite[-0.7cm]{coq} and particularly on two points:
+\marginnote[0.7cm]{
+  Reflection is defined in \refsubsec{ett-def}, and weak equality in
+  \refsubsec{wtt}, both in \nrefch{flavours}.
+}
 \begin{itemize}
   \item How can we effectively turn a proof using a very strong notion of
   equality called \emph{reflection}, into a proof relying on a very weak notion
