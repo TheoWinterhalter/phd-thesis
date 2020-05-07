@@ -91,9 +91,9 @@ which by strengthening is a proof of \(\bot\) in the empty context.
 
 This ``proof'' makes a lot of assumptions so it cannot conclude in a more
 general setting. For instance strengthening is a strong property to have,
-it doesn't hold in \acrshort{ETT} but it does in \acrshort{ITT} and
-\acrshort{WTT}, as such I believe my assumptions aren't that restrictive.
-One of the reasons such a translation isn't possible is that it would translate
+it does not hold in \acrshort{ETT} but it does in \acrshort{ITT} and
+\acrshort{WTT}, as such I believe my assumptions are not that restrictive.
+One of the reasons such a translation is not possible is that it would translate
 terms, types and contexts independently when it cannot as \acrshort{ETT} terms
 do not contain any hints with respect to the uses of reflection.
 
@@ -163,7 +163,7 @@ to prove it using the reflection rule.
 %
 
 This can have practical use when proving theorems in a proof assistant like \Coq
-which doesn't have reflection. If the translation is constructive, it gives
+which does not have reflection. If the translation is constructive, it gives
 rise to an algorithm to transform a proof using reflection into a proof without.
 
 The deduced \acrshort{ITT} to \acrshort{WTT} even teaches us that computation
@@ -178,7 +178,7 @@ actually extended with extensional principles on equality.
 The main principles we require are \acrshort{UIP} and fonctional extensionality.
 These two principles are valid statements of \acrshort{ITT} and \acrshort{WTT}
 which are provable in \acrshort{ETT}, to show \acrshort{ETT} is a conservative
-extension of the target, it must be provable in it; as it isn't the case we need
+extension of the target, it must be provable in it; as it is not the case we need
 to extend the target with those principles.
 \reminder[-3.6cm]{\acrshort{UIP}}{
 \[ \Pi\ x \ y\ (e \ e' : x = y).\ e = e' \]
@@ -246,7 +246,7 @@ Transport turns an equality \(e : A = B\) into a map
 This means however that for two terms \(a : A\) and \(b : B\) such that
 \(A \equiv B\) and \(u \equiv v\) in \acrshort{ETT}, their translations
 become comparable in the target only up-to the equality
-between the two types. \([u] =_{[A]} [v]\) doesn't necessarily make sense
+between the two types. \([u] =_{[A]} [v]\) does not necessarily make sense
 anymore.
 
 To solve this problem we use instead a notion of heterogeneous equality.

@@ -174,14 +174,14 @@ Definition vrev {A n m} (v : vec A n) (acc : vec A m)
 The recursive call of \mintinline{coq}{vrev} returns a vector of length
 \mintinline{coq}|n + S m| where the context expects one of length
 \mintinline{coq}|S n + m|. In \acrshort{ITT} and \Coq, thesec types are not
-convertible, and thus the definition isn't accepted, even though it feels like
+convertible, and thus the definition is not accepted, even though it feels like
 it is the right definition. \acrshort{ETT} solves this problem by exploiting
 the fact that \mintinline{coq}|n + S m = S n + m| is provable.
 You can still define it in \Coq, but you have to explicitely transport along
 the abovementioned equality which can result in some problems while reasoning
 on the resulting function and inconveniences overall.
 
-\acrshort{ETT} isn't the ultimate solution however and suffers from many
+\acrshort{ETT} is not the ultimate solution however and suffers from many
 drawbacks the main of which being that type-checking is not decidable as we
 shall see later~\misref. We will also explore the relation between
 \acrshort{ETT} and \acrshort{ITT} in \arefpart{elim-reflection}.
@@ -258,7 +258,7 @@ shows it is inconsistent to have \(\Type : \Type\).
   paradox~\sidecite[1cm]{girard1972interpretation} or Hurkens'
   paradox~\sidecite[1.7cm]{hurkens1995simplification}.
 }
-The \Coq user however doesn't usually has to deal with those and
+The \Coq user however does not usually has to deal with those and
 instead rely on the so-called
 % \emph{typical ambiguity}~\sidecite[1.5cm]{harper1991type,feferman2004typical,specker1966typical}:
 \emph{typical ambiguity}~\sidecite[1.5cm]{harper1991type}:
@@ -341,7 +341,7 @@ universes. Cumulativity is given by the following rules.
 This convenience allows the user to forget as much as possible about universes.
 
 
-Finally there is another point regarding universes that isn't hinted at in the
+Finally there is another point regarding universes that is not hinted at in the
 name: \emph{polymorphism}. This feature introduced
 by~\sidecite{sozeau2014universe} is complementary to cumulativity and allows to
 consider definitions that quantify over universe levels (the \(i\) in
@@ -418,7 +418,7 @@ will be equivalent to
 as both will evaluate \mintinline{ocaml}{u} before substituting it for
 \mintinline{ocaml}{x} in \mintinline{ocaml}{t}. This works mainly because
 \ocaml is a \acrshort{CbV} language.
-In \Coq, replacing the first by the second won't always yield a well-typed
+In \Coq, replacing the first by the second will not always yield a well-typed
 expression.
 \marginnote[0.5cm]{
   In \ocaml we have \(x : A \vdash t\).
@@ -462,7 +462,7 @@ Inductive eq (A : Type) (u : A) : A -> Prop :=
 
 This has some shortcomings\sidenote{At least for some people, many are content
 with the current status too.} like equalities between equalities, and between
-functions aren't really accounted for, in the sense that's it's hard---often
+functions are not really accounted for, in the sense that's it's hard---often
 impossible---to prove them.
 \marginnote[0.2cm]{
   \acrshort{UIP} is given computational content in \Agda, it's feasible so
@@ -491,7 +491,7 @@ and better fit the Setoid model~\sidecite[0.3cm]{altenkirch1999extensional}.
 \subsection{\acrfull{HoTT}}
 
 \acrshort{HoTT}~\sidecite{hottbook} is rather based on the idea that
-\acrshort{UIP} shouldn't hold and that instead, higher equalities matter.
+\acrshort{UIP} should not hold and that instead, higher equalities matter.
 Some types still enjoy a certain form of \acrshort{UIP} however: they are called
 sets, or homotopy sets (hSet). This actually defines a hierarchy of types, by
 looking at their type of equality.
@@ -519,7 +519,7 @@ An interesting consequence of the univalence axiom is that it implies
 Once again, this is an \emph{axiom} and as such, it does not compute.
 There are ways~\sidecite[-0.4cm]{tabareau2018equivalences} to overcome this in
 \Coq which has its own \acrshort{HoTT} library~\sidecite[0.2cm]{bauer2017hott}
-but this still doesn't give a full-fledged computation rule for univalence.
+but this still does not give a full-fledged computation rule for univalence.
 To achieve this, some proof assistants implement \acrlong{CubicalTT}.
 
 \paradot{\acrfull{CubicalTT}} \acrshort{CubicalTT}~\sidecite{cohen2016cubical}

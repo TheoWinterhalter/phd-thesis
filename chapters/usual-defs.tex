@@ -84,7 +84,7 @@ behaviour of \(\mathsf{if}\).
   \end{array}
 \end{mathpar}
 It is still the same as the well-known \(\mathsf{if}\), except that we are more
-liberal in the types given to the two branches: they don't have to match as they
+liberal in the types given to the two branches: they do not have to match as they
 can now depend on the boolean. The \(x.P\) notation means that \(P\) lives in a
 context extended by \(x\) (of type \(\bool\)).
 
@@ -351,7 +351,7 @@ There are two main ways of achieving this.
   It will have the same reduction rules as the eliminator shown above.
 \end{itemize}
 
-I won't go into that much detail for other inductive types as they will all
+I will not go into that much detail for other inductive types as they will all
 follow more or less the same schema.
 
 \subsection{Parameterised inductive types}
@@ -362,7 +362,7 @@ though everything goes.
 
 \paradot{Lists}
 
-I already presented lists in \ocaml, and their \Coq counterpart isn't much
+I already presented lists in \ocaml, and their \Coq counterpart is not much
 different.
 \begin{mathpar}
   \infer
@@ -583,7 +583,7 @@ giving a term \(t : A\) and a proof of \(P\ t\).
   %
 \end{mathpar}
 Once more, this is the \emph{positive} presentation of \(\Sigma\)-types.
-With this presentation it is also possible to restrict \(P\) in case we don't
+With this presentation it is also possible to restrict \(P\) in case we do not
 want to make it possible to extract the witness (the \(a\) in \(\dpair{a,b}\)).
 
 \marginnote[0.2cm]{
@@ -679,7 +679,7 @@ ruling out the empty vector completely.
     }
   \end{array}
 \]
-Notice how I didn't even provide a branch for \(\vnil\) because it will always
+Notice how I did not even provide a branch for \(\vnil\) because it will always
 by ill-typed. This is unfortunately impossible in vanilla \Coq but is supported
 in \Agda natively and can be achived in \Coq with \Program of the \Equations
 plugin~\sidecite{DBLP:conf/itp/Sozeau10,sozeau2019equations}.
@@ -912,7 +912,7 @@ seq : Nat → Stream Nat
 head (seq n) = n
 tail (seq n) = seq (succ n)
 \end{minted}
-In won't go into further detail about those, coinductive types are not really
+In will not go into further detail about those, coinductive types are not really
 well-behaved in \Coq so we mostly ignore them for the time being.
 
 \section{Equality}
@@ -992,7 +992,7 @@ Its definition is
   \end{array}
 \]
 
-It is often the case that \(P\) doesn't mention the equality, in which case we
+It is often the case that \(P\) does not mention the equality, in which case we
 get the simpler notion of \emph{transport}.
 \marginnote[1cm]{
   I changed the order of the arguments a bit compared with \(\eqrec\) because
@@ -1133,7 +1133,7 @@ extra index for a second type.
     {\Ga \vdash \mathsf{hrefl}_A\ a : \Heq{A}{a}{A}{a}}
   %
 \end{mathpar}
-As usual it features pattern-matching. Unfortunately, it doesn't allow us to
+As usual it features pattern-matching. Unfortunately, it does not allow us to
 recover the property that heterogenous equalities where the two types are in
 fact the same like \(\Heq{A}{u}{A}{v}\), imply homogenous equality \(u =_A v\).
 This has to be added as an extra axiom, equivalent to \acrshort{UIP}.

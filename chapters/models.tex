@@ -159,7 +159,7 @@ The interpretation of \(\Prop\) is then \(2 \coloneqq \{ 0, 1 \}\).
 As you can see in the typing rules we have to deal with terms in a context
 \(\Ga\), \ie open terms. The interpretation of such a term is dependent on the
 context, this can be easily seen when considering \(x : A \vdash x\)
-and \(x : B \vdash x\), the two \(x\) don't necessarily mean the same thing.
+and \(x : B \vdash x\), the two \(x\) do not necessarily mean the same thing.
 As such we will interpret terms together with their context:
 \(\transl{\Ga \vdash t}\), which will be set-theoretic functions of domain
 \(\transl{\Ga}\), without a precise codomain.
@@ -201,12 +201,12 @@ where in the last equality
 \[
   \Ga = x_n : A_n, \dots x_i : A_i, \dots x_0 : A_0
 \]
-I don't really believe you can distinguish between propositions and usual types
+I do not really believe you can distinguish between propositions and usual types
 in the current setting so in~\sidecite{aczel1998relating}, Aczel introduces a
 non-standard encoding of set-theoretic functions such that the constant function
 \(x \mapsto 0\) is \emph{equal} to \(0\).
 
-I didn't precise what \(\mathcal{U}\) was. From \(\mathcal{U}\) we only require
+I did not precise what \(\mathcal{U}\) was. From \(\mathcal{U}\) we only require
 that it is closed under product and power-sets and contains at least \(2\).
 It needs only be the cardinal \(\aleph_0\) in our case, but if we wanted more
 universes---say a hierarchy of them---we could use inaccessible cardinals.
@@ -265,7 +265,7 @@ interpretation behaves well with respect to substitution.
 I will not dwell on the details as it has been dealt with nicely in the
 references I put at the beginning of this section.
 
-Set-theoretic models aren't the only way to make models of type theory of
+Set-theoretic models are not the only way to make models of type theory of
 course. For instance they may not be best-suited to interpretation of
 computational content since \(\beta\)-convertible terms are interpreted as the
 same set. They however provide a nice way of seeing the relation between
@@ -506,7 +506,7 @@ this notion to include other constructions.
 
 All of these can be defined in the \(\Set\) model above. They are however all
 simpler cases than the \(\Card\) model I will give in the next section so I
-won't detail them.
+will not detail them.
 
 \subsection{Cardinal model}
 \labsubsec{card-model}
@@ -775,7 +775,7 @@ We check
   \end{array}
 \]
 
-Now that we have equality I will show why we don't need an eliminator in this
+Now that we have equality I will show why we do not need an eliminator in this
 particular case.
 
 \begin{theorem}
@@ -1028,13 +1028,13 @@ A perhaps more interesting universe is given by using the \(\aleph\) function:
 where
 \(\aleph_\mu = \prod_{x \in \CEl{a(\gamma)}} \CEl{\beta^{-1}(b(\gamma))(x)}\).
 
-I won't really go into detail about cardinals and everything here, or as to
+I will not really go into detail about cardinals and everything here, or as to
 why this universe also supports natural numbers, equality and such.
 
 \paradot{A warning about syntax}
 
 Together all these show that the cardinal model of type theory is indeed a model
-of type theory with some quirks, teaching us that isomorphic objects can't be
+of type theory with some quirks, teaching us that isomorphic objects cannot be
 distinguished.
 There is another important teaching it brings us about syntax.
 
@@ -1060,7 +1060,7 @@ for any \(\gamma \in \ctxempty\).
 \marginnote[0cm]{
   In fact there is only one such \(\gamma\): \(0\).
 }
-Didn't we prove that \(\beta\)-reduction held however?
+Did we not prove that \(\beta\)-reduction held however?
 Let us replay the proof of \(\beta\)-reduction above in our specific case:
 \[
   \begin{array}{rcl}
@@ -1096,7 +1096,7 @@ is coming from: we actually have
 which do not cancel each other out.
 
 This is case for using type annotations on \(\lambda\)-abstractions and
-applications to block \(\beta\)-reduction when the types don't match.
+applications to block \(\beta\)-reduction when the types do not match.
 
 \section{Type-theoretic models}
 
@@ -1182,7 +1182,7 @@ Definition app {Γ A B} (f : Tm Γ (Π A B)) (u : Tm Γ A)
 
 Once again, the required equalities hold definitionally.
 \marginnote[1cm]{
-  The \Coq code is a tiny bit more verbose, as some argument aren't infered
+  The \Coq code is a tiny bit more verbose, as some argument are not infered
   automatically and have to be put in manually.
 }
 \begin{minted}{coq}

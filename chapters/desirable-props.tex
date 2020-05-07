@@ -100,13 +100,13 @@ result follows from a simple induction.
   \(\Ga \vdash B[x \sto u] \cumul T\) (we have to apply the application rule
   first and then possibly several time the cumulativity rule).
 }
-Now, it won't always be stated this way depending on the premises of the
+Now, it will not always be stated this way depending on the premises of the
 application rule, but also depending on the presence or not of a conversion
 rule. In the case of \acrshort{WTT} for instance, there is no conversion so
 instead of \(\Ga \vdash T \equiv B[x \sto u]\) we will have syntactic equality
 \(T =_{\alpha} B[x \sto u]\).
 
-You usually prove inversion of typing for every term constructor, but I won't
+You usually prove inversion of typing for every term constructor, but I will not
 do it here.
 
 \subsection{Validity}
@@ -161,7 +161,7 @@ type up to conversion.
 
 This usually means that the term is carrying enough information to recover
 its type. If one were to use Curry-style terms~\misref{} like
-\(\lambda x.\ x\) then this property can't hold: indeed
+\(\lambda x.\ x\) then this property cannot hold: indeed
 \(\vdash \lambda x.\ x : \unit \to \unit\) and
 \(\vdash \lambda x.\ x : \bool \to \bool\) both hold and the two arrow types
 are not related.
@@ -195,7 +195,7 @@ When the type theory features reduction, we also want it to satisfy some
 requirements, aside that reduction behaves in a compositional way as I already
 explained in \arefsubsec{weak-subst}.
 
-First are basic properties of rewriting systems\sidenote{I won't go into details
+First are basic properties of rewriting systems\sidenote{I will not go into details
 about what they are and it's not necessary to know about them to understand any
 of this.}: confluence and termination.
 
@@ -362,7 +362,7 @@ such that \(\Ga \vdash t : A\) or an error stating that \(t\) is ill-typed.
 Decidability of type checking is an important property because it crystalises
 the fact that a term is indeed a \emph{proof}, it is a good enough certificate
 that people can check independently.
-However, in a system that doesn't feature decidable type checking, you can still
+However, in a system that does not feature decidable type checking, you can still
 provide certificates: for one you could simply store the full-derivation as a
 proof; it is however possible to translate the proof to another system with
 decidable checking, like I will present in \arefpart{elim-reflection}.
@@ -381,7 +381,7 @@ the empty type is uninhabited.
   \(\vdash t : \bot\).
 \end{definition}
 
-This doesn't prevent you from having proofs of \(\bot\) in inconsistent
+This does not prevent you from having proofs of \(\bot\) in inconsistent
 contexts.
 
 Having canonicity in the theory is a good way to deduce consistency.
@@ -419,7 +419,7 @@ features cumulativity or not.
 Likewise, \acrshort{ITT} could go in either \ref{item:coq} or \ref{item:agda}.
 
 \marginnote[1.3cm]{
-  I write -- for properties that don't apply like properties on reduction
+  I write -- for properties that do not apply like properties on reduction
   for any theory without.
 }
 \begingroup

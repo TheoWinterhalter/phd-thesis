@@ -91,11 +91,11 @@ variables is called \emph{closed}.
 
 \marginnote[0.2cm]{
   Sometimes this fact is summarised in the term \emph{capture-avoiding} meaning
-  that bound variables aren't touched. I will refrain from using a qualifier
+  that bound variables are not touched. I will refrain from using a qualifier
   that basically means that it's not a nonsensical definition.
 }
 The only variables that can be instantiated are the \emph{free} ones.
-For example, it wouldn't make sense to replace the \(x\) in the identity
+For example, it would not make sense to replace the \(x\) in the identity
 \(\lambda x.\ x\) function, it would somehow break it. \emph{Substitution} is
 the operation that replaces free variables with other expressions.
 We will write
@@ -172,7 +172,7 @@ expressions that are of the right \emph{kind}---in our case, integers.
 \ocaml expressions like \mintinline{ocaml}{true + 3} or
 \mintinline{ocaml}{1 + fun x -> 2} should be---and are!---rejected.
 
-The way we prevent such problematic terms---\ie those that don't have
+The way we prevent such problematic terms---\ie those that do not have
 semantics---is by using \emph{types}. The \(\lambda\)-calculus is pretty simple,
 the only things we can do is define functions and apply them, as such we
 introduce a type of functions \(A \to B\).
@@ -270,7 +270,7 @@ The Curry-Howard isomorphism sets up a parallel between types and propositions
 and between programs and proofs.
 This is the origin of a very fruitful relationship between the two worlds.
 
-The correspondence doesn't stop there, computation also plays a part in it.
+The correspondence does not stop there, computation also plays a part in it.
 Consider the term \((\lambda x. x)\ y\) it can be typed as follows
 (assuming \(y\) has type \(A\)).
 \[

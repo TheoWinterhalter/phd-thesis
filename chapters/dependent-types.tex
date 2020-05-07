@@ -9,7 +9,7 @@ equality \(x = y\), and with it we can support quantifiers.
 
 It is not only useful on the logical side, but also on the programming language
 side: with it programs can be given much more precise types.
-For instance, you might want to specify that the division operator doesn't
+For instance, you might want to specify that the division operator does not
 accept \(0\) for the denominator, or that the operation returning the tail of
 list only applies to non-empty lists.
 Finally, we can take advantage of both and write \emph{proofs} about the
@@ -110,7 +110,7 @@ having \(\Type\) of type \(\Type\) is inconsistent.
 We will address this in more details in \arefsubsec{coq-univ} in
 \nrefch{flavours}.
 In this case, \(\Type\) will be a special type---which we call universe as it
-is inhabited solely by types---that doesn't have a type itself.
+is inhabited solely by types---that does not have a type itself.
 Having it is mainly to allow for quantifying over types, but we could also of
 course define some base types like the natural numbers \(\nat\) and put it in
 \[

@@ -112,7 +112,7 @@ then all accessible elements verify \(P\).
   \(\mathcal{F}_{n+2} = \mathcal{F}_{n+1} + \mathcal{F}_n\).
 }
 Let's say this time we want to define the Fibonacci sequence, the following
-definition isn't accepted by \Coq's termination checker.
+definition is not accepted by \Coq's termination checker.
 \begin{minted}{coq}
 Fail Fixpoint fib n :=
   match n with
@@ -121,7 +121,7 @@ Fail Fixpoint fib n :=
   | S (S n) => fib (S n) + fib n
   end.
 \end{minted}
-It doesn't like the \mintinline{coq}{S n} bit in the recursive call.
+It does not like the \mintinline{coq}{S n} bit in the recursive call.
 I'm cheating a bit because it can still be defined by telling \Coq that
 \mintinline{coq}{S n} here is indeed a subterm of the matched term.
 \begin{minted}{coq}
@@ -230,7 +230,7 @@ proceed to the second, etc.
 \end{definition}
 
 So, like the alphabetical order, when the two first elements are in the
-relation, we won't even look at the rest.
+relation, we will not even look at the rest.
 \marginnote[0.2cm]{
   They also remain orders.
 }
@@ -431,7 +431,7 @@ Then I list several properties that I require, I shall list them one by one:
 \todo{This looks like an order isomorphism.}
 
 All these should feel natural if you have equality in mind.
-I did mention bisimulations however and didn't even talk about it.
+I did mention bisimulations however and did not even talk about it.
 Let me correct this slight.
 
 \begin{definition}{Simulation}
@@ -459,7 +459,7 @@ This is summarised by the following diagram.
   a simulation for \(\red\) and for \(\red^{-1}\).
 \end{definition}
 
-A bisimulation doesn't quite fit the bill yet though. The simulation property
+A bisimulation does not quite fit the bill yet though. The simulation property
 does look like \ref{item:dlexmod-sim} but it would conclude
 \mintinline{coq}{leA y' x} for some \mintinline{coq}{eA y y'} instead of plain
 \mintinline{coq}{leA y x}. Also, there is no reason for a bisimulation to

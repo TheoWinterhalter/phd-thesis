@@ -34,7 +34,7 @@ Inductive term :=
 | tCoFix (mfix : mfixpoint term) (idx : nat).
 \end{minted}
 
-I won't present again variables, \(\Pi\)-types, etc. and will focus on
+I will not present again variables, \(\Pi\)-types, etc. and will focus on
 the other constructors, for this I need to introduce the global environment.
 % \mintinline{coq}{tConst}, \mintinline{coq}{tInd}, \mintinline{coq}{tConstruct},
 % \mintinline{coq}{tCase}, \mintinline{coq}{tProj}, \mintinline{coq}{tFix}
@@ -55,7 +55,7 @@ ambiguity as to its purpose.
 Besides the global environment we have a set of universes with their
 constraints. Indeed, although we usually present the hierarchy of universes in
 \Coq using \(\Type_i\) with \(i \in \mathbb{N}\), the implementation is a bit
-different in that universes aren't fixed but floating.
+different in that universes are not fixed but floating.
 \marginnote[0.65cm]{
   In \Coq, \(\Type_i\) is written \mintinline{coq}{Type@{i}}.
 }
@@ -373,7 +373,7 @@ They state that you can reduce either subterm.
 
 \subsection{Conversion}
 
-Unlike \Agda, conversion in \Coq isn't typed but rather based primarily on
+Unlike \Agda, conversion in \Coq is not typed but rather based primarily on
 reduction. Its definition is the following, corresponding basically to the
 reflexive, symmetric and transitive closure of reduction:
 \marginnote[1cm]{
@@ -422,7 +422,7 @@ In terms of inference rules this would be written
     {\Sigma ; \Ga \vdash t \equiv u}
   %
 \end{mathpar}
-This is similar except that we don't merely use \(\alpha\)-conversion in the
+This is similar except that we do not merely use \(\alpha\)-conversion in the
 reflexive case, we also equate the terms up to universes.
 Indeed sometimes, two universes may be syntactically different but still be the
 same like \(i\) and \(j\) with constraints \(i \le j\) and \(j \le i\).
@@ -794,7 +794,7 @@ type_CoFix mfix n decl :
   ) mfix ->
   Σ ;;; Γ |- tCoFix mfix n : decl.(dtype)
 \end{minted}
-Cofixed-points are pretty similar to fixed-points except we don't even check
+Cofixed-points are pretty similar to fixed-points except we do not even check
 productivity, so that is still something that we need to work on.
 
 \paradot{Cumulativity}

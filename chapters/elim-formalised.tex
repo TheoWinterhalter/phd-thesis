@@ -23,7 +23,7 @@ the tedious ones---are written in \Coq and then quoted to finally be
 For \acrshort{WTT} the story is a bit different because there is no \emph{weak}
 \Coq or \MetaCoq so for now there is no translation to a purer \acrshort{WTT}
 though this is work that we started but put on hold by coming to realise the
-target wouldn't be that much simpler.
+target would not be that much simpler.
 
 \paragraph{Interoperability with \MetaCoq.}
 The translation we define from \acrshort{ITT} to \MetaCoq is not proven
@@ -89,7 +89,7 @@ mutual inductive types.
   files are kept to a minimum!
 }
 Then, most of the files are focused on the meta-theory of \acrshort{ITT} and can
-be ignored by readers who don't need to see yet another proof of subject
+be ignored by readers who do not need to see yet another proof of subject
 reduction.
 
 The most interesting files are obviously those where the fundamental lemma
@@ -118,7 +118,7 @@ compute a translated term and type out of a derivation in \acrshort{ETT}.
 % \section{Inductive Types and Recursion}
 % \label{sec:inductives}
 
-% In the proof of Section~\ref{sec:translation}, we didn't mention
+% In the proof of Section~\ref{sec:translation}, we did not mention
 % anything about inductive types, pattern-matching or recursion as it is
 % a bit technical on paper.  In the formalisation, we offer a way to
 % still be able to use them, and we will even show how it works in
@@ -155,7 +155,7 @@ compute a translated term and type out of a derivation in \acrshort{ETT}.
 
 % This means for instance that we do not consider inductive types that would only
 % make sense in ETT, but we deem this not to be a restriction and to the best of
-% our knowledge isn't something that is usually considered in the literature.
+% our knowledge is not something that is usually considered in the literature.
 % %
 % With that in mind, our translation features a global context of typed constants
 % with the restriction that the types of those constants should be well-formed
@@ -163,7 +163,7 @@ compute a translated term and type out of a derivation in \acrshort{ETT}.
 
 % With this we are able to recover what we were missing from
 % \Coq, without having to deal with the trouble of proving that the translation
-% doesn't break the guard condition of fixed points, and we are instead relying on
+% does not break the guard condition of fixed points, and we are instead relying on
 % a more type-based approach.
 
 \section{About Universes}
@@ -233,7 +233,7 @@ The term we want to translate is the identity coercion:
 which relies on the equality \(e : A = B\) and reflection to convert  \(x : A\)
 to \(x : B\).
 %
-Of course, this definition isn't accepted in \Coq because this
+Of course, this definition is not accepted in \Coq because this
 conversion is not valid in \acrshort{ITT}.
 %
 \begin{minted}{coq}
@@ -366,7 +366,7 @@ As such we have written a complete procedure, relying on type checkers we
 wrote for \acrshort{ITT} and \acrshort{ETT}, which can generate equality
 obligations.
 
-Thanks to this, the user doesn't have to know about the details of
+Thanks to this, the user does not have to know about the details of
 implementation of the translation, and stay within the \Coq ecosystem.
 
 For instance, our previous example now becomes:
@@ -384,7 +384,7 @@ Run TemplateProgram (Translate ε "pseudoid").
 }
 This produces a \Coq term \mintinline{coq}{pseudoid'} corresponding to the
 translation.
-Notice how the user doesn't even have to provide any proof of equality or
+Notice how the user does not even have to provide any proof of equality or
 derivations of any sort. The derivation part is handled by our own typechecker
 while the obligation part is solved automatically by the \Coq obligation mechanism.
 

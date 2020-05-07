@@ -4,7 +4,7 @@
 
 An interesting fact of type theory (and perhaps one of its main selling points)
 is that it is a suitable framework in which to reason about type theory.
-That being said, representing type theory in itself isn't entirely
+That being said, representing type theory in itself is not entirely
 straightforward, and some care must be taken. There are actually several choices
 to be made when representing type theory and they are not all equivalent or with
 the same pros and cons.
@@ -26,7 +26,7 @@ we will usually use \emph{names}, identifiers for variables like in
 \(\lambda x. \lambda y. x\ y\), \(x\) refers to the variable bound by the
 outermost \(\lambda\), while \(y\) refers to the variable bound by the
 innermost.
-The names aren't fundamental in what the term represents:
+The names are not fundamental in what the term represents:
 \(\lambda z. \lambda w. z\ w\) represents \emph{exactly} the same term.
 We call this operation \(\alpha\)-renaming, here I \(\alpha\)-renamed \(x\)
 to \(z\) and \(y\) to \(w\). This defines the notion of \(\alpha\)-equality
@@ -116,7 +116,7 @@ somewhere in the context (same as the \(x\) it replaces).
 Notice however that using de Bruijn indices, weakening---\ie putting a term into
 an extended context---will now affect the term itself.
 If you consider the following weakening, adding one variable \(z\) in the middle
-of the context, doesn't affect the term using names.
+of the context, does not affect the term using names.
 \marginnote[1cm]{
   I use variables in the scope to make clear where the new variable is inserted
   in the nameless case.
@@ -308,12 +308,12 @@ To relate them to actual \(\Pi\)-types, we simply add computation rules to
 \[
   \CEl(\pi(a,b)) \red \Pi (x : \CEl\ a).\ \CEl\ (b\ x)
 \]
-Arguably we don't even need that, and to avoid duplication we could simply keep
+Arguably we do not even need that, and to avoid duplication we could simply keep
 the \(\CEl\)s everywhere
 \marginnote[1cm]{
   The \(\lambda (\highlight{x:a}).\ t\) is not a typo. I enforce here
   \(\lambda\) to use codes in their syntax since one should not be able to
-  abstract over a type that isn't some \(\CEl\ a\).
+  abstract over a type that is not some \(\CEl\ a\).
 }
 \begin{mathpar}
   \infer
@@ -347,7 +347,7 @@ that inhabit a universe:
 \[
   \Ga \vdash A : \Type
 \]
-As such we don't need something like \(\CEl\) to bridge between the two worlds.
+As such we do not need something like \(\CEl\) to bridge between the two worlds.
 In a sense, this is a special case of Tarki universes where codes are types
 and \(\CEl\) is the identity function.
 
@@ -365,7 +365,7 @@ With Russel universes \(\Pi\)-types are typed as follows:
 When formalising universes there is a trade-off between the concise Russel
 universes and the compartmentalised Tarski universes. On the interface with a
 user however, I think universes are best when they are the least invasive, which
-works better in a Russel setting. This doesn't prevent the system from having
+works better in a Russel setting. This does not prevent the system from having
 Tarski universes under the hood.
 
 \subsection{Formalisation of syntax}
@@ -447,10 +447,10 @@ Record Syntax := {
   sbterminal : substitution
 }.
 \end{minted}
-We also use de Bruijn indices, but most other choices I presented above aren't
+We also use de Bruijn indices, but most other choices I presented above are not
 made. It may seem like we use Tarski universes, separate terms and types, use
 explicit substitutions and fully-annotated terms.
-However, these aren't enforced because these aren't \emph{constructors}.
+However, these are not enforced because these are not \emph{constructors}.
 Nothing prevents us from providing an instance where \mintinline{coq}{term}
 and \mintinline{coq}{type} are the same and \mintinline{coq}{El} is the identity
 (hence Russel universes), functions that ignore the annotations for
@@ -589,7 +589,7 @@ in \nrefch{desirable-props}): when \(\Ga \vdash t : A\) then \(\Ga \vdash A\)
 and when \(\Ga \vdash A\) then \(\vdash \Ga\).
 
 \marginnote[0.2cm]{
-  Note that this approach is assuming you don't really care about the
+  Note that this approach is assuming you do not really care about the
   derivations that are produced. If you want to compute on them, having big
   derivations can be a problem and as such it might be worth it to put in the
   extra work to show them equivalent to their paranoid versions while keeping
@@ -674,7 +674,7 @@ This has a serious advantage in that it allows for rules like
 stating that two terms of the \(\unit\) type are convertible which is not
 feasible in an untyped setting. In general it simplifies all type-based
 conversion rules. As you can see with the rule above,
-\(\Ga \vdash u \equiv v : A\) needn't imply \(\Ga \vdash u : A\) or
+\(\Ga \vdash u \equiv v : A\) need not imply \(\Ga \vdash u : A\) or
 \(\Ga \vdash v : A\). It could however, it is again a design choice.
 If we do not require it then the conversion rule is similar
 \[
@@ -784,7 +784,7 @@ data Tms where
 \end{minted}
 Finally for terms we have something like this, pretty standard except the
 application is not the usual\sidenote{
-  In fact I wouldn't call it application at
+  In fact I would not call it application at
   all as it is not application. It's a key element to getting it however, usual
   application of \mintinline{agda}{(u : Tm Γ (Π A B))} and
   \mintinline{agda}{(v : Tm Γ A)} is given by
@@ -847,6 +847,6 @@ translations compute relatively efficiently as we will see in
 \nrefch{translations} and becomes crucial when derivations are
 \emph{big}\sidenote{This is the case in the translation I show
 in \arefpart{elim-reflection}} since terms (as in untyped syntax) are usually
-much smaller. Another point is that it doesn't really make sense to write a
+much smaller. Another point is that it does not really make sense to write a
 type-checker for a well-typed syntax, something that I expose in
 \arefpart{coq-in-coq}.

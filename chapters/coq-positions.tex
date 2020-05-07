@@ -24,7 +24,7 @@ branching you have to say which branch you want to take.
 
 Now, terms are a special kind of tree so we can do something similar.
 There are many ways to represent positions: for instance in the example above
-the position \(0.3\) doesn't correspond to anything, so is it still considered
+the position \(0.3\) does not correspond to anything, so is it still considered
 a position, only an \emph{invalid} one? Or should all expressable positions
 be valid?
 
@@ -65,7 +65,7 @@ Now as I already said, these are not necessarily valid positions, for this
 we define a function which verifies if a given position is valid in a given
 term.
 \marginnote[1cm]{
-  It shouldn't feel too surprising, the empty position is always valid,
+  It should not feel too surprising, the empty position is always valid,
   and otherwise, the head choice should match the structure of the term.
   There are some trickier cases for pattern-matching and fixed-points because
   they involve lists of terms but it's still pretty natural.
@@ -369,7 +369,7 @@ liberty as we shall see.
 
 Since positions are defined as lists, the natural order on them would the
 structural which says that any (strict) prefix of a position is smaller.
-This order isn't really of interest to us because it would correspond to
+This order is not really of interest to us because it would correspond to
 \emph{unfocusing}.
 Conversely, by extending a position with a new choice you are going deeper into
 the term, something which you cannot do indefinitely, you are bound to reach a
