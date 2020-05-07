@@ -9,11 +9,12 @@ type-system. This combination culminates into the Curry-Howard isomorphism that
 relates programming and logic in profound ways, serving as a foundation for
 type theory and modern logic.
 
-I will not try and do some thorough analysis and history of the subject but I
-will give an account of my understanding of it, limiting myself to points that
-I find relevant to my thesis.
+I will not do a thorough analysis and history of the subject but I will give an
+account of my understanding of it, limiting myself to points that I find
+relevant to my thesis. The interested reader can refer
+to~\sidecite{cardone2006history}.
 
-\section{\(\lambda\)-calculus}
+\section{The \(\lambda\)-calculus}
 
 \(\lambda\)-calculus can be reasonably called the simplest programming language.
 It consists basically of functions, variables and applications.
@@ -25,7 +26,7 @@ below.
 Here, we have the identity function \mintinline{ocaml}{fun x -> x}---\ie the
 function which maps \mintinline{ocaml}{x} to \mintinline{ocaml}{x}---applied to
 some expression \mintinline{ocaml}{u}.
-In mathematical textbooks we would define the identity function (for natural
+In mathematical textbooks, we would define the identity function (for natural
 numbers) as follows.
 \[
   \mathit{id} :
@@ -57,9 +58,11 @@ Formally, the grammar of \(\lambda\)-calculus is:
 and that's it.
 
 In a term, the variable names are considered irrelevant, for instance, the
-\(\lambda\)-terms \(\lambda x.\ x\) and \(\lambda y.\ y\) are deemed equivalent.
-Of course, it only works, if all occurences of \(x\) are replaced consistently
-with \(y\). This operation is called \(\alpha\)-renaming, we thus talk about
+\(\lambda\)-terms \(\lambda x.\ x\) and \(\lambda y.\ y\) are deemed equivalent,
+because they both define the identity function.
+% Of course, it only works, if all occurences of \(x\) are replaced consistently
+% with \(y\).
+This operation is called \(\alpha\)-renaming, we thus talk about
 \(\alpha\)-equality:
 \[
   \lambda x.\ x =_\alpha \lambda y.\ y
@@ -165,29 +168,39 @@ Now let's have a look at its computational behaviour:
   \end{array}
 \]
 The problem should become apparent: \(\Omega\) reduces to itself!
+This means that the evaluation of \(\Omega\) will not terminate.
 Generally, that is not something you want to have.
 In case you have more structure in your language, such as in \ocaml where you
 have integers, you also want to restrict some operations like addition to
 expressions that are of the right \emph{kind}---in our case, integers.
-\ocaml expressions like \mintinline{ocaml}{true + 3} or
+In \ocaml, expressions like \mintinline{ocaml}{true + 3} or
 \mintinline{ocaml}{1 + fun x -> 2} should be---and are!---rejected.
 
 The way we prevent such problematic terms---\ie those that do not have
 semantics---is by using \emph{types}. The \(\lambda\)-calculus is pretty simple,
 the only things we can do is define functions and apply them, as such we
 introduce a type of functions \(A \to B\).
-\(A \to B\) is the type of functions that take an argument of type \(A\)
-and produce a value of type \(B\).
+The expression \(A \to B\) denotes the type of functions that take an argument
+of type \(A\) and produce a value of type \(B\).
 If we go back to \ocaml for a bit, a function like
 \mintinline{ocaml}{fun x -> x + x} will have type \mintinline{ocaml}{int -> int}
 while another making use of different data structures like
-\mintinline{ocaml}{fun b -> if b then "Yes" else "No"} will be of type
+\begin{minted}{ocaml}
+fun b -> if b then "Yes" else "No"
+\end{minted}
+will be of type
 \mintinline{ocaml}{bool -> string}.
 Going back to \(\lambda\)-calculus, the important rule is that when you have
 a function \(f\) of type \(A \to B\)---which we will write \(f : A \to B\)---and
 an argument \(u : A\), the result of the application will have type \(B\):
 \[
-  f\ u : B
+  \infer
+    {
+      f : A \to B \\
+      u : A
+    }
+    {f\ u : B}
+  %
 \]
 
 The usefulness of types is best summarised in the famous quote:
@@ -196,13 +209,15 @@ The usefulness of types is best summarised in the famous quote:
 
   \hspace*{\fill} --- Robin Milner~\sidecite{milner1978theory}
 \end{quote}
+A program can `go wrong' if it needs to evaluate a nonsensical expression like
+\(1\) applied to \(0\) which might have unexpected behaviours on a computer.
 
 As I mentioned earlier, \(\lambda\)-terms can sometimes be open terms---\ie
 contain free variables---so in order to type them, we need to know the type of
 those variables. This information is called an environment or \emph{context}.
 We can thus give the syntax of types and contexts.
-\marginnote[1cm]{
-  \(o\) stands for base types. A context is a list of type ascriptions for the
+\marginnote[0.8cm]{
+  \(o\) stands for base types. A context is a list of type assignments for the
   variables, implicitly the variables are distinct.
 }
 \[
@@ -212,7 +227,7 @@ We can thus give the syntax of types and contexts.
   \end{array}
 \]
 
-The typing rules of \acrlong{STL} are the following.
+The typing rules of the \acrlong{STL} are the following.
 \begin{mathpar}
   \infer
     {\Ga, x:A \vdash t : B}
@@ -310,7 +325,8 @@ our case) in the proof.
 Thanks to that, a proof of \(A \to B\) is in fact an algorithm turning a proof
 of \(A\) into a proof of \(B\).
 
-All this is very useful and exciting for me. However, simple types are quite
-limited and do not allow for a proper handling of things like quantifiers
-(\(\forall\) and \(\exists\)). Hence the need for \emph{dependent} types which
-will be the subject of the next chapter.
+All this is very useful and was exciting for me. However, simple types are quite
+limited~\sidecite{zakrzewski2007definable} and do not allow for a proper
+handling of things like quantifiers (\(\forall\) and \(\exists\)).
+Hence the need for \emph{polymorphsim} and \emph{dependent} types.
+The latter will be the subject of the next chapter.
