@@ -1,3 +1,55 @@
 % \setchapterpreamble[u]{\margintoc}
 \chapter{Reduction}
 \labch{coq-reduction}
+
+A key element to defining a type checker is to have a conversion checker.
+Conversion in turn relies on reduction. The reduction I describe in
+\nrefch{coq-spec} is just a relation and is non-deterministic. In this chapter
+I will present an algorithmic implementation of reduction.
+This implementation relies on the axiom of strong normalisation, but even then
+it requires some more work to show the process is terminating.
+
+\section{Weak head normalisation}
+
+Since reduction is non deterministic, we have to pick a strategy to implement.
+When checking terms for conversion, one thing we want to do is verify that they
+have the same head constructor: if two terms are \(\lambda\)-abstractions
+\(\lambda (x:A).t\) and \(\lambda (x:A').t'\) we need only compare \(A\) and
+\(A'\), as well as \(t\) and \(t'\) for conversion.
+Weak head reduction is a strategy that allows us to access the head of a term
+rather efficiently.
+
+The idea is to only deal with redexes (\ie left-hand side of reduction rules)
+that appear at the top-level and might be hiding the head constructor. As such
+when considering \(\lambda (x:A).t\), neither \(A\) nor \(t\) will be reduced
+because we already know the head, or the shape, of the term: it is a
+\(\lambda\). However, if we have an application \(t\ u\), we will first weak
+head reduce \(t\) to see if it reaches a \(\lambda\): if it does we substitute
+\(u\) and repeat the process, if it does not, then we have reached a weak head
+normal form.
+
+Weak head normal forms are by definition the terms that cannot be reduced
+further by weak head reduction.
+
+\begin{definition}[Normal form]
+  A term \(t\) is a normal form for a reduction \(\red\) if it doesn't reduce
+  for \(\red\).
+  \[
+    t \not \red
+  \]
+\end{definition}
+
+It is however possible to characterise weak
+head normal forms syntactically. For this we need to talk about \emph{neutral}
+forms.
+
+\begin{definition}[Neutral forms]
+  A term \(t\) is neutral for a reduction \(\red\) if substituting it inside
+  another term doesn't introduce redexes. Equivalently substituting a neutral
+  term \(t\) in a normal form \(u\) will yield another normal form.
+  \[
+    u[x \sto t] \not \red
+  \]
+\end{definition}
+
+\todo{Syntactic characterisation, on simple case and/or code version?}
