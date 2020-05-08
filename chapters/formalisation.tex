@@ -271,7 +271,7 @@ One of the advantages of this, is that no universes are required to say that
 \end{mathpar}
 
 This difference become clearer when considering the two main notion of
-universes: namely Tarski and Russel universes.
+universes: namely Tarski and Russell universes.
 
 \paradot{Tarski universes}
 
@@ -339,10 +339,10 @@ I still prefer having a notion of \(\Pi\)-types that is independent of universes
 and codes so that their behaviour is defined once and for all for every
 universe.
 
-\paradot{Russel universes}
+\paradot{Russell universes}
 
 The other option, the one used in \Coq, \Agda and most type-theory-based proof
-assistants, is to use Russel universes. In this setting types are just terms
+assistants, is to use Russell universes. In this setting types are just terms
 that inhabit a universe:
 \[
   \Ga \vdash A : \Type
@@ -351,7 +351,7 @@ As such we do not need something like \(\CEl\) to bridge between the two worlds.
 In a sense, this is a special case of Tarki universes where codes are types
 and \(\CEl\) is the identity function.
 
-With Russel universes \(\Pi\)-types are typed as follows:
+With Russell universes \(\Pi\)-types are typed as follows:
 \begin{mathpar}
   \infer
     {
@@ -362,10 +362,10 @@ With Russel universes \(\Pi\)-types are typed as follows:
   %
 \end{mathpar}
 
-When formalising universes there is a trade-off between the concise Russel
+When formalising universes there is a trade-off between the concise Russell
 universes and the compartmentalised Tarski universes. On the interface with a
 user however, I think universes are best when they are the least invasive, which
-works better in a Russel setting. This does not prevent the system from having
+works better in a Russell setting. This does not prevent the system from having
 Tarski universes under the hood.
 
 \subsection{Formalisation of syntax}
@@ -453,7 +453,7 @@ explicit substitutions and fully-annotated terms.
 However, these are not enforced because these are not \emph{constructors}.
 Nothing prevents us from providing an instance where \mintinline{coq}{term}
 and \mintinline{coq}{type} are the same and \mintinline{coq}{El} is the identity
-(hence Russel universes), functions that ignore the annotations for
+(hence Russell universes), functions that ignore the annotations for
 \mintinline{coq}{app} and \mintinline{coq}{lam}, or meta-level functions for
 the substitutions.
 For instance, here is a version with explicit substitutions, but the rest as I
