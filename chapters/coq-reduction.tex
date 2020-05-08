@@ -19,6 +19,8 @@ have the same head constructor: if two terms are \(\lambda\)-abstractions
 Weak head reduction is a strategy that allows us to access the head of a term
 rather efficiently.
 
+\subsection{Characterisation}
+
 The idea is to only deal with redexes (\ie left-hand side of reduction rules)
 that appear at the top-level and might be hiding the head constructor. As such
 when considering \(\lambda (x:A).t\), neither \(A\) nor \(t\) will be reduced
@@ -42,6 +44,7 @@ further by weak head reduction.
 It is however possible to characterise weak
 head normal forms syntactically. For this we need to talk about \emph{neutral}
 forms.
+The intuition is that a neutral term is a \emph{stuck} term.
 
 \begin{definition}[Neutral forms]
   A term \(t\) is neutral for a reduction \(\red\) if substituting it inside
@@ -52,4 +55,159 @@ forms.
   \]
 \end{definition}
 
-\todo{Syntactic characterisation, on simple case and/or code version?}
+A neutral form is in particular a normal form.
+
+Focusing on a small fragment of \acrshort{PCUIC} without inductive types and so
+on, we can characterise weak head neutral (\(\whne\)) and normal forms \(\whnf\)
+with the following mutual judgements:
+\marginnote[1cm]{
+  The first rule is there to make sure that the variable doesn't correspond to
+  local definition because those reduce.
+}
+\begin{mathpar}
+  \infer
+    {(x : A) \in \Ga}
+    {\Ga \vdash x\ \whne}
+  %
+
+  \infer
+    {\Ga \vdash u\ \whne}
+    {\Ga \vdash u\ v\ \whne}
+  %
+
+  \infer
+    {\Ga \vdash u\ \whne}
+    {\Ga \vdash u\ \whnf}
+  %
+
+  \infer
+    { }
+    {\Ga \vdash \Type\ \whnf}
+  %
+
+  \infer
+    { }
+    {\Ga \vdash \Pi (x.A).B\ \whnf}
+  %
+
+  \infer
+    { }
+    {\Ga \vdash \lambda (x.A).t\ \whnf}
+  %
+\end{mathpar}
+As you can see, terms like \((\lambda (x.A).t)\ u\) or
+\(\tlet\ x := u\ \tin\ t\) are not weak head normal forms, and a fortiori not
+weak head neutral forms.
+Indeed they both reduce to \(t[x \sto u]\) for weak head reduction.
+
+Before I show how we deal with rest of the constructions in the formalisation
+I need to talk about how we parameterise the weak head reduction.
+
+\subsection{Reduction flags}
+
+In order to be able to fine-tune our reduction strategy we introduce the notion
+of reduction flags. Those mimic the flags that are used by \Coq internally.
+
+\begin{minted}{coq}
+Module RedFlags.
+
+  Record t := mk {
+    beta   : bool ;
+    iota   : bool ;
+    zeta   : bool ;
+    delta  : bool ;
+    fix_   : bool ;
+    cofix_ : bool
+  }.
+
+  Definition default := mk true true true true true true.
+
+  Definition nodelta := mk true true true false true true.
+
+End RedFlags.
+\end{minted}
+
+The names refer to the reduction rules that they activate or not.
+Setting \mintinline{coq}{beta} to \mintinline{coq}{true} means that we will
+reduce \(\beta\)-redexes.
+\mintinline{coq}{iota} is for the reduction of pattern-matching,
+\mintinline{coq}{zeta} for the reduction of let-bindings and unfolding of local
+definitions, \mintinline{coq}{delta} is for the unfolding of global definitions,
+\mintinline{coq}{fix_} is for the unfolding of fixed-points and
+\mintinline{coq}{cofix_} for that of cofixed-points.
+
+The default is to reduce all those, but later we will also use a version which
+doesn't do \(\delta\)-reductions to speed up conversion.
+
+\subsection{\Coq specification}
+
+The reduction flags parameterise the weak head reduction and as such they
+affect the definition of weak head normal and neutral forms.
+
+\begin{minted}{coq}
+Context (flags : RedFlags.t).
+Context (Σ : global_env).
+
+Inductive whnf Γ : term -> Prop :=
+| whnf_ne t            : whne Γ t -> whnf Γ t
+| whnf_sort s          : whnf Γ (tSort s)
+| whnf_prod na A B     : whnf Γ (tProd na A B)
+| whnf_lam na A B      : whnf Γ (tLambda na A B)
+| whnf_cstrapp i n u v : whnf Γ (mkApps (tConstruct i n u) v)
+| whnf_indapp i u v    : whnf Γ (mkApps (tInd i u) v)
+| whnf_fix mfix idx    : whnf Γ (tFix mfix idx)
+| whnf_cofix mfix idx  : whnf Γ (tCoFix mfix idx)
+
+with whne Γ : term -> Prop :=
+| whne_rel i :
+    option_map decl_body (nth_error Γ i) = Some None ->
+    whne Γ (tRel i)
+
+| whne_rel_nozeta i :
+    RedFlags.zeta flags = false ->
+    whne Γ (tRel i)
+
+| whne_letin_nozeta na B b t :
+    RedFlags.zeta flags = false ->
+    whne Γ (tLetIn na B b t)
+
+| whne_const c u decl :
+    lookup_env Σ c = Some (ConstantDecl decl) ->
+    decl.(cst_body) = None ->
+    whne Γ (tConst c u)
+
+| whne_const_nodelta c u :
+    RedFlags.delta flags = false ->
+    whne Γ (tConst c u)
+
+| whne_app f v :
+    whne Γ f ->
+    whne Γ (tApp f v)
+
+| whne_case i p c brs :
+    whne Γ c ->
+    whne Γ (tCase i p c brs)
+
+| whne_case_noiota i p c brs :
+    RedFlags.iota flags = false ->
+    whne Γ (tCase i p c brs)
+
+| whne_proj p c :
+    whne Γ c ->
+    whne Γ (tProj p c)
+
+| whne_proj_noiota p c :
+    RedFlags.iota flags = false ->
+    whne Γ (tProj p c).
+\end{minted}
+
+Applied constructors and inductive types are normal, same as fixed- and
+cofixed-points.
+
+Variables are neutral if they refer to local definitions when \(\zeta\) is
+deactivated, or if they refer to assumptions.
+Similarly, constants are neutral is they refer to global definitions when
+\(\delta\) is off, or if they refer to an axiom.
+let-bindings are only neutral when \(\zeta\) is off.
+A pattern-matching expression is neutral when the scrutiny is neutral or if the
+\(\iota\) flag is off. The same goes for projections.
