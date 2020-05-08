@@ -134,11 +134,9 @@ For instance we have
 to denote the fact that \(A\) and \(B\) as hypotheses, \emph{entail} the
 proposition \(A \wedge B\) (read `\(A\) \emph{and} \(B\)').
 \marginnote[0.2cm]{
-  This setting with only one proposition on the right is called
-  \emph{natural deduction} and was introduced by Gentzen;
-  this is not the only possible presentation of judgements and inference rules,
-  for instance Gentzen also introduced the \emph{sequent calculus} where there
-  can be several propositions on the right-hand side.
+  There are also settings where several propositions appear on the right-hand
+  side: \(A, B \vdash C, D\) means that assuming \(A\) and \(B\) then either
+  \(C\) or \(D\) hold.
 }
 This is called a \emph{judgement}: \(A, B, C \vdash D\) means that,
 \emph{assuming} \(A\), \(B\) \emph{and} \(C\), then \(D\) holds.
@@ -191,6 +189,12 @@ That is to say, to prove \(A \wedge B\) (under hypotheses \(\Ga\)), it
 \emph{suffices} to prove \(A\) and \(B\) (under the same hypotheses).
 This is called an \emph{introduction} rule because it allows us to introduce a
 connective in the conclusion.
+\marginnote[0.3cm]{
+  Once again, this is one of many ways to proceed.
+  This setting corresponds to \emph{natural deduction} and was introduced by
+  Gentzen; he also introduced \emph{sequent calculus} where there are no
+  elimination rules, but introduction rules on the left and on the right.
+}
 Sometimes, we want to be able to conclude something from a complex assumption
 like \(A \wedge B\), this is instead called an \emph{elimination} rule.
 \begin{mathpar}
@@ -281,128 +285,104 @@ The syntax is given by
     P, Q, A, B &\bnf& \top \bnfor \bot \bnfor P \wedge Q \bnfor P \vee Q
     \bnfor P \to Q \bnfor \neg P \\
     \Ga, \D &\bnf& \ctxempty \bnfor \Ga, P \\
-    \mathcal{J} &\bnf& \Ga \vdash P
+    \mathcal{J} &\bnf& \Ga \vdash \D
   \end{array}
 \]
 which corresponds to \emph{propositional logic}.
-\todo{Rewrite the rest in natural deduction}
-I will give the rules in separate bundles: the first of which consists of
-the two important rules of \emph{axiom} and \emph{cut}.
-\marginnote[1cm]{
-  Next to the rules I write their name in parentheses.
-  \(I\) stands for identity.
-}
-\begin{mathpar}
-  \infer
-    { }
-    {A \vdash A}
-  (I)
+Notice how the right-hand side of judgements contains a context, \ie a list of
+propositions, rather than just one as we previously saw.
 
-  \infer
-    {
-      \Ga \vdash \D, A \\
-      A, \Xi \vdash \Theta
-    }
-    {\Ga, \Xi \vdash \D, \Theta}
-  (Cut)
-\end{mathpar}
-While the \emph{axiom} rule has nothing special about it, the \emph{cut} rule
-might seem a bit peculiar. If we forget about \(\D\) and \(\Xi\), it says that
-if \(\Ga\) entails \(A\) which itself entails \(\Theta\) then \(\Ga\) entails
-\(\Theta\), which is not so far from the \emph{modus ponens} after all.
-
-Then we have the logical rules---\ie that pertain to the logical constructors
+I will give the rules in two separate bundle.
+We first have the logical rules---\ie that pertain to the logical constructors
 of propositional logic:
 \marginnote[1cm]{
-  The \(L\)s and \(R\)s in rules indicate whether it operates on the left or
-  right of the sequent.
+  Next to the rules I write their name in parentheses.
+  \(ax\) stands for `axiom'.
+  The \(I\)s and \(E\)s in rules indicate whether each rule is an introduction
+  rule or an elimination rule.
 }
 \begin{mathpar}
   \infer
-    {\Ga, A \vdash \D}
-    {\Ga, A \wedge B \vdash \D}
-  (\wedge L_1)
+    {A \in \Ga}
+    {\Ga \vdash A}
+  (ax)
 
   \infer
-    {\Ga \vdash A, \D}
+    {
+      \Ga \vdash A \\
+      \Ga \vdash B
+    }
+    {\Ga \vdash A \wedge B}
+  (\wedge I)
+
+  \infer
+    {\Ga \vdash A \wedge B}
+    {\Ga \vdash A}
+  (\wedge E_1)
+
+  \infer
+    {\Ga \vdash A \wedge B}
+    {\Ga \vdash B}
+  (\wedge E_2)
+
+  \infer
+    {\Ga \vdash A, B, \D}
     {\Ga \vdash A \vee B, \D}
-  (\vee R_1)
+  (\vee I)
 
   \infer
-    {\Ga,B \vdash \D}
-    {\Ga, A \wedge B \vdash \D}
-  (\wedge L_2)
-
-  \infer
-    {\Ga \vdash B, \D}
     {\Ga \vdash A \vee B, \D}
-  (\vee R_2)
-
-  \infer
-    {
-      \Ga, A \vdash \D \\
-      \Xi, B \vdash \Theta
-    }
-    {\Ga, \Xi, A \vee B \vdash \D, \Theta}
-  (\vee L)
-
-  \infer
-    {
-      \Ga \vdash A,\D \\
-      \Xi \vdash B, \Theta
-    }
-    {\Ga, \Xi \vdash A \wedge B, \D, \Theta}
-  (\wedge R)
-
-  \infer
-    {
-      \Ga \vdash A, \D \\
-      \Xi, B \vdash \Theta
-    }
-    {\Ga, \Xi, A \to B \vdash \D, \Theta}
-  (\to L)
+    {\Ga \vdash A, B, \D}
+  (\vee E)
 
   \infer
     {\Ga, A \vdash B, \D}
     {\Ga \vdash A \to B, \D}
-  (\to R)
+  (\to I)
 
   \infer
-    {\Ga \vdash A, \D}
-    {\Ga, \neg A \vdash \D}
-  (\neg L)
+    {
+      \Ga \vdash A \to B, \D \\
+      \Xi \vdash A, \Theta
+    }
+    {\Ga, \Xi \vdash \D, \Theta}
+  (\to E)
 
   \infer
     {\Ga, A \vdash \D}
     {\Ga \vdash \neg A, \D}
-  (\neg R)
+  (\neg I)
 
   \infer
-    {\Ga \vdash \D}
-    {\Ga, \top \vdash \D}
-  (\top L)
+    {
+      \Ga \vdash \neg A, \D \\
+      \Xi \vdash A, \Theta
+    }
+    {\Ga, \Xi \vdash \D, \Theta}
+  (\neg E)
 
   \infer
     { }
-    {\Ga \vdash \top, \D}
-  (\top R)
-
-  \infer
-    { }
-    {\Ga, \bot \vdash \D}
-  (\bot L)
+    {\vdash \top}
+  (\top I)
 
   \infer
     {\Ga \vdash \D}
     {\Ga \vdash \bot, \D}
-  (\bot R)
+  (\bot I)
+
+  \infer
+    {\Ga \vdash \bot, \D}
+    {\Ga \vdash \D}
+  (\bot E)
 \end{mathpar}
 
 The rest are structural rules that allow us to weaken the hypotheses (\ie add
 a new, unused hypothesis in the context) or the conclusion, or reorder
 propositions and remove duplicates.
 \marginnote[1cm]{
-  \(W\) stands for weakening, \(C\) for contraction and \(P\) for permutation.
+  \(W\) stands for weakening, \(C\) for contraction and \(P\) for permutation
+  while \(L\) and \(R\) stand for left and right.
 }
 \begin{mathpar}
   \infer
@@ -436,41 +416,40 @@ propositions and remove duplicates.
   (PR)
 \end{mathpar}
 
-\LK is classical because we can derive the \acrfull{LEM} from it.
+\NK is classical because we can derive the \acrfull{LEM} from it.
 \begin{mathpar}
-  \infer*[Right=\((CR)\)]
+  \infer*[Right=\(\vee I\)]
     {
-      \infer*[Right=\((\vee R_1)\)]
+      \infer*[Right=\(PR\)]
         {
-          \infer*[Right=\((PR)\)]
+          \infer*[Right=\(\neg I\)]
             {
-              \infer*[Right=\((\vee R_2)\)]
-                {
-                  \infer*[Right=\((\neg R)\)]
-                    {
-                      \infer*[Right=\((I)\)]
-                        { }
-                        {P \vdash P}
-                    }
-                    {\vdash \neg P, P}
-                }
-                {\vdash P \vee \neg P, P}
+              \infer*[Right=\(ax\)]
+                { }
+                {P \vdash P}
             }
-            {\vdash P, P \vee \neg P}
+            {\vdash \neg P, P}
         }
-        {\vdash P \vee \neg P, P \vee \neg P}
+        {\vdash P, \neg P}
     }
     {\vdash P \vee \neg P}
 \end{mathpar}
-\LK also features double negation elimination:
+
+\NK also features double negation elimination:
 \[
-  \infer*[Right=\((\to R)\)]
+  \infer*[Right=\((\to I)\)]
     {
-      \infer*[Right=\((\neg L)\)]
+      \infer*[Right=\((\neg E)\)]
         {
-          \infer*[Right=\((\neg R)\)]
+          \infer*[Right=\((ax)\)]
+            { }
+            {\neg \neg P \vdash \neg \neg P}
+          \\
+          \infer*[Right=\((\neg I)\)]
             {
-              \infer*[Right=\((I)\)]{ }{P \vdash P}
+              \infer*[Right=\((ax)\)]
+                { }
+                {P \vdash P}
             }
             {\vdash \neg P, P}
         }
@@ -481,52 +460,17 @@ propositions and remove duplicates.
 
 \subsection{Intuitionistic logic}
 
-Intuitionistic logic does not abide by the \acrshort{LEM}, so its treatment of
+Intuitionistic logic does not abide by the \acrlong{LEM}, so its treatment of
 negation is a bit different so that double negation cannot be eliminated as
-above. As such we define \LJ in natural deduction (the sequent style was also
-of importance to get classical logic), on the same syntax of propositional
-logic.
-It is pretty similar.
+above. As such we define \NJ in natural deduction, on the same syntax of
+propositional logic. The main difference is that we revert to only one
+propositions on the right-hand side of judgements.
+It is pretty similar to \NK.
 \begin{mathpar}
   \infer
-    { }
-    {A \vdash A}
-  (I)
-
-  \infer
-    {
-      \Ga \vdash A \\
-      A, \D \vdash B
-    }
-    {\Ga, \D \vdash B}
-  (Cut)
-\end{mathpar}
-
-We have less rules because some are no longer useful with only one
-proposition on the right-hand side.
-\begin{mathpar}
-  \infer
-    {\Ga, A, B \vdash C}
-    {\Ga, A \wedge B \vdash C}
-  (\wedge L)
-
-  \infer
+    {A \in \Ga}
     {\Ga \vdash A}
-    {\Ga \vdash A \vee B}
-  (\vee R_1)
-
-  \infer
-    {\Ga \vdash B, \D}
-    {\Ga \vdash A \vee B, \D}
-  (\vee R_2)
-
-  \infer
-    {
-      \Ga, A \vdash C \\
-      \Ga, B \vdash C
-    }
-    {\Ga, A \vee B \vdash C}
-  (\vee L)
+  (ax)
 
   \infer
     {
@@ -534,45 +478,72 @@ proposition on the right-hand side.
       \Ga \vdash B
     }
     {\Ga \vdash A \wedge B}
-  (\wedge R)
+  (\wedge I)
+
+  \infer
+    {\Ga \vdash A \wedge B}
+    {\Ga \vdash A}
+  (\wedge E_1)
+
+  \infer
+    {\Ga \vdash A \wedge B}
+    {\Ga \vdash B}
+  (\wedge E_2)
+
+  \infer
+    {\Ga \vdash A}
+    {\Ga \vdash A \vee B}
+  (\vee I_1)
+
+  \infer
+    {\Ga \vdash B}
+    {\Ga \vdash A \vee B}
+  (\vee I_2)
 
   \infer
     {
-      \Ga \vdash A \\
-      \D, B \vdash C
+      \Ga \vdash A \vee B \\
+      \Ga, A \vdash C \\
+      \Ga, B \vdash C
     }
-    {\Ga, \D, A \to B \vdash C}
-  (\to L)
+    {\Ga \vdash C}
+  (\vee E)
 
   \infer
     {\Ga, A \vdash B}
     {\Ga \vdash A \to B}
-  (\to R)
+  (\to I)
 
   \infer
-    {\Ga \vdash A}
-    {\Ga, \neg A \vdash B}
-  (\neg L)
+    {
+      \Ga \vdash A \to B \\
+      \Ga \vdash A
+    }
+    {\Ga \vdash B}
+  (\to E)
 
   \infer
     {\Ga, A \vdash \bot}
     {\Ga \vdash \neg A}
-  (\neg R)
+  (\neg I)
 
   \infer
+    {
+      \Ga \vdash \neg A \\
+      \Ga \vdash A
+    }
+    {\Ga \vdash \bot}
+  (\neg E)
+
+  \infer
+    { }
+    {\Ga \vdash \top}
+  (\top I)
+
+  \infer
+    {\Ga \vdash \bot}
     {\Ga \vdash A}
-    {\Ga, \top \vdash A}
-  (\top L)
-
-  \infer
-    { }
-    {\vdash \top}
-  (\top R)
-
-  \infer
-    { }
-    {\Ga, \bot \vdash A}
-  (\bot L)
+  (\bot E)
 \end{mathpar}
 
 The structural rules are only happening on the left now since there is nothing
@@ -599,8 +570,8 @@ a proof where the last rule is an introduction rule, \ie a \emph{right} rule.
 For instance, every proof of \(A \vee B\) must contain either a proof of \(A\)
 or a proof of \(B\).
 This is obtained by a process known as \emph{cut-elimination} which removes all
-occurrences of the \((Cut)\) rule in a derivation, showing at the same time that
-it is \emph{admissible} or redundant.
+occurrences of the modus ponens \((\to E)\) rule in a derivation, showing at the
+same time that it is \emph{admissible} or redundant.
 
 \subsection{Mechanised proofs}
 
