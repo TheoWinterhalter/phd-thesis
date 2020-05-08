@@ -217,7 +217,34 @@ procedure we implement.
 
 \section{The reduction machine}
 
+We now have a clearer idea of what we wish to implement. As I already said, this
+is still not as straightforward as one would hope.
+As it is a bit more complex than an evaluation function taking a term and
+returning its weak head normal form, we talk about an \emph{abstract machine}.
+
 \subsection{Idea behind the machine}
+
+The idea behind the machine is to \emph{focus and reduce}: whenever there is
+a redex at the top-level, we reduce it, and when we reach a term potentially
+stuck (say an application), we focus on a subterm and reduce it to see if we
+reach another redex.
+
+This is often achived by taking a list of arguments, \ie a \emph{stack} besides
+the term.
+\todo{Say more}
+
+\begin{mathpar}
+  \infer
+    {\dpair{t \mid u :: \pi} \red_\WM a}
+    {\dpair{t\ u \mid \pi} \red_\WM a}
+  %
+
+  \infer
+    {\dpair{t[x \sto u] \mid \pi} \red_\WM a}
+    {\dpair{\lambda (x:A).t \mid u :: \pi} \red_\WM a}
+  %
+\end{mathpar}
+\todo{Improve, fix, complete?}
 
 \subsection{The order}
 
