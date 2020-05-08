@@ -254,22 +254,45 @@ a redex at the top-level, we reduce it, and when we reach a term potentially
 stuck (say an application), we focus on a subterm and reduce it to see if we
 reach another redex.
 
-This is often achived by taking a list of arguments, \ie a \emph{stack} besides
-the term.
-\todo{Say more}
-
+This is often achived by taking a list of arguments, \ie a \emph{stack}, besides
+the term. When considering an application, the argument is \emph{pushed} on top
+of the stack and we \emph{focus} on the left-hand term.
+I will write \(\dpair{t \mid \pi}\) for term \(t\) \emph{against} stack \(\pi\).
+Whe want to define weak head reduction \(\red_\WM\) as something like this:
+\marginnote[2cm]{
+  Here I confuse \(\dpair{t \mid \pi}\) as the data of a pair and as the term
+  corresponding to \(t\) applied to the arguemtns of \(\pi\).
+}
 \begin{mathpar}
   \infer
-    {\dpair{t \mid u :: \pi} \red_\WM a}
-    {\dpair{t\ u \mid \pi} \red_\WM a}
+    {\Ga \vdash \dpair{t \mid u :: \pi} \red_\WM a}
+    {\Ga \vdash \dpair{t\ u \mid \pi} \red_\WM a}
   %
 
   \infer
-    {\dpair{t[x \sto u] \mid \pi} \red_\WM a}
-    {\dpair{\lambda (x:A).t \mid u :: \pi} \red_\WM a}
+    {\Ga \vdash \dpair{t[x \sto u] \mid \pi} \red_\WM a}
+    {\Ga \vdash \dpair{\lambda (x:A).t \mid u :: \pi} \red_\WM a}
+  %
+
+  \infer
+    {\Ga \vdash \dpair{t \mid \pi}\ \whnf}
+    {\Ga \vdash \dpair{t \mid \pi} \red_\WM \dpair{t \mid \pi}}
   %
 \end{mathpar}
-\todo{Improve, fix, complete?}
+The things above the line can be seen as recursive calls of the machine.
+This is rather informal, but it doesn't correspond to the final definition
+anyway.
+
+Regarding termination, we see two cases: in the first we focused on a subterm,
+whereas in the second we do a recursive call on a \emph{reduct}.
+As we have seen, assuming strong normalisation is tantamount to having a
+well-founded order on coreduction, and it shouldn't be surprising that the
+subterm relation is also well-founded. Taking a lexicographical order on both
+these orders seems like a good option.
+
+Problems arise however when considering other constructions of \acrshort{PCUIC},
+particularly pattern-matching and fixed-points.
+\todo{Continue, maybe improve the above}
 
 \subsection{The order}
 
