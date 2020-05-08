@@ -50,10 +50,10 @@ Even then, there is room for question on whether this really constitutes a
 proof.
 For instance, how \emph{hard} is it for the computer to \emph{see} that the
 proof is indeed correct? One definition would be to say, as long as it takes
-a finite amount of time, it's good, but if it takes ages, we will not have any
+a finite amount of time, it is good, but if it takes ages, we will not have any
 certainty. In \sidecite{de1991plea}, de Bruijn suggests that a proof should be
-self-evident. You should not have to think for hours before seeing that is indeed
-correct, and the same holds for computers.
+self-evident. You should not have to think for hours before seeing that is
+indeed correct, and the same holds for computers.
 
 In the remainder of the section I will address the way we \emph{write}
 statements and proofs.
@@ -134,21 +134,18 @@ For instance we have
 to denote the fact that \(A\) and \(B\) as hypotheses, \emph{entail} the
 proposition \(A \wedge B\) (read `\(A\) \emph{and} \(B\)').
 \marginnote[0.2cm]{
-  The setting with only one proposition on the right is called
-  \emph{natural deduction} and was introduced by Gentzen; with a list of
-  propositions and just introduction rules it is instead called the
-  \emph{sequent calculus}.
+  This setting with only one proposition on the right is called
+  \emph{natural deduction} and was introduced by Gentzen;
+  this is not the only possible presentation of judgements and inference rules,
+  for instance Gentzen also introduced the \emph{sequent calculus} where there
+  can be several propositions on the right-hand side.
 }
-This is called a \emph{judgement}, and in general it can have a list of
-statements on the right: \(A, B, C \vdash D, E, F\) means that, \emph{assuming}
-\(A\), \(B\) \emph{and} \(C\), then \emph{either} \(D\), \(E\) \emph{or} \(F\)
-hold.
-I will focus mostly on cases where the right-hand side consists only
-of one proposition.
+This is called a \emph{judgement}: \(A, B, C \vdash D\) means that,
+\emph{assuming} \(A\), \(B\) \emph{and} \(C\), then \(D\) holds.
 \[
   \begin{array}{rcl}
     \Ga, \D &\bnf& \ctxempty \bnfor \Ga, P \\
-    \mathcal{J} &\bnf& \Ga \vdash \D
+    \mathcal{J} &\bnf& \Ga \vdash P
   \end{array}
 \]
 We can now move on to the notion of \emph{inference} rule. They are what defines
@@ -156,23 +153,30 @@ the logic that we consider, they dictate what judgements can be
 \emph{derived}---\ie proven---and how.
 The simplest of rules usually is the so-called \emph{axiom} rule stating that
 assuming \(A\), you can prove \(A\).
-\marginnote[-0.3cm]{
-  Alternatively we could consider
-  \[
-    \infer
-      {A \in \Ga}
-      {\Ga \vdash A}
-  \]
-}
+% \marginnote[-0.3cm]{
+%   Alternatively we could consider
+%   \[
+%     \infer
+%       {A \in \Ga}
+%       {\Ga \vdash A}
+%   \]
+% }
 \[
   \infer
     { }
     {A \vdash A}
 \]
+or more generally
+\[
+  \infer
+    {A \in \Ga}
+    {\Ga \vdash A}
+\]
 The line separates one judgement below, the conclusion, to one, several or
 possibly no judgements above. They represent requirements to conclude the below
 part. In this case, one does not need to assume anything to conclude that \(A\)
-entails \(A\).
+entails \(A\). The condition \(A \in \Ga\) is not a judgement itself but really
+a side condition.
 Going back to conjunction, the rule\sidenote{It is actually one of many possible
 rules. It all depends on the logic.} to prove one is the following.
 \[
@@ -265,8 +269,11 @@ but I will present the most relevant ones to the rest of my work.
 
 Classical logic is the logic most people have in mind where any proposition is
 either ``true'' or ``false'' (but not either provable or provably
-contradictory). Gentzen describe it in a sequent calculus called
-\LK~\sidecite{gentzen1935untersuchungen}.
+contradictory).
+% Gentzen describe it in a sequent calculus called
+% \LK~\sidecite{gentzen1935untersuchungen}.
+Gentzen describes a natural deduction system called
+\NK~\sidecite{gentzen1935untersuchungen}.
 
 The syntax is given by
 \[
@@ -274,10 +281,11 @@ The syntax is given by
     P, Q, A, B &\bnf& \top \bnfor \bot \bnfor P \wedge Q \bnfor P \vee Q
     \bnfor P \to Q \bnfor \neg P \\
     \Ga, \D &\bnf& \ctxempty \bnfor \Ga, P \\
-    \mathcal{J} &\bnf& \Ga \vdash \D
+    \mathcal{J} &\bnf& \Ga \vdash P
   \end{array}
 \]
 which corresponds to \emph{propositional logic}.
+\todo{Rewrite the rest in natural deduction}
 I will give the rules in separate bundles: the first of which consists of
 the two important rules of \emph{axiom} and \emph{cut}.
 \marginnote[1cm]{
