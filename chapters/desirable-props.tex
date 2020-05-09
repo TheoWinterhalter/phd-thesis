@@ -159,8 +159,11 @@ type up to conversion.
   \(\Ga \vdash t : A\) and \(\Ga \vdash t : B\) imply \(\Ga \vdash A \equiv B\).
 \end{definition}
 
+\marginnote[0.5cm]{
+  We will talk more in depth about Curry-style terms in \nrefch{formalisation}.
+}
 This usually means that the term is carrying enough information to recover
-its type. If one were to use Curry-style terms~\misref{} like
+its type. If one were to use Curry-style terms like
 \(\lambda x.\ x\) then this property cannot hold: indeed
 \(\vdash \lambda x.\ x : \unit \to \unit\) and
 \(\vdash \lambda x.\ x : \bool \to \bool\) both hold and the two arrow types
