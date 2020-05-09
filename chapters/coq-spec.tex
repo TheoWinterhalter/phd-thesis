@@ -713,8 +713,8 @@ type_Case in u p c brs args :
              mkApps p (skipn npar args ++ [c])
 \end{minted}
 This rule is rather hairy. We verify that the inductive type given for the
-scrutiny is declared; we verify that the return predicate has the right type and
-is in a sort which can be eliminated to; we verify that the scrutiny is indeed
+scrutinee is declared; we verify that the return predicate has the right type and
+is in a sort which can be eliminated to; we verify that the scrutinee is indeed
 typed in the inductive type and we recover the indices from its type, they will
 be used in the return type; finally we verify that each branch is well-typed
 using the other information.
