@@ -74,7 +74,7 @@ being able to exploit the knowledge that \(\Gamma_\bot\) is inconsistent
 because of the syntactical nature of the translation.
 
 If moreover \(\transl{\ctxempty} = \ctxempty\), knowing that we also have
-\(\vdash 0 : \mathbb{N}\), we get \(\vdash [0] : \transl{\mathbb{N}}\)
+\(\vdash_\exmark 0 : \mathbb{N}\), we get \(\vdash [0] : \transl{\mathbb{N}}\)
 which means that \([0]\) is a closed term.
 \reminder[-1.7cm]{Preservation of falsehood}{
   A translation preserves falsehood when there exists \(t\) such that
@@ -207,7 +207,7 @@ following diagram.
 \[
 \begin{array}{cll}
   &\Prod{x : A} f\ x = g\ x \\
-  \to & x : A \vdash f\ x \equiv g\ x &
+  \to & x : A \vdash_\exmark f\ x \equiv g\ x &
   \mbox{by reflection} \\
   \to &  (\lambda (x:A). {f \ x}) \equiv (\lambda{(x:A)}.{g \ x}) &
   \mbox{by congruence of $\equiv$} \\

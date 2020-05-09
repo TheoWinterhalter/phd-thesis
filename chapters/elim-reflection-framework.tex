@@ -212,6 +212,9 @@ respective proofs in \acrshort{ETT}, \acrshort{ETT} is conservative over
 Similarly to the syntax I will present first the common rules of all involved
 theories and then detail the specificities of each.
 
+Note that I will differenciate \acrshort{ETT} judgements from those of the
+target by using \(\exmark\) as a subscript to the turnstile: \(\vdash_\exmark\).
+
 \subsection{Common typing rules}
 
 For all systems, the typing rules are the same for the most part. Conversion and
@@ -366,19 +369,20 @@ This means we need to define conversion in this setting.
 \marginnote[0.3cm]{
   See \nrefch{formalisation}.
 }
-Here, I will define
-conversion without relying on reduction, but instead in a typed way.
+Here, I will define conversion without relying on reduction, but instead in a
+typed way.
 
 \paradot{Computation}
 
 \begin{mathpar}
   \infer[]
-    {\isterm{\Ga}{A}{s} \\
-      \isterm{\Ga,x:A}{B}{s'} \\
-      \isterm{\Ga,x:A}{t}{B} \\
-      \isterm{\Ga}{u}{A}
+    {
+      \xisterm{\Ga}{A}{s} \\
+      \xisterm{\Ga,x:A}{B}{s'} \\
+      \xisterm{\Ga,x:A}{t}{B} \\
+      \xisterm{\Ga}{u}{A}
     }
-    {\eqterm
+    {\xeqterm
       {\Ga}
       {\app
         {(\lam{x:A}{B} t)}
@@ -392,12 +396,13 @@ conversion without relying on reduction, but instead in a typed way.
   %
 
   \infer[]
-    {\isterm{\Ga}{A}{s} \\
-      \isterm{\Ga}{u}{A} \\
-      \isterm{\Ga, x:A, e:\Eq{A}{u}{x}}{P}{s'} \\
-      \isterm{\Ga}{w}{P[x \sto u, e \sto \refl{A} u]}
+    {
+      \xisterm{\Ga}{A}{s} \\
+      \xisterm{\Ga}{u}{A} \\
+      \xisterm{\Ga, x:A, e:\Eq{A}{u}{x}}{P}{s'} \\
+      \xisterm{\Ga}{w}{P[x \sto u, e \sto \refl{A} u]}
     }
-    {\eqterm
+    {\xeqterm
       {\Ga}
       {\J{A}{u}{x.e.P}{w}{u}{\refl{A} u}}
       {w}
@@ -406,12 +411,13 @@ conversion without relying on reduction, but instead in a typed way.
   %
 
   \infer[]
-    {\isterm{\Ga}{A}{s} \\
-      \isterm{\Ga}{u}{A} \\
-      \isterm{\Ga,x:A}{B}{s'} \\
-      \isterm{\Ga}{v}{B[x \sto u]}
+    {
+      \xisterm{\Ga}{A}{s} \\
+      \xisterm{\Ga}{u}{A} \\
+      \xisterm{\Ga,x:A}{B}{s'} \\
+      \xisterm{\Ga}{v}{B[x \sto u]}
     }
-    {\eqterm
+    {\xeqterm
       {\Ga}
       {\pio{x:A}{B}{\pair{x:A}{B}{u}{v}}}
       {u}
@@ -420,12 +426,13 @@ conversion without relying on reduction, but instead in a typed way.
   %
 
   \infer[]
-    {\isterm{\Ga}{A}{s} \\
-      \isterm{\Ga}{u}{A} \\
-      \isterm{\Ga,x:A}{B}{s'} \\
-      \isterm{\Ga}{v}{B[x \sto u]}
+    {
+      \xisterm{\Ga}{A}{s} \\
+      \xisterm{\Ga}{u}{A} \\
+      \xisterm{\Ga,x:A}{B}{s'} \\
+      \xisterm{\Ga}{v}{B[x \sto u]}
     }
-    {\eqterm
+    {\xeqterm
       {\Ga}
       {\pit{x:A}{B}{\pair{x:A}{B}{u}{v}}}
       {v}
@@ -459,17 +466,19 @@ conversion without relying on reduction, but instead in a typed way.
 }
 \begin{mathpar}
   \infer[]
-    {\eqterm{\Ga}{t_1}{t_2}{T_1} \\
-      \eqtype{\Ga}{T_1}{T_2}
+    {
+      \xeqterm{\Ga}{t_1}{t_2}{T_1} \\
+      \xeqtype{\Ga}{T_1}{T_2}
     }
-    {\eqterm{\Ga}{t_1}{t_2}{T_2}}
+    {\xeqterm{\Ga}{t_1}{t_2}{T_2}}
   %
 
   \infer[]
-    {\isterm{\Ga}{u}{A} \\
-      \eqtype{\Ga}{A}{B} : s
+    {
+      \xisterm{\Ga}{u}{A} \\
+      \xeqtype{\Ga}{A}{B} : s
     }
-    {\isterm{\Ga}{u}{B}}
+    {\xisterm{\Ga}{u}{B}}
   %
 \end{mathpar}
 
@@ -488,12 +497,13 @@ I omit the congruence rules as they are quite heavy and boring.
 Here is for instance the congruence rule for application:
 \[
   \infer[]
-    {\eqterm{\Ga}{A_1}{A_2}{s} \\
-      \eqterm{\Ga,x:A_1}{B_1}{B_2}{s'} \\
-      \eqterm{\Ga}{t_1}{t_2}{\Prod{x:A_1} B_1} \\
-      \eqterm{\Ga}{u_1}{u_2}{A_1}
+    {
+      \xeqterm{\Ga}{A_1}{A_2}{s} \\
+      \xeqterm{\Ga,x:A_1}{B_1}{B_2}{s'} \\
+      \xeqterm{\Ga}{t_1}{t_2}{\Prod{x:A_1} B_1} \\
+      \xeqterm{\Ga}{u_1}{u_2}{A_1}
     }
-    {\eqterm
+    {\xeqterm
       {\Ga}
       {\app{t_1}{x:A_1}{B_1}{u_1}}
       {\app{t_1}{x:A_1}{B_1}{u_1}}
