@@ -329,6 +329,7 @@ prove \mintinline{coq}{A -> A}.
 \centering
 \begin{tabular}{p{0.5\textwidth}|p{0.5\textwidth}}
 \begin{minted}{coq}
+intro A.
 intro x.
 \end{minted}
 &
@@ -346,12 +347,15 @@ us to prove \mintinline{coq}{A}.
 Proving \mintinline{coq}{A}, when we have \mintinline{coq}{A} as an hypothesis
 should be pretty straightforward. The tatic \mintinline{coq}{assumption}
 tells \Coq that the goal can be concluded using one of the assumptions in the
-context (here \mintinline{coq}{x}).
+context (here \mintinline{coq}{x} since \mintinline{coq}{x : A} \ie
+\mintinline{coq}{x} is a proof witness of \mintinline{coq}{A}).
 
 \begingroup
 \centering
 \begin{tabular}{p{0.5\textwidth}|p{0.5\textwidth}}
 \begin{minted}{coq}
+intro A.
+intro x.
 assumption.
 \end{minted}
 &
