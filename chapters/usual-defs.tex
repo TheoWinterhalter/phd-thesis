@@ -7,7 +7,7 @@ It really shines when extended with some interesting principles and datatypes.
 I will give an overview of these features---with the \Coq proof assistant in
 mind---and focus mainly on those that are relevant to this thesis.
 
-\section{Inductive types}
+\section{Inductive types and pattern-matching}
 \labsec{inductive-types}
 
 Inductive types are probably the most emblematic feature of dependent type
@@ -23,6 +23,10 @@ type 'a list =
 | nil
 | cons of 'a * 'a list
 \end{minted}
+Here, the \mintinline{ocaml}{'a} represents \emph{any} type. For instance,
+\mintinline{ocaml}{int list} is the type of lists of integers.
+This is called polymorphism.
+
 They come in different flavours which I will try to explain.
 
 \subsection{Variants}
@@ -56,6 +60,9 @@ Inductive bool : Type :=
 | true
 | false.
 \end{minted}
+In other words, \mintinline{coq}{true} and \mintinline{coq}{false} are the only
+\emph{constructors} of the type \mintinline{coq}{bool}.
+
 Of course, having those is not nearly enough without the usual
 \(\mathsf{if}\) construct.
 For instance \mintinline{coq}{if b then 0 else 1} will return
@@ -63,7 +70,9 @@ For instance \mintinline{coq}{if b then 0 else 1} will return
 and \mintinline{coq}{1} if it is \mintinline{coq}{false}.
 This is already something that makes sense in the simple
 case\sidenote{See \nrefch{simple-types}}, but with dependent types the case
-analysis is also dependent on the scrutinee.
+analysis is also dependent on the scrutinee (\ie the boolean \(b\) in that
+case). The corresponding typing rule is an \emph{elimination} rule as we have
+seen in \nrefch{proof-theory}.
 \begin{mathpar}
   \infer
     {
@@ -87,6 +96,22 @@ It is still the same as the well-known \(\mathsf{if}\), except that we are more
 liberal in the types given to the two branches: they do not have to match as they
 can now depend on the boolean. The \(x.P\) notation means that \(P\) lives in a
 context extended by \(x\) (of type \(\bool\)).
+
+One can for instance write the following definition where the return type does
+\emph{not} depend on the boolean:
+\[
+  \mathsf{P} := \lambda (b : \bool).\ \tif{b}{x.\Type}{\bool}{\nat}
+\]
+where \(\nat\) is the type of natural numbers I am going to present later.
+Here, we have \(\mathsf{P}\ \ttrue = \bool\) and \(\mathsf{P}\ \ffalse = \nat\).
+Using this as a return type, we can write a depepndent version of the
+\(\mathsf{if}\):
+\[
+  \tif{b}{x.\ \mathsf{P}\ x}{\ttrue}{0}
+\]
+The idea is that in the branch where \(b\) is \(\ttrue\), we have to provide
+a boolean, here \(\ttrue\), and in the branch where \(b\) is \(\ffalse\), we
+have to provide a nautral number, I picked \(0\).
 
 The \(\mathsf{if}\) is actually just a notation for a more generic construction
 called \emph{pattern-matching}. \(\tif{b}{x.P}{u}{v}\) is in fact the term
@@ -141,15 +166,18 @@ Once again, pattern-matching allows us to inspect a proof of \(\unit\):
     }
   %
 \end{mathpar}
-This might seem a bit useless, but essentially it means that to prove anything
-involving a dependency on \(\unit\), like \(P[x \sto u]\), it suffices to prove
-it assuming it is \(\tunit\): \(P[x \sto \tunit]\).
+As all rules pertaining to pattern-matching, it is an elimination rule.
+In fact, pattern-matching is the only way to express elimination in \Coq.
+
+This rule might seem a bit useless, but essentially it means that to prove
+anything involving a dependency on \(\unit\), like \(P[x \sto u]\), it suffices
+to prove it assuming it is \(\tunit\): \(P[x \sto \tunit]\).
 When the term \(u\) was already \(\tunit\), the \(\mathsf{match}\) can go away:
 \[
   \pmatch{\tunit}{x.P}{\branch{\tunit}{v}} \red v
 \]
 
-Sometimes this type is called \(\top\) as in the logical triviality.
+Sometimes, this type is called \(\top\) as in the logical triviality.
 
 \paradot{Empty type}
 
@@ -168,7 +196,7 @@ Inductive False :=.
 \end{minted}
 
 It represents the data that should never exist, so any term of type \(\bot\)
-is a \emph{contradiction} with the hyptheses at hand.
+is a \emph{contradiction} with the hypotheses at hand.
 Even though it does not have constructors, pattern-matching still makes sense on
 such terms.
 \marginnote[1.6cm]{
@@ -189,12 +217,17 @@ Here we are able to conjure some inhabitant of \(P[x \sto t]\) from thin air.
 The \(P\) is typically not dependent on the proof of \(\bot\), meaning that from
 an inhabitant of \(\bot\) we can get an inhabitant of \emph{any} type.
 
+In dependent type theory we will define negation \(\neg P\) as \(P \to \bot\).
+As such, we might still end up with inhabitants of \(\bot\) when dealing with
+hypotheses of the shape \(\neg P\).
+
 \subsection{Recursive types}
 
 Inductive types are morally types of trees. For now I only prensented types
 consisting only of leaves. To allow for nodes with subtrees, constructors can
 take subtrees (or subterms) as arguments.
 The best and simplest example of those is that of natural numbers.
+\todo{Not talk about trees, or later?}
 
 \paradot{Natural numbers}
 
@@ -202,6 +235,7 @@ The way we represent \emph{unary} natural numbers in type theory is by saying
 a natural number is either \(0\) or the successor of another natural number
 \(n\), \ie \(n + 1\). We usually write the successor operation \(\natsucc\).
 So natural numbers are \(0\), \(\natsucc\ 0\), \(\natsucc\ (\natsucc\ 0)\), etc.
+respectively representing \(0\), \(1\), \(2\), \dots
 \marginnote[2.7cm]{
   Notice how \(u_\natsucc\) is allowed to mention \(m\). The variable is bound
   by the pattern \(\natsucc\ m\) on the left-hand side.
