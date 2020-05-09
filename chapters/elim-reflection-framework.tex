@@ -2,10 +2,9 @@
 \chapter{Framework}
 \labch{elim-reflection-framework}
 
-Now that the problem is stated, I will clearly define what the type theories
-I will use as source and target. This is a bit redundant with \nrefch{flavours}
-but I think it's worthwhile to make it clear what the translation is operating
-on.
+Now that the problem is stated, I will clearly define the type theories I will
+use as source and target. This is a bit redundant with \nrefch{flavours} but I
+think it is worthwhile to make it clear what the translation is operating on.
 
 \section{Syntax(es)}
 \labsec{trans-syntaxes}
@@ -36,7 +35,7 @@ First, comes the syntax of \acrshort{ETT}.
 Sorts are kept abstract (as represented by the generic \cS) but are not
 unrestricted. With the sorts should come the sort of a sort (or successor
 sort) \(\succs{s}\), the sort of a \(\Pi\)-type \(\pisort{s_1}{s_2}\)
-where \(s_1\) and \(s_2\) are the sorts of the domain and codomain respecitvely,
+where \(s_1\) and \(s_2\) are the sorts of the domain and codomain respectively,
 and likewise for each constructor.
 \sidedef[-0.9cm]{Functional \acrshort{PTS}}{
   A \acrshort{PTS} is \emph{functional} when \(\Ax\) and \(\Rl\) are functional,
@@ -122,7 +121,7 @@ we can use the following context
   n : A,\ n_{\mathit{def}} : n = t
 \]
 
-Similarly, booleans can de encoded as follows.
+Similarly, booleans can be encoded as follows.
 \marginnote[1cm]{
   Note that the sort \(s\) is fixed in the eliminator so it's still not that
   convenient, but it will serve for a few examples.
@@ -601,8 +600,9 @@ reduction however (see \nrefch{desirable-props}).
 \subsection{Typing of \acrshort{WTT}}
 \labsubsec{wtt-typing}
 
-For \acrshort{WTT}, no notion of reduction or conversion and so no conversion
-rule. This leaves us with the typing rules of the extra symbols we added.
+For \acrshort{WTT}, there is no notion of reduction or conversion, hence the
+absence of a conversion rule. This leaves us with the typing rules of the extra
+symbols we added.
 Two of them are in common with \acrshort{ITT} but I will repeat them nonetheless
 for clarity.
 
@@ -662,7 +662,14 @@ for clarity.
       \Ga, x:A \vdash e_B : B_1 = B_2 \\
       \Ga, x:A \vdash e_t : \Heq{B_1}{t_1}{B_2}{t_2}
     }
-    {\lamb{x:A}{e_B} e_t}
+    {
+      \lamb{x:A}{e_B} e_t :
+      \Heq
+        {\Pi (x:A). B_1}
+        {\lambda (x:A).B_1\ t_1}
+        {\Pi (x:A). B_2}
+        {\lambda (x:A).B_2\ t_2}
+    }
   %
 
   \infer
