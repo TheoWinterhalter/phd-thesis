@@ -11,12 +11,12 @@ used.
 Transport can be defined from elimination of equality as in \nrefch{usual-defs}.
 However, in order not to confuse the transports added by the
 translation with the transports that were already present in the
-source, we consider $\transpo{p}$ as part of the syntax in the
-reasoning. It will be unfolded to its definition only after the
-complete translation is performed.
+source, we consider $\transpo{p}$---\ie the transports added by the
+translation---as part of the syntax in the reasoning. It will be unfolded to its
+definition only after the complete translation is performed.
 %
 This idea is not novel as Hofmann already had a $\mathsf{Subst}$ operator that
-was part of his \acrshort{ITT} (noted TT\textsubscript{I} in his
+was part of his \acrshort{ITT} (written TT\textsubscript{I} in his
 paper~\sidecite{hofmann1995conservativity}).
 
 \section{Relating terms and their translation}
@@ -266,13 +266,13 @@ again.
 \end{mathpar}
 
 Once more, constructions specific to \acrshort{ITT} or \acrshort{WTT} are not
-related with \(\sim\): these will only appear in the equalities that are
-transported (the \(p\) in the highlighted rules).
+related with \(\sim\): these will only appear in the equalities along which
+we transport (the \(p\) in the highlighted rules).
 
 \section{Properties of the relation}
 
-As I just remarked, the relation is not reflexive; but only in that respect
-doest it fall short of being an equivalence relation.
+As I just remarked, the \(\sim\) relation is not reflexive; but only in that
+respect does it fall short of being an equivalence relation.
 
 \begin{lemma}[$\sim$ is a partial equivalence relation]
   \lablemma{sim-er}
@@ -379,6 +379,10 @@ sorts.
 %
 We can now tackle the fundamental lemma.
 
+\marginnote[1cm]{
+  I use \(\vdash\) and not \(\vdash_\exmark\) in the judgements to indicate that
+  these judgements are in the target, \ie \acrshort{ITT} or \acrshort{WTT}.
+}
 \begin{lemma}[Fundamental lemma]
   \lablemma{sim-cong}
   Let $t_1$ and $t_2$ be two terms such that \(t_1 \sim t_2\).
