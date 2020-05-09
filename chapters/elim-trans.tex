@@ -57,9 +57,9 @@ type, which is required to be able to use the typing rule for application.
   By definition of $\ir$,
   $T \ir \Tb$ means that $\Tb$ is shaped
   $\transpo{p}\ \transpo{q}\ ...\ \transpo{r}\ \Tb'$ with $\Tb'$ having
-  the same head constructor as $T$. By inversion~\eqref{lemma:inversion}, the
-  subterms are typable, including $\Tb'$. Actually, from inversion, we
-  even get that the type of $\Tb'$ is a universe. Then,
+  the same head constructor as $T$. By inversion, the subterms are typable,
+  including $\Tb'$. Actually, from inversion, we even get that the type of
+  $\Tb'$ is a universe. Then,
   using \reflemma{sim-cong} and \reflemma{uip-cong}, we get
   $\isterm{\Gb}{e}{\Eq{}{\Tb}{\Tb'}}$.
   We conclude with
@@ -155,7 +155,7 @@ equality.
     By IH and \reflemma{uip-cong} we have
     $\isterm{\Gb}{\eb}{\Eq{}{\Ab}{\Bb}}$ which implies
     $\istype{\Gb}{\Ab} \in \transl{\xistype{\Ga}{A}}$ by
-    inversion~\eqref{lemma:inversion}, thus, from \reflemma{change-type}
+    inversion, thus, from \reflemma{change-type}
     and IH we get $\isterm{\Gb}{\ub}{\Ab}$, yielding
     $\isterm{\Gb}{\transpo{\eb}\ \ub}{\Bb} \in \transl{\xisterm{\Ga}{u}{B}}$.
   \end{itemize}

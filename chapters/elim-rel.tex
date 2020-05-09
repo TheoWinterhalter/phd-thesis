@@ -427,7 +427,7 @@ We can now tackle the fundamental lemma.
     \]
     We have $\isterm{\Ga, \Ga_1}{\app{t_1}{x:A_1}{B_1}{u_1}}{T_1}$ and
     $\isterm{\Ga, \Ga_2}{\app{t_2}{x:A_2}{B_2}{u_2}}{T_2}$ which means by
-    inversion~\eqref{lemma:inversion} that the subterms are well-typed.
+    inversion that the subterms are well-typed.
     We apply the induction hypothesis and then conclude.
   \item \textsc{TransportLeft}
     \[
@@ -438,7 +438,7 @@ We can now tackle the fundamental lemma.
     \]
     We have $\isterm{\Ga, \Ga_1}{\transpo{p}\ t_1}{T_1}$ and
     $\isterm{\Ga, \Ga_2}{t_2}{T_2}$.
-    By inversion~\eqref{lemma:inversion} we have
+    By inversion we have
     $\isterm{\Ga, \Ga_1}{p}{\Eq{}{T_1'}{T_1}}$ and
     $\isterm{\Ga, \Ga_1}{t_1}{T_1'}$.
     By induction hypothesis we have $e$ such that
