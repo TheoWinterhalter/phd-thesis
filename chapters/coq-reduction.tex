@@ -260,8 +260,8 @@ of the stack and we \emph{focus} on the left-hand term.
 I will write \(\dpair{t \mid \pi}\) for term \(t\) \emph{against} stack \(\pi\).
 We want to define weak head reduction \(\red_\WM\) as something like this:
 \marginnote[1cm]{
-  Here I confuse \(\dpair{t \mid \pi}\) as the data of a pair and as the term
-  corresponding to \(t\) applied to the arguments of \(\pi\).
+  Here \(\dpair{t \mid \pi}\) is the data of a term \(t\) versus a list of
+  arguments \(\pi\). \(\zip\) takes the term and apply it to the stack.
 }
 \begin{mathpar}
   \infer
@@ -275,7 +275,7 @@ We want to define weak head reduction \(\red_\WM\) as something like this:
   %
 
   \infer
-    {\Ga \vdash \dpair{t \mid \pi}\ \whnf}
+    {\Ga \vdash \zip\ \dpair{t \mid \pi}\ \whnf}
     {\Ga \vdash \dpair{t \mid \pi} \red_\WM \dpair{t \mid \pi}}
   %
 \end{mathpar}
@@ -283,7 +283,7 @@ The things above the line can be seen as recursive calls of the machine.
 This is rather informal, but it doesn't correspond to the final definition
 anyway.
 
-Regarding termination, we see two cases: in the first we focusb on a subterm,
+Regarding termination, we see two cases: in the first we focus on a subterm,
 whereas in the second we do a recursive call on a \emph{reduct}.
 In other words we need a well-founded order that satisfies
 \[
@@ -304,12 +304,12 @@ Thus we must produce a pair from the data \(\dpair{t \mid \pi}\), coreduction is
 to be taken on the whole term (\(t\) applied to \(\pi\)), while the subterm
 relation only looks at \(t\).
 This forces us to consider coreduction before the subterm relation, indeed if we
-were to consider the pair \((t, \dpair{t \mid \pi})\) we would indeed satisfy
-the first inequality as \(t\) is a subterm of \(t\ u\), but in the second
-inequality the first components wouldn't be equal.
+were to consider the pair \((t, \zip\ \dpair{t \mid \pi})\) we would indeed
+satisfy the first inequality as \(t\) is a subterm of \(t\ u\), but in the
+second inequality the first components wouldn't be equal.
 We will thus consider the following pair:
 \[
-  (\dpair{t \mid \pi},\ t)
+  (\zip\ \dpair{t \mid \pi},\ t)
 \]
 with the corresponding lexicographical order of coreduction and subterm
 relation. This one works because \(\dpair{t \mid u :: \pi}\) and
@@ -320,17 +320,21 @@ are indeed equal when consdering the subterm order.
 }
 \[
   \begin{array}{rcl}
-    (\dpair{t \mid u :: \pi},\ t) &\prec& (\dpair{t\ u \mid \pi},\ t\ u) \\
+    (\zip\ \dpair{t \mid u :: \pi},\ t) &\prec&
+    (\zip\ \dpair{t\ u \mid \pi},\ t\ u) \\
     \text{since} &
-    \multicolumn{2}{l}{\dpair{t \mid u :: \pi} = \dpair{t\ u \mid \pi}} \\
+    \multicolumn{2}{l}{
+      \zip\ \dpair{t \mid u :: \pi} = \zip\ \dpair{t\ u \mid \pi}
+    } \\
     \text{and} &
     \multicolumn{2}{l}{t \sqsubset t\ u} \\
     \\
-    (\dpair{t[x \sto u] \mid \pi},\ t[x \sto u]) &\prec&
-    (\dpair{\lambda (x:A).t \mid u :: \pi},\ \lambda (x:A).t) \\
-    \text{since} &
-    \multicolumn{2}{l}{
-      \dpair{\lambda (x:A).t \mid u :: \pi} \red \dpair{t[x \sto u] \mid \pi}
+    (\zip\ \dpair{t[x \sto u] \mid \pi},\ t[x \sto u]) &\prec&
+    (\zip\ \dpair{\lambda x.t \mid u :: \pi},\ \lambda x.t) \\
+    \multicolumn{3}{r}{
+      \text{since} \quad
+      \zip\ \dpair{\lambda x.t \mid u :: \pi} \red
+      \zip\ \dpair{t[x \sto u] \mid \pi}
     }
   \end{array}
 \]
@@ -358,7 +362,7 @@ record, \ie a pair.
 \marginnote[0.2cm]{
   We also need
   \[
-    ((u,v),\ (u,v)) \prec (\dpair{p.1 \mid \pi},\ p.1)
+    (\zip\ \dpair{u \mid \pi},\ u) \prec (\zip\ \dpair{p.1 \mid \pi},\ p.1)
   \]
   It holds because \(u\) is a reduct of \(p.1\). To know this we need to know
   that the reduction machine is correct while proving it terminates. I will say
@@ -366,7 +370,7 @@ record, \ie a pair.
 }
 We now need
 \[
-  (\dpair{p \mid \ctxempty},\ p) \prec (\dpair{p.1 \mid \pi},\ p.1)
+  (\zip\ \dpair{p \mid \ctxempty},\ p) \prec (\zip\ \dpair{p.1 \mid \pi},\ p.1)
 \]
 However \(p\) is not a reduct of \(\dpair{p.1 \mid \pi}\), and is not equal to
 it so we cannot use the fact that \(p\) is a subterm of \(p.1\).
@@ -374,6 +378,10 @@ The solution I propose to this is to actually remember the full term we were
 considering before focusing. This is what lists of arguments were achieving
 when considering only \(\lambda\)-abstraction and application.
 For this we can use the stacks I introduced in \nrefch{coq-positions}.
+\marginnote[2.8cm]{
+  Now \(\zip\ \dpair{t \mid \pi}\) shall refer to plugging \(t\) in stack
+  \(\pi\).
+}
 \begin{mathpar}
   \infer
     {\Ga \vdash \dpair{t \mid \stack{\shole\ u} :: \pi} \red_\WM a}
@@ -390,7 +398,7 @@ For this we can use the stacks I introduced in \nrefch{coq-positions}.
   %
 
   \infer
-    {\Ga \vdash \dpair{t \mid \pi}\ \whnf}
+    {\Ga \vdash \zip\ \dpair{t \mid \pi}\ \whnf}
     {\Ga \vdash \dpair{t \mid \pi} \red_\WM \dpair{t \mid \pi}}
   %
 
@@ -457,8 +465,8 @@ fixed-point). If this argument reduces to a constructor\sidenote{
 then the fixed-point can safely be unfolded and reduced.
 For the recursive call to be valid we need:
 \[
-  (\vscmd{u_n}{\rho},\ u_n) \prec
-  (\vscmd{\fixp_n f.\ t}{\theta},\ \fixp_n f.\ t)
+  (\zip\ \vscmd{u_n}{\rho},\ u_n) \prec
+  (\zip\ \vscmd{\fixp_n f.\ t}{\theta},\ \fixp_n f.\ t)
 \]
 where
 \[
@@ -472,4 +480,60 @@ to replace it with a more flexible order. For this we will use \emph{positions}.
 
 \subsection{The order}
 
+\marginnote[0.2cm]{
+  This was presented in \nrefch{coq-positions}.
+}
+The order we define is on pairs term versus stack \(\dpair{t \mid \pi}\).
+We map them to dependent pairs consisting of the full term that
+\(\dpair{t \mid \pi}\) represents (\ie \(\zip\ \dpair{t \mid \pi}\)),
+and the position corresponding to the stack \(\pi\).
+
+I pointed out earlier that the well-founded order on positions corresponds more
+or less to the subterm order, but with a \emph{twist}: `going right', as I
+called it, is also decreasing for the order. As such, the position of an
+argument on the stack is smaller than the position of the term on the left,
+meaning that it makes the recursive call to the recursive argument \emph{legal}.
+
+In \Coq we do it in two steps, defining first the order on pairs, then on
+commands (term versus stack).
+\marginnote[1.5cm]{
+  \mintinline{coq}{stack_pos} is like \mintinline{coq}{stack_position} except
+  it lands in \mintinline{coq}{pos t} for some \mintinline{coq}{t}
+  and not in \mintinline{coq}{position}.
+}
+\begin{minted}{coq}
+Definition R_aux Γ :=
+  dlexprod (cored Σ Γ) @posR.
+
+Definition R Γ u v :=
+  R_aux Γ (zip u ; stack_pos (fst u) (snd u))
+          (zip v ; stack_pos (fst v) (snd v)).
+\end{minted}
+
+\marginnote[0.2cm]{
+  See \nrefch{coq-orders} for the definitions and properties of dependent
+  lexicographical order.
+}
+Since the two involved orders are well-founded, their dependent lexicographical
+order is also well-founded.
+
+\begin{minted}{coq}
+Lemma R_Acc_aux :
+  forall Γ t p,
+    wf Σ ->
+    wellformed Σ Γ t ->
+    Acc (R_aux Γ) (t ; p).
+\end{minted}
+
+\begin{minted}{coq}
+Corollary R_Acc :
+  forall Γ t,
+    wf Σ ->
+    wellformed Σ Γ (zip t) ->
+    Acc (R Γ) t.
+\end{minted}
+
+Everything is ready for the definition of the reduction machine.
+
 \subsection{The \Coq formalisation}
+
