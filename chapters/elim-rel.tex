@@ -298,6 +298,11 @@ when taken on the same type on both sides.
   and thus are syntactically the same (by an inversion argument).
 \end{remark}
 
+For heterogeneous equality to be a congurence however we have to rely on
+\acrshort{funext} in \acrshort{ITT}, and on the several equality constructors
+we introduce in \acrshort{WTT} like \(\overline{\lambda}\), \(\overline{\Pi}\),
+etc.
+
 Before we can prove the fundamental lemma stating that two terms in relation
 are heterogeneously equal, we need to consider another construction.
 %
@@ -409,8 +414,8 @@ We can now tackle the fundamental lemma.
         {x \sim x}
       %
     \]
-    If $x$ belongs to $\Ga$, we apply reflexivity---together with uniqueness of
-    typing~\eqref{lemma:uniq}---to conclude.
+    If $x$ belongs to $\Ga$, we apply reflexivity---together with unique
+    typing---to conclude.
     Otherwise, $\ProjE{x}$ has the expected type (since
     $\llift{\gamma}{}{x} \equiv \ProjO{x}$ and $\rlift{\gamma}{}{x} \equiv \ProjT{x}$).
 
