@@ -346,12 +346,24 @@ something else than a function. This is the case when reducing pattern-matching
 and projections. I will use projections on pairs as an example.
 \[
   \infer
-    {\dpair{p \mid \ctxempty} \red_\WM \dpair{(u,v) \mid \ctxempty}}
-    {\dpair{p.1 \mid \pi} \red_\WM u}
+    {
+      \Ga \vdash \dpair{p \mid \ctxempty} \red_\WM \dpair{(u,v) \mid \ctxempty} \\
+      \Ga \vdash \dpair{u \mid \pi} \red_\WM a
+    }
+    {\Ga \vdash \dpair{p.1 \mid \pi} \red_\WM a}
 \]
 The idea is that to reduce \(p.1\) (potentially applied to arguments) we want to
 reduce \(p\) (this time it is not applied) to see if it is a constructor of the
 record, \ie a pair.
+\marginnote[0.2cm]{
+  We also need
+  \[
+    ((u,v),\ (u,v)) \prec (\dpair{p.1 \mid \pi},\ p.1)
+  \]
+  It holds because \(u\) is a reduct of \(p.1\). To know this we need to know
+  that the reduction machine is correct while proving it terminates. I will say
+  more about this later.
+}
 We now need
 \[
   (\dpair{p \mid \ctxempty},\ p) \prec (\dpair{p.1 \mid \pi},\ p.1)
@@ -362,7 +374,43 @@ The solution I propose to this is to actually remember the full term we were
 considering before focusing. This is what lists of arguments were achieving
 when considering only \(\lambda\)-abstraction and application.
 For this we can use the stacks I introduced in \nrefch{coq-positions}.
-\todo{Show it in action}
+\begin{mathpar}
+  \infer
+    {\Ga \vdash \dpair{t \mid \stack{\shole\ u} :: \pi} \red_\WM a}
+    {\Ga \vdash \dpair{t\ u \mid \pi} \red_\WM a}
+  %
+
+  \infer
+    {\Ga \vdash \dpair{t[x \sto u] \mid \pi} \red_\WM a}
+    {
+      \Ga \vdash
+      \dpair{\lambda (x:A).t \mid \stack{\shole\ u} :: \pi}
+      \red_\WM a
+    }
+  %
+
+  \infer
+    {\Ga \vdash \dpair{t \mid \pi}\ \whnf}
+    {\Ga \vdash \dpair{t \mid \pi} \red_\WM \dpair{t \mid \pi}}
+  %
+
+  \infer
+    {
+      \Ga \vdash
+      \dpair{p \mid \stack{\shole.1} :: \pi} \red_\WM
+      \dpair{(u,v) \mid \stack{\shole.1} :: \pi} \\
+      \Ga \vdash \dpair{u \mid \pi} \red_\WM a
+    }
+    {\Ga \vdash \dpair{p.1 \mid \pi} \red_\WM a}
+  %
+\end{mathpar}
+This time, as the stack is preserved, the first components are indeed the same
+and we have the inequality.
+\[
+  (\dpair{p \mid \stack{\shole.1} :: \pi},\ p)
+  \prec
+  (\dpair{p.1 \mid \pi},\ p.1)
+\]
 
 \paragraph{Problem 2:}
 Using stacks solves our first problem but there remains another when considering
