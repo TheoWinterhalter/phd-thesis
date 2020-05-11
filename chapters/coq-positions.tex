@@ -381,8 +381,9 @@ The interesting part is that the order on positions can be more flexible than
 the subterm relation in that it allows us to compare `going left' with
 `going right'.
 Say you have the application \(t \coloneqq u\ v\), both \(u\) and \(v\) are
-subterms of \(u\) and \(v\) but there is no way to relate them reliably and
-have \(v\) \emph{always} smaller than \(u\) also because they can be arbitrary.
+subterms of \(t\) but there is no way to relate the two of them reliably and
+have \(v\) \emph{always} smaller than \(u\) because \(u\) and \(v\) can be
+arbitrary.
 If instead we were to consider positions in \(t\) we would have the empty one
 corresponding to \(t\) itself, \mintinline{coq}{[ app_l ]} corresponding to
 \(u\) and \mintinline{coq}{[ app_r ]} for \(v\). This means we abstract over the
