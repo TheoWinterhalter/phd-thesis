@@ -533,7 +533,53 @@ Corollary R_Acc :
     Acc (R Γ) t.
 \end{minted}
 
+We also define the reflexive closure of \mintinline{coq}{R} that we will use
+for correctness.
+\begin{minted}{coq}
+Definition Req Γ t t' :=
+  t = t' \/ R Γ t t'.
+\end{minted}
+
 Everything is ready for the definition of the reduction machine.
 
-\subsection{The \Coq formalisation}
+\subsection{The implementation}
 
+Now that we have an order and a clear idea of what we want, we can write down
+the machine as a \Coq function. I briefly pointed at one last issue however:
+in some cases, the argument to a recursive call is only smaller assuming that
+the result of another recursive call is indeed a reduct.
+I will repeat myself and focus again on the recursive calls for projections:
+\[
+  \infer
+    {
+      \Ga \vdash
+      \dpair{p \mid \stack{\shole.1} :: \pi} \red_\WM
+      \dpair{(u,v) \mid \stack{\shole.1} :: \pi} \\
+      \Ga \vdash \dpair{u \mid \pi} \red_\WM a
+    }
+    {\Ga \vdash \dpair{p.1 \mid \pi} \red_\WM a}
+  %
+\]
+The second recursive call, made on \(u\), is only valid because \(u\)
+is a reduct of \(p.1\), an information that we get from the correction of
+the first recursive call.
+
+The solution to this is to define the function and prove its correctness
+all at once.
+\begin{minted}{coq}
+reduce_stack :
+  forall (Γ : context) (t : term) (π : stack),
+    wellformed Σ Γ (zip (t,π)) ->
+    { t' : term * stack | Req Σ Γ t' (t,π) }.
+\end{minted}
+In other words, the function takes a term, a stack and returns a term that is
+a reduct (once zipped) in potentially zero steps.
+We actually need more than this but we have here the main ingredients).
+
+The definition is done by open recursion, relying heavily on \Equations to
+generate and fill obligations regarding correctness and the order.
+All in all, this definition is rather lengthy and I invite the interested reader
+to have a look at the details in the formalisation.
+
+This reduction machine will prove useful in defining the conversion algorithm,
+but the way we built it, in particular the order, will prove useful as well.
