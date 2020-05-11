@@ -258,10 +258,10 @@ This is often achived by taking a list of arguments, \ie a \emph{stack}, besides
 the term. When considering an application, the argument is \emph{pushed} on top
 of the stack and we \emph{focus} on the left-hand term.
 I will write \(\dpair{t \mid \pi}\) for term \(t\) \emph{against} stack \(\pi\).
-Whe want to define weak head reduction \(\red_\WM\) as something like this:
+We want to define weak head reduction \(\red_\WM\) as something like this:
 \marginnote[1cm]{
   Here I confuse \(\dpair{t \mid \pi}\) as the data of a pair and as the term
-  corresponding to \(t\) applied to the arguemtns of \(\pi\).
+  corresponding to \(t\) applied to the arguments of \(\pi\).
 }
 \begin{mathpar}
   \infer
@@ -283,16 +283,93 @@ The things above the line can be seen as recursive calls of the machine.
 This is rather informal, but it doesn't correspond to the final definition
 anyway.
 
-Regarding termination, we see two cases: in the first we focused on a subterm,
+Regarding termination, we see two cases: in the first we focusb on a subterm,
 whereas in the second we do a recursive call on a \emph{reduct}.
+In other words we need a well-founded order that satisfies
+\[
+  \begin{array}{rcl}
+    \dpair{t \mid u :: \pi} &\prec& \dpair{t\ u \mid \pi} \\
+    \dpair{t[x \sto u] \mid \pi} &\prec& \dpair{\lambda (x:A).t \mid u :: \pi}
+  \end{array}
+\]
+
 As we have seen, assuming strong normalisation is tantamount to having a
 well-founded order on coreduction, and it shouldn't be surprising that the
 subterm relation is also well-founded. Taking a lexicographical order on both
 these orders seems like a good option.
 
-Problems arise however when considering other constructions of \acrshort{PCUIC},
-particularly pattern-matching and fixed-points.
-\todo{Continue, maybe improve the above}
+Remember that lexicographical orders operate on pairs and that the first
+components mus be \emph{equal} when using the order on the second components.
+Thus we must produce a pair from the data \(\dpair{t \mid \pi}\), coreduction is
+to be taken on the whole term (\(t\) applied to \(\pi\)), while the subterm
+relation only looks at \(t\).
+This forces us to consider coreduction before the subterm relation, indeed if we
+were to consider the pair \((t, \dpair{t \mid \pi})\) we would indeed satisfy
+the first inequality as \(t\) is a subterm of \(t\ u\), but in the second
+inequality the first components wouldn't be equal.
+We will thus consider the following pair:
+\[
+  (\dpair{t \mid \pi},\ t)
+\]
+with the corresponding lexicographical order of coreduction and subterm
+relation. This one works because \(\dpair{t \mid u :: \pi}\) and
+\(\dpair{t\ u \mid \pi}\) represent the same term so that the first components
+are indeed equal when consdering the subterm order.
+\marginnote[1cm]{
+  I write \(x \sqsubset y\) to mean that \(x\) is a subterm of \(y\).
+}
+\[
+  \begin{array}{rcl}
+    (\dpair{t \mid u :: \pi},\ t) &\prec& (\dpair{t\ u \mid \pi},\ t\ u) \\
+    \text{since} &
+    \multicolumn{2}{l}{\dpair{t \mid u :: \pi} = \dpair{t\ u \mid \pi}} \\
+    \text{and} &
+    \multicolumn{2}{l}{t \sqsubset t\ u} \\
+    \\
+    (\dpair{t[x \sto u] \mid \pi},\ t[x \sto u]) &\prec&
+    (\dpair{\lambda (x:A).t \mid u :: \pi},\ \lambda (x:A).t) \\
+    \text{since} &
+    \multicolumn{2}{l}{
+      \dpair{\lambda (x:A).t \mid u :: \pi} \red \dpair{t[x \sto u] \mid \pi}
+    }
+  \end{array}
+\]
+
+Problems arise however when considering other syntactic constructions of
+\acrshort{PCUIC}, particularly pattern-matching and fixed-points.
+I will identify two such problems before finally moving on to the next section
+where I introduce the order we will actually use.
+
+\paragraph{Problem 1:}
+List of arguments as stacks will prove to be a problem when focusing on
+something else than a function. This is the case when reducing pattern-matching
+and projections. I will use projections on pairs as an example.
+\[
+  \infer
+    {\dpair{p \mid \ctxempty} \red_\WM \dpair{(u,v) \mid \ctxempty}}
+    {\dpair{p.1 \mid \pi} \red_\WM u}
+\]
+The idea is that to reduce \(p.1\) (potentially applied to arguments) we want to
+reduce \(p\) (this time it is not applied) to see if it is a constructor of the
+record, \ie a pair.
+We now need
+\[
+  (\dpair{p \mid \ctxempty},\ p) \prec (\dpair{p.1 \mid \pi},\ p.1)
+\]
+However \(p\) is not a reduct of \(\dpair{p.1 \mid \pi}\), and is not equal to
+it so we cannot use the fact that \(p\) is a subterm of \(p.1\).
+The solution I propose to this is to actually remember the full term we were
+considering before focusing. This is what lists of arguments were achieving
+when considering only \(\lambda\)-abstraction and application.
+For this we can use the stacks I introduced in \nrefch{coq-positions}.
+\todo{Show it in action}
+
+\paragraph{Problem 2:}
+Using stacks solves our first problem but there remains another when considering
+fixed-points this time. Indeed, fixed-points can only be unfolded when their
+recusrive argument is a constructor. This means that when reducing a fixed-point
+we have to focus on the recursive argument which is \emph{on} the stack:
+\todo{Show rule}
 
 \subsection{The order}
 
