@@ -2,10 +2,10 @@
 \chapter{Formalisation of the translation}
 \labch{elim-formalised}
 
-The formalisation is inspired from that of \Coq in \MetaCoq and \emph{besides}
-\MetaCoq to allow for some interoperability to bring about fairly realistic
-examples. This provides evidence that the translation is constructive \emph{and}
-computes!
+The formalisation is inspired from that of \Coq in \MetaCoq. It is actually
+defined \emph{besides} \MetaCoq to allow for some interoperability, bringing
+about fairly realistic examples.
+This provides evidence that the translation is constructive \emph{and} computes!
 Note that we also rely on the
 \Equations~\sidecite{DBLP:conf/itp/Sozeau10,sozeau2019equations} plugin to
 derive nice dependent induction principles.
@@ -193,7 +193,7 @@ From this we ensure the \acrshort{PTS} is \emph{functional} (in particular
 without cumulativity) so that we have unique typing.
 
 We're using classes here because they come with some automation in \Coq which
-allows us to assume globally a notion of sort without having to speficy it at
+allows us to assume globally a notion of sort without having to specify it at
 each use.
 
 This allows us to instantiate this by a lot of different notions like a natural
@@ -289,7 +289,7 @@ in our formalisation.
 %
 \marginnote[1cm]{
   \mintinline{coq}|fullquote| is given a \emph{big} number corresponding to the
-  the number of recusrive calls its allowed to do. This \emph{fuel} technique
+  the number of recursive calls it is allowed to do. This \emph{fuel} technique
   allows us to circumvent the termination checker of \Coq.
 }
 \begin{minted}{coq}
@@ -367,7 +367,7 @@ wrote for \acrshort{ITT} and \acrshort{ETT}, which can generate equality
 obligations.
 
 Thanks to this, the user does not have to know about the details of
-implementation of the translation, and stay within the \Coq ecosystem.
+implementation of the translation, and can stay within the \Coq ecosystem.
 
 For instance, our previous example now becomes:
 %
