@@ -417,7 +417,7 @@ Using stacks solves our first problem but there remains another when considering
 fixed-points this time. Indeed, fixed-points can only be unfolded when their
 recusrive argument is a constructor. This means that when reducing a fixed-point
 we have to focus on the recursive argument which is \emph{on} the stack:
-\marginnote[0.5cm]{
+\marginnote[0.8cm]{
   I here use non-mutual fixed-points to make things simpler.
   Remember here that \(n\) is the index of the recursive argument of the
   fixed-point.
@@ -425,29 +425,12 @@ we have to focus on the recursive argument which is \emph{on} the stack:
 \[
   \infer
     {
-      \begin{array}{ll}
-        \Ga \vdash &
-        \vscmd
-          {u_n}
-          {
-            \stack{(\fixp_n f.\ t)\ u_1\ \dots\ u_{n-1}\ \shole}
-            :: \pi
-          }
-        \arcr
-        \red_\WM &
-        \vscmd
-          {\mathsf{C}}
-          {
-            \stack{(\fixp_n f.\ t)\ u_1\ \dots\ u_{n-1}\ \shole}
-            :: \pi
-          }
-      \end{array}
-      \\
+      \Ga \vdash \vscmd{u_n}{\rho} \red_\WM \vscmd{\mathsf{C}}{\rho} \\
       \Ga \vdash
       \vscmd
         {t[f \sto \fixp_n f.\ t]}
         {
-          \coapp{u_1} :: \dots :: \coapp{u_{n-1}} :: \pi
+          \coapp{u_1} :: \dots :: \coapp{u_{n-1}} :: \coapp{C} :: \pi
         }
       \red_\WM
       a
@@ -462,6 +445,30 @@ we have to focus on the recursive argument which is \emph{on} the stack:
     }
   %
 \]
+where
+\[
+  \rho = \stack{(\fixp_n f.\ t)\ u_1\ \dots\ u_{n-1}\ \shole} :: \pi
+\]
+The idea is that we fetch the \(n\)-th argument on the stack (assuming it
+exists) and we reduce it (while remembering that it was indeed the argument of a
+fixed-point). If this argument reduces to a constructor\sidenote{
+  In full generality, it would have to reduce to an \emph{applied} constructor.
+}
+then the fixed-point can safely be unfolded and reduced.
+For the recursive call to be valid we need:
+\[
+  (\vscmd{u_n}{\rho},\ u_n) \prec
+  (\vscmd{\fixp_n f.\ t}{\theta},\ \fixp_n f.\ t)
+\]
+where
+\[
+  \theta = \coapp{u_1} :: \dots :: \coapp{u_{n-1}} :: \coapp{u_n} :: \pi
+\]
+Once again, the order fails us because, even though we manage to have the same
+term in both left components, we don't have that \(u_n\) is a subterm of
+\(\fixp_n f.\ t\).
+The subterm order is in fact ill-suited to deal with this problem and we need
+to replace it with a more flexible order. For this we will use \emph{positions}.
 
 \subsection{The order}
 
