@@ -417,7 +417,7 @@ Using stacks solves our first problem but there remains another when considering
 fixed-points this time. Indeed, fixed-points can only be unfolded when their
 recusrive argument is a constructor. This means that when reducing a fixed-point
 we have to focus on the recursive argument which is \emph{on} the stack:
-\marginnote[0.3cm]{
+\marginnote[0.5cm]{
   I here use non-mutual fixed-points to make things simpler.
   Remember here that \(n\) is the index of the recursive argument of the
   fixed-point.
@@ -425,28 +425,29 @@ we have to focus on the recursive argument which is \emph{on} the stack:
 \[
   \infer
     {
-      \Ga \vdash
-      \vscmd
-        {u_n}
-        {
-          \stack{(\fixp_n (f : \Pi \Delta. T).\ t)\ u_1\ \dots\ u_{n-1}\ \shole}
-          :: \pi
-        }
-      \red_\WM
-      \vscmd
-        {\mathsf{C}}
-        {
-          \coapp{v_1} :: ... :: \coapp{v_m} ::
-          \stack{(\fixp_n (f : \Pi \Delta. T).\ t)\ u_1\ \dots\ u_{n-1}\ \shole}
-          :: \pi
-        }
+      \begin{array}{ll}
+        \Ga \vdash &
+        \vscmd
+          {u_n}
+          {
+            \stack{(\fixp_n f.\ t)\ u_1\ \dots\ u_{n-1}\ \shole}
+            :: \pi
+          }
+        \arcr
+        \red_\WM &
+        \vscmd
+          {\mathsf{C}}
+          {
+            \stack{(\fixp_n f.\ t)\ u_1\ \dots\ u_{n-1}\ \shole}
+            :: \pi
+          }
+      \end{array}
       \\
       \Ga \vdash
       \vscmd
-        {t[f \sto \fixp_n (f : \Pi \Delta. T).\ t]}
+        {t[f \sto \fixp_n f.\ t]}
         {
-          \coapp{u_1} :: \dots :: \coapp{u_{n-1}} ::
-          \coapp{\mathsf{C}\ v_1\ \dots v_m} :: \pi
+          \coapp{u_1} :: \dots :: \coapp{u_{n-1}} :: \pi
         }
       \red_\WM
       a
@@ -454,7 +455,7 @@ we have to focus on the recursive argument which is \emph{on} the stack:
     {
       \Ga \vdash
       \vscmd
-        {\fixp_n (f : \Pi \Delta. T).\ t}
+        {\fixp_n f.\ t}
         {\coapp{u_1} :: \dots :: \coapp{u_{n-1}} :: \coapp{u_n} :: \pi}
       \red_\WM
       a
