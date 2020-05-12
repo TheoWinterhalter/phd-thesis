@@ -173,9 +173,74 @@ contexts. In the expression
 \(t_1\) lives in \(\Ga, \stackctx\ \pi_1\), and \(t_2\) in
 \(\Ga, \stackctx\ \pi_2\).
 
-\todo{More examples, also introduce fallback}
+Other than those, we also deal with \(\Pi\)-types, pattern-matching,
+projections, fixed- and cofixed-points.
+The case of two applications is imposibble because the arguments would have been
+pushed on the stacks.
+If the terms do not fall in this diagonal, we instead call the fallback
+function recursively.
+\[
+  \infer
+    {\convfall{\Ga}{t_1}{\pi_1}{t_2}{\pi_2}{A}}
+    {\convterm{\Ga}{t_1}{\pi_1}{t_2}{\pi_2}{A}}
+  %
+\]
 
 \subsection{\mintinline{coq}{Args}}
+
+When the two terms are convertible, it is time to move on the comparison of the
+stacks, or rather the comparision of the leading arguments on said stacks.
+
+A stack \(\pi\) can be decomposed into a list of arguments \(u_1, \dots, u_n\)
+and a remaining stack \(\rho\) that does not start with some \(\coapp{u}\),
+such that
+\[
+  \pi = \coapp{u_1} :: \dots :: \coapp{u_n} :: \rho
+\]
+With two such decomposed stacks, the meaning of the \mintinline{coq}{Args}
+function is the following
+\marginnote[1cm]{
+  Notice how we have \(n\) arguments on both sides, if there is a mismatch,
+  the function will return an error.
+}
+\[
+  \footnotesize
+  \infer
+    {
+      \convred
+        {\Ga}
+        {u_1}
+        {\stack{t_1\ \shole\ u_2\ \dots u_n} :: \rho_1}
+        {v_1}
+        {\stack{t_2\ \shole\ v_2\ \dots v_n} :: \rho_2}
+        {\ayes}
+      \\\\
+      \vdots \\\\
+      \convred
+        {\Ga}
+        {u_n}
+        {\stack{t_1\ u_1\ \dots u_{n-1}\ \shole} :: \rho_1}
+        {v_n}
+        {\stack{t_2\ v_1\ \dots v_{n-1}\ \shole} :: \rho_2}
+        {\ayes}
+    }
+    {
+      \convargs
+        {\Ga}
+        {t_1}
+        {\coapp{u_1} :: \dots :: \coapp{u_n} :: \rho_1}
+        {t_2}
+        {\coapp{v_1} :: \dots :: \coapp{v_n} :: \rho_2}
+        {A}
+    }
+  %
+\]
+Assuming that \(\Ga \vdash u_1 \equiv u_2\), it saying `yes' means that
+\[
+  \Ga \vdash t_1\ u_1\ \dots\ u_n \equiv t_2\ v_1\ \dots\ v_n
+\]
+(and also the stronger property that each \(u_i\) is convertible to \(v_i\) but
+the property above is sufficient for our needs).
 
 \subsection{\mintinline{coq}{Fallback}}
 
