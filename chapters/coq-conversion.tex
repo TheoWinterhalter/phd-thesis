@@ -244,7 +244,46 @@ the property above is sufficient for our needs).
 
 \subsection{\mintinline{coq}{Fallback}}
 
-\subsection{About universes}
+The fallback deals with terms outside of the diagonal that are potentially
+stuck because of definitions that are not unfolded.
+It tries to make progress on each side before resorting to plain and simple
+syntactic equality.
+\marginnote[1cm]{
+  I use \(\red_\WM \not =\) to mean that the reduction produced a different term.
+  In the formalisation its a different process that checks that the term is
+  indeed stuck because of \(\delta\).
+}
+\marginnote[4.4cm]{
+  Here \(t_1 = t_2\) means that \(t_1\) and \(t_2\) have been checked to be
+  syntactically equal, up to universes.
+}
+\begin{mathpar}
+  \infer
+    {
+      \Ga \vdash \vscmd{t_1}{\pi_1} \red_\WM \not= \vscmd{u}{\rho} \\
+      \convterm{\Ga}{u}{\rho}{t_2}{\pi_2}{A}
+    }
+    {\convfall{\Ga}{t_1}{\pi_1}{t_2}{\pi_2}{A}}
+  %
+
+  \infer
+    {
+      \Ga \vdash \vscmd{t_2}{\pi_2} \red_\WM \not= \vscmd{u}{\rho} \\
+      \convterm{\Ga}{t_1}{\pi_1}{u}{\rho}{A}
+    }
+    {\convfall{\Ga}{t_1}{\pi_1}{t_2}{\pi_2}{A}}
+  %
+
+  \infer
+    {
+      t_1 = t_2 \\
+      \convargs{\Ga}{t_1}{\pi_1}{t_2}{\pi_2}{A}
+    }
+    {\convfall{\Ga}{t_1}{\pi_1}{t_2}{\pi_2}{A}}
+  %
+\end{mathpar}
+
+\subsection{About cumulativity and universes}
 
 \section{Order for termination}
 
