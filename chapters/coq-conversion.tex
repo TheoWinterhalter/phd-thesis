@@ -305,7 +305,72 @@ formalisation.
 
 \section{Termination and correctness}
 
-\todo{It is time to specify the correctness}
+\subsection{Specification}
+
+You will perhaps find my presentation surprising in that I didn't even specify
+what was expected of the algorithm I was showing. I wanted to focus on the
+intuition before going into these details.
+It is time to correct this slight.
+
+All the `judgements' I presented earlier, that is
+\[
+  \begin{array}{l}
+    \convred{\Ga}{t_1}{\pi_1}{t_2}{\pi_2}{A} \\
+    \convterm{\Ga}{t_1}{\pi_1}{t_2}{\pi_2}{A} \\
+    \convargs{\Ga}{t_1}{\pi_1}{t_2}{\pi_2}{A} \\
+    \convfall{\Ga}{t_1}{\pi_1}{t_2}{\pi_2}{A}
+  \end{array}
+\]
+are correct if, when they return \(\ayes\), we have
+\[
+  \Ga \vdash t_1\ u_1\ \dots\ u_n \equiv t_2\ v_1\ \dots\ v_n
+\]
+where \(\pi_1\) and \(\pi_2\) are decomposed as
+\[
+  \begin{array}{rcl}
+    \pi_1 &=& \coapp{u_1} :: \dots :: \coapp{u_n} :: \rho_1 \\
+    \pi_2 &=& \coapp{v_1} :: \dots :: \coapp{v_n} :: \rho_2
+  \end{array}
+\]
+This might be a bit surprising that we only conclude on applications at the head
+of the stakcs and not about the whole stacks themselves.
+If we were asking for
+\[
+  \Ga \vdash \zip\ \vscmd{t_1}{\pi_1} \equiv \vscmd{t_2}{\pi_2}
+\]
+instead, it would be too strong a requirement. Indeed, in the case of
+\(\lambda\)-abstractions, we consider the recrusive call on the domains
+\marginnote[1cm]{
+  Note that \(\zip\ \vscmd{A}{\stack{\lambda (x:\shole).t} :: \pi}\)
+  is equal to \(\zip\ \vscmd{\lambda (x:A).t}{\pi}\).
+}
+\[
+  \convred
+    {\Ga}
+    {A_1}
+    {\stack{\lambda (x:\shole).\ t_1} :: \pi_1}
+    {A_2}
+    {\stack{\lambda (x:\shole).\ t_2} :: \pi_2}
+    {\ayes}
+\]
+which we want to conclude on \(A_1\) and \(A_2\), not on the full term,
+otherwise the recusrive call on the bodies becomes superfluous.
+This, I think, is a sign, that this approach is doomed to fail.
+
+Going back to the bigger picture, it is also not a problem that we conclude only
+on a portion of the stack since the conversion algorithm will be called with
+empty stacks at the start.
+\marginnote[0.6cm]{
+  As you can see we also call the \mintinline{coq}{Reduction} phase first as
+  well.
+}
+\[
+  \convred{\Ga}{t_1}{\varepsilon}{t_2}{\varepsilon}{A}
+\]
+
+We can now move on to the main difficulty regarding conversion: its termination.
+
+\subsection{Termination}
 
 \section{Future work: \(\eta\)-conversion}
 
