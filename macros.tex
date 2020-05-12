@@ -132,3 +132,17 @@
 
 % Machine
 \newcommand{\WM}{\mathsf{W}}
+
+% Conversion machine
+\newcommand{\cred}{\mathsf{R}}
+\newcommand{\cterm}{\mathsf{T}}
+\newcommand{\cargs}{\mathsf{A}}
+\newcommand{\cfall}{\mathsf{F}}
+\newcommand{\mconv}{\overset{?}{\equiv}}
+\newcommand{\isconv}[7][]{
+  #2 \vdash \vscmd{#3}{#4} \mconv_{#1} \vscmd{#5}{#6} \rightrightarrows #7
+}
+\newcommand{\convred}[6]{\isconv[\cred]{#1}{#2}{#3}{#4}{#5}{#6}}
+\newcommand{\convterm}[6]{\isconv[\cterm]{#1}{#2}{#3}{#4}{#5}{#6}}
+\newcommand{\convargs}[6]{\isconv[\cargs]{#1}{#2}{#3}{#4}{#5}{#6}}
+\newcommand{\convfall}[6]{\isconv[\cfall]{#1}{#2}{#3}{#4}{#5}{#6}}

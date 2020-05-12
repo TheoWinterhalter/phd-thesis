@@ -2,8 +2,94 @@
 \chapter{Conversion}
 \labch{coq-conversion}
 
-\todo{Present the high level idea with the different functions that are part of
-the order also before delving into the order}
+We want to implement a correct conversion checker that is close enough to the
+actual implementation that is rather efficient, instead of the naive solution
+of reducing both terms to normal forms and then comparing them syntactically.
+We also have to take care of universes and cumulativity which complicates matter
+a little bit.
 
-\todo{Have a paragraph on how the implem deals with eta and say we will do it
-later}
+\section{High level description}
+
+I will present our approach at the high level.
+\begin{enumerate}[label=(\arabic*)]
+  \item \label{itm:convred} First we weak head reduce the two terms without
+  \(\delta\)-reduction (\ie without unfolding definitions);
+  \item then we compare their heads, if they match we begin again at
+  \ref{itm:convred};
+  \item if they do not match, we check if some computation (pattern-matching
+  or fixed-point)---or even the whole term---is blocked by a definition that
+  could unfold to a value, and if so we unfold the definition and start again.
+\end{enumerate}
+
+Following reduction, we actually use terms versus stacks to deal with focusing.
+Conversion is in fact split in four main phases that I codify as follows
+\begin{itemize}
+  \item \mintinline{coq}{Reduction} which corresponds to putting the two terms
+  in weak head normal forms;
+  \item \mintinline{coq}{Term} which corresponds to comparing the heads of the
+  focused terms;
+  \item \mintinline{coq}{Args} which corresponds to comparing the arguments
+  on the stacks;
+  \item \mintinline{coq}{Fallback} which happens when comparing different heads
+  and we attempt to reduce both sides a bit more.
+\end{itemize}
+These roughly correspond each to one of the mutual definitions that yield
+conversion. I will write these functions as judgements:
+\marginnote[0.5cm]{
+  Here I forget about the typing requirements, but conversion, like reduction,
+  can only operate on well-typed terms.
+}
+\[
+  \begin{array}{c}
+    \isconv{\Ga}{t_1}{\pi_1}{t_2}{\pi_2}{A}
+  \end{array}
+\]
+where \(A\) is the \emph{answer} which is basically `yes' or an error message.
+\(A\) is the \emph{output} while everything else is the \emph{input}.
+I will use the subscripts \(\cred\), \(\cterm\), \(\cargs\) and \(\cfall\)
+to diffrenciate the four phases.
+I will present them in more depth so that we can see what are
+the requirements for termination.
+
+\subsection{\mintinline{coq}{Reduction}}
+
+The first phase takes two pairs of term and stack and reduce both using the
+weak head reduction machine of \nrefch{coq-reduction}.
+In order to avoid unfolding definitions unnecessarily, we disable the
+\(\delta\)-reduction.
+% This means that we pass the
+% \begin{minted}{coq}
+% RedFlags.nodelta
+% \end{minted}
+% flags to the machine.
+This means that we pass the \mintinline{coq}{RedFlags.nodelta} flags to the
+machine.
+
+I will once again describe these functions and their recursive calls using
+inference rules for simplicity.
+\begin{mathpar}
+  \infer
+    {
+      \Ga \vdash \vscmd{t_1}{\pi_1} \red_\WM \vscmd{u_1}{\rho_1} \\
+      \Ga \vdash \vscmd{t_2}{\pi_2} \red_\WM \vscmd{u_2}{\rho_2} \\
+      \convterm{\Ga}{u_1}{\rho_1}{u_2}{\rho_2}{A}
+    }
+    {\convred{\Ga}{t_1}{\pi_1}{t_2}{\pi_2}{A}}
+  %
+\end{mathpar}
+Here we simply do a recursive call on the weak head normal forms of the two
+inputs.
+
+\subsection{\mintinline{coq}{Term}}
+
+\subsection{\mintinline{coq}{Args}}
+
+\subsection{\mintinline{coq}{Fallback}}
+
+\subsection{About universes}
+
+\section{Order for termination}
+
+\section{Future work: \(\eta\)-conversion}
+
+\todo{how the implem deals with eta}
