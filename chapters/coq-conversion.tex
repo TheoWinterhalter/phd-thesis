@@ -285,7 +285,27 @@ syntactic equality.
 
 \subsection{About cumulativity and universes}
 
-\section{Order for termination}
+In the (partial) definitions above I sometimes refer to syntactic equality of
+terms or equality of universes. These are alaways refering to the universe
+constraints to be decided, \ie their respective representations need not be the
+same on both sides of the equality. This is the reason why I write \(u = v\)
+when I could have unified them, the way I unified \(k_1\) and \(k_2\) into \(k\)
+when considering constants.
+
+Another important point is that we actually define conversion and cumulativity
+at the same time, using an extra argument (essentially a boolean) telling us
+which of those we are checking for.
+I did everything in the setting of conversion to have lighter notations, but
+everything works just as well with cumulativity.
+
+I will not explain how we specify and check equality or cumulativity of
+universes as it was not my own contribution.
+The interested reader should refer either to~\sidecite{sozeau2019coq} or the
+formalisation.
+
+\section{Termination and correctness}
+
+\todo{It is time to specify the correctness}
 
 \section{Future work: \(\eta\)-conversion}
 
