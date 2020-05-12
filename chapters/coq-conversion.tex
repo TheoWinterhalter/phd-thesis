@@ -70,8 +70,8 @@ inference rules for simplicity.
 \begin{mathpar}
   \infer
     {
-      \Ga \vdash \vscmd{t_1}{\pi_1} \red_\WM \vscmd{u_1}{\rho_1} \\
-      \Ga \vdash \vscmd{t_2}{\pi_2} \red_\WM \vscmd{u_2}{\rho_2} \\
+      \Ga \vdash \vscmd{t_1}{\pi_1} \red_{\WM \not\delta} \vscmd{u_1}{\rho_1} \\
+      \Ga \vdash \vscmd{t_2}{\pi_2} \red_{\WM \not\delta} \vscmd{u_2}{\rho_2} \\
       \convterm{\Ga}{u_1}{\rho_1}{u_2}{\rho_2}{A}
     }
     {\convred{\Ga}{t_1}{\pi_1}{t_2}{\pi_2}{A}}
@@ -81,6 +81,99 @@ Here we simply do a recursive call on the weak head normal forms of the two
 inputs.
 
 \subsection{\mintinline{coq}{Term}}
+
+For this phase, we take two inputs that are in weak head normal form (without
+\(\delta\)-reduction) and look at the heads of the terms.
+The idea behind disabling \(\delta\) is that when comparing two constants
+we hope not to have to unfold them if they already are the same.
+\[
+  \infer
+    {
+      u_1 \cong u_2 \\
+      \convargs{\Ga}{\const\ k\ u_1}{\pi_1}{\const\ k\ u_2}{\pi_2}{\ayes}
+    }
+    {\convterm{\Ga}{\const\ k\ u_1}{\pi_1}{\const\ k\ u_2}{\pi_2}{\ayes}}
+  %
+\]
+where \(\const\ k\ u\) refers to the constant of name \(k\) and universe
+instance \(u\).
+Here we first compare the universe instances to check that they are equal
+(which is a bit more general that syntactic equality), and if so we compare
+the stacks, or more specifically the arguments on those. I will explain this
+part when presenting the corresponding function.
+\marginnote[0.1cm]{
+  One or the two of them might refer to axioms and in that case, we only unfold
+  those that can be, and if we compare two axioms, we know they are distinct.
+}
+If the constant names aren't the same, or if the universe instances do not match
+or if the argument comparison fails, we then unfold one of the constants and
+compare them again.
+\marginnote[1cm]{
+  I informally write \(t_2[u_2]\) to mean \(t_2\) instantiated by \(u_2\).
+}
+\[
+  \infer
+    {
+      (k_2 := t_2) \in \Sigma \\
+      \convred{\Ga}{\const\ k_1\ u_1}{\pi_1}{t_2[u_2]}{\pi_2}{A}
+    }
+    {\convterm{\Ga}{\const\ k_1\ u_1}{\pi_1}{\const\ k_2\ u_2}{\pi_2}{A}}
+  %
+\]
+
+Another interesting case is the comparison of \(\lambda\)-abstractions.
+\marginnote[1cm]{
+  Once again I show the rule when there are successes in each recursive calls,
+  all the others yield errors.
+}
+\[
+  \infer
+    {
+      \convred
+        {\Ga}
+        {A_1}
+        {\stack{\lambda (x:\shole).\ t_1} :: \pi_1}
+        {A_2}
+        {\stack{\lambda (x:\shole).\ t_2} :: \pi_2}
+        {\ayes}
+      \\
+      \convred
+        {\Ga}
+        {t_1}
+        {\stack{\lambda (x:A_1).\ \shole} :: \pi_1}
+        {t_2}
+        {\stack{\lambda (x:A_2).\ \shole} :: \pi_2}
+        {A}
+    }
+    {
+      \convterm
+        {\Ga}
+        {\lambda (x:A_1).\ t_1}{\pi_1}
+        {\lambda (x:A_2).\ t_2}{\pi_2}
+        {A}
+    }
+  %
+\]
+First we compare the two domains and then we compare the two bodies.
+This may seem like a simple case of recursing in the subterms but there is a
+subtlety: the context when comparing the bodies is still \(\Ga\) and not
+\(\Ga, x:A_1\) or \(\Ga, x:A_2\).
+\marginnote[0.1cm]{
+  A \emph{good} things that helps us complete proofs.
+}
+This is actually a good thing that we don't have to pick one of them and remain
+symmetric.
+We are saved by the stacks once more. Indeed, in
+\(\stack{\lambda (x:A_1).\ \shole}\) we have the information corresponding to
+\(x : A_1\). More generally, stacks do not only yield positions but also
+contexts. In the expression
+\[
+  \isconv{\Ga}{t_1}{\pi_1}{t_2}{\pi_2}{A}
+\]
+\(t_1\) lives in \(\Ga, \stackctx\ \pi_1\), and \(t_2\) in
+\(\Ga, \stackctx\ \pi_2\).
+
+\todo{More examples, also introduce fallback}
 
 \subsection{\mintinline{coq}{Args}}
 
