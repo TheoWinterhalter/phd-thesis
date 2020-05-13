@@ -492,18 +492,35 @@ vec_rect A
 
 \Andromeda~\sidecite{andromeda} is a proof assistant implementing \acrshort{ETT}
 in a sense that is really close to our formalisation. Aside from a concise
-nucleus with a basic type theory, most things happen with the declaration of
-constants with given types, including equalities to define the computational
-behaviour of eliminators for instance.
+nucleus consisting in a very basic type theory, \Andromeda features an interface
+in which the user can declare constants with given types. Definitions and
+computational behaviour are defined using constants which inhabit equalities.
+\begin{minted}{text}
+constant nat : Type
+constant O : nat
+constant S : nat -> nat
+
+constant natrec :
+  ∏ (P : nat -> Type),
+    P O ->
+    (∏ (n : nat), P n -> P (S n)) ->
+    ∏ (n : nat), P n.
+
+constant natrec_O :
+  ∏ P Pz Ps, natrec P Pz Ps O ≡ Pz.
+
+constant natrec_S :
+  ∏ P Pz Ps n, natrec P Pz Ps (S n) ≡ Ps n (natrec P Pz Ps n).
+\end{minted}
 This is essentially what we do in our formalisation.
 Furthermore, their theory relies on $\Type : \Type$, meaning, our modular
 handling of universes can accommodate for this as well.
 
 All in all, it should be possible in the future to use our translation
 (or a similar one) to produce \Coq terms out of \Andromeda developments.
-%
-Note that this would not suffer from the difficulties in generating typing
-derivations since \Andromeda would be generating them.
+\Andromeda would be generating the typing derivations for us, which is
+particularly interesting because \Andromeda's system is much more practical
+than the small type checker I wrote in \Coq.
 
 \section{Composition with other Translations}
 
