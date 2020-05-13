@@ -2,11 +2,40 @@
 \chapter{Conclusion}
 \labch{coq-conclusion}
 
-\todo{
-  Perspective : towards completeness
-  we can also talk about eta once again (also for spec)
-  Talk about the performances of the extracted type checker
-  Maybe CertiCoq and other stuff?
-  Towards a full type checker of coq written in coq (missing modules and
-  template polymorphism)
-}
+We have formalised an almost feature-complete type checker for \Coq in \Coq
+and proven it correct. Thanks to the extraction mechanism of \Coq, this can
+actually be turned into an independent type checker program.
+For instance it can be run within Coq in the manner of a plugin:
+\begin{minted}{coq}
+MetaCoq SafeCheck nat.
+\end{minted}
+
+Because we do not deal with template polymorphism, the module system and
+\(\eta\)-expansion, we are not yet able to typecheck the standard library
+or the formalisation itself (as it relies on the standard library).
+We were however able to test it on reasonable proof terms coming from
+the \acrshort{HoTT} library~\sidecite{bauer2017hott}.
+\marginnote[1.1cm]{
+  Examples of the checker in action, including the \acrshort{HoTT} theorems
+  can be found in the file
+  \href{https://github.com/MetaCoq/metacoq/blob/popl-artifact-eval/test-suite/safechecker_test.v}{test-suite/safechecker\_test.v}.
+}%
+For instance, we have been able to typecheck the proof that an isomorphism can
+be turned into an equivalence.
+It currently is about one order of magnitude slower than the \Coq
+implementation (0.015s vs 0.002s averaged over 10 runs for each checking).
+This can in particular be attributed to our very ineficient representation of
+global environments as association lists indexed by character lists, where \Coq
+uses efficient hash-maps on strings.
+
+Another point I would like to address is the lack of completeness proof.
+Our tests suggest that we are close to completeness if not there yet for the
+fragment we are considering. It would be however really interesting to have a
+proof that conversion and inference are complete with respect to their
+specifications.
+At the moment, dealing with \(\eta\)-conversion seems like a much more pressing
+matter as it would make the checker usable in practice at least as a standalone
+independent checker.
+
+There is also the long term dream of having a \Coq kernel fully verified and
+running in \Coq.
