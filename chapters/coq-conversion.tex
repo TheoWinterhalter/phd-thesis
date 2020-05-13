@@ -553,4 +553,40 @@ cumulativity or conversion.
 
 \section{Future work: \(\eta\)-conversion}
 
-\todo{how the implem deals with eta}
+In the \Coq implementation, \(\eta\)-expansion is handled even though the
+conversion is untyped. The way this is achieved is by only expanding a term
+(which is not a \(\lambda\)-abstraction) when it is compared to a
+\(\lambda\)-abstraction.
+\[
+  \infer
+    {\convterm{\Ga}{\lambda (x:A).\ t_1\ x}{\pi_1}{\lambda (x:A).\ u}{\pi_2}{A}}
+    {\convterm{\Ga}{t_1}{\pi_1}{\lambda (x:A).\ u}{\pi_2}{A}}
+  %
+\]
+The recursive call would thus be followed by the congruence rule for
+\(\lambda\)-abstractions.
+For termination purposes this step is actually skipped and we directly do
+\marginnote[1cm]{
+  We also take advantage of this to skip the comparison of the domains since
+  they are both necessarily the same.
+}
+\[
+  \infer
+    {
+      \convred
+        {\Ga}
+        {t_1\ x}
+        {\stack{\lambda (x:A).\ \shole} :: \pi_1}
+        {u}
+        {\stack{\lambda (x:A).\ \shole} :: \pi_2}
+        {A}
+    }
+    {\convterm{\Ga}{t_1}{\pi_1}{\lambda (x:A).\ u}{\pi_2}{A}}
+  %
+\]
+
+In our setting however, we would need to have the order not only modulo
+universes but also modulo \(\eta\), and I have not yet managed to find a way
+to account for \(\eta\) in a way that preserves well-foundedness.
+As unfortunate as it is---it gets in the way of actually using our typechecker
+on real-life examples---it will have to be future work for us.
