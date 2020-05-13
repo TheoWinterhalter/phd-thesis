@@ -1,3 +1,119 @@
 % \setchapterpreamble[u]{\margintoc}
 \chapter{Type inference and checking}
 \labch{coq-inference}
+
+Now that we have our conversion algorithm, we can move on to type checking.
+This work is not mine but that of Simon Boulier so I will go over it briefly.
+It needs to be mentioned as it is the goal of both the weak head reduction
+and the conversion algorithms.
+
+\paradot{Inference versus checking}
+In \Coq, without existential variables, type inference is decidable. That is,
+given a term of \acrshort{PCUIC} in a well-formed environment \(\Ga\), there is
+an algorithm that decides whether there exists a type \(A\) such that
+\[
+  \Ga \vdash t : A
+\]
+\marginnote[-0.3cm]{
+  This implies that the inference algorithm should not return any type, but the
+  principal type of \(t\).
+}%
+Checking that \(t\) has type \(B\) is then implemented by inferring the type of
+\(A\) and verifying that it is a subtype of \(B\).
+
+The good news is that this time, termination is structural so it doesn't require
+extra work like we had for reduction and conversion.
+Inference looks like this
+\begin{minted}{coq}
+Program Fixpoint infer
+  (Γ : context) (HΓ : ∥ wf_local Σ Γ ∥) (t : term) {struct t}
+  : typing_result ({ A : term & ∥ Σ ;;; Γ |- t : A ∥ }) :=
+  match t with
+  | tRel n =>
+    match nth_error Γ n with
+    | Some c => ret ((lift0 (S n)) (decl_type c) ; _)
+    | None   => raise (UnboundRel n)
+    end
+
+  | tSort u =>
+    match Universe.get_is_level u with
+    | Some l =>
+      check_eq_true
+        (LevelSet.mem l (global_ext_levels Σ))
+        (Msg ("undeclared level " ++ string_of_level l)) ;;
+      ret (tSort (Universe.super l) ; _)
+    | None  =>
+      raise (Msg (string_of_sort u ++ " is not a level"))
+    end
+
+  | tProd na A B =>
+    s1 <- infer_type infer Γ HΓ A ;;
+    s2 <- infer_type infer (Γ ,, vass na A) _ B ;;
+    ret (tSort (Universe.sort_of_product s1.π1 s2.π1) ; _)
+
+  | tLambda na A t =>
+    s1 <- infer_type infer Γ HΓ A ;;
+    B <- infer (Γ ,, vass na A) _ t ;;
+    ret (tProd na A B.π1 ; _)
+
+  | tLetIn n b b_ty b' =>
+    infer_type infer Γ HΓ b_ty ;;
+    infer_cumul infer Γ HΓ b b_ty _ ;;
+    b'_ty <- infer (Γ ,, vdef n b b_ty) _ b' ;;
+    ret (tLetIn n b b_ty b'_ty.π1 ; _)
+
+  | tApp t u =>
+    ty <- infer Γ HΓ t ;;
+    pi <- reduce_to_prod Γ ty.π1 _ ;;
+    infer_cumul infer Γ HΓ u pi.π2.π1 _ ;;
+    ret (subst10 u pi.π2.π2.π1 ; _)
+
+  | tConst cst u =>
+    match lookup_env (fst Σ) cst with
+    | Some (ConstantDecl d) =>
+      check_consistent_instance d.(cst_universes) u ;;
+      let ty := subst_instance_constr u d.(cst_type) in
+      ret (ty ; _)
+    |  _ => raise (UndeclaredConstant cst)
+    end
+
+  (* ... *)
+
+  end.
+\end{minted}
+
+We use \Program this time to allow us to solve some parts using tactics as,
+once again, the function is defined to be correct by construction.
+The function is written in monadic style, using the following monad
+\begin{minted}{coq}
+Inductive typing_result (A : Type) :=
+| Checked (a : A)
+| TypeError (t : type_error).
+\end{minted}
+which corresponds to either returning a type or an error message.
+
+We can then decude checking
+\begin{minted}{coq}
+Program Definition infer_cumul Γ HΓ t A (hA : wellformed Σ Γ A)
+  : typing_result (∥ Σ ;;; Γ |- t : A ∥) :=
+  A' <- infer Γ HΓ t ;;
+  X <- convert_leq Γ A'.π1 A _ _ ;;
+  ret _.
+\end{minted}
+
+I don't expect you to read the definition in detail. For a variable it checks if
+it is bound, and if so returns the type it is assigned in the environment,
+otherwise it raises an error.
+For a sort, it checks if is algebraic, if not and it is a declared level,
+it returns the successor level.
+For a \(\Pi\)-type if infers the types of the domain and codomain, checking that
+they are indeed sorts, and returns the sort of the product (\ie the maximum
+of the two sorts if the second one is not \(\Prop\), and \(\Prop\) otherwise).
+In the case of application we use \mintinline{coq}{infer_cumul} to \emph{check}
+rather than infer the type of the argument. The checking function is defined
+afterwards so this is another version of it (as you can see it takes
+\mintinline{coq}{infer} as argument).
+
+All this is as one should expect, and concludes our quest of a type checker
+defined in \Coq and proven correct while relying only on a few axioms stating
+that the theory is well behaved.
