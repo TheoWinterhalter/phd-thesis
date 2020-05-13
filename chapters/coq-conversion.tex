@@ -372,7 +372,184 @@ We can now move on to the main difficulty regarding conversion: its termination.
 
 \subsection{Termination}
 
-\todo{Introduce requirements on the order and then give it}
+You can see that the definition of the conversion algorithm is reminiscent of
+that of weak head reduction, and one might expect the termination orders to be
+relatively close. This is indeed the case, but things are slightly more
+complicated here, mainly for two reasons: we sometimes consider terms up to
+universes; and we have mutually defined functions.
+
+I will go over the different kind of recursive calls to motivate the order,
+before introducing it.
+
+The first rule I presented involves putting both terms in weak head normal
+form before recursing on them. As we know from the correctness of weak head
+reduction, the terms it yields are reducts of the orginal terms, and some
+focusing potentially happened. As such, the order used by reduction seems like
+a good option, save for one problem: in some cases---when the term is already
+in weak head normal form---the weak reduction returns the original term.
+Because of this, the phases must be part of the order.
+In particular we want to have
+\[
+  \cterm \prec \cred
+\]
+
+Similarly, when comparing constants in the \mintinline{coq}{Term} phase,
+we have a recursive call to the \mintinline{coq}{Args} phase with the same
+arguments so we also want
+\[
+  \cargs \prec \cterm
+\]
+When we unfold one of the constants however, we go back from the
+\mintinline{coq}{Term} phase to the \mintinline{coq}{Reduction} phase
+so we really have to account for the fact that the unfolded definition is a
+reduct of the constant, and it has to come before in the lexicographical
+order.
+
+The case of \(\lambda\)-abstractions tells us that similarly, the subterm
+relation should come before the phase relation.
+
+The \mintinline{coq}{Fallback} phase also happens with the same arguments as
+that of the \mintinline{coq}{Term} phase so
+\[
+  \cfall \prec \cterm
+\]
+
+The \mintinline{coq}{Args} phase makes recrusive calls inside the stack meaning
+that, like weak head reduction, we must in fact use positions rather than the
+subterm relation.
+
+Finally, the \mintinline{coq}{Fallback} phase can make recursive calls on the
+\mintinline{coq}{Args} phase with the same arguments, meaning
+\[
+  \cargs \prec \cfall
+\]
+
+\paradot{The order}
+
+Let me now introduce the order that we use to prove conversion terminating.
+First we need to define the notion of phases (that I call states in the
+formalisation):
+\begin{minted}{coq}
+Inductive state :=
+| Reduction
+| Term
+| Args
+| Fallback.
+\end{minted}
+as well as a well-founded order on them
+\marginnote[0.3cm]{
+  It should not prove to hard to see that it is indeed well-founded since we
+  essentially have
+  \[
+    \cargs \prec \cfall \prec \cterm \prec \cred
+  \]
+}
+\begin{minted}{coq}
+Inductive stateR : state -> state -> Prop :=
+| stateR_Term_Reduction : stateR Term     Reduction
+| stateR_Args_Term      : stateR Args     Term
+| stateR_Fallback_Term  : stateR Fallback Term
+| stateR_Args_Fallback  : stateR Args     Fallback.
+\end{minted}
+
+I already said we needed to consider equality of terms up to universes, as such
+we define an altered version of coreduction that is coreduction up to universes.
+\marginnote[0.6cm]{
+  The notation \mintinline{coq}{∥ A ∥} is for the \emph{squashed} version of
+  \mintinline{coq}{A}, \ie its plunging into \mintinline{coq}{Prop}.
+  This is to make sure it goes away after extraction.
+}
+\begin{minted}{coq}
+Notation eqt u v :=
+  (∥ eq_term (global_ext_constraints Σ) u v ∥).
+
+Definition cored' Γ u v :=
+  exists u' v', cored Σ Γ u' v' /\ eqt u u' /\ eqt v v'.
+\end{minted}
+
+\marginnote[2cm]{
+  \mintinline{coq}{` w} is the first projection of \mintinline{coq}{w}, \ie
+  a term, forgetting about its well-formedness proof.
+}
+Because coreduction is only well-founded for well-formed terms, I also define
+the type of well-formed terms and coreduction on them.
+\begin{minted}{coq}
+Definition wterm Γ :=
+  { t : term | wellformed Σ Γ t }.
+
+Definition wcored Γ (u v : wterm Γ) :=
+  cored' Σ Γ (` u) (` v).
+
+Definition weqt {Γ} (u v : wterm Γ) :=
+  eqt (` u) (` v).
+\end{minted}
+
+We can finally move on to the definition of the (auxiliary) order:
+\marginnote[0.6cm]{
+  Here I use \Equations which allows me to leave the coercions blank and provide
+  them using tactics.
+}
+\begin{minted}{coq}
+Equations R_aux (Γ : context) :
+  (∑ t : term, pos t × (∑ w : wterm Γ, pos (` w) × state)) ->
+  (∑ t : term, pos t × (∑ w : wterm Γ, pos (` w) × state)) ->
+  Prop :=
+  R_aux Γ :=
+    t ⊨ eqt \ cored' Σ Γ by _ ⨷
+    @posR t ⊗
+    w ⊨ weqt \ wcored Γ by _ ⨷
+    @posR (` w) ⊗
+    stateR.
+\end{minted}
+So what we have here are nested dependent lexicographical orders modulo
+syntactical equality up to universes.
+The order operates on a term, a position in it, another term and position, and
+finally a state, using coreduction for terms.
+
+The real order simply repacks this information, computing the positions from
+the stacks.
+\begin{minted}{coq}
+Record pack (Γ : context) := mkpack {
+  st   : state ;
+  tm1  : term ;
+  stk1 : stack ;
+  tm2  : term ;
+  stk2 : stack ;
+  wth  : wtp Γ tm2 stk2
+}.
+
+Arguments st {_} _.
+Arguments tm1 {_} _.
+Arguments stk1 {_} _.
+Arguments tm2 {_} _.
+Arguments stk2 {_} _.
+Arguments wth {_} _.
+
+Notation pzt u := (zipc (tm1 u) (stk1 u)) (only parsing).
+Notation pps1 u := (stack_pos (tm1 u) (stk1 u)) (only parsing).
+Notation pwt u := (exist _ (wth u)) (only parsing).
+Notation pps2 u := (stack_pos (tm2 u) (stk2 u)) (only parsing).
+
+Notation obpack u :=
+  (pzt u ; (pps1 u, (pwt u ; (pps2 u, st u)))) (only parsing).
+
+Definition R Γ (u v : pack Γ) :=
+  R_aux Γ (obpack u) (obpack v).
+\end{minted}
+
+The order is well-founded and sufficient to prove termination of the conversion
+algorithm which is also correct by construction.
+In the end we get a conversion checker that operates on well-formed terms and
+is proven sound:
+\begin{minted}{coq}
+Theorem isconv_term_sound :
+  forall Γ leq t1 h1 t2 h2,
+    isconv_term Γ leq t1 h1 t2 h2 = Success I ->
+    conv_cum leq Σ Γ t1 t2.
+\end{minted}
+where \mintinline{coq}{leq} is the flag saying whether we compare for
+cumulativity or conversion, and \mintinline{coq}{conv_cum leq} is either
+cumulativity or conversion.
 
 \section{Future work: \(\eta\)-conversion}
 
