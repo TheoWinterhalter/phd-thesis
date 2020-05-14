@@ -9,8 +9,8 @@ Before we can formalise the type-checker, we need to develop some of the
 meta-theory. In particular the type-checker relies on subject reduction,
 confluence and strong normalisation of the reduction.
 As I already said in \nrefch{coq-overview}, these properties can be part of
-the trusted base (and some of them like strong normalisation have to be in it
-lest we prove consistency of \Coq whithin \Coq). Moreover they are not the
+the trusted base (and some of them like strong normalisation have to be in it,
+lest we prove consistency of \Coq within \Coq). Moreover they are not the
 subject of this work. I will thus focus on their statements and not their
 potential proofs, those are explained in~\sidecite{sozeau2019coq} or will be
 in upcoming publications regarding the \MetaCoq project.
@@ -18,8 +18,9 @@ in upcoming publications regarding the \MetaCoq project.
 \paradot{Substitutivity and weakening}
 
 Weakening and substitution preserve typing, a fact which we prove rather early
-in the development. Such statements cannot really be assumed anyway since it is
-really easy to make mistakes while manipulating de Bruijn indices.
+in the development. It is really easy to make mistakes while manipulating de
+Bruijn indices, so having those theorems (and not merely as assumed properties)
+increase the confidence we can have in our handling of de Bruijn indices.
 
 The weakening theorem is rather simple:
 \begin{minted}{coq}
@@ -43,7 +44,7 @@ Lemma substitution :
     Σ ;;; Γ ,,, subst_context s 0 Δ |-
       subst s #|Δ| t : subst s #|Δ| T.
 \end{minted}
-This time we are replacing a bunch of variables at once using parallel
+This time we are replacing a bunch of variables at once using so-called parallel
 substitutions. Not only the term and type, but also the context that was built
 on top of the substituted variables are substituted.
 Unlike weakening, the substitution itself needs to be well-typed, this is
@@ -65,8 +66,8 @@ Inductive subslet {cf:checker_flags} Σ (Γ : context)
     Σ ;;; Γ |- subst0 s t : subst0 s T ->
     subslet Σ Γ (subst0 s t :: s) (Δ ,, vdef na t T).
 \end{minted}
-Unlike substitution typing I presented earlier this needs to account for local
-definitions (\ie let-bindings) in the environment.
+Substitution typing needs to account for local definitions (\ie let-bindings) in
+the environment.
 In a more understable language this becomes
 \marginnote[1cm]{
   This time I write \(\Ga \vdash \sigma : \D\) were earlier I wrote
@@ -145,9 +146,9 @@ the same term (up to names and universes).
 
 \paradot{Context conversion}
 
-This is property that I did not mention before: context conversion states that
+This is a property that I did not mention before: context conversion states that
 you can replace a context in a judgment by another context where all types
-and definitions are convertible to the original one.
+and definitions are convertible to those of the original context.
 This will often be used to replace \(\Ga, x:A\) by \(\Ga, x:A'\) with
 \(A \equiv A'\) but is proven in full generality.
 
