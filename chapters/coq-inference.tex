@@ -21,7 +21,7 @@ an algorithm that decides whether there exists a type \(A\) such that
 Checking that \(t\) has type \(B\) is then implemented by inferring the type of
 \(A\) and verifying that it is a subtype of \(B\).
 
-The good news is that this time, termination is structural so it doesn't require
+The good news is that this time, termination is structural so it does not require
 extra work like we had for reduction and conversion.
 Inference looks like this
 \begin{minted}{coq}
@@ -101,7 +101,7 @@ Program Definition infer_cumul Γ HΓ t A (hA : wellformed Σ Γ A)
   ret _.
 \end{minted}
 
-I don't expect you to read the definition in detail. For a variable it checks if
+I do not expect you to read the definition in detail. For a variable it checks if
 it is bound, and if so returns the type it is assigned in the environment,
 otherwise it raises an error.
 For a sort, it checks if is algebraic, if not and it is a declared level,

@@ -111,7 +111,7 @@ then all accessible elements verify \(P\).
   \(\mathcal{F}_0 = 0\), \(\mathcal{F}_1 = 1\) and
   \(\mathcal{F}_{n+2} = \mathcal{F}_{n+1} + \mathcal{F}_n\).
 }
-Let's say this time we want to define the Fibonacci sequence, the following
+Let us say this time we want to define the Fibonacci sequence, the following
 definition is not accepted by \Coq's termination checker.
 \begin{minted}{coq}
 Fail Fixpoint fib n :=
@@ -258,7 +258,7 @@ the only times we're interested in \(\prec_B\) is when the first two components
 are the same (\(a = a'\)), meaning the same type \(B[x \sto a]\).
 
 \marginnote[2.6cm]{
-  Notice in the second case that there is no \(a'\), it's twice \(a\).
+  Notice in the second case that there is no \(a'\), it is twice \(a\).
 }
 \begin{definition}[Dependent lexicographic order]
   Given a type \(A\) and a type \(B\) dependent on \(A\), as well as an order

@@ -612,7 +612,7 @@ second rule:
     {\Ga \vdash \refl{A} u : u =_A u}
   %
 \end{mathpar}
-It's also easy to see how proving \(\Ga \vdash u =_A u\) will be direct from the
+It is also easy to see how proving \(\Ga \vdash u =_A u\) will be direct from the
 hypotheses.
 
 \subsection{Conversion}
@@ -646,7 +646,7 @@ from reduction (as a congruence closure) but is also extended to take
     {u \equiv v}
   %
 \end{mathpar}
-Since it's untyped, we have to make sure the type is well-formed in the
+Since it is untyped, we have to make sure the type is well-formed in the
 conversion rule:
 \[
   \infer
@@ -785,7 +785,7 @@ data Tms where
 Finally for terms we have something like this, pretty standard except the
 application is not the usual\sidenote{
   In fact I would not call it application at
-  all as it is not application. It's a key element to getting it however, usual
+  all as it is not application. It is a key element to getting it however, usual
   application of \mintinline{agda}{(u : Tm Γ (Π A B))} and
   \mintinline{agda}{(v : Tm Γ A)} is given by
   \mintinline{agda}{(app u)[id, u]t}.

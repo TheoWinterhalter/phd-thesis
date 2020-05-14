@@ -68,7 +68,7 @@ term.
   It should not feel too surprising, the empty position is always valid,
   and otherwise, the head choice should match the structure of the term.
   There are some trickier cases for pattern-matching and fixed-points because
-  they involve lists of terms but it's still pretty natural.
+  they involve lists of terms but it is still pretty natural.
 }
 \begin{minted}{coq}
 Fixpoint validpos t (p : position) {struct p} :=
@@ -171,10 +171,10 @@ surrounding which can be recorded using stacks.
 
 \section{Stacks}
 
-My use of the term \emph{stack} might be an abuse as it's probably a
+My use of the term \emph{stack} might be an abuse as it is probably a
 generalisation of it and might be better called an evaluation environment
 or context; I will stick to \emph{stack} anyway.
-The main reason behind the name is that it's not presented as a term with a hole
+The main reason behind the name is that it is not presented as a term with a hole
 but rather as a succession of terms with a hole that stack on top of each other.
 
 If you take the following example,

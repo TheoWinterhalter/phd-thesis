@@ -34,7 +34,7 @@ Weak head normal forms are by definition the terms that cannot be reduced
 further by weak head reduction.
 
 \begin{definition}[Normal form]
-  A term \(t\) is a normal form for a reduction \(\red\) if it doesn't reduce
+  A term \(t\) is a normal form for a reduction \(\red\) if it does not reduce
   for \(\red\).
   \[
     t \not \red
@@ -48,7 +48,7 @@ The intuition is that a neutral term is a \emph{stuck} term.
 
 \begin{definition}[Neutral forms]
   A term \(t\) is neutral for a reduction \(\red\) if substituting it inside
-  another term doesn't introduce redexes. Equivalently substituting a neutral
+  another term does not introduce redexes. Equivalently substituting a neutral
   term \(t\) in a normal form \(u\) will yield another normal form.
   \[
     u[x \sto t] \not \red
@@ -61,7 +61,7 @@ Focusing on a small fragment of \acrshort{PCUIC} without inductive types and so
 on, we can characterise weak head neutral (\(\whne\)) and normal forms \(\whnf\)
 with the following mutual judgements:
 \marginnote[1cm]{
-  The first rule is there to make sure that the variable doesn't correspond to
+  The first rule is there to make sure that the variable does not correspond to
   local definition because those reduce.
 }
 \begin{mathpar}
@@ -137,7 +137,7 @@ definitions, \mintinline{coq}{delta} is for the unfolding of global definitions,
 \mintinline{coq}{cofix_} for that of cofixed-points.
 
 The default is to reduce all those, but later we will also use a version which
-doesn't do \(\delta\)-reductions to speed up conversion.
+does not do \(\delta\)-reductions to speed up conversion.
 
 \subsection{\Coq specification}
 
@@ -280,7 +280,7 @@ We want to define weak head reduction \(\red_\WM\) as something like this:
   %
 \end{mathpar}
 The things above the line can be seen as recursive calls of the machine.
-This is rather informal, but it doesn't correspond to the final definition
+This is rather informal, but it does not correspond to the final definition
 anyway.
 
 Regarding termination, we see two cases: in the first we focus on a subterm,
@@ -294,7 +294,7 @@ In other words we need a well-founded order that satisfies
 \]
 
 As we have seen, assuming strong normalisation is tantamount to having a
-well-founded order on coreduction, and it shouldn't be surprising that the
+well-founded order on coreduction, and it should not be surprising that the
 subterm relation is also well-founded. Taking a lexicographical order on both
 these orders seems like a good option.
 
@@ -306,7 +306,7 @@ relation only looks at \(t\).
 This forces us to consider coreduction before the subterm relation, indeed if we
 were to consider the pair \((t, \zip\ \dpair{t \mid \pi})\) we would indeed
 satisfy the first inequality as \(t\) is a subterm of \(t\ u\), but in the
-second inequality the first components wouldn't be equal.
+second inequality the first components would not be equal.
 We will thus consider the following pair:
 \[
   (\zip\ \dpair{t \mid \pi},\ t)
@@ -473,7 +473,7 @@ where
   \theta = \coapp{u_1} :: \dots :: \coapp{u_{n-1}} :: \coapp{u_n} :: \pi
 \]
 Once again, the order fails us because, even though we manage to have the same
-term in both left components, we don't have that \(u_n\) is a subterm of
+term in both left components, we do not have that \(u_n\) is a subterm of
 \(\fixp_n f.\ t\).
 The subterm order is in fact ill-suited to deal with this problem and we need
 to replace it with a more flexible order. For this we will use \emph{positions}.

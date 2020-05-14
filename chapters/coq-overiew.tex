@@ -10,7 +10,7 @@ several \emph{unsafe} features to be implemented outside of this kernel so that
 they do not have to be trusted. Tactis for instance will produce terms, but in
 the end, \Coq's kernel will type-check those and will complain if the tactics
 produced ill-typed terms. This means the implementation of the tactic language
-and other \emph{surface}-features are not critical. It's better if they do their
+and other \emph{surface}-features are not critical. It is better if they do their
 job properly, but there is a safety net in case they do not.
 \marginnote[2.5cm]{
   The green arrow is the only \emph{trusted} one. The others can fail.

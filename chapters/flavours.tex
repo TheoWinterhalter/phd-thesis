@@ -224,8 +224,8 @@ along said equality.
   %
 \end{mathpar}
 
-This time it's a bit hard to advertise it for practical use in a proof
-assistant, it's nonetheless interesting. For one, its meta-theory is that much
+This time it is a bit hard to advertise it for practical use in a proof
+assistant, it is nonetheless interesting. For one, its meta-theory is that much
 simpler, an even more attractive fact once combined with a translation from
 \acrshort{ITT} (or \acrshort{ETT}) to \acrshort{WTT} as is the object of
 \arefpart{elim-reflection}.
@@ -358,7 +358,7 @@ For instance, it allows to write a truly polymorphic identity function
   \mathsf{id}_i \coloneqq \lambda (A : \Type_i)\ (x : A).\ x
 \]
 Here, the \(i\) subscript is to bind level \(i\) in the expression. Notice that
-it's attached to the constant definition and not on the right-hand side; that's
+it is attached to the constant definition and not on the right-hand side; that's
 because universe levels are only quantified in a prenex-style, meaning you
 must quantify over \emph{all} universe levels before introducing other
 variables. In particular there is no type of polymorphic
@@ -469,11 +469,11 @@ Inductive eq (A : Type) (u : A) : A -> Prop :=
 
 This has some shortcomings\sidenote{At least for some people, many are content
 with the current status too.} like equalities between equalities, and between
-functions are not really accounted for, in the sense that's it's hard---often
+functions are not really accounted for, in the sense that's it is hard---often
 impossible---to prove them.
 \marginnote[0.2cm]{
-  \acrshort{UIP} is given computational content in \Agda, it's feasible so
-  it's not really an argument against this definition.
+  \acrshort{UIP} is given computational content in \Agda, it is feasible so
+  it is not really an argument against this definition.
 }
 This gives rise to axioms like \acrshort{UIP} and \acrshort{funext}, but axioms
 lack computational content.
