@@ -186,7 +186,7 @@ Definition mfixpoint term :=
   list (def term).
 \end{minted}
 while \mintinline{coq}{idx} tells which one we are referring to.
-Definitions which are given as
+Definitions are given as
 \begin{minted}{coq}
 Record def term := mkdef {
   dname : name ;
@@ -260,12 +260,12 @@ by \mintinline{coq}{a}.
 
 \paradot{\(\zeta\)-reduction}
 \begin{minted}{coq}
-red_zeta na b t b' :
-  red1 Σ Γ (tLetIn na b t b') (subst10 b b')
+red_zeta na b B t :
+  red1 Σ Γ (tLetIn na b B t) (subst10 b t)
 \end{minted}
 This rule is similar to \(\beta\)-reduction, it states that the expression
 \begin{minted}{coq}
-let x := b in t x
+let x : B := b in t x
 \end{minted}
 reduces to \mintinline{coq}{t b}.
 
@@ -299,9 +299,17 @@ Definition iota_red npar c args brs :=
     (List.skipn npar args).
 \end{minted}
 \mintinline{coq}{List.nth} takes a default value, so
-\mintinline{coq}{(0, tDummy)} can be safely ignored. \mintinline{coq}{iota_red}
-basically picks the branch corresponding to the constructor giving it the list
-of indices \mintinline{coq}{List.skipn npar args}.
+\mintinline{coq}{(0, tDummy)} can be safely ignored.
+\marginnote[-0.2cm]{%
+  For instance for \mintinline{coq}{@cons A x l}, which is a long way of writing
+  \mintinline{coq}{x :: l}, we only provide \mintinline{coq}{x} and
+  \mintinline{coq}{l} to the branch and not \mintinline{coq}{A} because it is a
+  parameter.
+}%
+\mintinline{coq}{iota_red}
+basically picks the branch corresponding to the constructor giving it the
+arguments of the constructor that are not also parameters of the inductive type:
+\mintinline{coq}{List.skipn npar args}.
 
 \paradot{Fixed-point unfolding}
 \begin{minted}{coq}
@@ -470,8 +478,8 @@ where " Σ ;;; Γ |- t <= u " := (cumul Σ Γ t u) : type_scope.
   %
 \end{mathpar}
 Of course this time it is not symmetric. We break symmetry by using
-\mintinline{coq}{leq_term} to perform \(\alpha\)-equlity up to universes.
-In a sense this is what does all the work regarding cumulativity.
+\mintinline{coq}{leq_term} to perform \(\alpha\)-equality up to cumulativity
+of universes. In a sense this is what does all the work regarding cumulativity.
 
 We define \mintinline{coq}{eq_term} and \mintinline{coq}{leq_term} at the same
 time using a more general definition.
@@ -522,7 +530,7 @@ Inductive eq_term_upto_univ
 As you can see, when comparing sorts we simply compare the universes with
 \mintinline{coq}{Rle}. Otherwise, we simply compare the subterms with the same
 relations. There is the exception of domains however, indeed they are in
-contravariant positions and as such they should need to be compared in reverse
+contravariant positions and as such they should be compared in reverse
 order. In \Coq we simply use conversion rather that cumulativity in
 contravariant positions:
 \begin{mathpar}
@@ -561,7 +569,7 @@ or even in a more directed way as
 \]
 In an untyped setting the question is a bit more complex, we have several
 candidates but are struggling to find a formulation that lets us preserve good
-properties about conversion/cumulativity without going through to much trouble.
+properties about conversion/cumulativity without going through too much trouble.
 
 \subsection{Typing}
 
@@ -601,9 +609,9 @@ type_Sort l :
   LevelSet.In l (global_ext_levels Σ) ->
   Σ ;;; Γ |- tSort (Universe.make l) : tSort (Universe.super l)
 \end{minted}
-For universes we once again require to local environment to be well-formed.
+For universes we once again require the local environment to be well-formed.
 The universe should also make sense in the global environment, in which case it
-is typed in its successor universe.
+is typed by its successor universe.
 
 \paradot{\(\Pi\)-types}
 \begin{minted}{coq}
@@ -732,7 +740,7 @@ type_Proj p c u :
 \end{minted}
 As usual we verify that the projection is declared and corresponds to a declared
 record type. The projected term must be of that record type, where universes
-are instantited. The projection has then the type of the corresponding field
+are instantiated. The projection then has the type of the corresponding field
 with these universes.
 
 \paradot{Fixed-points}
@@ -794,8 +802,13 @@ type_CoFix mfix n decl :
   ) mfix ->
   Σ ;;; Γ |- tCoFix mfix n : decl.(dtype)
 \end{minted}
-Cofixed-points are pretty similar to fixed-points except we do not even check
-productivity, so that is still something that we need to work on.
+Cofixed-points are pretty similar to fixed-points, with one exception.
+Similarly to fixed-points, not all cofixed-points are valid. Instead of
+termination we talk about \emph{productivity} which essentially means that each
+observation---for instance accessing the head of a stream---on the cofixed-point
+should terminate.
+For now we do not perform any productivity check and that is left as future
+work.
 
 \paradot{Cumulativity}
 \begin{minted}{coq}
