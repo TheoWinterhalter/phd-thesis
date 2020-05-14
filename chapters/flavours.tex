@@ -279,7 +279,8 @@ object itself. In the case of \(\Prop\) it comes from the fact that a
 proposition (\ie a type in \(\Prop\)) can quantify over propositions: \eg
 \(\forall (P : \Prop).\ P\) is still a proposition.
 \marginnote[-0.5cm]{
-  We write \(\forall (P : \Prop).\ P : \Prop\).
+  We write \(\forall (P : \Prop).\ P : \Prop\) to mean that the term
+  \(\forall (P : \Prop).\ P\) as type \(\Prop\).
   Note that this type is actually the empty type or false proposition so it's
   reassuring that it \emph{is} a proposition.
 }
@@ -305,7 +306,8 @@ formalisations (for now).
 When I introduced the typing rules for \(\Prop\) and \(\Type\) I showed that
 each universe can be typed in several other universes (actually in each case
 there are an infinite number of possiblities). The reality is even more
-intricate than that and it has to do with \emph{cumulative} part of the name.
+intricate than that and it has to do with the word `\emph{cumulative}' found in
+the name of the system.
 \Coq features a notion of subtyping that is limited to universes and that is
 called \emph{cumulativity}. In essence it says that \(\Type_i \le \Type_j\)
 whenever \(i \le j\), that is that bigger universes contain the smaller
