@@ -42,10 +42,13 @@ replace the \acrshort{TCB} by a \acrfull{TTB}.
 
 This time the idea is to rely on \MetaCoq which contains a specification of
 \acrshort{PCUIC} to implement a verified kernel, assuming that the theory is
-correct (hence the \acrshort{TTB}). The new kernel can be extracted to \Coq
-using its extraction mechanism~\sidecite{Let2008} and it no longer has to be
-trusted. Of course this requires trusting the extraction mechanism and even
-\Coq itself in which \acrshort{PCUIC} is formalised.
+correct (hence the \acrshort{TTB}).
+This \acrshort{TTB} is also kept to a minimum, only a few lemmata are part of it
+now, and in time it should only consist in assuming strong normalisation.
+The new kernel can be extracted to \Coq using its extraction
+mechanism~\sidecite{Let2008} and it no longer has to be trusted. Of course this
+requires trusting the extraction mechanism and even \Coq itself in which
+\acrshort{PCUIC} is formalised.
 The first point is mitigated by a verified extraction that is also part of the
 project. The latter is more fundamental but I would like to argue that this is
 \emph{not} entirely detrimental to our goal: the verified implementation is
