@@ -48,9 +48,10 @@ trusted. Of course this requires trusting the extraction mechanism and even
 \Coq itself in which \acrshort{PCUIC} is formalised.
 The first point is mitigated by a verified extraction that is also part of the
 project. The latter is more fundamental but I would like to argue that this is
-entirely detrimental to our goal: the verified implementation is still more
-detailed than the \ocaml implementation, in particular all the invariants
-are made explicit; implementation and specification are clearly separated.
+\emph{not} entirely detrimental to our goal: the verified implementation is
+still more detailed than the \ocaml implementation, in particular all the
+invariants are made explicit; implementation and specification are now clearly
+separated.
 
 \marginnote[0.2cm]{
   See \nrefch{proof-theory} for more on Gödel's incompleteness theorems.
@@ -62,7 +63,7 @@ incompleteness theorems which prevent us from proving consistency of
   See \nrefch{desirable-props}.
 }
 This implies that we have to admit strong normalisation of the system, as it
-would lead us to canonicity and thus consistency.
+would lead us to canonicity, hence consistency.
 Thus, the assumption that the meta-theory enjoys the well-known assumed
 properties is the main shortcoming of our formalisation. If those did not hold,
 it would either raise a serious issue in \Coq's theory, or a problem in the
@@ -73,7 +74,7 @@ specification we have is welcome.
   See \nrefch{flavours}.
 }
 Besides that, the theory of \acrshort{PCUIC} we specify and implement is a bit
-simpler from that of \Coq: we use lists where arrays are involved and more
+simpler than that of \Coq: we use lists where arrays are involved and more
 importantly we do not feature modules and template polymorphism.
 The implementation also provides efficient universe constraint checking and
 guard condition checking, we chose to remain abstract over those and simply
