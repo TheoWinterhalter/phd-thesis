@@ -20,7 +20,8 @@ it to investigate theories where conversion is defined differently.
 \labsubsec{pts-itt}
 
 \acrfull{ITT} is the name given to a wide range of type theories actually.
-Those could be described in the setting of \acrfullpl{PTS}.
+Those could be described in the setting of
+\acrfullpl{PTS}~\sidecite[-0.7cm]{barendregt1991introduction}.
 The theories behind the proof assistants \Coq and
 \Agda~\sidecite[-0.4cm]{norell2007towards}--respectively \acrfull{PCUIC} and
 \acrfull{MLTT}\sidenote{Note that \acrshort{MLTT} also has various
@@ -102,9 +103,9 @@ The typing rules involve the rules and axioms we mentioned earlier.
 Axioms determine typing of sorts, and rules what dependent products are allowed.
 The last rule is the conversion rule, it is the rule that involves computation:
 basically you can exchange two computationally equal types in a typing
-judgement. The \(\isterm{\Ga}{B}{s}\) bit is to make sure the type we want
+judgement. The \(\isterm{\Ga}{B}{s}\) part is to make sure the type we want
 to substitute still makes sense.
-In this case, conversion (\(\equiv\)) is defined as the reflexivie,
+In this case, conversion (\(\equiv\)) is defined as the reflexive,
 symmetric, transitive closure of reduction.
 \marginnote[-0.4cm]{
   \(t \equiv u\) is defined as \(t \mathop{(\redl . \red)^\star} u\)
@@ -121,14 +122,15 @@ common being \(\eta\)-expansion of functions.
 \[
   f \equiv_\eta \lambda (x:A). f\ x
 \]
-For it to make sense, expansion has to be limited to functions which require
-type information\sidenote{Also, the \(A\)---domain of the function---has to
-be sumrised somehow.}, this is why in certain contexts---like \Agda---the
-conversion is also typed.
+For it to make sense, expansion has to be limited to functions as we don't want
+to \(\eta\)-expand the natural number \(0\) to \(\lambda (x:A). 0\ x\). This
+means we need typing information\sidenote{Also, the \(A\)---domain of the
+function---has to be sumrised somehow.}, this is why in certain contexts---like
+\Agda---the conversion is also typed.
 The relation between typed and untyped conversion has been explored at several
-occasions~\sidecite[1.8cm]{van2013explicit}.
+occasions~\sidecite[0cm]{van2013explicit}.
 \Coq manages to verify \(\eta\)-conversion for functions and records without
-relying on a typed-conversion as we will see later~\misref.
+relying on a typed-conversion as we will see later in \nrefch{coq-conversion}.
 \marginnote[-0.5cm]{
   For instance, \(\eta\) for pairs is \(p \equiv (p.1, p.2)\) where
   \(p.1\) and \(p.2\) are the first and second projections of \(p\).
@@ -177,17 +179,20 @@ Definition vrev {A n m} (v : vec A n) (acc : vec A m)
 %
 The recursive call of \mintinline{coq}{vrev} returns a vector of length
 \mintinline{coq}|n + S m| where the context expects one of length
-\mintinline{coq}|S n + m|. In \acrshort{ITT} and \Coq, thesec types are not
+\mintinline{coq}|S n + m|. In \acrshort{ITT} and \Coq, these types are not
 convertible, and thus the definition is not accepted, even though it feels like
 it is the right definition. \acrshort{ETT} solves this problem by exploiting
 the fact that \mintinline{coq}|n + S m = S n + m| is provable.
 You can still define it in \Coq, but you have to explicitely transport along
-the abovementioned equality which can result in some problems while reasoning
+the above-mentioned equality which can result in some problems while reasoning
 on the resulting function and inconveniences overall.
 
 \acrshort{ETT} is not the ultimate solution however and suffers from many
 drawbacks the main of which being that type-checking is not decidable as we
 shall see in \nrefch{elim-reflection-intro}.
+Type-checking is usually decidable in proof assistants, which is part of what
+makes them usable in practice, I discuss this notion in
+\nrefch{desirable-props}.
 We will also explore the relation between \acrshort{ETT} and \acrshort{ITT} in
 \arefpart{elim-reflection}.
 
