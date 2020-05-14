@@ -197,8 +197,8 @@ It can be decomposed into
 meaning that the term will first be put under an abstraction, the result of this
 applied to \(u\) and the whole given as an argument to \(f\).
 This notion will prove particularly useful when considering the reduction
-machine in \nrefch{coq-reduction}, indeed the stack is way to remember the
-surrounding term when focusing on a subterm, once it has reached a normal form,
+machine in \nrefch{coq-reduction}. Indeed the stack is a way to remember the
+surrounding term when focusing on a subterm. Once it has reached a normal form,
 we can use the stack as a \emph{continuation}.
 
 You can see the process step by step in the following example.
@@ -368,7 +368,7 @@ well-founded order on them. There are actually several due to some degree of
 liberty as we shall see.
 
 Since positions are defined as lists, the natural order on them would the
-structural which says that any (strict) prefix of a position is smaller.
+structural one which says that any (strict) prefix of a position is smaller.
 This order is not really of interest to us because it would correspond to
 \emph{unfocusing}.
 Conversely, by extending a position with a new choice you are going deeper into
