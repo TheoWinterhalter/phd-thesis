@@ -11,8 +11,8 @@ mind---and focus mainly on those that are relevant to this thesis.
 \labsec{inductive-types}
 
 Inductive types are probably the most emblematic feature of dependent type
-theory. They are an extension of the variant datatypes present in \ocaml like
-the type of lists.
+theory. They can be seen as an extension of the variant datatypes present in
+\ocaml like the type of lists.
 \marginnote[0.6cm]{
   A list, say of integers, is either empty (\mintinline{ocaml}{nil}) or some
   head \mintinline{ocaml}{h : int} and some tail
@@ -167,11 +167,13 @@ Once again, pattern-matching allows us to inspect a proof of \(\unit\):
   %
 \end{mathpar}
 As all rules pertaining to pattern-matching, it is an elimination rule.
-In fact, pattern-matching is the only way to express elimination in \Coq.
+In fact, pattern-matching is the only way---besides application---to express
+elimination in \Coq.
 
 This rule might seem a bit useless, but essentially it means that to prove
-anything involving a dependency on \(\unit\), like \(P[x \sto u]\), it suffices
-to prove it assuming it is \(\tunit\): \(P[x \sto \tunit]\).
+anything involving a dependency on a term \(u\) of type \(\unit\), like
+\(P[x \sto u]\), it suffices to prove it assuming \(u\) is \(\tunit\):
+\(P[x \sto \tunit]\).
 When the term \(u\) was already \(\tunit\), the \(\mathsf{match}\) can go away:
 \[
   \pmatch{\tunit}{x.P}{\branch{\tunit}{v}} \red v
@@ -223,11 +225,14 @@ hypotheses of the shape \(\neg P\).
 
 \subsection{Recursive types}
 
-Inductive types are morally types of trees. For now I only prensented types
-consisting only of leaves. To allow for nodes with subtrees, constructors can
-take subtrees (or subterms) as arguments.
+% Inductive types are morally types of trees. For now I only prensented types
+% consisting only of leaves. To allow for nodes with subtrees, constructors can
+% take subtrees (or subterms) as arguments.
+% \todo{Not talk about trees, or later?}
+For now, I only presented inductive types that consist in enumerations of cases.
+Inductive types can be more complex and constructors can take subterms as
+arguments.
 The best and simplest example of those is that of natural numbers.
-\todo{Not talk about trees, or later?}
 
 \paradot{Natural numbers}
 
@@ -273,7 +278,10 @@ respectively representing \(0\), \(1\), \(2\), \dots
     }
   %
 \end{mathpar}
-Together with the computation rules
+The first three rules are \emph{introduction} rules, and as before, the
+typing rule for pattern-matching is an \emph{elimination} rule.
+
+The rules come together with the computation rules
 \[
   \begin{array}{lcl}
     \pmatch{\zero}{x.P}{
@@ -306,10 +314,11 @@ There are two main ways of achieving this.
         (\Pi n.\ P\ n \to P\ (\natsucc\ n)) \to
         \Pi n. P\ n
   \]
-  There are ways to generate them automatically~\sidecite{kovacs2020signatures}
-  and \Coq does it to some extent. The troublesome part is getting the
-  right computation rules and dealing with nested inductive types.
-  In this case, the computation rules are
+  The type of \(\natrec\) means that, for all proposition \(P\) on natural
+  numbers, if \(P\ \zero\) holds and \(P\ n\) implies \(P\ (n + 1)\), then
+  \(P\) holds for all natural numbers, which is the well-known induction
+  principle on \(\mathbb{N}\).
+  The eliminator comes with computation rules as well:
   \[
     \begin{array}{lcl}
       \natrec\ P\ p_\zero\ p_\natsucc\ \zero &\red& p_\zero \\
@@ -317,12 +326,23 @@ There are two main ways of achieving this.
       p_\natsucc\ n\ (\natrec\ P\ p_\zero\ p_\natsucc\ n) \\
     \end{array}
   \]
+  They tell us how to produce proofs from an induction. To get a proof of
+  \(P\ \zero\) we simply use \(p_\zero : P\ \zero\), and to get a proof of
+  \(P\ (n+1)\) we apply \(p_\natsucc\) which produces a proof of \(P\ (n+1)\)
+  from a proof of \(P\ n\), the latter is obtained by applying the eliminator
+  again.
+  There are ways to generate eliminators
+  automatically~\sidecite{kovacs2020signatures} and \Coq does it to some extent.
+  The troublesome part is getting the right computation rules and dealing with
+  more complicated kinds of inductive types such as nested inductive types
+  that I will not describe.
 
   \item \emph{Fixed-points.} The method used in \Coq comes from a combination of
   pattern-matching and a fixed-point operator.
   \marginnote[0.7cm]{
     The notation \(\Pi \D. T\) is to quantify over a whole context.
-    If \(\D\) is \(x : A, y : B\), \(\Pi \D. T\) is \(\Pi (x:A)\ (y:B).\ T\).
+    If \(\D\) is \(x : A, y : B\), then \(\Pi \D. T\) is
+    \(\Pi (x:A)\ (y:B).\ T\).
     When \(\D\) is empty, this is just \(T\).
   }
   \[
@@ -336,14 +356,19 @@ There are two main ways of achieving this.
     %
   \]
   The termination checking condition roughly verifies that the \(n\)-th argument
-  in \(\D\) is only fed to \(f\) (\ie recursive calls) in a decreasing manner.
+  in \(\D\) (\ie \(x_n\) if \(\D = x_1 : A_1, \dots x_m : A_m\)) is only fed to
+  \(f\) (\ie recursive calls) in a decreasing manner.
+  I write \(n\) as the subscript to the judgment to indicate that is relevant
+  to the termination checking.
+  If the \(n\)-th argument is a natural number, it roughly means that every
+  recursive call must be done on a smaller natural number.
   This so-called guard condition is a complicated matter and out of scope of
-  this thesis and probably better studied in
+  this thesis. It is probably better studied in
   \sidecite{gimenez1998structural,gimenez1994codifying}.
   In general this can be thought as only subterms of the argument are passed on
   to \(f\).
-  The computational behaviour of the fixed-point operator is via unfolding of
-  its definition.
+  The computational behaviour of the fixed-point operator is via the unfolding
+  of its definition.
   \[
     \fixp_n (f : \Pi \D.T).\ t \red
     \lambda \D.\ t[f \sto \fixp_n (f : \Pi \D.T).\ t]
@@ -365,16 +390,21 @@ There are two main ways of achieving this.
       u_1\ \dots\ u_{n-1}\ (\mathbf{C}\ v_1\ \dots\ v_m)
     \end{array}
   \]
+  A fixed-point can thus only be unfolded when its recursive argument is a
+  constructor. It will thus have to consume it and apply the recursive calls
+  (\ie the fixed-point itself now that is has been unfolded) on subterms of the
+  constructor (typically one of the \(v_i\)).
   We can then write down the induction principle \(\natrec\) with \(\fixp\)
   and \(\mathsf{match}\).
-  \marginnote[2cm]{
+  \marginnote[1.5cm]{
     Notice how \(m\) is a subterm of \(\natsucc\ m\) in the recursive call to
     \(f\). It is indeed its fourth argument.
   }
   \[
     \begin{array}{l}
       \fixp_4\ (f : \Pi\ P\ p_\zero\ p_\natsucc\ n.\ P\ n). \\
-      \pmatch{n}{x.\ P\ x}{
+      \quad \lambda\ P\ p_\zero\ p_\natsucc\ n. \\
+      \quad \pmatch{n}{x.\ P\ x}{
         \branch{\zero}{p_\zero} \\
         \branch
           {\natsucc\ m}
@@ -391,13 +421,15 @@ follow more or less the same schema.
 \subsection{Parameterised inductive types}
 
 Parameterised inductive types, as the name suggests, can take parameters.
-In \ocaml, parameters are necessarily types, and it is often the case in \Coq
-though everything goes.
+In \ocaml, parameters are necessarily types, in \Coq they are often types but
+they can be natural numbers of any other term.
+For instance, in the type \(\tlist\ A\), \(A\) is a parameter that specifies the
+nature of the objects in the list.
 
 \paradot{Lists}
 
-I already presented lists in \ocaml, and their \Coq counterpart is not much
-different.
+I already presented the list type of \ocaml, and its \Coq counterpart is not
+much different.
 \begin{mathpar}
   \infer
     {\Ga \vdash A}
@@ -436,8 +468,8 @@ different.
   %
 \end{mathpar}
 The computation rules are the ones you should expect by now.
-Similarly to natural numbers, that can be combined with the fixed-point operator
-to perform induction on lists, the type of which is
+Using pattern-matching and fixed-points---as we did for natural numbers---we get
+the induction principle on lists of type
 \[
   \Pi\ A\ (P : \tlist\ A \to \Type).\
   P\ \nil \to
@@ -484,6 +516,15 @@ be present. It is optional.
 \end{mathpar}
 It is an easy way of representing functions that are not defined on their whole
 domain (they return \(\none\) when they are not).
+For instance we could write a division function \(\mathsf{divide}\) such that
+\[
+  \mathsf{divide}\ x\ 0 = \none
+\]
+meaning that division by \(0\) is not defined, while in other cases it would
+return \(\some\), for example
+\[
+  \mathsf{divide}\ 10\ 5 = \some\ 2
+\]
 
 \paradot{Sum types}
 
@@ -531,11 +572,17 @@ is either a proof of \(A\) or a proof of \(B\).
     }
   %
 \end{mathpar}
+The rules should be reminiscent of the introduction and elimination rules of
+disjunction \(A \vee B\) in \NJ, presented in \nrefch{proof-theory}.
 
 \paradot{Simple products}
 
 Simple products \(A \times B\) are types of pairs of elements, one in \(A\)
 and one in \(B\). None too surprising.
+\marginnote[0.2cm]{%
+  You can once again refer to \nrefch{proof-theory} and find a parallel with the
+  rules regarding conjunction \(A \wedge B\) in \NJ.
+}%
 \begin{mathpar}
   \infer
     {
@@ -570,7 +617,7 @@ and one in \(B\). None too surprising.
 \end{mathpar}
 
 This presentation of pairs is called \emph{positive} as it uses a constructor.
-In the section on records I will show the \emph{negative} version.
+In the section on records, I will show the \emph{negative} version.
 
 \paradot{\(\Sigma\)-types}
 
@@ -616,9 +663,13 @@ giving a term \(t : A\) and a proof of \(P\ t\).
     }
   %
 \end{mathpar}
+This captures the computational content of existentials: from a proof of
+existence you can extract a witness (the \(a\) in \(\dpair{a,b}\)). This is
+another important example of constructivism.
+
 Once more, this is the \emph{positive} presentation of \(\Sigma\)-types.
 With this presentation it is also possible to restrict \(P\) in case we do not
-want to make it possible to extract the witness (the \(a\) in \(\dpair{a,b}\)).
+want to make it possible to extract the witness.
 
 \marginnote[0.2cm]{
   The \(\_\) is there to note that \(B\) does not depend on the variable in
@@ -636,8 +687,8 @@ It is also worth noting that simple products are a particular case of
 }
 Inductive types can have parameters, but they can also have \emph{indices}.
 They are similar to parameters in that they are arguments to the inductive type
-but while parameters are always the same in the \emph{conclusion} of the type of
-a constructor, indices can vary.
+but, while parameters are always the same in the \emph{conclusion} of the type
+of a constructor, indices can vary.
 I will show the two most talked about cases of indexed inductive types: vectors
 and equality.
 
@@ -692,11 +743,12 @@ Vectors are length-indexed lists: \(\tvec_A\ n\) is type of lists of length
     }
   %
 \end{mathpar}
-The pattern-matching this time binds \emph{two} variables: the variable
-representing the matched term as usual, but also the index! This is because it
-varies depending on the branch.
+The pattern-matching this time binds \emph{two} variables in the return
+predicate: the variable representing the matched term as usual, but also the
+index (\ie the length of the vector)! This is because it varies depending on the
+branch.
 
-Vectors are pretty useful because since you account for the length, you can
+Vectors are pretty useful because, since you account for the length, you can
 write safer and more precise functions. For instance, the tail function on lists
 would land in an option type (in the case the list is \(\nil\)), but here we
 can easily say it should only take some \(\tvec_A\ (\natsucc\ n)\) as argument,
@@ -708,14 +760,18 @@ ruling out the empty vector completely.
 \[
   \begin{array}{l}
     \lambda\ A\ (n : \nat)\ (v : \tvec_A\ (\natsucc\ n)). \\
-    \pmatch{v}{p.x. \tvec_A\ n}{
+    \pmatch{v}{p.x.\ \tvec_A\ n}{
       \branch{\vcons\ a\ m\ w}{w}
     }
   \end{array}
 \]
 Notice how I did not even provide a branch for \(\vnil\) because it will always
-by ill-typed. This is unfortunately impossible in vanilla \Coq but is supported
-in \Agda natively and can be achived in \Coq with \Program of the \Equations
+by ill-typed.%
+\marginnote[-0.1cm]{%
+  By vanilla \Coq I mean \Coq without anything extra like plugins.
+}%
+This is unfortunately impossible in vanilla \Coq but is supported
+in \Agda natively and can be achieved in \Coq with \Program of the \Equations
 plugin~\sidecite{DBLP:conf/itp/Sozeau10,sozeau2019equations}.
 With the typing rules I gave it is still possible to do it, it is just that we
 have to conclude using the elimination of \(\bot\) in the \(\vnil\) branch.
@@ -765,8 +821,8 @@ and \(u\) are parameters.
 The pattern-matching in the case where \(P\) does not depend on the equality
 \(p\) helps us recover Leibniz's principle stating that \(u = v\) means that
 for every \(P\), \(P\ x \to P\ y\).
-In particular this allows us to \emph{rewrite} equalities, \ie chaging something
-for something else equal to it in an expression.
+In particular this allows us to \emph{rewrite} along equalities, \ie changing
+something for something else equal to it in an expression.
 
 Generally speaking indices are complex to deal with and it is related to how
 equality is complex in type theory, hence the multiple approaches there are to
@@ -814,7 +870,8 @@ Both these features are not available in \Coq yet, but are present in \Agda.
 \section{Coinductive types and records}
 
 Not all data is best represented inductively, instead of constructors it is
-possible to talk about \emph{destructors}, \ie observations.
+possible to talk about \emph{destructors}, \ie observations (in other words we
+are more interested in what to do with the data rather than how to build it).
 
 \subsection{Records}
 
@@ -845,7 +902,7 @@ Definition snd A B (p : prod A B) : B :=
   end.
 \end{minted}
 This is what we call \emph{positive} records, corresponding to the presentation
-of \(A \times B\) and \(\Sigma (x:A).B\) I made earlier.
+of \(A \times B\) and \(\Sigma (x:A).B\) I gave earlier.
 
 There is however an option in \Coq to instead use a \emph{negative}
 presentation:
@@ -861,6 +918,10 @@ Definition pair A B (a : A) (b : B) : prod A B :=
     snd := b
   |}.
 \end{minted}
+The data is accessed using the projections \mintinline{coq}{fst} and
+\mintinline{coq}{snd}. They are \emph{destructors} in that they correspond to
+ways to observe pairs, by opposition to the construtors of pairs of the positive
+version: \mintinline{coq}{pair}.
 
 I will now give the typing rules of negative \(\Sigma\)-types.
 \begin{mathpar}
@@ -909,8 +970,9 @@ restrict usage of \(\pi_1\), it is always possible to recover the witness.
 \subsection{Coinductive types}
 
 Coinductive types are the dual of inductive types and are used to represent
-potentially infinite data. Streams of data are one such example: like lists
-streams have heads and tails, except there always is a tail, it is never-ending.
+potentially infinite data. Streams of data are one such example: they are
+infinite lists, like lists they have heads and tails, except there always is a
+tail.
 \begin{mathpar}
   \infer
     {\Ga \vdash A}
@@ -929,7 +991,7 @@ streams have heads and tails, except there always is a tail, it is never-ending.
 \end{mathpar}
 In the definition of the coinductive type of streams we define destructors:
 \(\head\) and \(\tail\) are means to inspect a \(\stream\).
-We cannot use constructors to describe a stream however as it is infinite.
+We cannot use constructors to describe a stream however, as it is infinite.
 There are several ways to build such data but the one I find most convincing and
 beautiful is to use a dual approach to pattern-matching:
 \emph{copattern-matching}~\sidecite{abel2013copatterns}, usually in combination
@@ -951,6 +1013,13 @@ well-behaved in \Coq so we mostly ignore them for the time being.
 
 \section{Equality}
 \labsec{equality-def}
+
+I will here describe some usual definition and concepts associated with equality
+in type theory, mostly from the point of view of \Coq.
+Again, several notions of equality are of interest and I study them briefly
+in \nrefch{flavours}.
+
+\subsection{Basic properties of equality}
 
 \reminder[-0.7cm]{Equality}{
   Equality is given by the following rules.
@@ -989,13 +1058,6 @@ well-behaved in \Coq so we mostly ignore them for the time being.
     %
   \]
 }
-I will here describe some usual definition and concepts associated with equality
-in type theory, mostly from the point of view of \Coq.
-Again, several notions of equality are of interest and I study them briefly
-in \nrefch{flavours}.
-
-\subsection{Basic properties of equality}
-
 Equality, by all means, should be a congruence, and it is. It might be
 surprising given that we \emph{only} ask for it to be reflexive.
 Induction helps us recover these properties.
@@ -1099,7 +1161,7 @@ themselves equal.
   \mathsf{uip} : \Pi\ A\ (x\ y : A)\ (e \ e' : x =_A y).\ e = e'
 \]
 In particular---or equivalently---all proofs of \(x = x\) are equal to the
-reflexivity proof: this is Streicher's axiom K:
+reflexivity proof, this is Streicher's axiom K:
 \[
   \mathsf{K} : \Pi\ A\ (x : A)\ (e : x =_A x).\ e =_{x =_A x} \refl{A} x
 \]
@@ -1121,7 +1183,7 @@ pointwise equal.
   \end{array}
 \]
 
-There is also a dependent varaint of \acrshort{funext}.
+There is also a dependent variant of \acrshort{funext}.
 \[
   \begin{array}{lcl}
     \mathsf{funextD} &:&
@@ -1167,13 +1229,14 @@ extra index for a second type.
     {\Ga \vdash \mathsf{hrefl}_A\ a : \Heq{A}{a}{A}{a}}
   %
 \end{mathpar}
-As usual it features pattern-matching. Unfortunately, it does not allow us to
-recover the property that heterogenous equalities where the two types are in
-fact the same like \(\Heq{A}{u}{A}{v}\), imply homogenous equality \(u =_A v\).
-This has to be added as an extra axiom, equivalent to \acrshort{UIP}.
+As usual, it features pattern-matching. Unfortunately, it does not allow us to
+recover the property that \emph{heterogenous} equalities where the two types are
+in fact the same like \(\Heq{A}{u}{A}{v}\), imply \emph{homogenous} equality
+\(u =_A v\).
+This has to be added as an extra axiom that is equivalent to \acrshort{UIP}.
 
-For this reason, I prefer an encoding of heterogenous equality with
-\(\Sigma\)-types:
+For this reason, I personally prefer the more explicit encoding of heterogenous
+equality with \(\Sigma\)-types:
 \[ \Heq{T}{t}{U}{u} := \Sum{p:\Eq{}{T}{U}} \Eq{}{\transpo{p}\ t}{u} \]
 where we write \(\transpo{p}\) for the map from \(T\) to \(U\), it is a notation
 for
@@ -1185,6 +1248,10 @@ When we have \(\Heq{A}{u}{A}{v}\), it means we have a proof of equality
 we need \acrshort{UIP} to rewrite \(p\) to \(\mathsf{refl}\) such that the
 second equality becomes \(u = v\) as wanted.
 
+\marginnote[0.15cm]{
+  Here the notion of heterogenous can be either of the two I presented as they
+  are equivalent.
+}
 \begin{lemma}
   \lablemma{uip-cong}
   Assuming \acrshort{UIP}, if $\isterm{\Ga}{e}{\Heq{A}{u}{A}{v}}$
