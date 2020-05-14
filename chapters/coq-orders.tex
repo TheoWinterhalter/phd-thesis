@@ -12,7 +12,7 @@ The \emph{classical} definition of a well-founded order basically says that one
 cannot \emph{go down} indefinitely in that order.
 
 \begin{definition}[Well-order (classically)]
-  An order \(\prec\) is said to be well-founded when there is not infinitely
+  An order \(\prec\) is said to be well-founded when there is no infinitely
   decreasing sequence for that order, \ie there is no sequence
   \((u_i)_{i \in \mathbb{N}}\) such that for all \(i\), \(u_{i+1} \prec u_i\).
 \end{definition}
@@ -209,8 +209,8 @@ the formalisation.
 \subsection{Simple lexicographic orders}
 
 Generally speaking, a lexicographic order is the combination of two orders to
-yield an order on pairs. The alphabetical order is one instance of lexicographic
-order: you first compare the first letter of each word, and if they match you
+yield an order on pairs. The idea is similar to the alphabetical order:
+you first compare the first letter of each word, and if they match you
 proceed to the second, etc.
 
 \begin{definition}[Lexicographic order]
@@ -330,7 +330,7 @@ Lemma dlexprod_Acc :
 
 \subsection{Lexicographic order modulo a bisimulation}
 
-With usual lexicographic orders, the second order is involved with the first
+With usual lexicographic orders, the second order is involved when the first
 components are \emph{equal}. In some cases, this requirement is just too strong
 and we want to relax it a bit, by accepting them to be equal modulo another
 relation. Of course we cannot accept any relation, otherwise we would have no
@@ -432,7 +432,7 @@ Then I list several properties that I require, I shall list them one by one:
 
 All these should feel natural if you have equality in mind.
 I did mention bisimulations however and did not even talk about it.
-Let me correct this slight.
+Let me now address this point.
 
 \begin{definition}{Simulation}
   Given a relation \(\red\) on \(A\), a relation \(\sim\) on \(A\) is called a
@@ -523,7 +523,7 @@ The bisimilarity relation is itself an equivalence relation meaning we can use
 it to quotient simple lexicographic orders.
 
 \marginnote[0.2cm]{
-  In the simple case, the coercion function is the indentity always, so all
+  In the simple case, the coercion function is always the indentity, so all
   its properties follow trivially.
 }
 Again, in the dependent case this is not enough but I still kept the same
