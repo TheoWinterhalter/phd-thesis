@@ -2,7 +2,7 @@
 \chapter{Type inference and checking}
 \labch{coq-inference}
 
-Now that we have our conversion algorithm, we can move on to type checking.
+Now that we have our conversion algorithm, we can move on to type-checking.
 This work is not mine but that of Simon Boulier so I will go over it briefly.
 It needs to be mentioned as it is the goal of both the weak head reduction
 and the conversion algorithms.
@@ -114,6 +114,6 @@ rather than infer the type of the argument. The checking function is defined
 afterwards so this is another version of it (as you can see it takes
 \mintinline{coq}{infer} as argument).
 
-All this is as one should expect, and concludes our quest of a type checker
+All this is as one should expect, and concludes our quest of a type-checker
 defined in \Coq and proven correct while relying only on a few axioms stating
 that the theory is well behaved.

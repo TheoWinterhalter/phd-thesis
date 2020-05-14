@@ -340,14 +340,14 @@ So computational canonicity ensures that whenever you prove that there exists
 some \(t\) such that \(P\ t\), it is possible to evaluate the proof to extract
 the \(t\) in question.
 
-\subsection{Decidability of type checking}
+\subsection{Decidability of type-checking}
 
 A property is called \emph{decidable} when there exists an algorithm that
 returns \(\ttrue\) whenever it holds, and \(\ffalse\) otherwise.
-Decidability of type checking thus means the existence of a sound and complete
-type checker:
+Decidability of type-checking thus means the existence of a sound and complete
+type-checker:
 
-\begin{definition}[Decidability of type checking]
+\begin{definition}[Decidability of type-checking]
   Type checking is decidable for a type theory if there exists an algorithm
   such that, when given a context \(\Ga\), a term \(t\) and a type \(A\),
   returns \(\ttrue\) when there is a derivation of \(\Ga \vdash t : A\)
@@ -362,10 +362,10 @@ decidability of inference:
 there is an algorithm taking \(\Ga\) and \(t\) and which returns some \(A\)
 such that \(\Ga \vdash t : A\) or an error stating that \(t\) is ill-typed.
 
-Decidability of type checking is an important property because it crystalises
+Decidability of type-checking is an important property because it crystalises
 the fact that a term is indeed a \emph{proof}, it is a good enough certificate
 that people can check independently.
-However, in a system that does not feature decidable type checking, you can still
+However, in a system that does not feature decidable type-checking, you can still
 provide certificates: for one you could simply store the full-derivation as a
 proof; it is however possible to translate the proof to another system with
 decidable checking, like I will present in \arefpart{elim-reflection}.
@@ -452,7 +452,7 @@ Likewise, \acrshort{ITT} could go in either \ref{item:coq} or \ref{item:agda}.
     \multicolumn{1}{ |l|  }{Computational / regular canonicity} &
     comp & comp & reg & no \\
     \hline
-    \multicolumn{1}{ |l|  }{Decidability of type checking} &
+    \multicolumn{1}{ |l|  }{Decidability of type-checking} &
     yes & yes & no & yes \\
     \hline
     \multicolumn{1}{ |l|  }{Consistency} &

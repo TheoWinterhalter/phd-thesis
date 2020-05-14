@@ -362,7 +362,7 @@ fun (A B : Type) (e : A = B) (x : A) => transport e x
 All of this work is pretty systematic. Fortunately for us,
 \MetaCoq also features a monad to reify \Coq commands which we can
 use to \emph{program} the translation steps.
-As such we have written a complete procedure, relying on type checkers we
+As such we have written a complete procedure, relying on type-checkers we
 wrote for \acrshort{ITT} and \acrshort{ETT}, which can generate equality
 obligations.
 
@@ -520,7 +520,7 @@ All in all, it should be possible in the future to use our translation
 (or a similar one) to produce \Coq terms out of \Andromeda developments.
 \Andromeda would be generating the typing derivations for us, which is
 particularly interesting because \Andromeda's system is much more practical
-than the small type checker I wrote in \Coq.
+than the small type-checker I wrote in \Coq.
 
 \section{Composition with other Translations}
 
