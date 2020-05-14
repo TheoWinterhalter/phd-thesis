@@ -372,8 +372,8 @@ We now need
 \[
   (\zip\ \dpair{p \mid \ctxempty},\ p) \prec (\zip\ \dpair{p.1 \mid \pi},\ p.1)
 \]
-However \(p\) is not a reduct of \(\dpair{p.1 \mid \pi}\), and is not equal to
-it so we cannot use the fact that \(p\) is a subterm of \(p.1\).
+However \(p\) is not a reduct of \(\zip\ \dpair{p.1 \mid \pi}\), and is not
+equal to it so we cannot use the fact that \(p\) is a subterm of \(p.1\).
 The solution I propose to this is to actually remember the full term we were
 considering before focusing. This is what lists of arguments were achieving
 when considering only \(\lambda\)-abstraction and application.
@@ -415,15 +415,15 @@ For this we can use the stacks I introduced in \nrefch{coq-positions}.
 This time, as the stack is preserved, the first components are indeed the same
 and we have the inequality.
 \[
-  (\dpair{p \mid \stack{\shole.1} :: \pi},\ p)
+  (\zip\ \dpair{p \mid \stack{\shole.1} :: \pi},\ p)
   \prec
-  (\dpair{p.1 \mid \pi},\ p.1)
+  (\zip\ \dpair{p.1 \mid \pi},\ p.1)
 \]
 
 \paragraph{Problem 2:}
 Using stacks solves our first problem but there remains another when considering
 fixed-points this time. Indeed, fixed-points can only be unfolded when their
-recusrive argument is a constructor. This means that when reducing a fixed-point
+recursive argument is a constructor. This means that when reducing a fixed-point
 we have to focus on the recursive argument which is \emph{on} the stack:
 \marginnote[0.8cm]{
   I here use non-mutual fixed-points to make things simpler.
@@ -438,7 +438,7 @@ we have to focus on the recursive argument which is \emph{on} the stack:
       \vscmd
         {t[f \sto \fixp_n f.\ t]}
         {
-          \coapp{u_1} :: \dots :: \coapp{u_{n-1}} :: \coapp{C} :: \pi
+          \coapp{u_1} :: \dots :: \coapp{u_{n-1}} :: \coapp{\mathsf{C}} :: \pi
         }
       \red_\WM
       a
@@ -459,9 +459,9 @@ where
 \]
 The idea is that we fetch the \(n\)-th argument on the stack (assuming it
 exists) and we reduce it (while remembering that it was indeed the argument of a
-fixed-point). If this argument reduces to a constructor\sidenote{
+fixed-point). If this argument reduces to a constructor\sidenote{%
   In full generality, it would have to reduce to an \emph{applied} constructor.
-}
+}%
 then the fixed-point can safely be unfolded and reduced.
 For the recursive call to be valid we need:
 \[
@@ -574,10 +574,10 @@ reduce_stack :
 \end{minted}
 In other words, the function takes a term, a stack and returns a term that is
 a reduct (once zipped) in potentially zero steps.
-We actually need more than this but we have here the main ingredients).
+We actually need more than this but we have here the main ingredients.
 
-The definition is done by open recursion, relying heavily on \Equations to
-generate and fill obligations regarding correctness and the order.
+The definition relies heavily on \Equations to generate and fill obligations
+regarding correctness and the order.
 All in all, this definition is rather lengthy and I invite the interested reader
 to have a look at the details in the formalisation.
 
