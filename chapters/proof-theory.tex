@@ -429,11 +429,85 @@ a new, unused hypothesis in the context), reorder them, and remove duplicates.
 
 This logic is \emph{constructive} in that, from every proof derivation one can
 extract a proof where the last rule is an introduction rule.
-For instance, every proof of \(A \vee B\) must contain either a proof of \(A\)
-or a proof of \(B\).
+\marginnote[0.1cm]{
+  Notice that these are proofs in the empty context.
+}%
+For instance, every proof of \(\vdash A \vee B\) must contain either a proof of
+\(\vdash A\) or a proof of \(\vdash B\).
 This is obtained by a process known as \emph{cut-elimination} which removes all
-occurrences of the modus ponens \((\to E)\) rule in a derivation, showing at the
-same time that it is \emph{admissible} or redundant.
+eliminations rule that would be the last rule.
+For instance the modus ponens (\(\to E\)) can be removed when it follows an
+introduction of implication (\(\to I\)) rule, I will show an example for which
+we set \(P \coloneqq A \to \neg \neg A\) and prove \(\vdash P \wedge P\).
+\[
+  \infer*[Right=\((\to E)\)]
+    {
+      \infer*[right=\((\to I)\)]
+        {
+          \infer*[Right=\((\wedge I)\)]
+            {
+              \infer*[Right=\((ax)\)]
+                { }
+                {P \vdash P}
+              \\
+              \infer*[Right=\((ax)\)]
+                { }
+                {P \vdash P}
+              %
+            }
+            {P \vdash P \wedge P}
+          %
+        }
+        {\vdash P \to P \wedge P}
+      \\
+      \infer*[Right=\((\to I)\)]
+        {
+          \infer*[Right=\((\neg I)\)]
+            {
+              \infer*[Right=\((ax)\)]
+                { }
+                {A, \neg A \vdash A}
+              %
+            }
+            {A \vdash \neg \neg A}
+          %
+        }
+        {\vdash P}
+      %
+    }
+    {\vdash P \wedge P}
+  %
+\]
+Now the idea is that to remove the elimination of implication \((\to E)\) which
+is the last rule, we replace the axiom rules corresponding to \(P \vdash P\)
+in the derivation above \(\vdash P \to P \wedge P\) by the derivation of
+\(\vdash P\) on the right.
+\[
+  \infer*[Right=\((\wedge I)\)]
+    {
+      \infer*[Right=\((\neg I)\)]
+        {
+          \infer*[Right=\((ax)\)]
+            { }
+            {A, \neg A \vdash A}
+          %
+        }
+        {A \vdash \neg \neg A}
+      \\
+      \infer*[Right=\((\neg I)\)]
+        {
+          \infer*[Right=\((ax)\)]
+            { }
+            {A, \neg A \vdash A}
+          %
+        }
+        {A \vdash \neg \neg A}
+      %
+    }
+    {\vdash P \wedge P}
+  %
+\]
+As you can see we end up with an introduction rule last.
 
 \subsection{Classical logic}
 
