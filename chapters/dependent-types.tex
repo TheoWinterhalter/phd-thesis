@@ -162,6 +162,62 @@ This kind of universe is called a Russell universe, and there are also Tarski
 universes, the difference will be explained in \arefsubsec{univ-and-types}
 of \nrefch{formalisation}.
 
+\paradot{Computation}
+As was the case in \nrefch{simple-types}, we have \(\beta\)-reduction in
+dependent type theory:
+\[
+  (\lambda (x:A).\ t)\ u \red_\beta t[x \sto u]
+\]
+Now that terms can appear in types, reduction can also happen in them.
+For instance, we would probably want \(\tvec\ (2 + 2)\) and \(\tvec\ 4\) to be
+related. We will in fact have
+\[
+  \tvec\ (3 + 1) \red \tvec\ 4
+\]
+If you consider the following \(\mathsf{concat}\) function with concatenates
+two vectors
+\[
+  \mathsf{concat} :
+  \Pi\ (n : \mathbb{N})\ (m : \mathbb{N})\ (v_1 : \tvec\ n)\ (v_2 : \tvec\ m).\
+  \tvec\ (n + m)
+\]
+we would have
+\[
+  \mathsf{concat}\ 3\ 1\ [0,1,2]\ [3] : \tvec\ (3 + 1)
+\]
+meaning that \(\tvec\ (3 + 1)\) can appear naturally.
+In this case, we expect the concatenation function to compute like this
+\[
+  \mathsf{concat}\ 3\ 1\ [0,1,2]\ [3] \red [0,1,2,3]
+\]
+but as I presented before, \([0,1,2,3]\) has type \(\tvec\ 4\).
+As such we want to argue that \(\tvec\ (3 + 1)\) and \(\tvec\ 4\) are the same.
+For this we introduce the notion of \emph{conversion}.
+Conversion \(A \equiv B\) essentially means that \(A\) and \(B\) are equal up
+to reduction (\(\red\)); we say that \(A\) and \(B\) are \emph{convertible}.
+In our case we would have
+\[
+  \tvec\ (3 + 1) \equiv \tvec\ 4
+\]
+We can change a type for a convertible one in typing, essentially saying that if
+\(t\) has type \(A\) and \(A\) is convertible to \(B\) then \(t\) also has type
+\(B\):
+\[
+  \infer
+    {
+      \Ga \vdash t : A \\
+      A \equiv B
+    }
+    {\Ga \vdash t : B}
+  %
+\]
+This allows us to say
+\[
+  \mathsf{concat}\ 3\ 1\ [0,1,2]\ [3] : \tvec\ 4
+\]
+directly.
+
+
 I will now put the syntax and the rules together for clarity, at the risk of
 repeating myself.
 \marginnote[1.2cm]{
@@ -204,12 +260,76 @@ repeating myself.
     }
     {\Ga \vdash u\ v : B[x \sto v]}
   %
+
+  \infer
+    {
+      \Ga \vdash t : A \\
+      A \equiv B \\
+      \Ga \vdash B : \Type
+    }
+    {\Ga \vdash t : B}
+  %
 \end{mathpar}
-\marginnote[-3cm]{
+\marginnote[-4.5cm]{
   Here I changed a bit the typing rule for \(\lambda\)-abstraction to also ask
   for its type to be well-formed. This is necessary to ensure we put legitimate
   types in the context.
+}%
+\marginnote[-1.5cm]{
+  Similarly, I ask that the type \(B\) is well-typed in the conversion rule.
 }
+
+Where conversion is defined as the congruent closure of \(\beta\)-reduction.
+\begin{mathpar}
+  \infer
+    { }
+    {t \equiv t}
+  %
+
+  \infer
+    {u \equiv v}
+    {v \equiv u}
+  %
+
+  \infer
+    {
+      u \equiv v \\
+      v \equiv w
+    }
+    {u \equiv w}
+  %
+
+  \highlight{
+    \infer
+      { }
+      {(\lambda (x:A).\ t)\ u \equiv t[x \sto u]}
+    %
+  }
+
+  \infer
+    {
+      A \equiv A' \\
+      B \equiv B'
+    }
+    {\Pi (x:A).B \equiv \Pi (x:A').B'}
+  %
+
+  \infer
+    {
+      A \equiv A' \\
+      t \equiv t'
+    }
+    {\lambda (x:A).t \equiv \lambda (x:A').t'}
+  %
+
+  \infer
+    {
+      u \equiv u' \\
+      v \equiv v'
+    }
+    {u\ v \equiv u'\ v'}
+  %
+\end{mathpar}
 
 We usually also add a definition of well-formed contexts to ensure they are
 comprised of types that make sense and that the dependencies are in order:
