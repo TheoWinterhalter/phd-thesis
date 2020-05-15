@@ -780,9 +780,22 @@ have to conclude using the elimination of \(\bot\) in the \(\vnil\) branch.
 As equality is special I will only give a brief definition before we dicuss it
 in more detail later in this chapter. In \nrefch{flavours} I will also show
 different notions of equality.
-In any case, we want the type \(u =_A v\) to represent equality of terms \(u\)
-and \(v\) of type \(A\). When can you prove that \(u\) and \(v\) are
-\emph{equal}? When they are the same!
+%
+We already have one notion of equality in conversion, sometimes called
+definitional equality. This notion is external in type theory and one cannot
+reason about conversion. As such we want a notion of equality on which we can
+reason, one which is internal to type theory. We talk this time of
+\emph{propositional equality}.
+%
+We want the type \(u =_A v\) to represent equality of terms \(u\) and \(v\) of
+type \(A\). When can you prove that \(u\) and \(v\) are \emph{equal}?
+When they are the same!%
+\marginnote[0.1cm]{
+  This notion of `being the same', is conversion: if \(u\) and \(v\) are
+  convertible then \(\refl{A} u\) is a proof of \(u =_A v\).
+  This comes from the fact that, if \(u \equiv v\), we have
+  \(u =_A u \equiv u =_A v\).
+}%
 \begin{mathpar}
   \infer
     {
