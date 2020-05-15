@@ -276,6 +276,12 @@ in the \Coq proof assistant one will simply write \(\Type\) and \Coq will infer
 constraints to know whether it is possible to appoint each occurrence of
 \(\Type\) a \emph{level}, \ie a natural number, such that the universes are used
 consistently.
+For instance, \(\Pi (A:\Type).\ \Type : \Type\) will actually correspond to
+\[
+  \Pi (A:\Type_i).\ \Type_j : \Type_k
+\]
+with constraints \(i < k\) and \(j < k\), \ie quantifying over a universe raises
+the universe level of the whole expression.
 
 Alongside this hierarchy comes another universe, \(\Prop\) which is the universe
 of propositions. This universe is \emph{impredicative}.
@@ -296,7 +302,7 @@ proposition for instance.
 
 Recently, a new universe of propositions has been
 introduced~\sidecite{gilbert:hal-01859964}: \(\SProp\).
-This time it is a universe of \emph{strict} propositions in the sense that any
+This time, it is a universe of \emph{strict} propositions in the sense that any
 two proofs of the same proposition are considered to be convertible.
 \marginnote[-0.5cm]{
   For \(P : \SProp\) and \(p_1 : P\) and \(p_2 : P\) then \(p_1 \equiv p_2\).
@@ -304,6 +310,8 @@ two proofs of the same proposition are considered to be convertible.
 In other words, there is no computational content to proofs of strict
 propositions, and as such proofs are \emph{irrelevant}, only their mere
 existence matters.
+This builds on the principle of proof irrelevance that is an axiom often
+considered, of type \(\Pi (P : \Prop)\ (x\ y : \Prop).\ x = y\).
 Although this addition is a really interesting subject, it goes a bit beyond
 the scope of this thesis, in particular I do not consider it in my
 formalisations (for now).
@@ -354,11 +362,11 @@ This convenience allows the user to forget as much as possible about universes.
 
 
 Finally there is another point regarding universes that is not hinted at in the
-name: \emph{polymorphism}. This feature introduced
+name: \emph{universe polymorphism}. This feature introduced
 by~\sidecite{sozeau2014universe} is complementary to cumulativity and allows to
 consider definitions that quantify over universe levels (the \(i\) in
 \(\Type_i\)).
-For instance, it allows to write a truly polymorphic identity function
+For instance, it allows us to write a truly polymorphic identity function
 \[
   \mathsf{id}_i \coloneqq \lambda (A : \Type_i)\ (x : A).\ x
 \]
@@ -441,6 +449,10 @@ that the definition is also stored, not just its type and name. This information
 can be used to \emph{recall} that \mintinline{coq}{x} is convertible to
 \mintinline{coq}{u}. The example below illustrates a case where the
 transformation yields an ill-typed term.
+\marginnote[4.5cm]{
+  \mintinline{coq}{Fail} is just there to attest that the following definition
+  will fail.
+}%
 \begin{minted}{coq}
 Section Let.
 
@@ -466,7 +478,8 @@ type theory, but there I only presented \emph{one way} of dealing with equality,
 the one that is prevalent in type theory based proof assistants like \Agda and
 \Coq.
 
-In \Coq equality is defined as follows.
+In \Coq equality is defined as follows, \ie in the way I presented in
+\refch{usual-defs}.
 \begin{minted}{coq}
 Inductive eq (A : Type) (u : A) : A -> Prop :=
 | eq_refl : eq A u u.
@@ -543,13 +556,15 @@ construct \(\II\) morally representing the interval \([0;1]\). Its end points
 are \(\Iz\) and \(\Io\).
 An equality between two terms \(u\) and \(v\) of type \(A\) is now a map \(f\)
 from \(\II\) to \(A\) such that \(f\ \Iz \equiv u\) and \(f\ \Io \equiv v\).
-By having the map dependent instead, we can easily have heterogenous equality:
+If we allow the map \(f\) to be dependently typed, we can easily have
+heterogenous equality:
 \[
   f : (i : \II) \to A\ i
 \]
+\(f\) is now an equality between \(f\ \Iz : A\ \Iz\) and \(f\ \Io : A\ \Io\).
 The main interest of this is that it gives computational content to univalence
-which is no longer an axiom but a theorem. Since univalence implies
-\acrshort{funext} this is also the case for it.
+which is no longer an axiom but a theorem. Univalence implies \acrshort{funext},
+meaning that \acrshort{funext} gets a computational content from it.
 
 There is a large-scale implementation of \acrshort{CubicalTT} in
 \Agda called \name{CubicalAgda}~\sidecite{vezzosi2019cubical},
