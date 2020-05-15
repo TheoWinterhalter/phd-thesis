@@ -355,6 +355,33 @@ There are two main ways of achieving this.
       {\Ga \vdash \fixp_n (f : \Pi \Delta. T).\ t : \Pi \Delta. T}
     %
   \]
+  As you can see there is an extra condition I called `termination checking'.
+  If we were not to restrict the definition of fixed-points to terminating
+  functions we would end up with an inconsistent theory. Indeed, one could
+  inhabit the empty with the following trivial fixed-point which just calls
+  itself directly:
+  \[
+    \fixp (f : \bot).\ f
+  \]
+  The typing derivation showing it has type \(\bot\) is the following%
+  \marginnote[0.9cm]{
+    Here, I took \(\D \coloneqq \ctxempty\) and \(T \coloneqq \bot\).
+  }%
+  \[
+    \infer*
+      {
+        \infer*
+          { }
+          {\vdash \bot}
+        \\
+        \infer*
+          { }
+          {f : \bot \vdash f : \bot}
+        %
+      }
+      {\vdash \fixp (f : \bot).\ f : \bot}
+    %
+  \]
   The termination checking condition roughly verifies that the \(n\)-th argument
   in \(\D\) (\ie \(x_n\) if \(\D = x_1 : A_1, \dots x_m : A_m\)) is only fed to
   \(f\) (\ie recursive calls) in a decreasing manner.
