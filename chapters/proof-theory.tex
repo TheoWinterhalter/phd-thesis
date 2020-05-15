@@ -462,10 +462,10 @@ we set \(P \coloneqq A \to \neg \neg A\) and prove \(\vdash P \wedge P\).
         }
         {\vdash P \to P \wedge P}
       \\
-      \infer*[Right=\((\to I)\)]
-        {
-          \highlight[bluelightcol]{
-            \infer*[right=\((\neg I)\)]
+      \highlight[bluelightcol]{
+        \infer*[right=\((\to I)\)]
+          {
+            \infer*[Right=\((\neg I)\)]
               {
                 \infer*[Right=\((ax)\)]
                   { }
@@ -475,9 +475,9 @@ we set \(P \coloneqq A \to \neg \neg A\) and prove \(\vdash P \wedge P\).
               {A \vdash \neg \neg A}
             %
           }
-        }
-        {\vdash P}
-      %
+          {\vdash P}
+        %
+      }
     }
     {\vdash P \wedge P}
   %
@@ -489,23 +489,33 @@ derivation of \(\vdash P\) on the right (in blue).
 \[
   \infer*[Right=\((\wedge I)\)]
     {
-      \infer*[Right=\((\neg I)\)]
+      \infer*[right=\((\to I)\)]
         {
-          \infer*[Right=\((ax)\)]
-            { }
-            {A, \neg A \vdash A}
+          \infer*[Right=\((\neg I)\)]
+            {
+              \infer*[Right=\((ax)\)]
+                { }
+                {A, \neg A \vdash A}
+              %
+            }
+            {A \vdash \neg \neg A}
           %
         }
-        {A \vdash \neg \neg A}
+        {\vdash P}
       \\
-      \infer*[Right=\((\neg I)\)]
+      \infer*[Right=\((\to I)\)]
         {
-          \infer*[Right=\((ax)\)]
-            { }
-            {A, \neg A \vdash A}
+          \infer*[Right=\((\neg I)\)]
+            {
+              \infer*[Right=\((ax)\)]
+                { }
+                {A, \neg A \vdash A}
+              %
+            }
+            {A \vdash \neg \neg A}
           %
         }
-        {A \vdash \neg \neg A}
+        {\vdash P}
       %
     }
     {\vdash P \wedge P}
