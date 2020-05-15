@@ -32,8 +32,9 @@
 
 % Highlight for maths
 \colorlet{highlightcol}{Yellow!50}
-\newcommand{\highlight}[1]{%
-  \colorbox{highlightcol}{$\displaystyle#1$}%
+\colorlet{bluelightcol}{CornflowerBlue!50}
+\newcommand{\highlight}[2][highlightcol]{%
+  \colorbox{#1}{$\displaystyle#2$}%
 }
 
 % Faded text

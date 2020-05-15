@@ -444,33 +444,37 @@ we set \(P \coloneqq A \to \neg \neg A\) and prove \(\vdash P \wedge P\).
     {
       \infer*[right=\((\to I)\)]
         {
-          \infer*[Right=\((\wedge I)\)]
-            {
-              \infer*[Right=\((ax)\)]
-                { }
-                {P \vdash P}
-              \\
-              \infer*[Right=\((ax)\)]
-                { }
-                {P \vdash P}
-              %
-            }
-            {P \vdash P \wedge P}
-          %
+          \highlight{
+            \infer*[right=\((\wedge I)\)]
+              {
+                \infer*[Right=\((ax)\)]
+                  { }
+                  {P \vdash P}
+                \\
+                \infer*[Right=\((ax)\)]
+                  { }
+                  {P \vdash P}
+                %
+              }
+              {P \vdash P \wedge P}
+            %
+          }
         }
         {\vdash P \to P \wedge P}
       \\
       \infer*[Right=\((\to I)\)]
         {
-          \infer*[Right=\((\neg I)\)]
-            {
-              \infer*[Right=\((ax)\)]
-                { }
-                {A, \neg A \vdash A}
-              %
-            }
-            {A \vdash \neg \neg A}
-          %
+          \highlight[bluelightcol]{
+            \infer*[right=\((\neg I)\)]
+              {
+                \infer*[Right=\((ax)\)]
+                  { }
+                  {A, \neg A \vdash A}
+                %
+              }
+              {A \vdash \neg \neg A}
+            %
+          }
         }
         {\vdash P}
       %
@@ -478,10 +482,10 @@ we set \(P \coloneqq A \to \neg \neg A\) and prove \(\vdash P \wedge P\).
     {\vdash P \wedge P}
   %
 \]
-Now the idea is that to remove the elimination of implication \((\to E)\) which
+Now the idea is that, to remove the elimination of implication \((\to E)\) which
 is the last rule, we replace the axiom rules corresponding to \(P \vdash P\)
-in the derivation above \(\vdash P \to P \wedge P\) by the derivation of
-\(\vdash P\) on the right.
+in the derivation above \(\vdash P \to P \wedge P\) (in yellow) by the
+derivation of \(\vdash P\) on the right (in blue).
 \[
   \infer*[Right=\((\wedge I)\)]
     {
@@ -508,6 +512,7 @@ in the derivation above \(\vdash P \to P \wedge P\) by the derivation of
   %
 \]
 As you can see we end up with an introduction rule last.
+However the blue derivation has been duplicated.
 
 \subsection{Classical logic}
 
