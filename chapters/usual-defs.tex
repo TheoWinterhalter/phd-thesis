@@ -393,7 +393,9 @@ There are two main ways of achieving this.
   this thesis. It is probably better studied in
   \sidecite{gimenez1998structural,gimenez1994codifying}.
   In general this can be thought as only subterms of the argument are passed on
-  to \(f\).
+  to \(f\) (thus, the fixed-point above is illegal because there is no argument
+  that becomes strictly smaller, it is however fine to call \(f\ n\) to compute
+  \(f\ (\natsucc\ n)\) as \(n\) is a (strict) subterm of \(\natsucc\ n\)).
   The computational behaviour of the fixed-point operator is via the unfolding
   of its definition.
   \[
