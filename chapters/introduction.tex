@@ -34,6 +34,8 @@ in \nrefch{models} that we did not publish, and work I did with Andrej Bauer
 and Philipp Haselwarter on formalising type theory called
 \ftt~\sidecite{formaltypetheory} and that I present briefly in
 \nrefch{formalisation}.
+\todo{Make some statements precise for the reader in a hurry? Or should I have
+an abstract instead?}
 
 \section{Proof assistants}
 \todo{Very WIP}
@@ -98,4 +100,35 @@ that, but that all of the boxes contain, each, a feline.
 
 \begin{center}
   \includegraphics[width=0.8\textwidth]{box-contains-feline.pdf}
+\end{center}
+
+\begin{center}
+  \includegraphics[width=0.8\textwidth]{how-to-prove.pdf}
+\end{center}
+
+The proof assistant has now understood what we meant. The interactive part of
+the prove now begins. We want to prove a property on the boxes, as there are
+four to consider, we can tell the proof assistant that we intend to look at each
+case, one by one.
+
+\begin{center}
+  \includegraphics[width=0.8\textwidth]{convo7.pdf}
+\end{center}
+
+\begin{center}
+  \includegraphics[width=0.8\textwidth]{convo8.pdf}
+\end{center}
+
+We are presented with four cases, and as many statements to prove.
+In this case, we are rather lazy, especially since all four cases will be
+similar. Fortunately for us, the proof assistant is capable of understanding
+that you want to deal with several cases in similar ways, \emph{and} is also
+capable of doing very basic proofs without the user.
+
+\begin{center}
+  \includegraphics[width=0.8\textwidth]{convo9.pdf}
+\end{center}
+
+\begin{center}
+  \includegraphics[width=0.8\textwidth]{convo10.pdf}
 \end{center}
