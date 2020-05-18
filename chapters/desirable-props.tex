@@ -16,7 +16,7 @@ Variables and binders are essential to type theory and as such we have to treat
 them with care, in particular we want our theories to be \emph{compositional}
 meaning that different blocks that make sense can be assembled into something
 that still makes sense.
-This is embodied in the two following properties.
+This is---in part---embodied in the two following properties.
 
 \begin{definition}[Weakening]
   A type theory enjoys weakening when for any \(\Ga, \Xi \vdash t : A\) and
@@ -61,7 +61,8 @@ conversion.
 
 \subsection{Inversion of typing}
 
-Inversion of typing is not really a measure as it is always present in some way.
+Inversion of typing cannot really be used as a means of comparing theories as it
+is always present in some form or the other.
 It is nonetheless a very useful property to state when reasoning on a type
 theory.
 It is saying than when we have \(\Ga \vdash t : A\), by analysing the shape of
@@ -277,8 +278,10 @@ subject reduction, sometimes called type safety or type preservation.
   and \(t \red u\), we also have \(\Ga \vdash u : A\).
 \end{definition}
 
-This means simplifying a proof does not break its status of proof. This is a
-very sensible property to have in a programming language or a proof assistant.
+This means that evaluating a program of type, \eg, \(\nat\), will return a
+value of type \(\nat\). In terms of proofs, this means that simplifying a proof
+of proposition \(P\) will still yield a proof of \(P\). This is a very
+sensible property to have in a programming language or a proof assistant.
 Its absence is usually a sign that something is very wrong with the considered
 system: if evaluation might break things, why have evaluation at all?
 
@@ -294,11 +297,13 @@ For \(\Pi\)-types, injectivity means that whenever
 \]
 then we have both \(A \equiv A'\) and \(B \equiv B'\).
 
-This property is usually proven using confluence of reduction (when it makes
-sense) so that \(\Pi (x:A).B \equiv \Pi (x:A').B'\) is equivalent to both types
+This property is usually proven using confluence of reduction so that
+\(\Pi (x:A).B \equiv \Pi (x:A').B'\) is equivalent to both types
 reducing to the same term. Since the \(\Pi\) type constructor will never
 disappear from reduction, it necessarily means that \(A\) and \(A'\) reduce to
 the same term, hence are convertible (and the same holds for the codomains).
+The proof is not always so easy, and it very much depends on the definition
+used for conversion.
 
 Injectivity of \(\Pi\)-types is crucial in proving that \(\beta\)-reduction is
 type-preserving, one of the key elements to the proof of subject reduction.
@@ -319,6 +324,9 @@ When expressed for \(\Sigma\)-types, this corresponds to the so-called
 context, so without assumption) is necessarily of the form \((t;p)\)
 with \(t : A\) and \(p : P\ t\).
 
+\marginnote[1cm]{
+  Note that \(t\) is typed in the empty context.
+}
 \begin{definition}[Canonicity]
   A type theory enjoys canonicity when \(\vdash t : \bool\) implies that
   either \(t \equiv \ttrue\) or \(t \equiv \ffalse\).
@@ -326,7 +334,30 @@ with \(t : A\) and \(p : P\ t\).
   construction of this type.
 \end{definition}
 
-This is usually true in a much stronger and useful sense:
+This doesn't always hold. The presence of axioms usually hinders canonicity.
+Take for instance the \acrshort{LEM}, stated using the sum types of
+\refch{usual-defs}:
+\marginnote[0.3cm]{
+  \(P \to \bot\) is the usual way to represent the negation of \(P\):
+  \(\neg P\).
+}%
+\[
+  \mathsf{lem} : \Pi\ (P : \Type).\ P + (P \to \bot)
+\]
+We can use this axiom to build a boolean:
+\[
+  \pmatch{\mathsf{lem}\ \bool}{x.\ \bool}{
+    \branch{\inl\ b}{b} \\
+    \branch{\inr\ n}{\ttrue}
+  }
+\]
+but it will never be convertible to either \(\ttrue\) or \(\ffalse\) because
+\(\mathsf{lem}\ \bool\) does not reduce to a constructor (in fact it does not
+reduce at all).
+There is no way of making this axiom into a definition that would compute,
+hinting at the fact that canonicity and constructivism are closely related.
+
+Canonicity usually holds in a much stronger and useful sense in type theory:
 
 \begin{definition}[Computational canonicity]
   Computational canonicity corresponds to the fact that whenever
@@ -362,6 +393,9 @@ decidability of inference:
 there is an algorithm taking \(\Ga\) and \(t\) and which returns some \(A\)
 such that \(\Ga \vdash t : A\) or an error stating that \(t\) is ill-typed.
 
+Decidability of conversion is crucial in getting decidability of type
+checking, and can sometimes derive from confluence and strong normalisation.
+
 Decidability of type-checking is an important property because it crystalises
 the fact that a term is indeed a \emph{proof}, it is a good enough certificate
 that people can check independently.
@@ -372,6 +406,9 @@ decidable checking, like I will present in \arefpart{elim-reflection}.
 
 \subsection{Consistency}
 
+\marginnote[0.1cm]{
+  I already discussed consistency in \nrefch{proof-theory}.
+}
 To be able to use a type theory as a logic, it needs to be consistent.
 Consistency means that not all types are provable, or equivalently that
 the empty type is uninhabited.
@@ -408,22 +445,15 @@ in the table.
 
 I will separate the theories in four groups sharing properties.
 \begin{enumerate}[label=(\Alph*)]
-  \item \label{item:coq} \Coq/\acrshort{PCUIC}
-  \item \label{item:agda} \Agda/\acrshort{MLTT}, \acrshort{CubicalTT}
-  \item \label{item:ett} \acrshort{ETT}
-  \item \label{item:wtt} \acrshort{WTT}
+  \item \label{item:coq} \Coq/\acrlong{PCUIC}
+  \item \label{item:agda} \Agda/\acrlong{MLTT}, \acrlong{CubicalTT}
+  \item \label{item:ett} \acrlong{ETT}
+  \item \label{item:wtt} \acrlong{WTT}
 \end{enumerate}
-2-level variants of the theory should enjoy the same properties as their 1-level
-counterpart: \acrshort{HTS} goes in \ref{item:ett} while \acrshort{2TT} goes
-in \ref{item:agda}.
-\acrshort{HoTT} can also be considered a variant of a type theory, and should be
-placed in either \ref{item:coq} or \ref{item:agda} depending on whether it
-features cumulativity or not.
-Likewise, \acrshort{ITT} could go in either \ref{item:coq} or \ref{item:agda}.
 
-\marginnote[1.3cm]{
+\marginnote[1.4cm]{
   I write -- for properties that do not apply like properties on reduction
-  for any theory without.
+  for any theory without a notion of reduction.
 }
 \begingroup
 
@@ -461,3 +491,11 @@ Likewise, \acrshort{ITT} could go in either \ref{item:coq} or \ref{item:agda}.
   \end{tabular}
 
 \endgroup
+
+2-level variants of the theory should enjoy the same properties as their 1-level
+counterpart: \acrshort{HTS} goes in \ref{item:ett} while \acrshort{2TT} goes
+in \ref{item:agda}.
+\acrshort{HoTT} can also be considered a variant of a type theory, and should be
+placed in either \ref{item:coq} or \ref{item:agda} depending on whether it
+features cumulativity or not.
+Likewise, \acrshort{ITT} could go in either \ref{item:coq} or \ref{item:agda}.
