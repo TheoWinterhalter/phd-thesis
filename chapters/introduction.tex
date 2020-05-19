@@ -189,9 +189,61 @@ with them? And how can we make them better?
 Part of my work is focused on these questions, and on the study of proof
 assistants based on something called type theory.
 
-\section{Type theory}
+\section{Proofs, types and programs}
 
-\todo{Some sort of summary of the intro part?}
+In order to explain the title ``Formalisation and Meta-Theory of Type Theory''
+I need to explain what \emph{type theory} is. Even before that, I believe I have
+to introduce \emph{proof theory} (\refch{proof-theory}): the study of proofs
+themselves. Indeed, in order to build a proof assistant one needs to understand
+what a proof is, formally, \ie in very precise and non-ambiguous terms.
+
+It turns out that certain formal notion of proofs have intricate relations with
+programming as we shall see in \refch{simple-types}. The idea is that programs
+can be seen as proofs, and proofs as programs.
+For instance a proof that a proposition \(A\) implies the proposition \(B\)
+is a program that takes a proof of \(A\) as input and outputs a proof of \(B\).
+Such a program is given type \(A \to B\). Types are a way of describing the data
+return by a program. Student will often write the infamous leap year function
+which, given a year as an integer (described by the type
+\mintinline{ocaml}{int}), returns whether it is a leap year or not. This binary
+information---yes or no---is encoded into what we call booleans
+(\mintinline{ocaml}{bool}).
+The Curry-Howard correspondence states that programs of type \(A\) can be seen
+as proofs of propositon \(A\) and vise-versa.
+
+In \refch{dependent-types}, I finally describe what I call type theory.
+Type theory is framework taking advantage of this correspondence and is thus at
+the core of well-known proof assistants such as \Coq~\sidecite[-1.05cm]{coq} and
+\Agda~\sidecite{norell2007towards}. I myself am a \Coq user and this thesis is
+written with a focus on this proof assistant and its foundations.
+In \refch{usual-defs}, I describe usual definitions that come with type theory.
+I explain how we can reason in such a setting with more than implications.
+\sidedef[-1cm]{Induction on natural numbers}{%
+  If \(P(n)\) is a property on natural number \(n\), then if we have
+  \begin{enumerate}
+    \item \(P(0)\);
+    \item \(P(m)\) implies \(P(m+1)\) for any \(m\);
+  \end{enumerate}
+  then we have \(P(n)\) for any \(n\).
+}%
+This is where I introduce for instance the way of doing induction on natural
+numbers in type theory.
+
+\refch{flavours} is dedicated to different formulations and variants of type
+theory. Indeed, there is not just one such theory. Different type theories have
+different properties, I catalogue the most important ones while telling which
+theory enjoys which in a summarising table.
+
+The remaining of the introductory part will focus more on the `meta-theory'
+part of the title. While the theory is where you conduct your proofs and write
+your programs, the meta-theory is where you reason about the theory itself!
+In \refch{models}, I explain how we can build so-called models of type theory,
+which consist in interpreting the theory and giving it meaning---or
+\emph{semantics}---inside the meta-theory. At the end, I hint at how the
+meta-theory can even be a form of type theory itself. The representation of
+type theory inside itself is the subject of \refch{formalisation} while
+\refch{translations} focuses on how we can give meaning to a type theory, using
+another type theory.
 
 \section{Summary of part 1}
 
