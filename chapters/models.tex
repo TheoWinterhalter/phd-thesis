@@ -27,12 +27,14 @@ interpretation to judgments in such a way that the interpretation is coherent.
 I already briefly mentioned this but the main point of models is to prove
 consistency of a theory, relying on the already \emph{known} consistency of the
 theory in which lives the model... At least in principle. It is however very
-rare\sidenote{Impossible?} to \emph{know} that a theory is consistent, instead
-we should see it as a theory we \emph{trust}, typically a theory that's widely
-accepted as beeing consistent by the community of mathematicians.
+rare\sidenote{This may work with very simple theories that cannot express
+arithmetic, as explained in \nrefsec{limit-godel} of \refch{proof-theory}} to
+\emph{know} that a theory is consistent, instead we should see it as a theory we
+\emph{trust}, typically a theory that's widely accepted as beeing consistent by
+the community of mathematicians.
 This also applies to the meta-theory in which we show that the interpretation is
-correct. As such it is best to keep it as simple as possible to avoid relying on
-the consistency of too complicated objects.
+correct. As such, it is best to keep it as simple as possible to avoid relying
+on the consistency of too complicated objects.
 
 \paragraph{Independence.}
 
@@ -58,6 +60,9 @@ can come as surprising for some, especially in a classical mindset.
 }
 Gödel's incompleteness theorems have to do with this.
 
+Models can also be useful to prove other properties like normalisation and even
+subject reduction, but such models are usually built for that purpose.
+
 \section{Set-theoretic models}
 
 Set-theoretic models are models of type-theory where types are interpreted as
@@ -75,7 +80,8 @@ Instead of describing all set-theoretic models abstractly I will rather focus on
 one example: the proof-irrelevant model of \acrshort{CIC}. I will actually deal
 with the smaller case of \acrshort{CoC}.
 This is exposed
-in~\sidecite[-0.9cm]{miquel2001calcul}---following~\sidecite[-0.3cm]{aczel1998relating,xi2000imperative}---in very clear---and French---way,
+in~\sidecite[-0.9cm]{miquel2001calcul}---following~\sidecite[-0.3cm]{aczel1998relating,xi2000imperative}---in
+a very clear---and French---way,
 but without accounting for contexts and open terms.
 I will instead base my own exposition on that of~\sidecite[0.3cm]{werner1997sets},
 itself based upon the folklore model seen
@@ -84,7 +90,7 @@ The model is called \emph{proof-irrelevant} because proofs of propositions
 (proofs of \(P : \Prop\)) all collapse in the model: provable propositions
 are interpreted as the singleton \(\{ \emptyset \}\).
 
-First I will remind what rules we are dealing with. This theory will only have
+First, I will remind what rules we are dealing with. This theory will only have
 two universes: \(\Prop\) and \(\Type\), the model can be adapted to deal with
 more universes but it is a bit more complicated.
 \marginnote[1.7cm]{
@@ -156,7 +162,7 @@ propositions, or as the singleton \(\{ \emptyset \}\) for inhabited ones.
 These two sets are the ordinals \(0\) and \(1\) and I will write them as such.
 The interpretation of \(\Prop\) is then \(2 \coloneqq \{ 0, 1 \}\).
 
-As you can see in the typing rules we have to deal with terms in a context
+As you can see, in the typing rules we have to deal with terms in a context
 \(\Ga\), \ie open terms. The interpretation of such a term is dependent on the
 context, this can be easily seen when considering \(x : A \vdash x\)
 and \(x : B \vdash x\), the two \(x\) do not necessarily mean the same thing.
@@ -210,9 +216,14 @@ I did not precise what \(\mathcal{U}\) was. From \(\mathcal{U}\) we only require
 that it is closed under product and power-sets and contains at least \(2\).
 It needs only be the cardinal \(\aleph_0\) in our case, but if we wanted more
 universes---say a hierarchy of them---we could use inaccessible cardinals.
-We will see them briefly in \refsec{cat-models}.
+We discuss see them briefly in \refsec{cat-models}.
 
-Before we can claim it is a model we need to show that whenever
+\paradot{Consistency}
+
+\marginnote[0.3cm]{
+  This property is called \emph{soundness}.
+}
+Before we can claim it is a model, we need to show that whenever
 \(\Ga \vdash t : A\) then \(\transl{\Ga \vdash t} \in \transl{\Ga \vdash A}\).
 This will in particular prove that every proof of a proposition is indeed sent
 to \(0\).
@@ -229,9 +240,10 @@ since there is no element in \(0\) there is no such \(f\) and as such
 \[
   \transl{\vdash \bot} = 0
 \]
+which is the empty set.
 
-The proof is done by looking at each rule and showing they preserve the
-property: for instance if we take
+The proof of soundness is done by looking at each rule and showing they preserve
+the property: for instance if we take
 \[
   \infer
     {
@@ -257,7 +269,7 @@ If we reformulate we want to show that for all \(\gamma \in \Ga\) and
   \transl{\Ga, x : A \vdash t}(\gamma, a) \in
   \transl{\Ga, x:A \vdash B}(\gamma,a)
 \]
-which corresponds to our hyothesis.
+which corresponds to our hypothesis.
 
 For some other cases like the conversion and application rules we need to show
 that convertible terms are sent to equal sets/functions and that the
@@ -268,7 +280,7 @@ references I put at the beginning of this section.
 Set-theoretic models are not the only way to make models of type theory of
 course. For instance they may not be best-suited to interpretation of
 computational content since \(\beta\)-convertible terms are interpreted as the
-same set. They however provide a nice way of seeing the relation between
+same set. They provide however a nice way of seeing the relation between
 set-theory---the widely accepted framework in which to do mathematics---and type
 theory which we\sidenote{I'll leave that one as imprecise as it is.} advocate
 instead.
@@ -286,7 +298,12 @@ I will focus on \acrshortpl{CwF} in this document.
 
 \subsection{Categories with families}
 
-A \acrshort{CwF} is given by
+A \acrshort{CwF} is given by%
+\marginnote[1.1cm]{%
+  Here I use type-theoretic notations: \(\Ga : \Con\) means \(\Ga\) an object
+  of the catergory \(\Con\), \(\sigma : \Ga \to \D\) means \(\sigma\) a morphism
+  from object \(\Ga\) to object \(\D\), etc.
+}%
 \begin{enumerate}
   \item a collection of objects (or contexts) \(\Con\);
   \item morphisms (or substitutions) \(\sigma : \Ga \to \D\) between contexts
@@ -367,12 +384,13 @@ following equations hold:
   \end{array}
 \]
 
-\sidedef[-0.7cm]{\(\eta\)-expansion}{
+\reminder[-0.7cm]{\(\eta\)-expansion}{
   \(\eta\)-expansion is defined as follows
   \[
     t \red_\eta \lambda x.\ t\ x
   \]
   \(\eta\)-contraction is the opposite relation.
+  See \refch{flavours}.
 }
 The first four equations are simply there to attest to the good behaviour of
 substitution. The last two are more interesting, corresponding to
@@ -382,7 +400,7 @@ substitution. The last two are more interesting, corresponding to
 
 A \acrshort{CwF} has (negative) dependent sums
 when:
-\marginnote{
+\marginnote[0.8cm]{
   See \nrefch{flavours} for a discussion on negative vs positive sums.
 }
 \begin{itemize}
@@ -424,7 +442,8 @@ such that
   \end{array}
 \]
 In a lot of models, equality ends up being interpreted as the equality of the
-model meaning the eliminator is not necessary, hence my not requiring it.
+model meaning they validate something stronger than the eliminator. As such,
+I will not specify any requirements for the eliminator as they can greatly vary.
 Models that deal with equality differently are of course interesting but I
 will keep things simple in this chapter.
 
@@ -504,9 +523,10 @@ such that
 This makes the universe closed under dependent types, we can of course extend
 this notion to include other constructions.
 
-All of these can be defined in the \(\Set\) model above. They are however all
-simpler cases than the \(\Card\) model I will give in the next section so I
-will not detail them.
+All of these constructions (dependent products, sums, natural numbers,
+universes\dots) can be defined in the \(\Set\) model above. The \(\Set\) model
+is a simpler case of the \(\Card\) model I will give in the next section so I
+will not detail it.
 
 \subsection{Cardinal model}
 \labsubsec{card-model}
@@ -517,7 +537,7 @@ Bauer. It teaches us interesting things about syntax and especially about
 \acrshort{ETT}.
 
 \marginnote[0.1cm]{
-  The existence of such a bijection and this definition of cardinal relies on
+  The existence of such a bijection and this definition of cardinal rely on
   the axiom of choice. This is not constructive at all.
 }
 For every set \(X\) there is a unique cardinal \(\card{X}\) such that
@@ -793,7 +813,7 @@ particular case.
 %
 \begin{proof}
   Assuming that we have \(p : \CTm\ \Ga\ (\CId_A\ u\ v)\) we want to show that
-  \(u\) and \(v\) are equal choice functions, \ie that \(u(gamma) = v(\gamma)\)
+  \(u\) and \(v\) are equal choice functions, \ie that \(u(\gamma) = v(\gamma)\)
   for all \(\gamma \in \Ga\).
   Because \(0 = p(\gamma) \in (\CId_A\ u\ v)(\gamma)\), it follows that
   \(u(\gamma) = v(\gamma)\).
