@@ -48,6 +48,11 @@ They are not particularly smart and will not get the job done for you, but they
 are very annoying because they do not always understand what you say and you
 have to be very precise or they will point out your mistakes.
 
+\marginnote[1.2cm]{
+  The user will have blue speech bubbles, slightly on the left, while the proof
+  assistant will answer in green (for good) or red (for bad) on the right-hand
+  side.
+}%
 \begin{center}
   \includegraphics[width=0.6\textwidth]{coq-chatbot.pdf}
 \end{center}
@@ -138,8 +143,21 @@ Let us now consider a theorem that is not provable.
   \includegraphics[width=0.8\textwidth]{convo12.pdf}
   \includegraphics[width=0.8\textwidth]{convo9.pdf}
   \includegraphics[width=0.8\textwidth]{convo13.pdf}
+\end{center}
+
+Here the proof assistant tells us that not all cases are trivial so we decide
+to go over them one by one to understand what is wrong.
+
+\begin{center}
   \includegraphics[width=0.8\textwidth]{convo-focus.pdf}
   \includegraphics[width=0.8\textwidth]{convo-case1.pdf}
+\end{center}
+
+When we focus on a case, the proof assistant reminds us of what we have to prove
+specifically. Here we revert to using our earlier strategy and simply say that
+it is plain to see.
+
+\begin{center}
   \includegraphics[width=0.8\textwidth]{convo-trivial.pdf}
   \includegraphics[width=0.8\textwidth]{convo-indeed.pdf}
   \includegraphics[width=0.8\textwidth]{convo-case2.pdf}
@@ -149,4 +167,20 @@ Let us now consider a theorem that is not provable.
   \includegraphics[width=0.8\textwidth]{convo-abort.pdf}
 \end{center}
 
-It was not a cat...
+This time we see we do not have a cat so we do not even try to prove it.
+We abort the proof, that is we give up on proving a statement we know to be
+wrong now.
+
+A proof assistant is thus both helping us do proofs by building parts of it on
+its own, and verifying that they are correct, for instance by not forgetting one
+case were we had a lion rather than a cat.
+
+Proof assistants are also interesting and useful for other people than the user
+doing the proof. Say that I have proven a complicated theorem using my favourite
+proof assistant, people who trust my proof assistant will simply have to ask it
+if it agrees with my claim.
+In fact, proof assistants usually generate so-called \emph{certificates} that
+can be checked by others without having to understand the details of the proof.
+\begin{center}
+  \includegraphics[width=0.4\textwidth]{cerificate.pdf}
+\end{center}
