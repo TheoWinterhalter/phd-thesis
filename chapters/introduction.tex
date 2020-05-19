@@ -34,8 +34,6 @@ in \nrefch{models} that we did not publish, and work I did with Andrej Bauer
 and Philipp Haselwarter on formalising type theory called
 \ftt~\sidecite{formaltypetheory} and that I present briefly in
 \nrefch{formalisation}.
-\todo{Make some statements precise for the reader in a hurry? Or should I have
-an abstract instead?}
 
 \section{Proof assistants}
 
@@ -180,6 +178,11 @@ proof assistant, people who trust my proof assistant will simply have to ask it
 if it agrees with my claim.
 In fact, proof assistants usually generate so-called \emph{certificates} that
 can be checked by others without having to understand the details of the proof.
+\marginnote[1.3cm]{
+  The picture can be misleading, I am really talking about a concrete objects
+  that people can run through their own proof assistant to check that your proof
+  is indeed valid.
+}
 \begin{center}
   \includegraphics[width=0.4\textwidth]{cerificate.pdf}
 \end{center}
@@ -213,9 +216,9 @@ as proofs of propositon \(A\) and vise-versa.
 
 In \refch{dependent-types}, I finally describe what I call type theory.
 Type theory is framework taking advantage of this correspondence and is thus at
-the core of well-known proof assistants such as \Coq~\sidecite[-1.05cm]{coq} and
-\Agda~\sidecite{norell2007towards}. I myself am a \Coq user and this thesis is
-written with a focus on this proof assistant and its foundations.
+the core of well-known proof assistants such as \Coq~\sidecite[-0.85cm]{coq} and
+\Agda~\sidecite[0.25cm]{norell2007towards}. I myself am a \Coq user and this
+thesis is written with a focus on this proof assistant and its foundations.
 In \refch{usual-defs}, I describe usual definitions that come with type theory.
 I explain how we can reason in such a setting with more than implications.
 \sidedef[-1cm]{Induction on natural numbers}{%
@@ -245,10 +248,48 @@ type theory inside itself is the subject of \refch{formalisation} while
 \refch{translations} focuses on how we can give meaning to a type theory, using
 another type theory.
 
-\section{Summary of part 1}
+\section{Elimination of reflection}
 
-\todo{Outlining the problem mainly}
+Next, we have \arefpart{elim-reflection}. The title can be scary but it falls in
+the category of ``what can I prove with my proof assistant?'' and
+``how can I improve proof assistants?''
 
-\section{Summary of part 2}
+Type theory is at the interface of logic and programming. Traditionally,
+programming languages are designed with the idea that, eventually, programs
+will be \emph{run}, or \emph{evaluated}. In other programs \emph{compute}.
+Now, computation is also an important part of type theory. Computation
+corresponds to the simplification of proofs, but also more importantly it
+embodies the notion of \emph{constructivism}. Say, in the example of earlier,
+that you prove that ``there exists a cat with a gravity issue,'' if you execute
+this proof, it will compute and yield two important informations: who is the
+guilty cat---in this case the black one in the second box---and why it has
+gravity issues (as another proof).
+
+Computation is also useful when doing proofs. For instance, \(2 + 2\) \emph{is}
+\(4\), so no need to carry around any informaiton relating the two. \(2 + 2\)
+will evaluate to \(4\), so two sets of two catboxes is really just a set of four
+catboxes.
+
+Now there are various degrees of computation that can be put inside a type
+theory, and one might wonder what impacts it has on it. I present a spectrum
+of three different theories. On one side a theory, called \acrfull{ETT},
+which is very liberal with respect to computation in that it identifies any two
+things that we prove or assume equal, in such a setting, computation is no
+longer directed and we simply talk about things being \emph{equal}.
+This principle, turning a proof into an equality, is called \emph{reflection} of
+equality.
+The other extreme is a theory, called \acrfull{WTT}, where we remove the very
+notion of computation. In the middle, we have \acrfull{ITT} which has a
+`regular' notion of computation, defined as the evaluation of functions. The
+latter is the base for \Coq and \Agda.
+
+My contribution is a translation from \acrshort{ETT} to \acrshort{ITT} and
+\acrshort{WTT}, showing that computation is not an essential property---albeit
+highly practical---of type theory. The translation is done in type theory
+itself---in this case \Coq---and as such provides a program turning a proof in
+\acrshort{ETT} into a proof in \acrshort{ITT} or \acrshort{WTT} that can
+actually be used to compute new proofs.
+
+\section{Summary of part 3}
 
 \todo{First talk about how verifying is important, increase trust}
