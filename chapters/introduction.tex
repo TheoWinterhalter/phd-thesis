@@ -312,4 +312,23 @@ and as such is easier to survey.
   \includegraphics[width=0.9\textwidth]{chatbot-kernel.pdf}
 \end{center}
 
-\todo{First talk about how verifying is important, increase trust}
+If the proof assistant is broken, the certificate will be incorrect and rejected
+by the kernel. As long as the kernel is correct, it is not crucial that the rest
+is completly correct. Granted, it is nicer when everything is correct, but only
+the correctness of the kernel is crucial.
+As I said, efforts are made to keep the kernel as small as possible so that
+humans can inspect it and assert of its correctness.
+
+Unfortunately even a proof assistant as widely used as \Coq is not exempt from
+mistakes: one critical bug had been found roughly every year for the past twenty
+years. These are usually fixed rather fast but their mere existence is
+troublesome nonetheless.
+An incorrect proof can have desastrous consequences. \Coq is not only used to
+prove mathematical theorems, but also to verify programs and make sure they will
+not crash or end up in unwanted configurations. Such programs that we want to
+verify are often used in critical parts of softwares, for instance in autopilots
+and rockets, where the smallest mistake can cost millions... and lives.
+
+I am part of a project to specificy and verify \Coq's kernel itself, within
+\Coq. This means we produce a separate kernel, fully written and verified in
+\Coq that can also check certificates independently.
