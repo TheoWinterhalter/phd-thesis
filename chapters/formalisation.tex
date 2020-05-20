@@ -28,6 +28,9 @@ outermost \(\lambda\), while \(y\) refers to the variable bound by the
 innermost.
 The names are not fundamental in what the term represents:
 \(\lambda z. \lambda w. z\ w\) represents \emph{exactly} the same term.
+\marginnote[0cm]{
+  \(\alpha\)-renaming is introduced in \nrefch{simple-types}.
+}
 We call this operation \(\alpha\)-renaming, here I \(\alpha\)-renamed \(x\)
 to \(z\) and \(y\) to \(w\). This defines the notion of \(\alpha\)-equality
 or \(\alpha\)-equivalence.
@@ -209,6 +212,19 @@ However, I find the other option of having substitutions as a meta-operation,
 outside of the syntax, more natural. It also helps in keeping the syntax and
 rules to a minimum while turning the substitutions notions above into
 definitions and properties.
+\marginnote[0.1cm]{
+  The weakening lemma can be stated as admissibility of the following rule
+  \[
+    \infer
+      {
+        \Ga \vdash t : A \\
+        \Ga \vdash B
+      }
+      {\Ga, B \vdash {\uparrow t} : {\uparrow A}}
+    %
+  \]
+  where \(\uparrow t\) is the term \(t\) with all its variables shifted by one.
+}%
 For instance weakening becomes a lemma and not something postulated with the
 constructor \(\sbweak{}\).
 I will not make a strong case for either choice however as they both have their
@@ -231,7 +247,8 @@ domain of the function, that is
 This opposes the so-called Church-style (annotation of the domain) to
 Curry-style (no annotation whatsoever).
 There is even a third option of including the codomain \(\lambda (x:A).B.\ t\)
-that seems necessary for \acrshort{ETT} according to the cardinal model.
+that seems necessary for \acrshort{ETT} according to the cardinal model (it is
+necessary to restrict \(\beta\)-reduction).
 \reminder[-0.7cm]{Uniqueness of type}{
   A type theory has uniqueness of type when
   \(\Ga \vdash t : A\) and \(\Ga \vdash t : B\) imply
@@ -277,7 +294,7 @@ universes: namely Tarski and Russell universes.
 
 I already gave a brief presentation of Tarski universes when looking at
 categorical models of type theory in \nrefch{models}.
-A Tarski universe is a type of \emph{codes} of types, \ie they are terms
+A Tarski universe is a type of \emph{codes} of types which are terms
 representing types. They can de decoded to types using the \(\CEl\) (element)
 type constructor.
 \begin{mathpar}
@@ -292,8 +309,10 @@ type constructor.
   %
 \end{mathpar}
 
-We then need a code for each type we want in this universe (otherwise we only
-have variables). For instance here are the codes for \(\Pi\)-types.
+If we only had the above constructors, our universes would only contain type
+varibles. In order to populate a universe, we introduce codes for the types
+we are interested in having.
+For instance here are the codes for \(\Pi\)-types.
 \begin{mathpar}
   \infer
     {
@@ -335,6 +354,10 @@ the \(\CEl\)s everywhere
     {\Ga \vdash f\ u : \CEl\ (b\ u)}
   %
 \end{mathpar}
+\marginnote[-0.1cm]{
+  For instance, having \(\Pi\)-types as a general notion allows us to have
+  \(\Pi\)-types that do not live in any universes but are still valid types.
+}%
 I still prefer having a notion of \(\Pi\)-types that is independent of universes
 and codes so that their behaviour is defined once and for all for every
 universe.
@@ -348,7 +371,7 @@ that inhabit a universe:
   \Ga \vdash A : \Type
 \]
 As such we do not need something like \(\CEl\) to bridge between the two worlds.
-In a sense, this is a special case of Tarki universes where codes are types
+In a sense, this is a special case of Tarski universes where codes are types
 and \(\CEl\) is the identity function.
 
 With Russell universes \(\Pi\)-types are typed as follows:
@@ -401,12 +424,14 @@ Inductive term :=
   \(\db{n}\);
   \item \mintinline{coq}{tSort u} is a universe, as described in the
   \mintinline{coq}{Universe} module;
-  \item \mintinline{coq}{tProd na A B} represents a \(\Pi\)-type, herein
-  \mintinline{coq}{na} is a \mintinline{coq}{name}: even though we use de Bruijn
-  indices, we still have naming annotations for pretty-printing that are
-  irrelevant for typing;
-  \item \mintinline{coq}{tLambda na A t} represents a \(\lambda\)-abstraction;
-  \item \mintinline{coq}{tLetIn na b B t} is a let-binding;
+  \item \mintinline{coq}{tProd na A B} represents a \(\Pi\)-type
+  (informally \(\Pi (n:A). B\)), herein \mintinline{coq}{na} is a
+  \mintinline{coq}{name}: even though we use de Bruijn indices, we still have
+  naming annotations for pretty-printing that are irrelevant for typing;
+  \item \mintinline{coq}{tLambda na A t} represents a \(\lambda\)-abstraction
+  (\(\lambda (n:A).t\));
+  \item \mintinline{coq}{tLetIn na b B t} is a let-binding
+  (\(\tlet\ n : B := b\ \tin\ t\));
   \item \mintinline{coq}{tApp u v} is application of \mintinline{coq}{u} to
   \mintinline{coq}{v};
   \item the other constructors deal with constants, inductive types and their
@@ -448,9 +473,9 @@ Record Syntax := {
 }.
 \end{minted}
 We also use de Bruijn indices, but most other choices I presented above are not
-made. It may seem like we use Tarski universes, separate terms and types, use
-explicit substitutions and fully-annotated terms.
-However, these are not enforced because these are not \emph{constructors}.
+made: it may seem like we use Tarski universes, separate terms and types, use
+explicit substitutions and fully-annotated terms;
+however, these are not enforced because these are not \emph{constructors}.
 Nothing prevents us from providing an instance where \mintinline{coq}{term}
 and \mintinline{coq}{type} are the same and \mintinline{coq}{El} is the identity
 (hence Russell universes), functions that ignore the annotations for
@@ -515,7 +540,7 @@ Definition S : Syntax := {|
 There is however an important consequence of such a presentation: the syntax is
 no longer inductive, so there is a priori no injectivity of constructors and
 we might well define all those types to be \mintinline{coq}{unit}, identifying
-all those constructs.
+all those constructs (\eg \mintinline{coq}{lam A B t = app u A B v}).
 This can make it hard to reason about the syntax, and a lot of properties simply
 do not hold because you cannot distinguish two different constructs.
 As such I am not sure this is the best way to go.
@@ -568,7 +593,7 @@ desribe the two ends of this spectrum as either \emph{economic} or
 There is a real question as to which should be chosen. When building derivations
 it is nicer to be in an economic setting to avoid big and redundant derivations,
 however when building something \emph{from} a derivation, the paranoid version
-gives more hyotheses to work on.
+gives more hypotheses to work on.
 Leaving aside the practical side, there is of course the question of whether
 they are equivalent or not.
 
@@ -595,7 +620,7 @@ and when \(\Ga \vdash A\) then \(\vdash \Ga\).
   extra work to show them equivalent to their paranoid versions while keeping
   the data as small as possible.
 }
-The right approach to this I think is to put as many information required to
+The right approach to this I think is to put as much information as required to
 make the proof of sanity/validity \emph{easy} and then use this proof to prove
 that the economic versions are admissible.
 Empirically it seems to me that you put everything that is needed to do
@@ -687,6 +712,8 @@ If we do not require it then the conversion rule is similar
     {\Ga \vdash t : B}
   %
 \]
+Typed conversion also has shortcomings. For instance, proving injectivity of
+\(\Pi\)-types can become harder.
 
 Finally, there is a third notion of explicit conversion which stores the
 conversion proof in the term:
@@ -700,9 +727,10 @@ conversion proof in the term:
     {\Ga \vdash t^H : B}
   %
 \]
+Conversion is then part of the syntax as a new term constructor.
 
-All three notions of conversion are proven equivalent in
-\sidecite{van2013explicit}.
+All three notions of conversion are proven equivalent in the case of
+\acrshortpl{PTS} in~\sidecite{van2013explicit}.
 
 \subsection{How intricate need the concepts be?}
 
@@ -785,8 +813,8 @@ data Tms where
 Finally for terms we have something like this, pretty standard except the
 application is not the usual\sidenote{
   In fact I would not call it application at
-  all as it is not application. It is a key element to getting it however, usual
-  application of \mintinline{agda}{(u : Tm Γ (Π A B))} and
+  all, as it is not application. It is a key element to getting it however,
+  usual application of \mintinline{agda}{(u : Tm Γ (Π A B))} and
   \mintinline{agda}{(v : Tm Γ A)} is given by
   \mintinline{agda}{(app u)[id, u]t}.
 } and is rather the inverse operation to
@@ -849,4 +877,4 @@ translations compute relatively efficiently as we will see in
 in \arefpart{elim-reflection}} since terms (as in untyped syntax) are usually
 much smaller. Another point is that it does not really make sense to write a
 type-checker for a well-typed syntax, something that I expose in
-\arefpart{coq-in-coq}.
+\avrefpart{coq-in-coq}.
