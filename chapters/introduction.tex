@@ -296,4 +296,20 @@ Finally, in \arefpart{coq-in-coq}, I will address the question ``How can we
 increase the trust in a proof assistant?'' Focusing once more on \Coq, I present
 a verification of \Coq's kernel, using \Coq itself.
 
+\Coq features a kernel that is a rather small program that checks that proofs
+are indeed correct. The interactive part of the proof assistant, as well as the
+automation---\ie the thing that makes the proof assistant find proofs for
+us---are not part of the kernel and rather built above it.
+If you want, the part that checks the certificates is separate from the rest
+and as such is easier to survey.
+
+\marginnote[1.2cm]{
+  The egg on the right represents the kernel. The proof assistant essentially
+  sends it the certificate it generated after discussing with the user and the
+  kernel validates it (or not).
+}
+\begin{center}
+  \includegraphics[width=0.9\textwidth]{chatbot-kernel.pdf}
+\end{center}
+
 \todo{First talk about how verifying is important, increase trust}
