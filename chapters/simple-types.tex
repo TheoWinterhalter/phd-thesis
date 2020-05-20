@@ -319,12 +319,12 @@ This yields a simpler term with a simpler typing derivation.
     {y : A \vdash y : A}
 \]
 This means that \(\beta\)-reduction allows for simplification of proofs.
-In proof theory, this property is called \emph{cut-elimination} in that it
-removes all superfluous applications of \emph{cut} (or \emph{modus ponens} in
-our case) in the proof.
+This corresponds to the \emph{cut-elimination} I introduced in
+\nrefch{proof-theory} which removes all superfluous applications of \emph{cut}
+(or \emph{modus ponens} in our case) in the proof.
+Here it removes direct applications of a function to an argument.
 Thanks to that, a proof of \(A \to B\) is in fact an algorithm turning a proof
 of \(A\) into a proof of \(B\).
-\todo{Maybe echo cut-elim as introduced in chap 2?}
 
 All this is very useful and was exciting for me. However, simple types are quite
 limited~\sidecite{zakrzewski2007definable} and do not allow for a proper
