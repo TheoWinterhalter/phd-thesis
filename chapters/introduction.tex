@@ -4,7 +4,7 @@
 
 Type theory is set at the interface between programming and formal logic,
 feeding off and nourishing both worlds. Proof assistants can be built on it,
-making them full-fledged programming languages as well, with the added benifit
+making them full-fledged programming languages as well, with the added benefit
 of producing certified programs.
 
 My main interest lies in the study of type theory while relying on the tools it
@@ -24,8 +24,8 @@ assistant~\sidecite[-0.7cm]{coq} and particularly on two points:
 \end{itemize}
 
 \paradot{Contributions}
-My contributions will mainly be found in \arefpart{elim-reflection} and
-\arefpart{coq-in-coq} corresponding to the following published
+My contributions will mainly be found in \avrefpart{elim-reflection}, and
+\avrefpart{coq-in-coq}, corresponding to the following published
 articles~\sidecite{winterhalter:hal-01849166,sozeau2019coq,sozeau:hal-02167423}.
 While the chapters before these two parts are mainly introductory and
 corresponding to a rough state-of-the-art, they actually contain other
@@ -63,6 +63,13 @@ Let us now see in detail how such a conversation can go.
   \includegraphics[width=0.8\textwidth]{modern-art.pdf}
 \end{center}
 
+\marginnote[0.1cm]{
+  When I say they agree, I mean that, in particular, the proof assistant has
+  basic knowledge of cats and boxes, for instance you don't need to show it
+  that a cat is a feline.
+  It also knows what each box contains, for instance that the fourth box
+  contains a red cat.
+}
 This piece of modern art will be the setting for the exchange between the user
 and the proof assistant, and we will assume they both agree on it.
 We have cats in boxes (although one of the cats is rather a lion), of different
@@ -184,13 +191,14 @@ our previous proof, the third.
 \begin{center}
   \includegraphics[width=0.8\textwidth]{convo-take-third.pdf}
   \includegraphics[width=0.8\textwidth]{convo-after-exists.pdf}
+  \includegraphics[width=0.8\textwidth]{convo-trivial.pdf}
   \includegraphics[width=0.8\textwidth]{convo-indeed.pdf}
   \includegraphics[width=0.8\textwidth]{convo-proven.pdf}
 \end{center}
 
 A proof assistant is thus both helping us do proofs by building parts of it on
 its own, and verifying that they are correct, for instance by not forgetting one
-case were we had a lion rather than a cat.
+case where we had a lion rather than a cat.
 
 Proof assistants are also interesting and useful for other people than the user
 doing the proof. Say that I have proven a complicated theorem using my favourite
@@ -198,7 +206,7 @@ proof assistant, people who trust my proof assistant will simply have to ask it
 if it agrees with my claim.
 In fact, proof assistants usually generate so-called \emph{certificates} that
 can be checked by others without having to understand the details of the proof.
-\marginnote[1.3cm]{
+\marginnote[1.6cm]{
   The picture can be misleading, I am really talking about a concrete object
   that people can run through their own proof assistant to check that a proof
   is indeed valid.
