@@ -284,20 +284,30 @@ the category of ``what can I prove with my proof assistant?'' and
 
 Type theory is at the interface of logic and programming. Traditionally,
 programming languages are designed with the idea that, eventually, programs
-will be \emph{run}, or \emph{evaluated}. In other programs \emph{compute}.
+will be \emph{run}, or \emph{evaluated}. In other words, programs
+\emph{compute}.
 Now, computation is also an important part of type theory. Computation
 corresponds to the simplification of proofs, but also more importantly it
-embodies the notion of \emph{constructivism}. Say, in the example of earlier,
+embodies the notion of \emph{constructivism}. Say, in the earlier example,
 that you prove that ``there exists a cat with a gravity issue,'' if you execute
 this proof, it will compute and yield two important informations: who is the
 guilty cat---in this case the black one in the second box---and why it has
-gravity issues (as another proof).
+gravity issues (as another proof which will roughly correspond to showing the
+cat is upside down).
 
 Computation is also useful when doing proofs. For instance, \(2 + 2\) \emph{is}
-\(4\), so no need to carry around any informaiton relating the two. \(2 + 2\)
+\(4\), so no need to carry around any information relating the two. \(2 + 2\)
 will evaluate to \(4\), so two sets of two catboxes is really just a set of four
 catboxes.
 
+\marginnote[2cm]{
+  Computation is \emph{directed}: \(2 + 2\) simplifies, or evaluates, to
+  \(4\), not the converse. \(2 + 2\) and \(3 + 1\) are equal because they both
+  evaluate to \(4\):
+  \[
+    2 + 2 \red 4 \redl 3 + 1
+  \]
+}
 Now there are various degrees of computation that can be put inside a type
 theory, and one might wonder what impacts it has on it. I present a spectrum
 of three different theories. On one side a theory, called \acrfull{ETT},
@@ -313,10 +323,14 @@ latter is the base for \Coq and \Agda.
 
 My contribution is a translation from \acrshort{ETT} to \acrshort{ITT} and
 \acrshort{WTT}, showing that computation is not an essential property---albeit
-highly practical---of type theory. The translation is done in type theory
-itself---in this case \Coq---and as such provides a program turning a proof in
-\acrshort{ETT} into a proof in \acrshort{ITT} or \acrshort{WTT} that can
-actually be used to compute new proofs.
+highly practical---of type theory from the logical point of view: indeed, I show
+that we can still prove the same statements.
+It means we can reason about provability of statements in \acrshort{WTT}, which
+is simpler.
+The translation is done in type theory itself---in this case \Coq---and as such
+provides a program turning a proof in \acrshort{ETT} into a proof in
+\acrshort{ITT} or \acrshort{WTT} that can actually be used to compute new
+proofs.
 
 \section{A verified type-checker for \Coq, in \Coq}
 
@@ -324,21 +338,21 @@ Finally, in \arefpart{coq-in-coq}, I will address the question ``How can we
 increase the trust in a proof assistant?'' Focusing once more on \Coq, I present
 a verification of \Coq's kernel, using \Coq itself.
 
-\Coq features a kernel that is a rather small program that checks that proofs
+\Coq features a kernel, that is a rather small program that checks that proofs
 are indeed correct. The interactive part of the proof assistant, as well as the
 automation---\ie the thing that makes the proof assistant find proofs for
 us---are not part of the kernel and rather built above it.
 If you want, the part that checks the certificates is separate from the rest
 and as such is easier to survey.
 
-\marginnote[1.2cm]{
+\begin{center}
+  \includegraphics[width=0.9\textwidth]{chatbot-kernel.pdf}
+\end{center}
+\marginnote[-2.5cm]{
   The egg on the right represents the kernel. The proof assistant essentially
   sends it the certificate it generated after discussing with the user and the
   kernel validates it (or not).
 }
-\begin{center}
-  \includegraphics[width=0.9\textwidth]{chatbot-kernel.pdf}
-\end{center}
 
 If the proof assistant is broken, the certificate will be incorrect and rejected
 by the kernel. As long as the kernel is correct, it is not crucial that the rest
@@ -357,6 +371,6 @@ not crash or end up in unwanted configurations. Such programs that we want to
 verify are often used in critical parts of softwares, for instance in autopilots
 and rockets, where the smallest mistake can cost millions... and lives.
 
-I am part of a project to specificy and verify \Coq's kernel itself, within
-\Coq. This means we produce a separate kernel, fully written and verified in
-\Coq that can also check certificates independently.
+I am part of a project---the \MetaCoq project---to specificy and verify \Coq's
+kernel itself, within \Coq. This means we produce a separate kernel, fully
+written and verified in \Coq that can also check certificates independently.
