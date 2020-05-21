@@ -164,9 +164,29 @@ it is plain to see.
   \includegraphics[width=0.8\textwidth]{convo-abort.pdf}
 \end{center}
 
-This time we see we do not have a cat so we do not even try to prove it.
+This time, we see we do not have a cat so we do not even try to prove it.
 We abort the proof, that is we give up on proving a statement we know to be
 wrong now.
+One important thing to note here is that the proof assistant still does not
+know the statement is incorrect, only that the proof attempt was itself invalid.
+We can show it to be incorrect by proving the converse:
+
+\begin{center}
+  \includegraphics[width=0.8\textwidth]{conv-exists.pdf}
+  \includegraphics[width=0.8\textwidth]{how-to-prove.pdf}
+\end{center}
+
+The easiest way of proving that something exists is by providing a so-called
+\emph{witness} of existence. Here we are looking for a box which does not
+contain a cat, there is only one box with no cat in it, as we found out during
+our previous proof, the third.
+
+\begin{center}
+  \includegraphics[width=0.8\textwidth]{convo-take-third.pdf}
+  \includegraphics[width=0.8\textwidth]{convo-after-exists.pdf}
+  \includegraphics[width=0.8\textwidth]{convo-indeed.pdf}
+  \includegraphics[width=0.8\textwidth]{convo-proven.pdf}
+\end{center}
 
 A proof assistant is thus both helping us do proofs by building parts of it on
 its own, and verifying that they are correct, for instance by not forgetting one
@@ -184,7 +204,7 @@ can be checked by others without having to understand the details of the proof.
   is indeed valid.
 }
 \begin{center}
-  \includegraphics[width=0.4\textwidth]{cerificate.pdf}
+  \includegraphics[width=0.5\textwidth]{cerificate.pdf}
 \end{center}
 
 Even then, why should we trust the proof assistant? What exactly can we prove
