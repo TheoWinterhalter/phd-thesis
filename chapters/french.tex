@@ -366,69 +366,78 @@ La traduction se fait dans la théorie des types elle-même --- dans ce cas \Coq
 une preuve dans \acrshort{ITT} ou \acrshort{WTT} qui peut donc être utilisé
 pour calculer de nouvelles preuves.
 
-\section{A verified type-checker for \Coq, in \Coq}
+\section{Un vérificateur de typage pour \Coq, en \Coq}
 
-Finally, in \arefpart{coq-in-coq}, I will address the question ``How can we
-increase the trust in a proof assistant?'' Focusing once more on \Coq, I present
-a verification of \Coq's kernel, using \Coq itself.
+Enfin, dans \arefpart {coq-in-coq}, je répondrai à la question ``Comment
+peut-on augmenter la confiance dans un assistant de preuve ?'' En me concentrant
+une fois de plus sur \Coq, je présente une vérification du noyau de \Coq, en
+utilisant \Coq lui-même.
 
-\Coq features a kernel, that is a rather small program that checks that proofs
-are indeed correct. The interactive part of the proof assistant, as well as the
-automation---\ie the thing that makes the proof assistant find proofs for
-us---are not part of the kernel and rather built above it.
-If you want, the part that checks the certificates is separate from the rest
-and as such is easier to survey.
+\Coq dispose d'un noyau, c'est-à-dire un programme assez petit qui vérifie que
+les preuves sont bien correctes. La partie interactive de l'assistant de preuve,
+ainsi que l'automatisation --- c'est-à-dire ce qui fait que l'assistant de
+preuve trouve des preuves pour nous --- ne font pas partie du noyau et sont
+plutôt construites au-dessus de lui.
+Si vous voulez, la partie qui vérifie les certificats est distincte du reste et,
+en tant que telle, est plus facile à étudier.
 
 \begin{center}
   \includegraphics[width=0.9\textwidth]{chatbot-kernel.pdf}
 \end{center}
 \marginnote[-2.5cm]{
-  The egg on the right represents the kernel. The proof assistant essentially
-  sends it the certificate it generated after discussing with the user and the
-  kernel validates it (or not).
+  L'œuf à droite représente le noyau. L'assistant de preuve lui envoie
+  essentiellement le certificat qu'il a généré après discussion avec
+  l'utilisateur et le noyau le valide (ou non).
 }
 
-If the proof assistant is broken, the certificate will be incorrect and rejected
-by the kernel. As long as the kernel is correct, it is not crucial that the rest
-is completly correct. Granted, it is nicer when everything is correct, but only
-the correctness of the kernel is crucial.
-As I said, efforts are made to keep the kernel as small as possible so that
-humans can inspect it and assert of its correctness.
+Si l'assistant de preuve est défectueux, le certificat sera incorrect et rejeté
+par le noyau. Tant que le noyau est correct, il n'est pas crucial que le reste
+soit complètement correct. Certes, c'est plus agréable quand tout est correct,
+mais seule l'exactitude du noyau est cruciale.
+Comme je l'ai dit, des efforts sont faits pour garder le noyau aussi petit que
+possible afin que des humains puissent l'inspecter et affirmer son exactitude.
 
-Unfortunately even a proof assistant as widely used as \Coq is not exempt from
-mistakes: one critical bug had been found roughly every year for the past twenty
-years. These are usually fixed rather quickly but their mere existence is
-troublesome nonetheless.
-An incorrect proof can have desastrous consequences. \Coq is not only used to
-prove mathematical theorems, but also to verify programs and make sure they will
-not crash or end up in unwanted configurations. Such programs that we want to
-verify are often used in critical parts of softwares, for instance in autopilots
-and rockets, where the smallest mistake can cost millions... and lives.
+Malheureusement, même un assistant de preuve aussi largement utilisé que \Coq
+n'est pas exempt d'erreurs : un bogue critique a été trouvé à peu près chaque
+année au cours des vingt dernières années. Ceux-ci sont généralement résolus
+assez rapidement, mais leur simple existence est néanmoins gênante.
+Une preuve incorrecte peut avoir des conséquences désastreuses. \Coq n'est pas
+seulement utilisé pour prouver des théorèmes mathématiques, mais aussi pour
+vérifier des programmes et s'assurer qu'ils ne planteront pas ou ne se
+retrouveront pas dans des configurations indésirables. Ces programmes que nous
+voulons vérifier sont souvent utilisés dans les parties critiques des logiciels,
+par exemple dans les pilotes automatiques et les fusées, où la plus petite
+erreur peut coûter des millions... et des vies.
 
-I am part of a project---the \MetaCoq project---to specificy and verify \Coq's
-kernel itself, within \Coq. This means we produce a separate kernel, fully
-written and verified in \Coq that can also check certificates independently.
+Je fais partie d'un projet --- le projet \MetaCoq --- qui a pour but de
+spécifier et vérifier le noyau de \Coq lui-même, dans \Coq. Cela signifie que
+nous produisons un noyau séparé, entièrement écrit et vérifié dans \Coq qui peut
+également vérifier les certificats indépendamment.
 
-When verifying the kernel we need to rely on meta-theoretical properties of
-\Coq's theory. Unfortunately, not all of them can be proven within \Coq itself.
+Lors de la vérification du noyau, nous devons nous fier aux propriétés
+méta-théoriques de la théorie de \Coq. Malheureusement, toutes ne peuvent pas
+être prouvés dans \Coq lui-même.
 \marginnote[0.1cm]{
-  I will talk about Gödel's incompleteness theorems in \nrefch{proof-theory}.
+  Je parlerai des théorèmes d'incomplétude de Gödel dans le
+  \nrefch{proof-theory}.
 }%
-This is because of Gödel's incompleteness theorems which roughly implies that a
-theory like that of \Coq cannot prove its own consistency. As such, we need to
-assume some of these meta-theoretical properties, especially those strong enough
-to imply the consistency of \Coq, hence which cannot be proven.
-Thus, we propose a paradigm shift: instead of having a relatively small kernel
-that is trusted, we rely on a small base of properties assumed on the theory
-which has been well studied over the years and does not suffer form the
-shortcomings of the implementation.
-There are other challenges we must face, one of which is proving that the
-definitions we provide for the kernel are terminating, this was much more
-complicated that anticipated and forced us to make explicit a lot of invariants
-which are kept implicit (and sometimes unknown) in the current implementation.
+Cela est dû aux théorèmes d'incomplétude de Gödel qui impliquent à peu près
+qu'une théorie comme celle de \Coq ne peut pas prouver sa propre cohérence.
+Ainsi, nous devons supposer certaines de ces propriétés méta-théoriques, en
+particulier celles suffisamment fortes pour impliquer la cohérence de \Coq, donc
+qui ne peuvent pas être prouvées.
+Nous proposons donc un changement de paradigme : au lieu d'avoir un noyau
+relativement petit auquel on fait confiance, nous nous appuyons sur une petite
+base de propriétés supposées sur la théorie, théorie qui a été bien étudiée au
+fil des années et qui ne souffre pas des bogues découverts dans l'implantation.
+Il y a d'autres défis auxquels nous devons faire face, l'un d'entre eux est la
+preuve que les définitions que nous fournissons pour construire le noyau sont
+terminantes, cela a été beaucoup plus compliqué que prévu et cela nous a forcés
+à rendre explicite plusieurs invariants qui sont implicites dans l'implantation
+actuelle.
 
-All in all, we provide a specfication of \Coq, within \Coq, with a few trusted
-properties about the theory with which we verify the soundness of an alternative
-\Coq kernel.
+Dans l'ensemble, nous fournissons une spécification de \Coq, dans \Coq, avec
+quelques propriétés sur la théorie que nous devons supposer. À partir de cela
+nous vérifions la correction d'un noyau de \Coq alternatif.
 
 \selectlanguage{english}
