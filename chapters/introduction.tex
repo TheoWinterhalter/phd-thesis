@@ -363,7 +363,7 @@ humans can inspect it and assert of its correctness.
 
 Unfortunately even a proof assistant as widely used as \Coq is not exempt from
 mistakes: one critical bug had been found roughly every year for the past twenty
-years. These are usually fixed rather fast but their mere existence is
+years. These are usually fixed rather quickly but their mere existence is
 troublesome nonetheless.
 An incorrect proof can have desastrous consequences. \Coq is not only used to
 prove mathematical theorems, but also to verify programs and make sure they will
@@ -374,3 +374,25 @@ and rockets, where the smallest mistake can cost millions... and lives.
 I am part of a project---the \MetaCoq project---to specificy and verify \Coq's
 kernel itself, within \Coq. This means we produce a separate kernel, fully
 written and verified in \Coq that can also check certificates independently.
+
+When verifying the kernel we need to rely on meta-theoretical properties of
+\Coq's theory. Unfortunately, not all of them can be proven within \Coq itself.
+\marginnote[0.1cm]{
+  I will talk about Gödel's incompleteness theorems in \nrefch{proof-theory}.
+}%
+This is because of Gödel's incompleteness theorems which roughly implies that a
+theory like that of \Coq cannot prove its own consistency. As such, we need to
+assume some of these meta-theoretical properties, especially those strong enough
+to imply the consistency of \Coq, hence which cannot be proven.
+Thus, we propose a paradigm shift: instead of having a relatively small kernel
+that is trusted, we rely on a small base of properties assumed on the theory
+which has been well studied over the years and does not suffer form the
+shortcomings of the implementation.
+There are other challenges we must face, one of which is proving that the
+definitions we provide for the kernel are terminating, this was much more
+complicated that anticipated and forced us to make explicit a lot of invariants
+which are kept implicit (and sometimes unknown) in the current implementation.
+
+All in all, we provide a specfication of \Coq, within \Coq, with a few trusted
+properties about the theory with which we verify the soundness of an alternative
+\Coq kernel.
