@@ -30,6 +30,17 @@
   }
 }
 
+% Warning box
+\newcommand{\warn}[1]{%
+  \begin{kaobox}[
+    % frametitle=,
+    backgroundcolor=OrangeRed!25!White,
+    % frametitlebackgroundcolor=GreenYellow!25!White
+  ]
+    #1
+  \end{kaobox}
+}
+
 % Highlight for maths
 \colorlet{highlightcol}{Yellow!50}
 \colorlet{bluelightcol}{CornflowerBlue!50}
