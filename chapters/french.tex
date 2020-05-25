@@ -26,7 +26,7 @@ deux points:
 \marginnote[0.7cm]{
   La \emph{reflection} et la notion d'égalité faible sont définies en
   \arefsubsecfr{ett-def} et \arefsubsecfr{wtt} respectivement, les deux dans
-  le \refchfr{flavours}.
+  le \refch{flavours}.
 }
 \begin{itemize}
   \item Comment peut-on transformer efficacement une preuve utilisant une notion
@@ -43,9 +43,9 @@ suivantes~\sidecite{winterhalter:hal-01849166,sozeau2019coq,sozeau:hal-02167423}
 Bien que les chapitres précédant ces deux parties soient principalement
 introductifs et correspondent à un état de l'art approximatif, ils contiennent
 en réalité d'autres contributions, à savoir le travail que j'ai fait avec Andrej
-Bauer sur le modèle cardinal dans \nrefchfr{models} actuellement non publié, et le travail avec Andrej Bauer et Philipp Haselwarter sur la formalisation de la
+Bauer sur le modèle cardinal dans \nrefch{models} actuellement non publié, et le travail avec Andrej Bauer et Philipp Haselwarter sur la formalisation de la
 théorie des types appelée \ftt~\sidecite[-0.1cm]{formaltypetheory} et que je
-présente brièvement dans \nrefchfr{formalisation}.
+présente brièvement dans \nrefch{formalisation}.
 
 \section{Proof assistants}
 
@@ -244,61 +244,68 @@ Et comment pouvons-nous les améliorer ?
 Une partie de mon travail est centrée sur ces questions, et sur l'étude des
 assistants de preuve basés sur ce que l'on appelle la théorie des types.
 
-\section{Proofs, types and programs}
+\section{Preuves, types et programmes}
 
-In order to explain the title ``Formalisation and Meta-Theory of Type Theory''
-I need to explain what \emph{type theory} is. Even before that, I believe I have
-to introduce \emph{proof theory} (\refch{proof-theory}): the study of proofs
-themselves. Indeed, in order to build a proof assistant one needs to understand
-what a proof is, formally, \ie in very precise and non-ambiguous terms.
+Afin d'expliquer le titre ``Formalisation et méta-théorie de la théorie des
+types'', j'ai besoin d'expliquer ce qu'est la \emph{théorie des types}.
+Avant cela, je pense que je dois introduire la \emph{théorie de la preuve}
+(\refch{proof-theory}) : l'étude des preuves elles-mêmes.
+En effet, pour construire un assistant de preuve, il faut comprendre ce qu'est
+une preuve, formellement, c'est-à-dire en termes très précis et non ambigus.
 
-It turns out that certain formal notion of proofs have intricate relations with
-programming as we shall see in \refch{simple-types}. The idea is that programs
-can be seen as proofs, and proofs as programs.
-For instance a proof that a proposition \(A\) implies the proposition \(B\)
-is a program that takes a proof of \(A\) as input and outputs a proof of \(B\).
-Such a program is given type \(A \to B\). Types are a way of describing the data
-return by a program. Student will often write the infamous leap year function
-which, given a year as an integer (described by the type
-\mintinline{ocaml}{int}), returns whether it is a leap year or not. This binary
-information---yes or no---is encoded into what we call booleans
+Il s'avère que certaines notions formelles de preuves ont des relations complexes avec la programmation comme nous le verrons dans le \refch{simple-types}.
+L'idée est que les programmes peuvent être considérés comme des preuves et les
+preuves comme des programmes.
+Par exemple, la preuve qu'un proposition \(A\) implique la proposition \(B\)
+est un programme qui prend une preuve de \(A\) en entrée et renvoie une preuve
+de \(B\) en sortie.
+Un tel programme est de type \(A \to B\). Les types sont un moyen de décrire les
+données renvoyées par un programme. Les étudiants sont souvent amenés à écrire
+la fameuse fonction de test d'une année bissextile qui, étant donnée une année
+sous forme d'entier (décrit par le type \mintinline{ocaml}{int}), répond s'il
+s'agit d'une année bissextile ou non. Cette information binaire --- oui ou non
+--- est encodée dans ce que nous appelons des booléens
 (\mintinline{ocaml}{bool}).
-The Curry-Howard correspondence states that programs of type \(A\) can be seen
-as proofs of propositon \(A\) and vise-versa.
+La correspondance de Curry-Howard indique que les programmes de type \(A\)
+peuvent être considérés comme des preuves de la proposition \(A\) et vice-versa.
 
-In \refch{dependent-types}, I finally describe what I call type theory.
-Type theory is framework taking advantage of this correspondence and is thus at
-the core of well-known proof assistants such as \Coq~\sidecite[-0.85cm]{coq} and
-\Agda~\sidecite[0.25cm]{norell2007towards}. I myself am a \Coq user and this
-thesis is written with a focus on this proof assistant and its foundations.
-In \refch{usual-defs}, I describe usual definitions that come with type theory.
-I explain how we can reason in such a setting with more than implications.
-\sidedef[-1cm]{Induction on natural numbers}{%
-  If \(P(n)\) is a property on natural number \(n\), then if we have
+Danse le \refch{dependent-types}, je décris enfin ce que j'appelle la théorie
+des types.
+La théorie des types est un cadre qui tire parti de cette correspondance et est donc au cœur d'assistants de preuve bien connus tels que
+\Coq~\sidecite[-1.3cm]{coq} et \Agda~\sidecite[-0.2cm]{norell2007towards}.
+Je suis moi-même un utilisateur de \Coq et cette thèse est écrite en mettant
+l'accent sur cet assistant de preuve et ses fondements.
+Dans le \refch{usual-defs}, je décris les définitions habituelles qui
+accompagnent la théorie des types.
+J'explique comment nous pouvons raisonner dans un tel contexte avec plus que des
+implications (\(\to\)).
+\sidedeffr[-2.2cm]{Récurrence sur les entiers naturels}{%
+  Si \(P(n)\) est une propriété sur l'entier naturel \(n\), et si
   \begin{enumerate}
     \item \(P(0)\);
-    \item \(P(m)\) implies \(P(m+1)\) for any \(m\);
+    \item \(P(m)\) implique \(P(m+1)\) pour tout \(m\);
   \end{enumerate}
-  then we have \(P(n)\) for any \(n\).
+  alors on a \(P(n)\) pour tout \(n\).
 }%
-This is where I introduce for instance the way of doing induction on natural
-numbers in type theory.
+C'est là que j'introduis par exemple comment faire un récurrence sur des entier
+naturels dans la théorie des types.
 
-\refch{flavours} is dedicated to different formulations and variants of type
-theory. Indeed, there is not just one such theory. Different type theories have
-different properties, I catalogue the most important ones while telling which
-theory enjoys which in a summarising table.
+Le \refch{flavours} est dédié à différentes formulations et variantes de la
+théorie des types. En effet, il n'y a pas qu'une seule théorie de ce genre.
+Différentes théories de type ont des propriétés différentes, je répertorie les
+plus importantes tout en disant quelle théorie possède quelle propriété dans un
+tableau récapitulatif.
 
-The remaining of the introductory part will focus more on the `meta-theory'
-part of the title. While the theory is where you conduct your proofs and write
-your programs, the meta-theory is where you reason about the theory itself!
-In \refch{models}, I explain how we can build so-called models of type theory,
-which consist in interpreting the theory and giving it meaning---or
-\emph{semantics}---inside the meta-theory. At the end, I hint at how the
-meta-theory can even be a form of type theory itself. The representation of
-type theory inside itself is the subject of \refch{formalisation} while
-\refch{translations} focuses on how we can give meaning to a type theory, using
-another type theory.
+Le reste de la partie introductive se concentrera davantage sur la partie
+``méta-théorie'' du titre. Alors que la théorie est l'endroit où l'on effectue now
+preuves et où l'on écrit nos programmes, la méta-théorie est l'endroit où l'on raisonne sur la théorie elle-même !
+Dans le \refch{models}, j'explique comment construire ce que l'on appelle des
+modèles de théorie des types, qui consistent à interpréter la théorie et à lui
+donner un sens --- ou une \emph{sémantique} --- à l'intérieur de la
+méta-théorie. À la fin, je suggère comment la méta-théorie peut même être une
+forme de théorie des types elle-même. La représentation de la théorie des types
+en théorie des types est l'objet du \refch{formalisation} tandis que le
+\refch{translations} se concentre sur la façon dont nous pouvons donner un sens à une théorie des types, en utilisant une autre théorie des types.
 
 \section{Elimination of reflection}
 

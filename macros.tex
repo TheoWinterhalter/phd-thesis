@@ -30,6 +30,18 @@
   }
 }
 
+\newcommand{\sidedeffr}[3][0pt]{%
+  \marginnote[#1]{
+    \begin{kaobox}[
+      frametitle=Définition: #2,
+      backgroundcolor=GreenYellow!25!White,
+      frametitlebackgroundcolor=GreenYellow!25!White
+    ]
+      #3
+    \end{kaobox}
+  }
+}
+
 % Warning box
 \newcommand{\warn}[1]{%
   \begin{kaobox}[
@@ -51,8 +63,6 @@
 % French refs
 \newcommand{\partnamefr}{Partie}
 \newcommand{\chapternamefr}{Chapitre}
-\newcommand{\refchfr}[1]{\hyperref[ch:#1]{\chapternamefr\xspace\ref{ch:#1}}}
-\newcommand{\nrefchfr}[1]{\hyperref[ch:#1]{\chapternamefr\xspace\ref{ch:#1} (\nameref{ch:#1})}}
 \newcommand{\subsectionnamefr}{Sous-section}
 \newcommand{\arefsubsecfr}[1]{\hyperref[subsec:#1]{\subsectionnamefr\xspace`\nameref{subsec:#1}'}}
 \newcommand{\avrefpartfr}[1]{\hyperref[part:#1]{\partnamefr}\xspace`\nameref{part:#1}', \vpageref{part:#1}} % Part `Name of the Part' on page 84
