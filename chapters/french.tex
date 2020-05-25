@@ -79,11 +79,11 @@ Voyons maintenant en détail comment une telle conversation peut se dérouler.
 \end{center}
 
 \marginnote[0.1cm]{
-  When I say they agree, I mean that, in particular, the proof assistant has
-  basic knowledge of cats and boxes, for instance you don't need to show it
-  that a cat is a feline.
-  It also knows what each box contains, for instance that the fourth box
-  contains a red cat.
+  Quand je dis qu'ils sont d'accord, je veux dire que, en particulier,
+  l'assistant de preuve a des connaissances de base sur les chats et les boîtes,
+  par exemple, vous n'avez pas besoin de montrer qu'un chat est un félin.
+  Il sait également ce que contient chaque boîte, par exemple que la quatrième
+  boîte contient un chat rouge.
 }
 Cette œuvre d'art moderne sera le cadre de l'échange entre l'utilisateur et
 l'assistant de preuve, et nous supposerons qu'ils sont tous les deux d'accord
@@ -105,56 +105,59 @@ l'assistant de preuve se plaindra à juste titre.
   \includegraphics[width=0.8\textwidth]{error-incomplete-fr.pdf}
 \end{center}
 
-Indeed, we were too fast and forgot half of what we wanted to say. Next we give
-it a complete sentence.
+En effet, nous sommes allé trop vite et avons oublié la moitié de ce que nous voulions dire. Cette fois, on lui donne une phrase complète.
 
 \begin{center}
   \includegraphics[width=0.8\textwidth]{iwant-is-fr.pdf}
 \end{center}
 
-This time, the statement is slightly incorrect, or not precise enough for our
-good assistant.
+Maintenant, l'énoncé est légèrement incorrect, ou pas assez précis pour notre
+gentil assistant.
 
 \begin{center}
   \includegraphics[width=0.8\textwidth]{error-box-feline-fr.pdf}
 \end{center}
 
-We have to revise our wanted theorem, and realise that we do not want to prove
-that all boxes are feline, although a human might understand what we mean by
-that, but that all of the boxes contain, each, a feline.
+Nous devons réviser le théorème voulu et réaliser que nous ne voulons pas
+prouver que toutes les boîtes sont des félins, bien qu'un humain puisse
+comprendre ce que nous entendons par là, mais que toutes les boîtes
+contiennent, chacune, un félin.
 
 \begin{center}
   \includegraphics[width=0.8\textwidth]{box-contains-feline-fr.pdf}
   \includegraphics[width=0.8\textwidth]{how-to-prove-fr.pdf}
 \end{center}
 
-The proof assistant has now understood what we meant. The interactive part of
-the prove now begins. We want to prove a property on the boxes, as there are
-four to consider, we can tell the proof assistant that we intend to look at each
-case, one by one.
+L'assistant de preuve a maintenant compris ce que nous voulions dire. La partie
+interactive de la preuve commence maintenant. Nous voulons prouver une propriété
+sur les boîtes, comme il y en a quatre à considérer, nous pouvons dire à
+l'assistant de preuve que nous avons l'intention d'examiner chaque cas, un par
+un.
 
 \begin{center}
   \includegraphics[width=0.8\textwidth]{convo7-fr.pdf}
   \includegraphics[width=0.8\textwidth]{convo8-fr.pdf}
 \end{center}
 
-We are presented with four cases, and as many statements to prove.
-In this case, we are rather lazy, especially since all four cases will be
-similar. Fortunately for us, the proof assistant is capable of understanding
-that you want to deal with several cases in similar ways, \emph{and} is also
-capable of doing very basic proofs without the user.
+On nous présente quatre cas, et autant d'énoncés à prouver.
+Dans ce cas, nous sommes plutôt paresseux, d'autant plus que les quatre cas
+seront similaires. Heureusement pour nous, l'assistant de preuve est capable de
+comprendre que nous voulons traiter plusieurs cas de manière similaire,
+\emph{et} est également capable de faire des preuves très basiques sans
+l'intervention de l'utilisateur.
 
 \begin{center}
   \includegraphics[width=0.8\textwidth]{convo9-fr.pdf}
   \includegraphics[width=0.8\textwidth]{convo10-fr.pdf}
 \end{center}
 
-Once the proof is complete, the proof assistant tells you so and you can move on
-to other theorems to prove. I already showed that you have to be explicit and
-non ambiguous when talking to the proof assistant. You also have to be correct.
-The proof assistant will not trust blindly into what you say.
+Une fois la preuve terminée, l'assistant de preuve vous le dit et vous pouvez
+passer à d'autres théorèmes pour le prouver. J'ai déjà montré que vous devez
+être explicite et non ambigu lorsque vous parlez à l'assistant de preuve. Vous
+devez également être correct.
+L'assistant de preuve ne se fiera pas aveuglément à ce que vous dites.
 %
-Let us now consider a theorem that is not provable.
+Considérons maintenant un théorème qui n'est pas prouvable.
 
 \begin{center}
   \includegraphics[width=0.8\textwidth]{convo11-fr.pdf}
@@ -165,17 +168,17 @@ Let us now consider a theorem that is not provable.
   \includegraphics[width=0.8\textwidth]{convo13-fr.pdf}
 \end{center}
 
-Here the proof assistant tells us that not all cases are trivial so we decide
-to go over them one by one to understand what is wrong.
+Ici, l'assistant de preuve nous dit que tous les cas ne sont pas triviaux, nous
+décidons donc de les examiner un par un pour comprendre ce qui ne va pas.
 
 \begin{center}
   \includegraphics[width=0.8\textwidth]{convo-focus-fr.pdf}
   \includegraphics[width=0.8\textwidth]{convo-case1-fr.pdf}
 \end{center}
 
-When we focus on a case, the proof assistant reminds us of what we have to prove
-specifically. Here we revert to using our earlier strategy and simply say that
-it is plain to see.
+Lorsque nous nous concentrons sur un cas, l'assistant de preuve nous rappelle ce
+que nous devons prouver spécifiquement. Ici, nous revenons à l'utilisation de
+notre stratégie antérieure et disons simplement que c'est évident.
 
 \begin{center}
   \includegraphics[width=0.8\textwidth]{convo-trivial-fr.pdf}
@@ -187,22 +190,22 @@ it is plain to see.
   \includegraphics[width=0.8\textwidth]{convo-abort-fr.pdf}
 \end{center}
 
-This time, we see we do not have a cat so we do not even try to prove it.
-We abort the proof, that is we give up on proving a statement we know to be
-wrong now.
-One important thing to note here is that the proof assistant still does not
-know the statement is incorrect, only that the proof attempt was itself invalid.
-We can show it to be incorrect by proving the converse:
+Cette fois, nous voyons que nous n'avons pas de chat donc nous n'essayons même
+pas de le prouver.
+Nous abandonnons la preuve, c'est-à-dire que nous renonçons à prouver un
+énoncé que nous savons maintenant faux.
+Une chose importante à noter ici est que l'assistant de preuve ne sait toujours
+pas que l'énoncé est incorrect, mais seulement que la tentative de preuve était elle-même invalide.
+Nous pouvons montrer que l'énoncé est faux en prouvant l'inverse :
 
 \begin{center}
   \includegraphics[width=0.8\textwidth]{conv-exists-fr.pdf}
   \includegraphics[width=0.8\textwidth]{how-to-prove-fr.pdf}
 \end{center}
 
-The easiest way of proving that something exists is by providing a so-called
-\emph{witness} of existence. Here we are looking for a box which does not
-contain a cat, there is only one box with no cat in it, as we found out during
-our previous proof, the third.
+La façon la plus simple de prouver que quelque chose existe est de fournir ce
+que l'on appelle un \emph{témoin} d'existence. Ici, nous recherchons une boîte
+qui ne contient pas de chat, il n'y a qu'une seule boîte sans chat, comme nous l'avons découvert lors de notre précédente épreuve, la troisième.
 
 \begin{center}
   \includegraphics[width=0.8\textwidth]{convo-take-third-fr.pdf}
@@ -212,29 +215,34 @@ our previous proof, the third.
   \includegraphics[width=0.8\textwidth]{convo-proven-fr.pdf}
 \end{center}
 
-A proof assistant is thus both helping us do proofs by building parts of it on
-its own, and verifying that they are correct, for instance by not forgetting one
-case where we had a lion rather than a cat.
+Un assistant de preuve nous aide donc à la fois à faire des preuves en
+construisant des parties de la preuve lui-même et à vérifier qu'elles sont
+correctes, par exemple en s'assurant qu'on n'a pas oublié un cas où nous avions
+un lion plutôt qu'un chat.
 
-Proof assistants are also interesting and useful for other people than the user
-doing the proof. Say that I have proven a complicated theorem using my favourite
-proof assistant, people who trust my proof assistant will simply have to ask it
-if it agrees with my claim.
-In fact, proof assistants usually generate so-called \emph{certificates} that
-can be checked by others without having to understand the details of the proof.
-\marginnote[1.6cm]{
-  The picture can be misleading, I am really talking about a concrete object
-  that people can run through their own proof assistant to check that a proof
-  is indeed valid.
-}
+Les assistants d'épreuve sont également intéressants et utiles pour d'autres
+personnes que l'utilisateur qui fait la preuve. Disons que j'ai prouvé un
+théorème compliqué en utilisant mon assistant de preuve préféré, les personnes
+qui font confiance à mon assistant de preuve devront simplement lui demander
+s'il est d'accord avec mon affirmation.
+En fait, les assistants de preuve génèrent généralement ce que l'on appelle des
+\emph{certificats} qui peuvent être vérifiés par d'autres sans avoir à
+comprendre les détails de la preuve.
+
 \begin{center}
   \includegraphics[width=0.5\textwidth]{cerificate-fr.pdf}
 \end{center}
+\marginnote[-3cm]{
+  L'image peut être trompeuse, je parle vraiment d'un objet concret que les gens
+  peuvent analyser à l'aide de leur propre assistant de preuve pour vérifier
+  qu'une preuve est bien valide.
+}
 
-Even then, why should we trust the proof assistant? What exactly can we prove
-with them? And how can we make them better?
-Part of my work is focused on these questions, and on the study of proof
-assistants based on something called type theory.
+Quand bien même, pourquoi devrions-nous faire confiance à l'assistant de
+preuve ? Que pouvons-nous prouver exactement avec des assistant à la preuve ?
+Et comment pouvons-nous les améliorer ?
+Une partie de mon travail est centrée sur ces questions, et sur l'étude des
+assistants de preuve basés sur ce que l'on appelle la théorie des types.
 
 \section{Proofs, types and programs}
 
