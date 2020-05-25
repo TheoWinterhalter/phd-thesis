@@ -309,59 +309,62 @@ en théorie des types est l'objet du \refch{formalisation} tandis que le
 
 \section{Élimination de la \emph{reflection}}
 
-Next, we have \arefpart{elim-reflection}. The title can be scary but it falls in
-the category of ``what can I prove with my proof assistant?'' and
-``how can I improve proof assistants?''
+Ensuite, nous avons la \arefpart{elim-reflection}.
+Le titre peut fair peur, mais il tombe dans la catégorie ``que puis-je prouver
+avec mon assistant de preuve ?'' Et ``comment puis-je améliorer les assistants
+de preuve ?''
 
-Type theory is at the interface of logic and programming. Traditionally,
-programming languages are designed with the idea that, eventually, programs
-will be \emph{run}, or \emph{evaluated}. In other words, programs
-\emph{compute}.
-Now, computation is also an important part of type theory. Computation
-corresponds to the simplification of proofs, but also more importantly it
-embodies the notion of \emph{constructivism}. Say, in the earlier example,
-that you prove that ``there exists a cat with a gravity issue,'' if you execute
-this proof, it will compute and yield two important informations: who is the
-guilty cat---in this case the black one in the second box---and why it has
-gravity issues (as another proof which will roughly correspond to showing the
-cat is upside down).
+La théorie des types est à l'interface de la logique et de la programmation.
+Traditionnellement, les langages de programmation sont conçus avec l'idée que,
+à la fin, les programmes seront \emph{exécutés} ou \emph{évalués}. En d'autres
+termes, les programmes \emph{calculent}.
+Le calcul est également un élément important de la théorie des types. Le calcul
+correspond à la simplification des preuves, mais surtout il incarne la notion de
+\emph{constructivisme}. Supposons que, dans l'exemple précédent, vous prouvez
+qu'il ``existe un chat avec un problème de gravité'', si vous exécutez cette
+preuve, elle calculera et produira deux informations importantes: qui est le
+chat fautif --- dans ce cas le noir dans la deuxième boîte --- et pourquoi il a
+des problèmes de gravité (donnée comme une autre preuve qui correspondra à peu
+près à montrer que le chat est à l'envers).
 
-Computation is also useful when doing proofs. For instance, \(2 + 2\) \emph{is}
-\(4\), so no need to carry around any information relating the two. \(2 + 2\)
-will evaluate to \(4\), so two sets of two cat boxes is really just a set of
-four cat boxes, and the proof assistant knows it.
+Le calcul est également utile lors de la réalisation de preuves.
+Par exemple, \(2 + 2\) \emph{vaut} \(4\), donc pas besoin de transporter des
+informations concernant la relation entre les deux. \(2 + 2\) s'évalue en \(4\),
+donc deux ensembles de deux boîtes de chat correspond juste à un ensemble de
+quatre boîtes de chat, et l'assistant de preuve le sait.
 
 \marginnote[2cm]{
-  Computation is \emph{directed}: \(2 + 2\) simplifies, or evaluates, to
-  \(4\), not the converse. \(2 + 2\) and \(3 + 1\) are equal because they both
-  evaluate to \(4\):
+  Le calcul est \emph{dirigé}: \(2 + 2\) se simplifie, ou s'évalue, en
+  \(4\), et pas l'inverse. \(2 + 2\) et \(3 + 1\) sont égaux parce que les deux
+  s'évaluent en \(4\):
   \[
     2 + 2 \red 4 \redl 3 + 1
   \]
 }
-Now there are various degrees of computation that can be put inside a type
-theory, and one might wonder what impacts it has on it. I present a spectrum
-of three different theories. On one side a theory, called \acrfull{ETT},
-which is very liberal with respect to computation in that it identifies any two
-things that we prove or assume equal, in such a setting, computation is no
-longer directed and we simply talk about things being \emph{equal}.
-This principle, turning a proof into an equality, is called \emph{reflection} of
-equality.
-The other extreme is a theory, called \acrfull{WTT}, where we remove the very
-notion of computation. In the middle, we have \acrfull{ITT} which has a
-`regular' notion of computation, defined as the evaluation of functions. The
-latter is the base for \Coq and \Agda.
+Il existe différents degrés de calcul qui peuvent être mis dans une théorie des
+type, et on peut se demander quels impacts le calcul a sur la théorie.
+Je présente un spectre de trois théories différentes. D'un côté, une théorie,
+appelée théorie extentionnelle des types (ETT), qui est très libérale en ce qui
+concerne le calcul en ce qu'elle identifie deux choses que si prouvées ou
+supposées égales. Dans un tel contexte, le calcul n'est plus dirigé et nous
+parlons simplement des choses comme étant \emph{égales}.
+Ce principe, transformant une preuve en égalité, est appelé \emph{reflecion} de
+l'égalité.
+L'autre extrême est une théorie, appelée théorie faible des types (WTT), où nous
+supprimons la notion même de calcul. Au milieu, nous avons la théorie
+intentionnelle des types (ITT) qui a une notion de calcul ``usuelle'', définie
+comme l'évaluation des fonctions. Cette dernière est à la base de \Coq et \Agda.
 
-My contribution is a translation from \acrshort{ETT} to \acrshort{ITT} and
-\acrshort{WTT}, showing that computation is not an essential property---albeit
-highly practical---of type theory from the logical point of view: indeed, I show
-that we can still prove the same statements.
-It means we can reason about provability of statements in \acrshort{WTT}, which
-is simpler.
-The translation is done in type theory itself---in this case \Coq---and as such
-provides a program turning a proof in \acrshort{ETT} into a proof in
-\acrshort{ITT} or \acrshort{WTT} that can actually be used to compute new
-proofs.
+Ma contribution est une traduction de \acrshort{ETT} vers \acrshort{ITT} et
+\acrshort{WTT}, montrant que le calcul n'est pas une propriété essentielle ---
+bien que très pratique --- de la théorie des types du point de vue logique : en
+effet, je montre que nous pouvons encore prouver les mêmes énoncés.
+Cela signifie que nous pouvons raisonner sur la prouvabilité des énoncés dans
+\acrshort{WTT}, qui est plus simple.
+La traduction se fait dans la théorie des types elle-même --- dans ce cas \Coq
+--- et fournit ainsi un programme transformant une preuve dans \acrshort{ETT} en
+une preuve dans \acrshort{ITT} ou \acrshort{WTT} qui peut donc être utilisé
+pour calculer de nouvelles preuves.
 
 \section{A verified type-checker for \Coq, in \Coq}
 
