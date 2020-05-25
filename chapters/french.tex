@@ -49,27 +49,30 @@ présente brièvement dans \nrefchfr{formalisation}.
 
 \section{Proof assistants}
 
-One of my goals is improving and understanding better proof assistants, but what
-is a proof assistant?
-I think we can see them as chatbots---that is, those programs that you can
-converse with---that are there to help you assert and prove theorems.
-They are not particularly smart and will not get the job done for you, but they
-are very annoying because they do not always understand what you say and you
-have to be very precise or they will point out your mistakes.
+L'un de mes objectifs est d'améliorer et de mieux comprendre les assistants de
+preuve, mais qu'est-ce qu'un assistant de preuve?
+Je pense que nous pouvons les voir comme des chatbots --- c'est-à-dire des
+programmes avec lesquels vous pouvez converser --- qui sont là pour vous aider à
+énoncer et à prouver des théorèmes.
+Ils ne sont pas particulièrement intelligents et ne feront pas le travail pour
+vous, mais ils sont très ennuyeux car ils ne comprennent pas toujours ce que
+vous dites et vous devez être très précis ou ils vous feront remarquer vos
+erreurs.
 
 \marginnote[1.2cm]{
-  The user will have blue speech bubbles, slightly on the left, while the proof
-  assistant will answer in green (for good) or red (for bad) on the right-hand
-  side.
+  L'utilisateur aura des bulles bleues, légèrement à gauche, tandis que
+  l'assistant de preuve répondra en vert (réponse positive) ou en rouge
+  (réponse négative) sur le côté droit.
 }%
 \begin{center}
   \includegraphics[width=0.6\textwidth]{coq-chatbot.pdf}
 \end{center}
 
-Here, I represent the user on the left, conversing with the proof assistant, on
-the right, that I picture as a laptop with a rooster inside.
+Ici, je représente l'utilisateur à gauche, en conversation avec l'assistant
+de preuve, à droite, que j'imagine comme un ordinateur portable avec un coq à
+l'intérieur.
 
-Let us now see in detail how such a conversation can go.
+Voyons maintenant en détail comment une telle conversation peut se dérouler.
 
 \begin{center}
   \includegraphics[width=0.8\textwidth]{modern-art.pdf}
@@ -82,37 +85,38 @@ Let us now see in detail how such a conversation can go.
   It also knows what each box contains, for instance that the fourth box
   contains a red cat.
 }
-This piece of modern art will be the setting for the exchange between the user
-and the proof assistant, and we will assume they both agree on it.
-We have cats in boxes (although one of the cats is rather a lion), of different
-colours, and subject to different gravitation forces.
+Cette œuvre d'art moderne sera le cadre de l'échange entre l'utilisateur et
+l'assistant de preuve, et nous supposerons qu'ils sont tous les deux d'accord
+sur ce cadre.
+Nous avons des chats dans des boîtes (bien que l'un des chats soit plutôt un
+lion), de différentes couleurs et soumis à différentes forces de gravitation.
 
-At the beginning, the user makes their purpose known to the proof assistant,
-saying for which theorem they require their assistance.
+Au début, l'utilisateur fait connaître son but à l'assistant de preuve, en
+disant pour quel théorème il a besoin de son aide.
 
 \begin{center}
-  \includegraphics[width=0.8\textwidth]{iwanterror.pdf}
+  \includegraphics[width=0.8\textwidth]{iwanterror-fr.pdf}
 \end{center}
 
-The sentence above doesn't sound like a statement we can prove, and the proof
-assistant will rightfully complain.
+La phrase ci-dessus ne ressemble pas à un énoncé que nous pouvons prouver, et
+l'assistant de preuve se plaindra à juste titre.
 
 \begin{center}
-  \includegraphics[width=0.8\textwidth]{error-incomplete.pdf}
+  \includegraphics[width=0.8\textwidth]{error-incomplete-fr.pdf}
 \end{center}
 
 Indeed, we were too fast and forgot half of what we wanted to say. Next we give
 it a complete sentence.
 
 \begin{center}
-  \includegraphics[width=0.8\textwidth]{iwant-is.pdf}
+  \includegraphics[width=0.8\textwidth]{iwant-is-fr.pdf}
 \end{center}
 
 This time, the statement is slightly incorrect, or not precise enough for our
 good assistant.
 
 \begin{center}
-  \includegraphics[width=0.8\textwidth]{error-box-feline.pdf}
+  \includegraphics[width=0.8\textwidth]{error-box-feline-fr.pdf}
 \end{center}
 
 We have to revise our wanted theorem, and realise that we do not want to prove
@@ -120,8 +124,8 @@ that all boxes are feline, although a human might understand what we mean by
 that, but that all of the boxes contain, each, a feline.
 
 \begin{center}
-  \includegraphics[width=0.8\textwidth]{box-contains-feline.pdf}
-  \includegraphics[width=0.8\textwidth]{how-to-prove.pdf}
+  \includegraphics[width=0.8\textwidth]{box-contains-feline-fr.pdf}
+  \includegraphics[width=0.8\textwidth]{how-to-prove-fr.pdf}
 \end{center}
 
 The proof assistant has now understood what we meant. The interactive part of
@@ -130,8 +134,8 @@ four to consider, we can tell the proof assistant that we intend to look at each
 case, one by one.
 
 \begin{center}
-  \includegraphics[width=0.8\textwidth]{convo7.pdf}
-  \includegraphics[width=0.8\textwidth]{convo8.pdf}
+  \includegraphics[width=0.8\textwidth]{convo7-fr.pdf}
+  \includegraphics[width=0.8\textwidth]{convo8-fr.pdf}
 \end{center}
 
 We are presented with four cases, and as many statements to prove.
@@ -141,7 +145,7 @@ that you want to deal with several cases in similar ways, \emph{and} is also
 capable of doing very basic proofs without the user.
 
 \begin{center}
-  \includegraphics[width=0.8\textwidth]{convo9.pdf}
+  \includegraphics[width=0.8\textwidth]{convo9-fr.pdf}
   \includegraphics[width=0.8\textwidth]{convo10.pdf}
 \end{center}
 
