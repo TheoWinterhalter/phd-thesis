@@ -276,14 +276,14 @@ peuvent être considérés comme des preuves de la proposition \(A\) et vice-ver
 Danse le \refch{dependent-types}, je décris enfin ce que j'appelle la théorie
 des types.
 La théorie des types est un cadre qui tire parti de cette correspondance et est donc au cœur d'assistants de preuve bien connus tels que
-\Coq~\sidecite[-1.3cm]{coq} et \Agda~\sidecite[-0.2cm]{norell2007towards}.
+\Coq~\sidecite[-0.5cm]{coq} et \Agda~\sidecite[0.6cm]{norell2007towards}.
 Je suis moi-même un utilisateur de \Coq et cette thèse est écrite en mettant
 l'accent sur cet assistant de preuve et ses fondements.
 Dans le \refch{usual-defs}, je décris les définitions habituelles qui
 accompagnent la théorie des types.
 J'explique comment nous pouvons raisonner dans un tel contexte avec plus que des
 implications (\(\to\)).
-\sidedeffr[-2.2cm]{Récurrence sur les entiers naturels}{%
+\sidedeffr[-1.4cm]{Récurrence sur les entiers naturels}{%
   Si \(P(n)\) est une propriété sur l'entier naturel \(n\), et si
   \begin{enumerate}
     \item \(P(0)\);
@@ -337,21 +337,22 @@ informations concernant la relation entre les deux. \(2 + 2\) s'évalue en \(4\)
 donc deux ensembles de deux boîtes de chat correspond juste à un ensemble de
 quatre boîtes de chat, et l'assistant de preuve le sait.
 
-\marginnote[2cm]{
+Il existe différents degrés de calcul qui peuvent être mis dans une théorie des
+type, et on peut se demander quels impacts le calcul a sur la théorie.
+Je présente un spectre de trois théories différentes.
+D'un côté, une théorie, appelée théorie extentionnelle des types (ETT), qui est
+très libérale en ce qui concerne le calcul en ce qu'elle identifie deux choses
+que  si prouvées ou supposées égales.
+\marginnote[0.1cm]{%
   Le calcul est \emph{dirigé}: \(2 + 2\) se simplifie, ou s'évalue, en
   \(4\), et pas l'inverse. \(2 + 2\) et \(3 + 1\) sont égaux parce que les deux
   s'évaluent en \(4\):
   \[
     2 + 2 \red 4 \redl 3 + 1
   \]
-}
-Il existe différents degrés de calcul qui peuvent être mis dans une théorie des
-type, et on peut se demander quels impacts le calcul a sur la théorie.
-Je présente un spectre de trois théories différentes. D'un côté, une théorie,
-appelée théorie extentionnelle des types (ETT), qui est très libérale en ce qui
-concerne le calcul en ce qu'elle identifie deux choses que si prouvées ou
-supposées égales. Dans un tel contexte, le calcul n'est plus dirigé et nous
-parlons simplement des choses comme étant \emph{égales}.
+}%
+Dans un tel contexte, le calcul n'est plus dirigé et nous parlons simplement des
+choses comme étant \emph{égales}.
 Ce principe, transformant une preuve en égalité, est appelé \emph{reflecion} de
 l'égalité.
 L'autre extrême est une théorie, appelée théorie faible des types (WTT), où nous
