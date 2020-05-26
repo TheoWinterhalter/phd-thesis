@@ -92,7 +92,7 @@ Inductive typing_result (A : Type) :=
 \end{minted}
 which corresponds to either returning a type or an error message.
 
-We can then decude checking
+We can then decide checking
 \begin{minted}{coq}
 Program Definition infer_cumul Γ HΓ t A (hA : wellformed Σ Γ A)
   : typing_result (∥ Σ ;;; Γ |- t : A ∥) :=
@@ -104,9 +104,9 @@ Program Definition infer_cumul Γ HΓ t A (hA : wellformed Σ Γ A)
 I do not expect you to read the definition in detail. For a variable it checks if
 it is bound, and if so returns the type it is assigned in the environment,
 otherwise it raises an error.
-For a sort, it checks if is algebraic, if not and it is a declared level,
+For a sort, it checks if it is algebraic, if not and it is a declared level,
 it returns the successor level.
-For a \(\Pi\)-type if infers the types of the domain and codomain, checking that
+For a \(\Pi\)-type it infers the types of the domain and codomain, checking that
 they are indeed sorts, and returns the sort of the product (\ie the maximum
 of the two sorts if the second one is not \(\Prop\), and \(\Prop\) otherwise).
 In the case of application we use \mintinline{coq}{infer_cumul} to \emph{check}
