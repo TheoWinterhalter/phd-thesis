@@ -108,6 +108,8 @@
     *to/.default=
 }
 
+\RequirePackage{epigraph} % \cleartoevenpage
+
 \include{macros}
 \input{cpp-macros} % TODO Integrate into macros and factorise
 
@@ -501,10 +503,11 @@
 
 % If you have a PDF/image file that you want to use as a back cover, uncomment the following lines
 
-\clearpage
-\thispagestyle{empty}
-\null%
-\clearpage
+% \clearpage
+% \thispagestyle{empty}
+% \null%
+% \clearpage
+\cleartoevenpage[\thispagestyle{empty}]
 \includepdf[pages={2}]{import/cover}
 
 %----------------------------------------------------------------------------------------
