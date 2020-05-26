@@ -286,11 +286,10 @@ syntactic equality.
 \subsection{About cumulativity and universes}
 
 In the (partial) definitions above I sometimes refer to syntactic equality of
-terms or equality of universes. These are alaways refering to the universe
-constraints to be decided, \ie their respective representations need not be the
-same on both sides of the equality. This is the reason why I write \(u = v\)
-when I could have unified them, the way I unified \(k_1\) and \(k_2\) into \(k\)
-when considering constants.
+terms or equality of universes. When I write \(t_1 = t_2\) I mean syntactic
+equality of terms up to universes. This implicitly refers to universe
+constraints, which is the reason I do not simply unify them, the way I unified
+\(k_1\) and \(k_2\) into \(k\) when considering constants.
 
 Another important point is that we actually define conversion and cumulativity
 at the same time, using an extra argument (essentially a boolean) telling us
