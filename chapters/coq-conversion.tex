@@ -47,7 +47,7 @@ conversion. I will write these functions as judgements:
 where \(A\) is the \emph{answer} which is basically `yes' or an error message.
 \(A\) is the \emph{output} while everything else is the \emph{input}.
 I will use the subscripts \(\cred\), \(\cterm\), \(\cargs\) and \(\cfall\)
-to diffrenciate the four phases.
+to differentiate the four phases.
 I will present them in more depth so that we can see what are
 the requirements for termination.
 
@@ -332,14 +332,14 @@ where \(\pi_1\) and \(\pi_2\) are decomposed as
     \pi_2 &=& \coapp{v_1} :: \dots :: \coapp{v_n} :: \rho_2
   \end{array}
 \]
-This might be a bit surprising that we only conclude on applications at the head
+This might come as surprising that we only conclude on applications at the head
 of the stakcs and not about the whole stacks themselves.
 If we were asking for
 \[
   \Ga \vdash \zip\ \vscmd{t_1}{\pi_1} \equiv \vscmd{t_2}{\pi_2}
 \]
 instead, it would be too strong a requirement. Indeed, in the case of
-\(\lambda\)-abstractions, we consider the recrusive call on the domains
+\(\lambda\)-abstractions, we consider the recursive call on the domains
 \marginnote[1cm]{
   Note that \(\zip\ \vscmd{A}{\stack{\lambda (x:\shole).t} :: \pi}\)
   is equal to \(\zip\ \vscmd{\lambda (x:A).t}{\pi}\).
@@ -355,7 +355,8 @@ instead, it would be too strong a requirement. Indeed, in the case of
 \]
 which we want to conclude on \(A_1\) and \(A_2\), not on the full term,
 otherwise the recursive call on the bodies becomes superfluous.
-This, I think, is a sign, that this approach is doomed to fail.
+This, I think, is a sign, that this approach---concluding on the whole term,
+zipped with its stack---is doomed to fail.
 
 Going back to the bigger picture, it is also not a problem that we conclude only
 on a portion of the stack since the conversion algorithm will be called with
@@ -414,7 +415,7 @@ that of the \mintinline{coq}{Term} phase so
   \cfall \prec \cterm
 \]
 
-The \mintinline{coq}{Args} phase makes recrusive calls inside the stack meaning
+The \mintinline{coq}{Args} phase makes recursive calls inside the stack meaning
 that, like weak head reduction, we must in fact use positions rather than the
 subterm relation.
 
@@ -438,7 +439,7 @@ Inductive state :=
 \end{minted}
 as well as a well-founded order on them
 \marginnote[0.3cm]{
-  It should not prove to hard to see that it is indeed well-founded since we
+  It should not prove too hard to see that it is indeed well-founded since we
   essentially have
   \[
     \cargs \prec \cfall \prec \cterm \prec \cred
@@ -456,7 +457,7 @@ I already said we needed to consider equality of terms up to universes, as such
 we define an altered version of coreduction that is coreduction up to universes.
 \marginnote[0.6cm]{
   The notation \mintinline{coq}{∥ A ∥} is for the \emph{squashed} version of
-  \mintinline{coq}{A}, \ie its plunging into \mintinline{coq}{Prop}.
+  \mintinline{coq}{A}, \ie its embedding into \mintinline{coq}{Prop}.
   This is to make sure it goes away after extraction.
 }
 \begin{minted}{coq}
@@ -508,34 +509,34 @@ finally a state, using coreduction for terms.
 
 The real order simply repacks this information, computing the positions from
 the stacks.
-\begin{minted}{coq}
-Record pack (Γ : context) := mkpack {
-  st   : state ;
-  tm1  : term ;
-  stk1 : stack ;
-  tm2  : term ;
-  stk2 : stack ;
-  wth  : wtp Γ tm2 stk2
-}.
+% \begin{minted}{coq}
+% Record pack (Γ : context) := mkpack {
+%   st   : state ;
+%   tm1  : term ;
+%   stk1 : stack ;
+%   tm2  : term ;
+%   stk2 : stack ;
+%   wth  : wtp Γ tm2 stk2
+% }.
 
-Arguments st {_} _.
-Arguments tm1 {_} _.
-Arguments stk1 {_} _.
-Arguments tm2 {_} _.
-Arguments stk2 {_} _.
-Arguments wth {_} _.
+% Arguments st {_} _.
+% Arguments tm1 {_} _.
+% Arguments stk1 {_} _.
+% Arguments tm2 {_} _.
+% Arguments stk2 {_} _.
+% Arguments wth {_} _.
 
-Notation pzt u := (zipc (tm1 u) (stk1 u)) (only parsing).
-Notation pps1 u := (stack_pos (tm1 u) (stk1 u)) (only parsing).
-Notation pwt u := (exist _ (wth u)) (only parsing).
-Notation pps2 u := (stack_pos (tm2 u) (stk2 u)) (only parsing).
+% Notation pzt u := (zipc (tm1 u) (stk1 u)) (only parsing).
+% Notation pps1 u := (stack_pos (tm1 u) (stk1 u)) (only parsing).
+% Notation pwt u := (exist _ (wth u)) (only parsing).
+% Notation pps2 u := (stack_pos (tm2 u) (stk2 u)) (only parsing).
 
-Notation obpack u :=
-  (pzt u ; (pps1 u, (pwt u ; (pps2 u, st u)))) (only parsing).
+% Notation obpack u :=
+%   (pzt u ; (pps1 u, (pwt u ; (pps2 u, st u)))) (only parsing).
 
-Definition R Γ (u v : pack Γ) :=
-  R_aux Γ (obpack u) (obpack v).
-\end{minted}
+% Definition R Γ (u v : pack Γ) :=
+%   R_aux Γ (obpack u) (obpack v).
+% \end{minted}
 
 The order is well-founded and sufficient to prove termination of the conversion
 algorithm which is also correct by construction.
