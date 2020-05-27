@@ -179,10 +179,10 @@
 
 % Redefine the following sidenotes' command to use the kao version of marginnote
 \RenewDocumentCommand \@sidenotes@placemarginal { m m }
-{
-	\IfNoValueOrEmptyTF{#1}
-	{\marginpar{#2}}
-	{\marginnote[#1]{#2}}
+{%
+	\IfNoValueOrEmptyTF{#1}%
+	{\marginpar{#2}}%
+	{\marginnote[#1]{#2}}%
 }
 
 % Initially set the counter to zero instead of 1, and update it before printing the sidenote.
