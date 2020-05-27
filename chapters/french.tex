@@ -12,14 +12,12 @@
 La théorie des types se trouve à l'interface entre programmation et logique
 formelle, les deux mondes se nourissant l'un l'autre. Des assistants de preuve
 peuvent être basés dessus, ce qui en fait également des langages de
-programmation à part entière, avec l'avantage supplémentaire de produire des
-programmes certifiés.
+programmation à part entière, avec l'avantage supplémentaire qu'ils peuvent
+produire des programmes certifiés.
 
-Mon intérêt principal réside dans l'étude de la théorie des types tout en s'appuyant sur les outils qu'elle fournit :
-
-My main interest lies in the study of type theory while relying on the tools it
-provides: j'étudie la théorie des types \emph{au sein même} de la théorie des
-types.
+Mon intérêt principal réside dans l'étude de la théorie des types tout en
+s'appuyant sur les outils qu'elle fournit : j'étudie la théorie des types
+\emph{au sein même} de la théorie des types.
 Ainsi, je me suis concentré sur la formalisation de la théorie des types dans
 l'assistant de preuve \Coq~\sidecite[-0.7cm]{coq} et particuliètement sur
 deux points:
@@ -37,29 +35,30 @@ deux points:
 \end{itemize}
 
 \paradot{Contributions}
-Mes contributions se trouvent principalement dans \avrefpart{elim-reflection}
-et \avrefpart{coq-in-coq}, correspondant aux publications
+Mes contributions se trouvent principalement dans la \avrefpart{elim-reflection}
+et la \avrefpart{coq-in-coq}, correspondant aux publications
 suivantes~\sidecite{winterhalter:hal-01849166,sozeau2019coq,sozeau:hal-02167423}.
 Bien que les chapitres précédant ces deux parties soient principalement
-introductifs et correspondent à un état de l'art approximatif, ils contiennent
+introductifs et correspondent à un état de l'art partiel, ils contiennent
 en réalité d'autres contributions, à savoir le travail que j'ai fait avec Andrej
-Bauer sur le modèle cardinal dans \nrefch{models} actuellement non publié, et le travail avec Andrej Bauer et Philipp Haselwarter sur la formalisation de la
+Bauer sur le modèle cardinal dans le \nrefch{models} actuellement non publié, et
+le travail avec Andrej Bauer et Philipp Haselwarter sur la formalisation de la
 théorie des types appelée \ftt~\sidecite[-0.1cm]{formaltypetheory} et que je
-présente brièvement dans \nrefch{formalisation}.
+présente brièvement dans le \nrefch{formalisation}.
 
 \marginnote[1.6cm]{
   On dit souvent ``assistant de preuve'', et je vais également le faire, mais il
   semblerait que la formulation ``assistant à la preuve'' soit plus correcte.
 }%
-\section{Assistans à la preuve}
+\section{Assistants à la preuve}
 
 L'un de mes objectifs est d'améliorer et de mieux comprendre les assistants de
 preuve, mais qu'est-ce qu'un assistant de preuve?
-Je pense que nous pouvons les voir comme des chatbots --- c'est-à-dire des
-programmes avec lesquels vous pouvez converser --- qui sont là pour vous aider à
-énoncer et à prouver des théorèmes.
+Je pense que nous pouvons les voir comme des \emph{chatbots} -- c'est-à-dire
+des programmes avec lesquels vous pouvez converser -- qui sont là pour vous
+aider à énoncer et à prouver des théorèmes.
 Ils ne sont pas particulièrement intelligents et ne feront pas le travail pour
-vous, mais ils sont très ennuyeux car ils ne comprennent pas toujours ce que
+vous, mais ils sont très pointilleux car ils ne comprennent pas toujours ce que
 vous dites et vous devez être très précis ou ils vous feront remarquer vos
 erreurs.
 
@@ -95,7 +94,7 @@ sur ce cadre.
 Nous avons des chats dans des boîtes (bien que l'un des chats soit plutôt un
 lion), de différentes couleurs et soumis à différentes forces de gravitation.
 
-Au début, l'utilisateur fait connaître son but à l'assistant de preuve, en
+Au début, l'utilisateur fait connaître son objectif à l'assistant de preuve, en
 disant pour quel théorème il a besoin de son aide.
 
 \begin{center}
@@ -109,7 +108,8 @@ l'assistant de preuve se plaindra à juste titre.
   \includegraphics[width=0.8\textwidth]{error-incomplete-fr.pdf}
 \end{center}
 
-En effet, nous sommes allé trop vite et avons oublié la moitié de ce que nous voulions dire. Cette fois, on lui donne une phrase complète.
+En effet, nous sommes allé trop vite et avons oublié la moitié de ce que nous
+voulions dire. Cette fois, on lui donne une phrase complète.
 
 \begin{center}
   \includegraphics[width=0.8\textwidth]{iwant-is-fr.pdf}
@@ -122,9 +122,9 @@ gentil assistant.
   \includegraphics[width=0.8\textwidth]{error-box-feline-fr.pdf}
 \end{center}
 
-Nous devons réviser le théorème voulu et réaliser que nous ne voulons pas
-prouver que toutes les boîtes sont des félins, bien qu'un humain puisse
-comprendre ce que nous entendons par là, mais que toutes les boîtes
+Nous devons réviser le théorème demandé et réaliser que nous ne voulons pas
+prouver que toutes les boîtes sont des félins -- bien qu'un humain puisse
+comprendre ce que nous entendons par là -- mais que toutes les boîtes
 contiennent, chacune, un félin.
 
 \begin{center}
@@ -144,8 +144,8 @@ un.
 \end{center}
 
 On nous présente quatre cas, et autant d'énoncés à prouver.
-Dans ce cas, nous sommes plutôt paresseux, d'autant plus que les quatre cas
-seront similaires. Heureusement pour nous, l'assistant de preuve est capable de
+Nous sommes plutôt paresseux, d'autant plus que les quatre cas seront
+similaires. Heureusement pour nous, l'assistant de preuve est capable de
 comprendre que nous voulons traiter plusieurs cas de manière similaire,
 \emph{et} est également capable de faire des preuves très basiques sans
 l'intervention de l'utilisateur.
@@ -182,7 +182,7 @@ décidons donc de les examiner un par un pour comprendre ce qui ne va pas.
 
 Lorsque nous nous concentrons sur un cas, l'assistant de preuve nous rappelle ce
 que nous devons prouver spécifiquement. Ici, nous revenons à l'utilisation de
-notre stratégie antérieure et disons simplement que c'est évident.
+notre stratégie antérieure et affirmons simplement que c'est évident.
 
 \begin{center}
   \includegraphics[width=0.8\textwidth]{convo-trivial-fr.pdf}
@@ -199,7 +199,8 @@ pas de le prouver.
 Nous abandonnons la preuve, c'est-à-dire que nous renonçons à prouver un
 énoncé que nous savons maintenant faux.
 Une chose importante à noter ici est que l'assistant de preuve ne sait toujours
-pas que l'énoncé est incorrect, mais seulement que la tentative de preuve était elle-même invalide.
+pas que l'énoncé est incorrect, mais seulement que la tentative de preuve était
+elle-même invalide.
 Nous pouvons montrer que l'énoncé est faux en prouvant l'inverse :
 
 \begin{center}
@@ -209,7 +210,8 @@ Nous pouvons montrer que l'énoncé est faux en prouvant l'inverse :
 
 La façon la plus simple de prouver que quelque chose existe est de fournir ce
 que l'on appelle un \emph{témoin} d'existence. Ici, nous recherchons une boîte
-qui ne contient pas de chat, il n'y a qu'une seule boîte sans chat, comme nous l'avons découvert lors de notre précédente épreuve, la troisième.
+qui ne contient pas de chat. Il n'y a qu'une seule boîte sans chat, comme nous
+l'avons découvert lors de notre précédente épreuve, la troisième.
 
 \begin{center}
   \includegraphics[width=0.8\textwidth]{convo-take-third-fr.pdf}
@@ -263,12 +265,12 @@ preuves comme des programmes.
 Par exemple, la preuve qu'un proposition \(A\) implique la proposition \(B\)
 est un programme qui prend une preuve de \(A\) en entrée et renvoie une preuve
 de \(B\) en sortie.
-Un tel programme est de type \(A \to B\). Les types sont un moyen de décrire les
-données renvoyées par un programme. Les étudiants sont souvent amenés à écrire
-la fameuse fonction de test d'une année bissextile qui, étant donnée une année
-sous forme d'entier (décrit par le type \mintinline{ocaml}{int}), répond s'il
-s'agit d'une année bissextile ou non. Cette information binaire --- oui ou non
---- est encodée dans ce que nous appelons des booléens
+Un tel programme est dit de type \(A \to B\). Les types sont un moyen de décrire
+les données renvoyées par un programme. Les étudiants sont souvent amenés à
+écrire la fameuse fonction de test d'une année bissextile qui, étant donnée une
+année sous forme d'entier (décrit par le type \mintinline{ocaml}{int}), répond
+s'il s'agit d'une année bissextile ou non. Cette information binaire -- oui ou
+non -- est encodée dans ce que nous appelons des booléens
 (\mintinline{ocaml}{bool}).
 La correspondance de Curry-Howard indique que les programmes de type \(A\)
 peuvent être considérés comme des preuves de la proposition \(A\) et vice-versa.
@@ -276,14 +278,14 @@ peuvent être considérés comme des preuves de la proposition \(A\) et vice-ver
 Danse le \refch{dependent-types}, je décris enfin ce que j'appelle la théorie
 des types.
 La théorie des types est un cadre qui tire parti de cette correspondance et est donc au cœur d'assistants de preuve bien connus tels que
-\Coq~\sidecite[-0.5cm]{coq} et \Agda~\sidecite[0.6cm]{norell2007towards}.
+\Coq~\sidecite[-2.9cm]{coq} et \Agda~\sidecite[-1.8cm]{norell2007towards}.
 Je suis moi-même un utilisateur de \Coq et cette thèse est écrite en mettant
 l'accent sur cet assistant de preuve et ses fondements.
 Dans le \refch{usual-defs}, je décris les définitions habituelles qui
 accompagnent la théorie des types.
 J'explique comment nous pouvons raisonner dans un tel contexte avec plus que des
 implications (\(\to\)).
-\sidedeffr[-1.4cm]{Récurrence sur les entiers naturels}{%
+\sidedeffr[-3.8cm]{Récurrence sur les entiers naturels}{%
   Si \(P(n)\) est une propriété sur l'entier naturel \(n\), et si
   \begin{enumerate}
     \item \(P(0)\);
@@ -296,20 +298,22 @@ naturels dans la théorie des types.
 
 Le \refch{flavours} est dédié à différentes formulations et variantes de la
 théorie des types. En effet, il n'y a pas qu'une seule théorie de ce genre.
-Différentes théories de type ont des propriétés différentes, je répertorie les
+Différentes théories des types ont des propriétés différentes, je répertorie les
 plus importantes tout en disant quelle théorie possède quelle propriété dans un
 tableau récapitulatif.
 
 Le reste de la partie introductive se concentrera davantage sur la partie
-``méta-théorie'' du titre. Alors que la théorie est l'endroit où l'on effectue now
-preuves et où l'on écrit nos programmes, la méta-théorie est l'endroit où l'on raisonne sur la théorie elle-même !
+``méta-théorie'' du titre. Alors que la théorie est l'endroit où l'on effectue
+nos preuves et où l'on écrit nos programmes, la méta-théorie est l'endroit où
+l'on raisonne sur la théorie elle-même !
 Dans le \refch{models}, j'explique comment construire ce que l'on appelle des
 modèles de théorie des types, qui consistent à interpréter la théorie et à lui
-donner un sens --- ou une \emph{sémantique} --- à l'intérieur de la
+donner un sens -- ou une \emph{sémantique} -- à l'intérieur de la
 méta-théorie. À la fin, je suggère comment la méta-théorie peut même être une
-forme de théorie des types elle-même. La représentation de la théorie des types
+forme de théorie des types également. La représentation de la théorie des types
 en théorie des types est l'objet du \refch{formalisation} tandis que le
-\refch{translations} se concentre sur la façon dont nous pouvons donner un sens à une théorie des types, en utilisant une autre théorie des types.
+\refch{translations} se concentre sur la façon dont nous pouvons donner un sens
+à une théorie des types, en utilisant une autre théorie des types.
 
 \section{Élimination de la \emph{reflection}}
 
@@ -327,23 +331,27 @@ correspond à la simplification des preuves, mais surtout il incarne la notion d
 \emph{constructivisme}. Supposons que, dans l'exemple précédent, vous prouvez
 qu'il ``existe un chat avec un problème de gravité'', si vous exécutez cette
 preuve, elle calculera et produira deux informations importantes: qui est le
-chat fautif --- dans ce cas le noir dans la deuxième boîte --- et pourquoi il a
+chat fautif -- dans ce cas, le noir dans la deuxième boîte -- et pourquoi il a
 des problèmes de gravité (donnée comme une autre preuve qui correspondra à peu
 près à montrer que le chat est à l'envers).
 
 Le calcul est également utile lors de la réalisation de preuves.
 Par exemple, \(2 + 2\) \emph{vaut} \(4\), donc pas besoin de transporter des
 informations concernant la relation entre les deux. \(2 + 2\) s'évalue en \(4\),
-donc deux ensembles de deux boîtes de chat correspond juste à un ensemble de
-quatre boîtes de chat, et l'assistant de preuve le sait.
+autrement dit, deux ensembles de deux boîtes à chat correspondent juste à un
+ensemble de quatre boîtes à chat, et l'assistant de preuve le sait.
 
 Il existe différents degrés de calcul qui peuvent être mis dans une théorie des
-type, et on peut se demander quels impacts le calcul a sur la théorie.
+types, et on peut se demander quels impacts le calcul a sur la théorie.
 Je présente un spectre de trois théories différentes.
 D'un côté, une théorie, appelée théorie extentionnelle des types (ETT), qui est
-très libérale en ce qui concerne le calcul en ce qu'elle identifie deux choses
-que  si prouvées ou supposées égales.
-\marginnote[0.1cm]{%
+très libérale en ce qui concerne le calcul en ce qu'elle identifie les choses
+qui sont prouvées ou supposées égales (et pas seulement celles qui s'évaluent
+en un même résultat).
+%
+Dans un tel contexte, le calcul n'est plus dirigé et nous parlons simplement des
+choses comme étant \emph{égales}.
+\marginnote[-0.45cm]{%
   Le calcul est \emph{dirigé}: \(2 + 2\) se simplifie, ou s'évalue, en
   \(4\), et pas l'inverse. \(2 + 2\) et \(3 + 1\) sont égaux parce que les deux
   s'évaluent en \(4\):
@@ -351,8 +359,6 @@ que  si prouvées ou supposées égales.
     2 + 2 \red 4 \redl 3 + 1
   \]
 }%
-Dans un tel contexte, le calcul n'est plus dirigé et nous parlons simplement des
-choses comme étant \emph{égales}.
 Ce principe, transformant une preuve en égalité, est appelé \emph{reflecion} de
 l'égalité.
 L'autre extrême est une théorie, appelée théorie faible des types (WTT), où nous
@@ -361,15 +367,15 @@ intentionnelle des types (ITT) qui a une notion de calcul ``usuelle'', définie
 comme l'évaluation des fonctions. Cette dernière est à la base de \Coq et \Agda.
 
 Ma contribution est une traduction de \acrshort{ETT} vers \acrshort{ITT} et
-\acrshort{WTT}, montrant que le calcul n'est pas une propriété essentielle ---
-bien que très pratique --- de la théorie des types du point de vue logique : en
+\acrshort{WTT}, montrant que le calcul n'est pas une propriété essentielle --
+bien que très pratique -- de la théorie des types du point de vue logique : en
 effet, je montre que nous pouvons encore prouver les mêmes énoncés.
 Cela signifie que nous pouvons raisonner sur la prouvabilité des énoncés dans
 \acrshort{WTT}, qui est plus simple.
-La traduction se fait dans la théorie des types elle-même --- dans ce cas \Coq
---- et fournit ainsi un programme transformant une preuve dans \acrshort{ETT} en
-une preuve dans \acrshort{ITT} ou \acrshort{WTT} qui peut donc être utilisé
-pour calculer de nouvelles preuves.
+La traduction se fait dans la théorie des types elle-même -- dans ce cas
+\Coq\xspace -- et fournit ainsi un programme transformant une preuve dans
+\acrshort{ETT} en une preuve dans \acrshort{ITT} ou \acrshort{WTT} qui peut donc
+être utilisé pour calculer de nouvelles preuves.
 
 \section{Un vérificateur de type pour \Coq, en \Coq}
 
@@ -380,8 +386,8 @@ utilisant \Coq lui-même.
 
 \Coq dispose d'un noyau, c'est-à-dire un programme assez petit qui vérifie que
 les preuves sont bien correctes. La partie interactive de l'assistant de preuve,
-ainsi que l'automatisation --- c'est-à-dire ce qui fait que l'assistant de
-preuve trouve des preuves pour nous --- ne font pas partie du noyau et sont
+ainsi que l'automatisation -- c'est-à-dire ce qui fait que l'assistant de
+preuve trouve des preuves pour nous -- ne font pas partie du noyau et sont
 plutôt construites au-dessus de lui.
 Si vous voulez, la partie qui vérifie les certificats est distincte du reste et,
 en tant que telle, est plus facile à étudier.
@@ -399,7 +405,7 @@ Si l'assistant de preuve est défectueux, le certificat sera incorrect et rejet�
 par le noyau. Tant que le noyau est correct, il n'est pas crucial que le reste
 soit complètement correct. Certes, c'est plus agréable quand tout est correct,
 mais seule l'exactitude du noyau est cruciale.
-Comme je l'ai dit, des efforts sont faits pour garder le noyau aussi petit que
+Comme je l'ai dit, des efforts sont fournis pour garder le noyau aussi petit que
 possible afin que des humains puissent l'inspecter et affirmer son exactitude.
 
 Malheureusement, même un assistant de preuve aussi largement utilisé que \Coq
@@ -414,7 +420,7 @@ voulons vérifier sont souvent utilisés dans les parties critiques des logiciel
 par exemple dans les pilotes automatiques et les fusées, où la plus petite
 erreur peut coûter des millions... et des vies.
 
-Je fais partie d'un projet --- le projet \MetaCoq --- qui a pour but de
+Je fais partie d'un projet -- le projet \MetaCoq\xspace -- qui a pour but de
 spécifier et vérifier le noyau de \Coq lui-même, dans \Coq. Cela signifie que
 nous produisons un noyau séparé, entièrement écrit et vérifié dans \Coq qui peut
 également vérifier les certificats indépendamment.
@@ -431,7 +437,7 @@ qu'une théorie comme celle de \Coq ne peut pas prouver sa propre cohérence.
 Ainsi, nous devons supposer certaines de ces propriétés méta-théoriques, en
 particulier celles suffisamment fortes pour impliquer la cohérence de \Coq, donc
 qui ne peuvent pas être prouvées.
-Nous proposons donc un changement de paradigme : au lieu d'avoir un noyau
+Nous proposons donc un changement de paradigme : à la place d'avoir un noyau
 relativement petit auquel on fait confiance, nous nous appuyons sur une petite
 base de propriétés supposées sur la théorie, théorie qui a été bien étudiée au
 fil des années et qui ne souffre pas des bogues découverts dans l'implantation.
