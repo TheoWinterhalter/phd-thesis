@@ -1,5 +1,5 @@
 % \setchapterpreamble[u]{\margintoc}
-\chapter{Conclusions regarding elimination of reflection}
+\chapter{Limitations and related works}
 \labch{elim-conclusion}
 
 \section{Limitations and Axioms}
@@ -60,7 +60,7 @@ The translated term will never make us of it and one can always check if a
 term is relying on unsafe assumptions thanks to the
 \mintinline{coq}|Print Assumptions| command.
 
-\section{Related Works and Conclusion}
+\section{Related Works}
 \label{sec:related-works}
 
 The seminal works on the precise connection between \acrshort{ETT} and
@@ -96,22 +96,6 @@ assuming a proof-irrelevance axiom. Inserting coercions locally is not
 as general as the present translation from \acrshort{ETT} to \acrshort{ITT}
 which can insert transports in any context.
 
-In this document (and in the orginal paper) we provide the first effective
-translation from \acrshort{ETT} to \acrshort{ITT} with \acrshort{UIP} and
-\acrshort{funext}. The translation has been formalised in \Coq.
-This translation is also effective in the sense that we can produce in the end a
-\Coq term using the \MetaCoq denotation machinery.
-%
-With ongoing work to extend the translation to the inductive fragment
-of \Coq, we are paving the way to an extensional version of the \Coq
-proof assistant which could be translated back to its intensional
-version, allowing the user to navigate between the two modes, and in
-the end produce a proof term checkable in the intensional fragment.
-
-This thesis also introduces a translation from \acrshort{ETT} to \acrshort{WTT}
-which thus yields a translation from \acrshort{ITT} to \acrshort{WTT}. This
-shows that computation is not \emph{essential} to the logical power of a type
-theory.
 
 In both formalisations I implemented type-checkers for the theories involved.
 In \acrshort{WTT}, since the meta-theory is so simple---I was able to prove the

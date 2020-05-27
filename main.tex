@@ -406,7 +406,6 @@
 \input{chapters/coq-reduction.tex}
 \input{chapters/coq-conversion.tex}
 \input{chapters/coq-inference.tex}
-\input{chapters/coq-conclusion.tex}
 
 % \appendix % From here onwards, chapters are numbered with letters, as is the appendix convention
 
@@ -420,6 +419,10 @@
 
 \backmatter % Denotes the end of the main document content
 \setchapterstyle{plain} % Output plain chapters from this point onwards
+
+\pagelayout{margin} % Restore margins
+\input{chapters/conclusions.tex}
+\pagelayout{wide} % No margins
 
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY

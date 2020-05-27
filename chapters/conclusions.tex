@@ -1,6 +1,25 @@
 % \setchapterpreamble[u]{\margintoc}
-\chapter{Conclusion}
-\labch{coq-conclusion}
+\chapter{Conclusions}
+\labch{conclusions}
+
+In this document (and in the orginal paper) we provide the first effective
+translation from \acrshort{ETT} to \acrshort{ITT} with \acrshort{UIP} and
+\acrshort{funext}. The translation has been formalised in \Coq.
+This translation is also effective in the sense that we can produce in the end a
+\Coq term using the \MetaCoq denotation machinery.
+%
+With ongoing work to extend the translation to the inductive fragment
+of \Coq, we are paving the way to an extensional version of the \Coq
+proof assistant which could be translated back to its intensional
+version, allowing the user to navigate between the two modes, and in
+the end produce a proof term checkable in the intensional fragment.
+
+This thesis also introduces a translation from \acrshort{ETT} to \acrshort{WTT}
+which thus yields a translation from \acrshort{ITT} to \acrshort{WTT}. This
+shows that computation is not \emph{essential} to the logical power of a type
+theory.
+
+% -------------
 
 We have formalised an almost feature-complete type-checker for \Coq in \Coq
 and proven it correct. Thanks to the extraction mechanism of \Coq, this can
