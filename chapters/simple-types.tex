@@ -5,7 +5,7 @@
 When studying programming languages theoretically, \(\lambda\)-calculus imposes
 itself as the prototypical example. A model of computation much simpler than
 Turing machines, it becomes extremely useful in combination with a so-called
-type-system. This combination culminates into the Curry-Howard isomorphism that
+type system. This combination culminates into the Curry-Howard isomorphism that
 relates programming and logic in profound ways, serving as a foundation for
 type theory and modern logic.
 
@@ -39,7 +39,7 @@ numbers) as follows.
 \]
 The whole expression would be written \(\mathit{id}(u)\).
 
-\(\lambda\)-calculus is a third way of writing the same thing.
+The \(\lambda\)-calculus provides a third way of writing the same thing.
 \[
   (\lambda x.\ x)\ u
 \]
@@ -57,9 +57,10 @@ Formally, the grammar of \(\lambda\)-calculus is:
 \]
 and that's it.
 
-In a term, the variable names are considered irrelevant, for instance, the
-\(\lambda\)-terms \(\lambda x.\ x\) and \(\lambda y.\ y\) are deemed equivalent,
-because they both define the identity function.
+In a term (the expressions of \(\lambda\)-calculus), the variable names are
+considered irrelevant, for instance, the \(\lambda\)-terms \(\lambda x.\ x\)
+and \(\lambda y.\ y\) are deemed equivalent, because they both define the
+identity function.
 % Of course, it only works, if all occurences of \(x\) are replaced consistently
 % with \(y\).
 This operation is called \(\alpha\)-renaming, we thus talk about
@@ -227,7 +228,7 @@ We can thus give the syntax of types and contexts.
   \end{array}
 \]
 
-The typing rules of the \acrlong{STL} are the following.
+The typing rules of the \acrfull{STL} are the following.
 \begin{mathpar}
   \infer
     {\Ga, x:A \vdash t : B}
