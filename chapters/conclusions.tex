@@ -2,9 +2,12 @@
 \chapter{Conclusions}
 \labch{conclusions}
 
-In this document (and in the orginal paper) we provide the first effective
-translation from \acrshort{ETT} to \acrshort{ITT} with \acrshort{UIP} and
-\acrshort{funext}. The translation has been formalised in \Coq.
+\section*{Elimination of reflection}
+
+In this document (and in the orginal paper~\sidecite{winterhalter:hal-01849166})
+we provide the first effective translation from \acrshort{ETT} to \acrshort{ITT}
+with \acrshort{UIP} and \acrshort{funext}. The translation has been formalised
+in \Coq.
 This translation is also effective in the sense that we can produce in the end a
 \Coq term using the \MetaCoq denotation machinery.
 %
@@ -19,7 +22,24 @@ which thus yields a translation from \acrshort{ITT} to \acrshort{WTT}. This
 shows that computation is not \emph{essential} to the logical power of a type
 theory.
 
-% -------------
+\subsection{Perspectives}
+
+The translation from \acrshort{ETT} is effective, but not particularly
+efficient. This is mainly due to the fact that derivations in \acrshort{ETT}
+are really big, due to a lot of redundant information. I think this calls for
+an intermediary between the term and its typing derivation on which to perform
+the translation.
+
+On another note, I believe we can improve \acrshort{ETT} so that it is more
+practical, by reconciling it with computation. I believe (at least hope) that
+this can be achieved by using a weaker notion of irrelevant reflection that
+would only allow reflection to happen in specific places like the indices of
+inductive types, provided said indices are irrelevant for computation (one
+should not be able to get the length of a vector by simply matching the head
+but needs to recurse in the tail, same as for lists).
+It would be interesting how it would affect the translation I presented.
+
+\section*{A verified type-checker for \Coq, in \Coq}
 
 We have formalised an almost feature-complete type-checker for \Coq in \Coq
 and proven it correct. Thanks to the extraction mechanism of \Coq, this can
