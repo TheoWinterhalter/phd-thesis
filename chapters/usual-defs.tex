@@ -183,7 +183,7 @@ Sometimes, this type is called \(\top\) as in the logical triviality.
 
 \paradot{Empty type}
 
-The empty (or false) type, \(\bot\) is the dual of the unit type. This time it
+The empty (or false) type, \(\bot\), is the dual of the unit type. This time it
 has no constructors \emph{at all}.
 \begin{mathpar}
   \infer
@@ -451,7 +451,7 @@ follow more or less the same schema.
 
 Parameterised inductive types, as the name suggests, can take parameters.
 In \ocaml, parameters are necessarily types, in \Coq they are often types but
-they can be natural numbers of any other term.
+they can be natural numbers or any other term.
 For instance, in the type \(\tlist\ A\), \(A\) is a parameter that specifies the
 nature of the objects in the list.
 
@@ -543,8 +543,8 @@ be present. It is optional.
     }
   %
 \end{mathpar}
-It is an easy way of representing functions that are not defined on their whole
-domain (they return \(\none\) when they are not).
+It gives us an easy way of representing functions that are not defined on their
+whole domain (they return \(\none\) when they are not).
 For instance we could write a division function \(\mathsf{divide}\) such that
 \[
   \mathsf{divide}\ x\ 0 = \none
@@ -800,7 +800,7 @@ by ill-typed.%
   By vanilla \Coq I mean \Coq without anything extra like plugins.
 }%
 This is unfortunately impossible in vanilla \Coq but is supported
-in \Agda natively and can be achieved in \Coq with \Program of the \Equations
+in \Agda natively and can be achieved in \Coq with \Program or the \Equations
 plugin~\sidecite{DBLP:conf/itp/Sozeau10,sozeau2019equations}.
 With the typing rules I gave it is still possible to do it, it is just that we
 have to conclude using the elimination of \(\bot\) in the \(\vnil\) branch.
