@@ -9,8 +9,8 @@ The idea behind dependent types is that they now can \emph{depend} on terms,
   inhabitants are witnesses of the fact that \(x\) and \(y\) are equal.
 }
 This is very interesting because we can talk about things like \(P\ n\) for a
-property \(P\) on a natural numbers, equality \(x = y\) for two terms \(x\) and
-\(y\), and with it, we can support quantifiers.
+property \(P\) on a natural number \(n\), equality \(x = y\) for two terms \(x\)
+and \(y\), and with it, we can support quantifiers.
 
 It is not only useful on the logical side, but also on the programming language
 side: with it programs can be given much more precise types.
@@ -28,7 +28,7 @@ Let me describe a very basic type theory featuring dependent types.
 \paradot{\(\Pi\)-types}
 
 The simplest way to get dependent types is to extend the \acrshort{STL}---which
-only features arrow or function types---with dependent function types or
+only features arrow, or function, types---with dependent function types or
 \(\Pi\)-types.
 \[
   \infer
@@ -71,7 +71,7 @@ or even more concisely as
   \lambda\ (A : \Type)\ (a : A).\ a
   : \Pi\ (A : \Type).\ A \to A
 \]
-since \(a\) is not mentioned.
+since \(a\) is not mentioned in the type.
 Now we should be able to see the dependency on \(A\).
 One can argue that \(A\) is a \emph{type} and not a term, but in this setting,
 types are just a special kind of terms that happen to be of type \(\Type\).
@@ -169,7 +169,7 @@ dependent type theory:
   (\lambda (x:A).\ t)\ u \red_\beta t[x \sto u]
 \]
 Now that terms can appear in types, reduction can also happen in them.
-For instance, we would probably want \(\tvec\ (2 + 2)\) and \(\tvec\ 4\) to be
+For instance, we would probably want \(\tvec\ (3 + 1)\) and \(\tvec\ 4\) to be
 related. We will in fact have
 \[
   \tvec\ (3 + 1) \red \tvec\ 4
@@ -384,7 +384,7 @@ The polymorphic identity function of earlier is
 \begin{minted}{coq}
 fun A x => x : forall A, A -> A
 \end{minted}
-We can write it as a definition in the systems as follows:
+We can write it as a definition in the system as follows:
 \begin{minted}{coq}
 Definition id {A : Type} (x : A) : A := x.
 \end{minted}
@@ -492,7 +492,7 @@ No more goals.
 \endgroup
 
 This generates a term, and when we write \mintinline{coq}{Qed} it is checked
-by \Coq to be correct.
+by \Coq to make sure it is correct.
 
 As one should expect this produces the same term as before
 \begin{minted}{coq}
