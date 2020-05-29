@@ -136,7 +136,7 @@ capable of doing very basic proofs without the user.
 Once the proof is complete, the proof assistant tells you so and you can move on
 to other theorems to prove. I already showed that you have to be explicit and
 non ambiguous when talking to the proof assistant. You also have to be correct.
-The proof assistant will not trust blindly into what you say.
+The proof assistant will not trust blindly in what you say.
 %
 Let us now consider a theorem that is not provable.
 
@@ -216,7 +216,7 @@ can be checked by others without having to understand the details of the proof.
 \end{center}
 
 Even then, why should we trust the proof assistant? What exactly can we prove
-with them? And how can we make them better?
+with them? And how can improve them?
 Part of my work is focused on these questions, and on the study of proof
 assistants based on something called type theory.
 
@@ -234,8 +234,8 @@ can be seen as proofs, and proofs as programs.
 For instance a proof that a proposition \(A\) implies the proposition \(B\)
 is a program that takes a proof of \(A\) as input and outputs a proof of \(B\).
 Such a program is given type \(A \to B\). Types are a way of describing the data
-returned by a program. Students will often write the infamous leap year function
-which, given a year as an integer (described by the type
+the programs manipulate. Students will often write the infamous leap year
+function which, given a year as an integer (described by the type
 \mintinline{ocaml}{int}), returns whether it is a leap year or not. This binary
 information---yes or no---is encoded into what we call booleans
 (\mintinline{ocaml}{bool}).
@@ -243,9 +243,9 @@ The Curry-Howard correspondence states that programs of type \(A\) can be seen
 as proofs of propositon \(A\) and vise-versa.
 
 In \refch{dependent-types}, I finally describe what I call type theory.
-Type theory is framework taking advantage of this correspondence and is thus at
-the core of well-known proof assistants such as \Coq~\sidecite[-0.85cm]{coq} and
-\Agda~\sidecite[0.25cm]{norell2007towards}. I myself am a \Coq user and this
+Type theory is a framework taking advantage of this correspondence and is thus
+at the core of well-known proof assistants such as \Coq~\sidecite[-0.85cm]{coq}
+and \Agda~\sidecite[0.25cm]{norell2007towards}. I myself am a \Coq user and this
 thesis is written with a focus on this proof assistant and its foundations.
 In \refch{usual-defs}, I describe usual definitions that come with type theory.
 I explain how we can reason in such a setting with more than implications.
@@ -390,7 +390,7 @@ which has been well studied over the years and does not suffer form the
 shortcomings of the implementation.
 There are other challenges we must face, one of which is proving that the
 definitions we provide for the kernel are terminating, this was much more
-complicated that anticipated and forced us to make explicit a lot of invariants
+complicated than anticipated and forced us to make explicit a lot of invariants
 which are kept implicit (and sometimes unknown) in the current implementation.
 
 All in all, we provide a specification of \Coq, within \Coq, with a few trusted
