@@ -28,7 +28,7 @@ The theories behind the proof assistants \Coq and
 forms.}---are variants of \acrshort{ITT}.
 
 A \acrshort{PTS} is a pretty basic type theory, it is parametrised by a
-collection of sorts \cS, with so called \emph{rules}
+collection of sorts \cS, with so-called \emph{rules}
 (\Rl) and \emph{axioms} (\Ax).
 Its syntax features \(\lambda\)-abstractions, applications, variables,
 \(\Pi\)-types and sorts.
@@ -125,10 +125,10 @@ common being \(\eta\)-expansion of functions.
 For it to make sense, expansion has to be limited to functions as we don't want
 to \(\eta\)-expand the natural number \(0\) to \(\lambda (x:A). 0\ x\). This
 means we need typing information\sidenote{Also, the \(A\)---domain of the
-function---has to be sumrised somehow.}, this is why in certain contexts---like
+function---has to be inferred somehow.}, this is why in certain systems---like
 \Agda---the conversion is also typed.
 The relation between typed and untyped conversion has been explored at several
-occasions~\sidecite[0cm]{van2013explicit}.
+occasions~\sidecite[0.1cm]{van2013explicit}.
 \Coq manages to verify \(\eta\)-conversion for functions and records without
 relying on a typed-conversion as we will see later in \nrefch{coq-conversion}.
 \marginnote[-0.5cm]{
@@ -165,7 +165,7 @@ Also, you can note the little \(\exmark\) subscript, its purpose is to mark
 the judgement as beeing \emph{ex}tensional.
 \Andromeda and \NuPRL implement variants of
 \acrlongpl{ETT}~\sidecite{andromeda,nuprl}.
-To see its usefulness, we're going to look at the definition of reversal of
+To see its usefulness, we are going to look at the definition of reversal of
 vectors in \Coq, using an accumulator for the definiton to be tail-recursive.
 %
 \begin{minted}{coq}
@@ -268,7 +268,7 @@ shows it is inconsistent to have \(\Type : \Type\).
   paradox~\sidecite[1cm]{girard1972interpretation} or Hurkens'
   paradox~\sidecite[1.7cm]{hurkens1995simplification}.
 }
-The \Coq user however does not usually has to deal with those and
+The \Coq user however does not usually have to deal with those and
 instead rely on the so-called
 % \emph{typical ambiguity}~\sidecite[1.5cm]{harper1991type,feferman2004typical,specker1966typical}:
 \emph{typical ambiguity}~\sidecite[1.5cm]{harper1991type}:
@@ -363,16 +363,16 @@ This convenience allows the user to forget as much as possible about universes.
 
 Finally there is another point regarding universes that is not hinted at in the
 name: \emph{universe polymorphism}. This feature introduced
-by~\sidecite{sozeau2014universe} is complementary to cumulativity and allows to
-consider definitions that quantify over universe levels (the \(i\) in
+by~\sidecite{sozeau2014universe} is complementary to cumulativity and allows us
+to consider definitions that quantify over universe levels (the \(i\) in
 \(\Type_i\)).
 For instance, it allows us to write a truly polymorphic identity function
 \[
   \mathsf{id}_i \coloneqq \lambda (A : \Type_i)\ (x : A).\ x
 \]
 Here, the \(i\) subscript is to bind level \(i\) in the expression. Notice that
-it is attached to the constant definition and not on the right-hand side; that's
-because universe levels are only quantified in a prenex-style, meaning you
+it is attached to the constant definition and not on the right-hand side; that
+is because universe levels are only quantified in a prenex-style, meaning you
 must quantify over \emph{all} universe levels before introducing other
 variables. In particular there is no type of polymorphic
 identities.
@@ -487,7 +487,7 @@ Inductive eq (A : Type) (u : A) : A -> Prop :=
 
 This has some shortcomings\sidenote{At least for some people, many are content
 with the current status too.} like equalities between equalities, and between
-functions are not really accounted for, in the sense that's it is hard---often
+functions are not really accounted for, in the sense that it is hard---often
 impossible---to prove them.
 \marginnote[0.2cm]{
   \acrshort{UIP} is given computational content in \Agda, it is feasible so
@@ -549,7 +549,7 @@ To achieve this, some proof assistants implement \acrlong{CubicalTT}.
 
 \paradot{\acrfull{CubicalTT}} \acrshort{CubicalTT}~\sidecite{cohen2016cubical}
 does not build on regular type theory with an inductive equality but instead
-define it diffrently, with intuition coming from cubical
+defines it differently, with intuition coming from cubical
 sets~\sidecite[0.2cm]{coquand:cubical}.
 This time the analogy with paths is put to the extreme: there is a special
 construct \(\II\) morally representing the interval \([0;1]\). Its end points
@@ -584,7 +584,7 @@ collapse.
 For this, the two equalities must be compartmentalised to limit their
 interaction. Hence the name \acrfull{2TT}.
 This idea was first introduced as \acrfull{HTS}~\sidecite[-0.4cm]{hts-sota} in
-an extensional setting, but since then there are other approaches to
+an extensional setting, but since then there have been other approaches to
 \acrshort{2TT}~\sidecite{DBLP:journals/corr/AltenkirchCK16,DBLP:journals/corr/AnnenkovCK17}
 where only \acrshort{UIP} is assumed.
 
