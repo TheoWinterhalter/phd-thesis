@@ -32,6 +32,8 @@ arithmetic, as explained in \nrefsec{limit-godel} of \refch{proof-theory}} to
 \emph{know} that a theory is consistent, instead we should see it as a theory we
 \emph{trust}, typically a theory that is widely accepted as beeing consistent by
 the community of mathematicians.
+In this case we talk about \emph{relative consistency}: the theory is
+consistent, relative to the consistency of the theory of its model.
 This also applies to the meta-theory in which we show that the interpretation is
 correct. As such, it is best to keep it as simple as possible to avoid relying
 on the consistency of too complicated objects.
@@ -52,7 +54,7 @@ which validates \(P\) and another model which invalidates it (or validates
 could be proven in \cT, then it would be valid in both models, leading to
 at least one of them being inconsistent.
 
-The fact that a proposition can neither be validated or invalidated in a theory
+The fact that a proposition can neither be validated nor invalidated in a theory
 can come as surprising for some, especially in a classical mindset.
 \reminder[-1.8cm]{Classical logic}{
   Classical logic is often characterised by the presence of the \acrshort{LEM}
@@ -91,7 +93,7 @@ The model is called \emph{proof-irrelevant} because proofs of propositions
 are interpreted as the singleton \(\{ \emptyset \}\).
 
 First, I will remind what rules we are dealing with. This theory will only have
-two universes: \(\Prop\) and \(\Type\), the model can be adapted to deal with
+two universes: \(\Prop\) and \(\Type\). The model can be adapted to deal with
 more universes but it is a bit more complicated.
 \marginnote[1.7cm]{
   We have two rules for \(\Pi\)-types because we have an impredicative
@@ -207,16 +209,18 @@ where in the last equality
 \[
   \Ga = x_n : A_n, \dots x_i : A_i, \dots x_0 : A_0
 \]
-I do not really believe you can distinguish between propositions and usual types
-in the current setting so in~\sidecite{aczel1998relating}, Aczel introduces a
-non-standard encoding of set-theoretic functions such that the constant function
+One cannot distinguish between propositions and usual types in the current
+setting so in~\sidecite{aczel1998relating}, Aczel introduces a non-standard
+encoding of set-theoretic functions such that the constant function
 \(x \mapsto 0\) is \emph{equal} to \(0\).
+In \sidecite{timany:hal-01615123} they build a set-theoretic model for the whole
+of \acrshort{PCUIC} using the same trick.
 
 I did not precise what \(\mathcal{U}\) was. From \(\mathcal{U}\) we only require
-that it is closed under product and power-sets and contains at least \(2\).
+that it is closed under products and power-sets and contains at least \(2\).
 It needs only be the cardinal \(\aleph_0\) in our case, but if we wanted more
 universes---say a hierarchy of them---we could use inaccessible cardinals.
-We discuss see them briefly in \refsec{cat-models}.
+We discuss them briefly in \refsec{cat-models}.
 
 \paradot{Consistency}
 
@@ -263,7 +267,7 @@ and show that
   \transl{\Ga \vdash \lambda (x:A). t}(\gamma) \in
   \transl{\Ga \vdash \Pi (x:A). B}(\gamma)
 \]
-If we reformulate we want to show that for all \(\gamma \in \Ga\) and
+If we reformulate, we want to show that for all \(\gamma \in \Ga\) and
 \(a \in \transl{\Ga \vdash A}(\gamma)\) we have
 \[
   \transl{\Ga, x : A \vdash t}(\gamma, a) \in
@@ -282,7 +286,7 @@ course. For instance they may not be best-suited to interpretation of
 computational content since \(\beta\)-convertible terms are interpreted as the
 same set. They provide however a nice way of seeing the relation between
 set-theory---the widely accepted framework in which to do mathematics---and type
-theory which we\sidenote{I'll leave that one as imprecise as it is.} advocate
+theory which we\sidenote{I will leave that one as imprecise as it is.} advocate
 instead.
 
 \section{Categorical models}
@@ -485,10 +489,10 @@ A \acrshort{CwF} has natural numbers when, given \(\Ga : \Con\), it has
 \end{itemize}
 \marginnote[-1.3cm]{
   For the successor I use \(\Pi\)-types when I could have instead put things
-  in the context. Both are valid and I'm often favorable to the idea that things
-  should be kept separate as much as possible, but the reliance on application
-  and everything allows us to avoid proving the same things several times,
-  especially since manipulating contexts is so tedious with categories.
+  in the context. Both are valid and I am often favorable to the idea that
+  things should be kept separate as much as possible, but the reliance on
+  application and everything allows us to avoid proving the same things several
+  times, especially since manipulating contexts is so tedious with categories.
 }
 such that
 \[
@@ -808,7 +812,7 @@ particular case.
       {\eqterm{\Ga}{u}{v}{A}}
     %
   \end{equation*}
-  See \refdef{reflection}
+  See \refdef{reflection}.
 }%
 %
 \begin{proof}
@@ -836,7 +840,7 @@ equality).
 \end{definition}
 
 This consists in a strong invariance principle stating that isomorphic types
-cannot be distinguished. Another invariance principle is the univalence axiom.
+cannot be distinguished. Univalence is another invariance principle.
 
 \begin{theorem}
   The cardinal model validates isomorphism reflection.
@@ -1048,8 +1052,9 @@ A perhaps more interesting universe is given by using the \(\aleph\) function:
 where
 \(\aleph_\mu = \prod_{x \in \CEl{a(\gamma)}} \CEl{\beta^{-1}(b(\gamma))(x)}\).
 
-I will not really go into detail about cardinals and everything here, or as to
-why this universe also supports natural numbers, equality and such.
+I will stop here regarding cardinals, or as to why this universe also supports
+natural numbers, equality and such, because the details do not provide new
+insights about this model.
 
 \paradot{A warning about syntax}
 
@@ -1107,15 +1112,15 @@ The problematic part is the equality
 \[
   \beta^{-1}(\beta(x \mapsto x))(2) = (x \mapsto x)(2)
 \]
-where simplify the expression \(\beta^{-1} \circ \beta\) to the identity
-function. As usual I left the subscripts implicit, but that is where the error
+where we simplified the expression \(\beta^{-1} \circ \beta\) to the identity
+function. As usual, I left the subscripts implicit, but that is where the error
 is coming from: we actually have
 \[
   \beta_{2^\aleph_0}^{-1} \circ \beta_{{\aleph_0}^{\aleph_0}}
 \]
 which do not cancel each other out.
 
-This is case for using type annotations on \(\lambda\)-abstractions and
+This is a case for the use type annotations on \(\lambda\)-abstractions and
 applications to block \(\beta\)-reduction when the types do not match.
 
 \section{Type-theoretic models}
