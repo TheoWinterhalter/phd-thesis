@@ -2,7 +2,7 @@
 \chapter{Desirable properties of type theories}
 \labch{desirable-props}
 
-To compare different type theories there are several measures we can use in
+To compare different type theories there are several measures we can use in the
 form of usual or desirable properties that they might satisfy or not.
 After a brief presentation of the main ones I will summarise which of the
 theories of \nrefch{flavours} has which properties in a table.
@@ -13,7 +13,7 @@ theories of \nrefch{flavours} has which properties in a table.
 \labsubsec{weak-subst}
 
 Variables and binders are essential to type theory and as such we have to treat
-them with care, in particular we want our theories to be \emph{compositional}
+them with care, in particular we want our theories to be \emph{compositional},
 meaning that different blocks that make sense can be assembled into something
 that still makes sense.
 This is---in part---embodied in the two following properties.
@@ -27,7 +27,7 @@ This is---in part---embodied in the two following properties.
   weakening, so for this we usually introduce a \emph{lifting} operator
   \(\lift{}{}\) such that we have
   \(\Ga, \Delta, \Xi \vdash \lift{n}{k}\ t : \lift{n}{k}\ A\)
-  where \(n = |\Delta|\) and \(k = |\Xi|\).
+  where \(n = |\Delta|\) and \(k = |\Xi|\), that is the lengths of the contexts.
 }
 
 Weakening means that you can plug a term into a larger context.
@@ -107,8 +107,8 @@ rule. In the case of \acrshort{WTT} for instance, there is no conversion so
 instead of \(\Ga \vdash T \equiv B[x \sto u]\) we will have syntactic equality
 \(T =_{\alpha} B[x \sto u]\).
 
-You usually prove inversion of typing for every term constructor, but I will not
-do it here.
+One usually proves inversion of typing for every term constructor, but I will
+not do it here.
 
 \subsection{Validity}
 
@@ -147,7 +147,7 @@ rules of things like sorts and variables ask for the context to be well-formed.
 %
 In a theory which does not have this requirement / property, many lemmata will
 only apply assuming the contexts involved are well-formed.
-The difference between presentations like this will be studied in
+The difference between presentations like these will be studied in
 \nrefch{formalisation}.
 
 \subsection{Unique / principal typing}
@@ -165,14 +165,14 @@ type up to conversion.
 }
 This usually means that the term is carrying enough information to recover
 its type. If one were to use Curry-style terms like
-\(\lambda x.\ x\) then this property cannot hold: indeed
+\(\lambda x.\ x\) then this property could not hold: indeed
 \(\vdash \lambda x.\ x : \unit \to \unit\) and
 \(\vdash \lambda x.\ x : \bool \to \bool\) both hold and the two arrow types
 are not related.
 
-This property can be broken for other reasons however: the presence of subtyping
-(typically cumulativity). In such a case, unique typing can be relaxed to
-principal typing.
+This property can be broken for other reasons however: \eg the presence of
+subtyping (typically cumulativity). In such a case, unique typing can be relaxed
+to principal typing.
 
 \begin{definition}[(Weak) principal typing]
   A type theory enjoys principal typing (in the weaker sense) when
@@ -196,12 +196,12 @@ to a term.
 \subsection{Properties of reduction}
 
 When the type theory features reduction, we also want it to satisfy some
-requirements, aside that reduction behaves in a compositional way as I already
-explained in \arefsubsec{weak-subst}.
+requirements, aside from the fact that reduction behaves in a compositional way
+as I already explained in \arefsubsec{weak-subst}.
 
-First are basic properties of rewriting systems\sidenote{I will not go into details
-about what they are and it is not necessary to know about them to understand any
-of this.}: confluence and termination.
+First are basic properties of rewriting systems\sidenote{I will not go into
+details about what they are and it is not necessary to know about them to
+understand any of this.}: confluence and termination.
 
 \sidedef[-0.4cm]{}{
   The transitive reflexive closure of reduction, written \(\reds\),
@@ -425,7 +425,7 @@ This does not prevent you from having proofs of \(\bot\) in inconsistent
 contexts.
 
 Having canonicity in the theory is a good way to deduce consistency.
-Indeed, if there is a proof of \(\bot\) in the empty context, there must
+Indeed, if there is a proof of \(\bot\) in the empty context, there must be
 one which is a constructor, since there are no constructors for \(\bot\)
 it is not possible.
 
