@@ -58,7 +58,7 @@ Je pense que nous pouvons les voir comme des \emph{chatbots} -- c'est-à-dire
 des programmes avec lesquels vous pouvez converser -- qui sont là pour vous
 aider à énoncer et à prouver des théorèmes.
 Ils ne sont pas particulièrement intelligents et ne feront pas le travail pour
-vous, mais ils sont très pointilleux car ils ne comprennent pas toujours ce que
+vous, ils sont très pointilleux car ils ne comprennent pas toujours ce que
 vous dites et vous devez être très précis ou ils vous feront remarquer vos
 erreurs.
 
@@ -156,7 +156,7 @@ l'intervention de l'utilisateur.
 \end{center}
 
 Une fois la preuve terminée, l'assistant de preuve vous le dit et vous pouvez
-passer à d'autres théorèmes pour le prouver. J'ai déjà montré que vous devez
+passer à d'autres théorèmes à prouver. J'ai déjà montré que vous devez
 être explicite et non ambigu lorsque vous parlez à l'assistant de preuve. Vous
 devez également être correct.
 L'assistant de preuve ne se fiera pas aveuglément à ce que vous dites.
@@ -211,7 +211,7 @@ Nous pouvons montrer que l'énoncé est faux en prouvant sa négation :
 La façon la plus simple de prouver que quelque chose existe est de fournir ce
 que l'on appelle un \emph{témoin} d'existence. Ici, nous recherchons une boîte
 qui ne contient pas de chat. Il n'y a qu'une seule boîte sans chat, comme nous
-l'avons découvert lors de notre précédente épreuve, la troisième.
+l'avons découvert lors de notre précédente preuve, la troisième.
 
 \begin{center}
   \includegraphics[width=0.8\textwidth]{convo-take-third-fr.pdf}
@@ -226,7 +226,7 @@ construisant des parties de la preuve lui-même et à vérifier qu'elles sont
 correctes, par exemple en s'assurant qu'on n'a pas oublié un cas où nous avions
 un lion plutôt qu'un chat.
 
-Les assistants d'épreuve sont également intéressants et utiles pour d'autres
+Les assistants de preuve sont également intéressants et utiles pour d'autres
 personnes que l'utilisateur qui fait la preuve. Disons que j'ai prouvé un
 théorème compliqué en utilisant mon assistant de preuve préféré, les personnes
 qui font confiance à mon assistant de preuve devront simplement lui demander
@@ -266,7 +266,7 @@ Par exemple, la preuve qu'un proposition \(A\) implique la proposition \(B\)
 est un programme qui prend une preuve de \(A\) en entrée et renvoie une preuve
 de \(B\) en sortie.
 Un tel programme est dit de type \(A \to B\). Les types sont un moyen de décrire
-les données renvoyées par un programme. Les étudiants sont souvent amenés à
+les données manipulées par un programme. Les étudiants sont souvent amenés à
 écrire la fameuse fonction de test d'une année bissextile qui, étant donnée une
 année sous forme d'entier (décrit par le type \mintinline{ocaml}{int}), répond
 s'il s'agit d'une année bissextile ou non. Cette information binaire -- oui ou
@@ -277,7 +277,8 @@ peuvent être considérés comme des preuves de la proposition \(A\) et vice-ver
 
 Danse le \refch{dependent-types}, je décris enfin ce que j'appelle la théorie
 des types.
-La théorie des types est un cadre qui tire parti de cette correspondance et est donc au cœur d'assistants de preuve bien connus tels que
+La théorie des types est un cadre qui tire parti de cette correspondance et est
+donc au cœur d'assistants de preuve bien connus tels que
 \Coq~\sidecite[-2.9cm]{coq} et \Agda~\sidecite[-1.8cm]{norell2007towards}.
 Je suis moi-même un utilisateur de \Coq et cette thèse est écrite en mettant
 l'accent sur cet assistant de preuve et ses fondements.
@@ -359,7 +360,7 @@ choses comme étant \emph{égales}.
     2 + 2 \red 4 \redl 3 + 1
   \]
 }%
-Ce principe, transformant une preuve en égalité, est appelé \emph{reflecion} de
+Ce principe, transformant une preuve en égalité, est appelé \emph{reflection} de
 l'égalité.
 L'autre extrême est une théorie, appelée théorie faible des types (WTT), où nous
 supprimons la notion même de calcul. Au milieu, nous avons la théorie
