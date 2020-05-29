@@ -122,7 +122,7 @@ Fail Fixpoint fib n :=
   end.
 \end{minted}
 It does not like the \mintinline{coq}{S n} bit in the recursive call.
-I'm cheating a bit because it can still be defined by telling \Coq that
+I am cheating a bit because it can still be defined by telling \Coq that
 \mintinline{coq}{S n} here is indeed a subterm of the matched term.
 \begin{minted}{coq}
 Fixpoint fib n :=
