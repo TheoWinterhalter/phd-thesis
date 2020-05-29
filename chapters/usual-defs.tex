@@ -104,7 +104,7 @@ One can for instance write the following definition where the return type does
 \]
 where \(\nat\) is the type of natural numbers I am going to present later.
 Here, we have \(\mathsf{P}\ \ttrue = \bool\) and \(\mathsf{P}\ \ffalse = \nat\).
-Using this as a return type, we can write a depepndent version of the
+Using this as a return type, we can write a dependent version of the
 \(\mathsf{if}\):
 \[
   \tif{b}{x.\ \mathsf{P}\ x}{\ttrue}{0}
@@ -451,7 +451,7 @@ follow more or less the same schema.
 
 Parameterised inductive types, as the name suggests, can take parameters.
 In \ocaml, parameters are necessarily types, in \Coq they are often types but
-they can be natural numbers or any other term.
+they can be natural numbers or a term of any other type.
 For instance, in the type \(\tlist\ A\), \(A\) is a parameter that specifies the
 nature of the objects in the list.
 
@@ -656,7 +656,7 @@ In the section on records, I will show the \emph{negative} version.
   all shifted: we have sums \(\Sigma A.B\) and products \(\Pi A.B\).
 }
 Dependent sums or \(\Sigma\)-types are a generalisation of simple products to
-dependent types. They are the way to represent existential quantifier
+dependent types. They are the way to represent existential quantifiers
 (except in a---usually---constructive way): \(\Sigma (x:A).P\ x\) is proven by
 giving a term \(t : A\) and a proof of \(P\ t\).
 \begin{mathpar}
@@ -806,7 +806,7 @@ With the typing rules I gave it is still possible to do it, it is just that we
 have to conclude using the elimination of \(\bot\) in the \(\vnil\) branch.
 
 \paradot{Equality}
-As equality is special I will only give a brief definition before we dicuss it
+As equality is special I will only give a brief definition before we discuss it
 in more detail later in this chapter. In \nrefch{flavours} I will also show
 different notions of equality.
 %
@@ -1052,6 +1052,7 @@ tail (seq n) = seq (succ n)
 \end{minted}
 In will not go into further detail about those, coinductive types are not really
 well-behaved in \Coq so we mostly ignore them for the time being.
+\todo{Matthieu's remark}
 
 \section{Equality}
 \labsec{equality-def}
