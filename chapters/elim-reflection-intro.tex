@@ -2,7 +2,7 @@
 \chapter{What I mean by elimination of reflection}
 \labch{elim-reflection-intro}
 
-We presented earlier \acrshort{ETT} and its defining reflection rule.
+I presented earlier \acrshort{ETT} and its defining reflection rule.
 %
 \reminder[-1.0cm]{Reflection rule}{
   \begin{equation*}
@@ -15,13 +15,13 @@ We presented earlier \acrshort{ETT} and its defining reflection rule.
 }
 %
 The next few chapters are going to be dedicated to its elimination from type
-theory: that is how to make a translation from \acrshort{ETT} to type theories
+theory: that is, how to make a translation from \acrshort{ETT} to type theories
 that do not feature reflection.
 
-This work gave rise to a publication~\sidecite[0.2cm]{winterhalter:hal-01849166} that
-focused on translating \acrshort{ETT} to \acrshort{ITT}.
+This work gave rise to a publication~\sidecite[0.2cm]{winterhalter:hal-01849166}
+that focused on translating \acrshort{ETT} to \acrshort{ITT}.
 However, with Simon Boulier we worked on another version translating directly to
-\acrshort{WTT} which I am going to present here.
+\acrshort{WTT} which I am going to present here as well.
 
 \section{Nature of the translation}
 
@@ -64,9 +64,9 @@ anything can have any type because conversion has become trivial.
   %
 \end{mathpar}
 %
-It thus follows that in the target you have
+It thus follows that in the target we have
 \( \isterm{\transl{\Gamma_\bot}}{[0]}{\transl{\bot}} \).
-Similarly you would have
+Similarly we would have
 \( \isterm{\transl{\Gamma_\bot}}{[0]}{\transl{\mathbb{N}}} \). This means
 that both \(\bot\) and \(\mathbb{N}\) should be translated to similar things
 (to convertible types in case the target theory has uniqueness of type), without
@@ -106,7 +106,7 @@ This is actually related to the fact that type-checking is undecidable in
 
 If we go back to the notion of proof, it becomes apparent that
 syntactical translations do not work because we would not be translating proofs
-but only partial ones; in other words terms in \acrshort{ETT} are not proofs
+but only partial ones; in other words, terms in \acrshort{ETT} are not proofs
 because they are insufficient to recover a typing derivation\sidenote{Because
 type-checking is undecidable.}.
 Thus comes the question of what is a \emph{suitable proof} in \acrshort{ETT}.
@@ -180,11 +180,11 @@ exploit any computational behaviour.
 
 As we said earlier, the \acrshort{ITT} and \acrshort{WTT} we consider are
 actually extended with extensional principles on equality.
-The main principles we require are \acrshort{UIP} and functional extensionality.
+The main principles we require are \acrshort{UIP} and \acrlong{funext}.
 These two principles are valid statements of \acrshort{ITT} and \acrshort{WTT}
 which are provable in \acrshort{ETT}, to show \acrshort{ETT} is a conservative
-extension of the target, it must be provable in it; as it is not the case we need
-to extend the target with those principles.
+extension of the target, they must be provable in it; as it is not the case we
+need to extend the target with those principles.
 \reminder[-3.6cm]{\acrshort{UIP}}{
 \[ \Pi\ x \ y\ (e \ e' : x = y).\ e = e' \]
 }
@@ -207,8 +207,7 @@ which is well typed (using the reflection rule to show that $e$ has
 type $x= x$) and which can be inhabited by elimination of the identity
 type.
 
-In the same way, \acrshort{funext} is provable in \acrshort{ETT} as shown by the
-following diagram.
+In the same way, \acrshort{funext} is provable in \acrshort{ETT} as shown below.
 \[
 \begin{array}{cll}
   &\Prod{x : A} f\ x = g\ x \\
@@ -229,13 +228,14 @@ Hofmann and Streicher using the groupoid model~\sidecite{groupoid-interp}, which
 has recently been extended in the setting of univalent type theory using the
 simplicial or cubical models~\sidecite{kapulkin2012simplicial,coquand:cubical}.
 
-Similarly, \acrshort{funext} is independent from \acrshort{ITT}, it is folklore
-but has recently been formalised by Boulier \emph{et al.} using a simple
-syntactical translation~\sidecite{boulier17:next-syntac-model-type-theor}.
+Similarly, \acrshort{funext} is independent from \acrshort{ITT}, this fact is
+folklore but has recently been formalised by Boulier \emph{et al.} using a
+simple syntactical
+translation~\sidecite{boulier17:next-syntac-model-type-theor}.
 
-As previously said in \vrefsubsec{wtt}, \acrshort{WTT} has to be extended with
-more principles in the vein of functional extensionality, like extensionality
-of \(\Pi\)-types for similar reasons.
+As previously said in \nrefsubsec{wtt} of \refch{flavours}, \acrshort{WTT} has
+to be extended with more principles in the vein of functional extensionality,
+like extensionality of \(\Pi\)-types for similar reasons.
 
 \section{Basic idea of the translation}
 
@@ -251,10 +251,10 @@ Transport turns an equality \(e : A = B\) into a map
 This means however that for two terms \(a : A\) and \(b : B\) such that
 \(A \equiv B\) and \(u \equiv v\) in \acrshort{ETT}, their translations
 become comparable in the target only up-to the equality
-between the two types. \([u] =_{[A]} [v]\) does not necessarily make sense
-anymore.
+between the two types. The type \([u] =_{[A]} [v]\) does not necessarily make
+sense anymore since \([v]\) might not be of type \([A]\).
 
-To solve this problem we use instead a notion of heterogeneous equality.
+To solve this problem we instead use a notion of heterogeneous equality.
 This is also the approach followed by
 Oury~\sidecite[1.7cm]{oury2005extensionality}
 although we decided on a slightly different presentation of heterogeneous
@@ -264,10 +264,9 @@ equality to avoid the axioms involved with the use of \acrshort{JMeq}.
 \(\Sum{p:\Eq{}{T}{U}} \Eq{}{\transpo{p}\ t}{u}\).
 }
 
-During the translation, the same term occurring twice can be
-translated in two different manners, if the corresponding typing
-derivations are different. Even the types of the two different
-translations may be different.
+During the translation, the same term occurring twice can be translated in two
+different manners, if the corresponding typing derivations are different. Even
+the types of the two different translated terms may be different.
 %
 However, we have the strong property that any two translations of the
 same term only differ in places where transports of proofs of equality have been
