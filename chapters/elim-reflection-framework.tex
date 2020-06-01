@@ -107,7 +107,7 @@ Another interesting bit is the presence of the \(\ax{n}\) term, as well as
 that of the \(\Sigma\) context. Indeed, in order for our \acrshort{ETT} to be
 a bit extensible, we add a context \(\Sigma\) of axioms \(n : A\) that can be
 referenced using \(\ax{n}\) but cannot be bound (they are global).
-For a theory like \Coq, having just axioms is bit weak, but in \acrshort{ETT}
+For a theory like \Coq, having just axioms is a bit weak, but in \acrshort{ETT}
 this is enough to simulate constants and even things such as inductive types:
 any computation rule can be stated propositionally and still be definitional
 thanks to reflection.
@@ -153,7 +153,7 @@ We build \acrshort{WTT} over \acrshort{ITT} by adding computation rules
 and some missing congruence rules (in the likeness of \acrshort{funext}).
 Indeed the elimination of equality provided by \(\mathsf{J}\) or by Leibniz'
 principle does not account for equalities under binders; conversion however does
-and as such in \acrshort{WTT} we need to add this to the theory.
+and as such, in \acrshort{WTT}, we need to add this to the theory.
 In \acrshort{ITT} it is enough to use the congruence of conversion and
 \acrshort{funext} to recover all of those, unfortunately in \acrshort{WTT} I
 could not yet find a way to factorise them. As such we add to the syntax
@@ -180,9 +180,9 @@ equality constructors for each binder.
 \]
 
 Note most of these congruence symbols would no longer be necessary if we were to
-type things such as \(J\) of \(\Sigma\) using \(\Pi\)-types so that \(\Pi\)
-and \(\lambda\) are the only binders. Computation rules would still be required
-however.
+type things such as \(J\) or \(\Sigma\)-types using \(\Pi\)-types so that
+\(\Pi\) and \(\lambda\) are the only binders. Computation rules would still be
+required however.
 
 \subsection{Can \acrshort{ETT} still be called a conservative extension?}
 
@@ -203,8 +203,8 @@ definitions. The notion of conservativity can thus be adapted to work in that
 case: let us write \(\iota\) the translation that is homorphically the identity
 but replaces extra symbols like \acrshort{funext} and \acrshort{UIP} with their
 respective proofs in \acrshort{ETT}, \acrshort{ETT} is conservative over
-\acrshort{ITT}/\acrshort{WTT} in the sense that every \(\vdash A\) such that
-\(\vdash_\exmark t : \iota(A)\) there exists a term \(t'\) such that
+\acrshort{ITT}/\acrshort{WTT} in the sense that, for every \(\vdash A\) such
+that \(\vdash_\exmark t : \iota(A)\), there exists a term \(t'\) such that
 \(\vdash t' : A\).
 
 \section{Typing rules}
@@ -568,7 +568,7 @@ reduction.
 
   \infer
     {
-      u \equiv v \\
+      u \equiv w \\
       v \red w
     }
     {u \equiv v}
