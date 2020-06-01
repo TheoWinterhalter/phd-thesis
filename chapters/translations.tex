@@ -84,6 +84,11 @@ complex than the target and even more so when \cT is a theory that we trust.
 Type preservation can be achieved by proving intermediary properties:
 substitutivity, preservation of reduction and of conversion.
 
+\marginnote[0.6cm]{
+  Here I write \(t\{ x \sto u\}\) for \(t\) where \(x\) is substituted by \(u\),
+  rather than \(t[x \sto u]\) to avoid confusion with the translation operator
+  also written with square brackets.
+}
 \begin{definition}[Substitutivity]
   A translation \([.], \transl{.}\) is substitutive when
   \[
@@ -111,8 +116,8 @@ A simple yet non-trivial example of translation (or class of translations) is
 the so-called \(\times\ \mathsf{bool}\) translation, again
 from~\sidecite{boulier17:next-syntac-model-type-theor,boulier2018extending}.
 
-As we said earlier, the source is going to be an extension of the target.
-We'll keep the target pretty basic as a simple instance of \acrshort{ITT}
+As I said earlier, the source is going to be an extension of the target.
+I will keep the target pretty basic, as a simple instance of \acrshort{ITT}
 with a hierarchy of universes \(\Ty{i}\) (for \(i \in \mathbb{N}\)) with the
 following rules:
 \begin{itemize}
@@ -145,8 +150,8 @@ and equality.
 \end{mathpar}
 
 The source is going to be the target extended with a new principle corresponding
-to the negation of \acrlong{funext}, that is the existence of two functions
-extensionally equal, but not equal themselves.
+to the negation of \acrlong{funext}, that is the existence of two functions that
+are extensionally equal, but not equal themselves.
 %
 \[
   \infer
@@ -166,14 +171,15 @@ extensionally equal, but not equal themselves.
   to the empty type: \(x = y \to \bot\).
 }
 %
-We will write \(\Notfunext\) for the type of \(\notfunext\) in the following.
+I will write \(\Notfunext\) for the type of \(\notfunext\) in the following.
 
 The idea is to inhabit this extra principle in the target which does not feature
 it, or rather to inhabit its translation \(\transl{\Notfunext}\).
-In order to differentiate functions of the target, while keeping them
+In order to distinguish functions of the target, while keeping them
 observationally equal, we translate them by adding a boolean label to them.
-Basically \(\lambda x. x\) is sent to \((\lambda x. x, \ttrue)\), the \(\ttrue\)
-telling us the it might have come from the translation of a function from \cS.
+Basically, \(\lambda x. x\) is sent to \((\lambda x. x, \ttrue)\), the
+\(\ttrue\) telling us the it might have come from the translation of a function
+from \cS.
 Any function coming with \(\ffalse\) instead will not be a translated term.
 
 The translation is defined as follows:
@@ -234,9 +240,9 @@ which gives a more comprehensive treatment of this and other translations.
 \section{Other translations}
 
 As I mentioned earlier, it is not alaways the case that contexts are translated
-homomorphically. In the binary parametricity
+homomorphically. For instance, in the binary parametricity
 translation~\sidecite{bernardy2012proofs} a variable
-\(a : A\) in the context is sent to three varaibles:
+\(a : A\) in the context is sent to three variables:
 \[
   a_0 : \transl{A}_0, a_1 : \transl{A}_1, a_\varepsilon : \transl{A}\ a_0\ a_1
 \]
