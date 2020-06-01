@@ -2,8 +2,8 @@
 \chapter{Syntax and formalisation of type theory}
 \labch{formalisation}
 
-An interesting fact of type theory (and perhaps one of its main selling points)
-is that it is a suitable framework in which to reason about type theory.
+An interesting fact about type theory (and perhaps one of its main selling
+points) is that it is a suitable framework in which to reason about type theory.
 That being said, representing type theory in itself is not entirely
 straightforward, and some care must be taken. There are actually several choices
 to be made when representing type theory and they are not all equivalent or with
@@ -25,19 +25,20 @@ When writing programs or expressions with binders on paper or on the computer
 we will usually use \emph{names}, identifiers for variables like in
 \(\lambda x. \lambda y. x\ y\), \(x\) refers to the variable bound by the
 outermost \(\lambda\), while \(y\) refers to the variable bound by the
-innermost.
+innermost one.
 The names are not fundamental in what the term represents:
 \(\lambda z. \lambda w. z\ w\) represents \emph{exactly} the same term.
 \marginnote[0cm]{
   \(\alpha\)-renaming is introduced in \nrefch{simple-types}.
 }
-We call this operation \(\alpha\)-renaming, here I \(\alpha\)-renamed \(x\)
+% We call this operation \(\alpha\)-renaming, here I \(\alpha\)-renamed \(x\)
+Here I \(\alpha\)-renamed \(x\)
 to \(z\) and \(y\) to \(w\). This defines the notion of \(\alpha\)-equality
 or \(\alpha\)-equivalence.
 \[
   \lambda x. \lambda y. x\ y =_\alpha \lambda z. \lambda w. z\ w
 \]
-However variable names should only be thought of as an abstraction to represent
+However, variable names should only be thought of as an abstraction to represent
 such terms and not a part of the syntax in itself.
 
 Thinking in terms of variables name can lead to unpleasant examples where
@@ -110,7 +111,7 @@ Using this representation, both \(\lambda x.x\) and \(\lambda y.y\) are written
   \lambda\ \db{0}
 \]
 so that \(\alpha\)-equality is purely syntactic equality.
-\(\alpha\)-renaming is not only a problem for pretty-printing.
+\(\alpha\)-renaming only remains a problem for pretty-printing.
 This also solves the problem of substitutions potentially capturing free
 variables: the term \(t \coloneqq x\ (\lambda x.\ x)\) of before is now
 \(\db{n}\ (\lambda\ \db{0})\) where \(n\) is some number which should point to
@@ -121,8 +122,8 @@ an extended context---will now affect the term itself.
 If you consider the following weakening, adding one variable \(z\) in the middle
 of the context, does not affect the term using names.
 \marginnote[1cm]{
-  I use variables in the scope to make clear where the new variable is inserted
-  in the nameless case.
+  I assign types to the variables in the scope to make clear where the new
+  variable is inserted in the nameless case.
 }
 \[
   x : A, y : B \vdash x\ y\ (\lambda u.\ x\ y\ u)
@@ -223,7 +224,8 @@ definitions and properties.
       {\Ga, B \vdash {\uparrow t} : {\uparrow A}}
     %
   \]
-  where \(\uparrow t\) is the term \(t\) with all its variables shifted by one.
+  where \(\uparrow t\) is the term \(t\) with all its free variables shifted by
+  one.
 }%
 For instance weakening becomes a lemma and not something postulated with the
 constructor \(\sbweak{}\).
@@ -267,10 +269,11 @@ recovered from a theory without them.
 \subsection{Universes and types}
 \labsubsec{univ-and-types}
 
-Another point of choice is whether to separate types and terms, putting them in
-different syntactic classes. One of the great advantages of dependent type
-theory over simple type theory is that types and terms can be expressed using
-the same language. Keeping them separate might also make sense.
+Another choice to make is whether to separate types and terms. They can be kept
+separate by putting them in different syntactic classes. One of the great
+advantages of dependent type theory over simple type theory is that types and
+terms can be expressed using the same language. That said, keeping them separate
+might also make sense.
 
 In case we want to keep them distinct, we have to duplicate concepts a bit:
 substitution, weakening, and even typing: we have judgments \(\Ga \vdash A\)
@@ -310,7 +313,7 @@ type constructor.
 \end{mathpar}
 
 If we only had the above constructors, our universes would only contain type
-varibles. In order to populate a universe, we introduce codes for the types
+variables. In order to populate a universe, we introduce codes for the types
 we are interested in having.
 For instance here are the codes for \(\Pi\)-types.
 \begin{mathpar}
@@ -385,7 +388,7 @@ With Russell universes \(\Pi\)-types are typed as follows:
   %
 \end{mathpar}
 
-When formalising universes there is a trade-off between the concise Russell
+When formalising universes, there is a trade-off between the concise Russell
 universes and the compartmentalised Tarski universes. On the interface with a
 user however, I think universes are best when they are the least invasive, which
 works better in a Russell setting. This does not prevent the system from having
@@ -597,9 +600,9 @@ gives more hypotheses to work on.
 Leaving aside the practical side, there is of course the question of whether
 they are equivalent or not.
 
-In \ftt we formalise that paranoid and economic type theories are equivalent
-provided rules pertaining to variables and constants require that the context
-is well-formed even in the economic version:
+In \ftt, we formalise a proof that paranoid and economic type theories are
+equivalent provided rules pertaining to variables and constants require that the
+context is well-formed even in the economic version:
 \[
   \infer
     {
@@ -623,11 +626,11 @@ and when \(\Ga \vdash A\) then \(\vdash \Ga\).
 The right approach to this I think is to put as much information as required to
 make the proof of sanity/validity \emph{easy} and then use this proof to prove
 that the economic versions are admissible.
-Empirically it seems to me that you put everything that is needed to do
-type inference on the term.
-To infer the type of \(\refl{A} u\) you need to check \(u\) has type \(A\),
-which usually relies on the well-typedness of \(A\), meaning I would use the
-second rule:
+Empirically, it seems that requiring all the premises needed to do type
+inference on the term is the best practice.
+To infer the type of \(\refl{A} u\) one needs to check that \(u\) has type
+\(A\), which usually relies on the well-typedness of \(A\), meaning I would use
+the second rule:
 \begin{mathpar}
   \infer
     {
@@ -713,7 +716,9 @@ If we do not require it then the conversion rule is similar
   %
 \]
 Typed conversion also has shortcomings. For instance, proving injectivity of
-\(\Pi\)-types can become harder.
+\(\Pi\)-types can become harder: it can be proven by either showing that
+transitivity of conversion can be eliminated (\ie shown admissible), or using
+a model construction for instance.
 
 Finally, there is a third notion of explicit conversion which stores the
 conversion proof in the term:
@@ -735,7 +740,7 @@ All three notions of conversion are proven equivalent in the case of
 \subsection{How intricate need the concepts be?}
 
 If we go back to the notion of typed equality, I mentioned we could enforce
-typedness by having rules more like
+typedness by having rules closer to
 \[
   \infer
     {
@@ -779,7 +784,7 @@ and then typing on top of it.
 We can push things even further and define syntax at the same time as typing
 as well. This is called well-typed syntax, and is presented
 in~\sidecite{altenkirch2016type} using \acrshortpl{QIT}.
-The idea is define contexts, types, terms and substitutions (very similar to
+The idea is to define contexts, types, terms and substitutions (very similar to
 categorical models, see \nrefch{models}) mutually, in a typed way:
 \begin{minted}{agda}
 data Con : Set
@@ -812,8 +817,8 @@ data Tms where
 \end{minted}
 Finally for terms we have something like this, pretty standard except the
 application is not the usual\sidenote{
-  In fact I would not call it application at
-  all, as it is not application. It is a key element to getting it however,
+  In fact I would not call it application, as nothing is applied yet in
+  \mintinline{agda}{app}. It is a key element to getting it however,
   usual application of \mintinline{agda}{(u : Tm Γ (Π A B))} and
   \mintinline{agda}{(v : Tm Γ A)} is given by
   \mintinline{agda}{(app u)[id, u]t}.
@@ -870,8 +875,8 @@ are constructing represents derivations rather than terms.
 It is very interesting but does not supersedes the good old syntax and
 derivation above it combination.
 For one, it allows us to manipulate syntax in an untyped way, and later show
-that this manipulation is type-preserving. It is important to have program
-translations compute relatively efficiently as we will see in
+that this manipulation is type-preserving. It is important in order to have
+program translations compute relatively efficiently as we will see in
 \nrefch{translations} and becomes crucial when derivations are
 \emph{big}\sidenote{This is the case in the translation I show
 in \arefpart{elim-reflection}} since terms (as in untyped syntax) are usually
