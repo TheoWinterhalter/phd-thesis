@@ -3,7 +3,7 @@
 \labch{translations}
 
 Syntactical translations are a special case of program transformations suited
-for type theory, and a method of choice to get models of type theories.
+for type theory, as well as a method of choice to get models of type theories.
 This is better studied in Simon Boulier's
 thesis~\sidecite{boulier17:next-syntac-model-type-theor,boulier2018extending}
 but in order to keep this document self contained, I will do my best to give a
@@ -16,8 +16,8 @@ meaningful excerpt here.
 
 A \emph{syntactical} translation, as the name suggests, operates on the syntax
 of terms. It has a source theory \cS and a target theory \cT with possibly
-different syntax and typing rules---though usually \cS is an extension of \cT,
-more on that later.
+different syntax and typing rules---though usually \cS is an extension of \cT
+(more on that later).
 
 A translation is then given as two functions:
 \begin{itemize}
@@ -99,6 +99,10 @@ substitutivity, preservation of reduction and of conversion.
   \]
 \end{definition}
 
+\marginnote[0.3cm]{
+  This can be relaxed by only asking \([u] \red^{\star} [v]\) or
+  \([u] \red^{+} [v]\).
+}
 \begin{definition}[Preservation of reduction]
   A translation \([.], \transl{.}\) is said to preserve reduction when
   \(u \red v\) implies \([u] \red [v]\) (and \(\transl{u} \red \transl{v}\)).
@@ -167,8 +171,8 @@ are extensionally equal, but not equal themselves.
   %
 \]
 \marginnote[-1.4cm]{
-  Inequality \(x \not= y\) is defined as the negation of equality, that is a map
-  to the empty type: \(x = y \to \bot\).
+  Inequality \(x \not= y\) is defined as the negation of equality, that is the
+  type of maps to the empty type: \(x = y \to \bot\).
 }
 %
 I will write \(\Notfunext\) for the type of \(\notfunext\) in the following.
@@ -239,7 +243,7 @@ which gives a more comprehensive treatment of this and other translations.
 
 \section{Other translations}
 
-As I mentioned earlier, it is not alaways the case that contexts are translated
+As I mentioned earlier, it is not always the case that contexts are translated
 homomorphically. For instance, in the binary parametricity
 translation~\sidecite{bernardy2012proofs} a variable
 \(a : A\) in the context is sent to three variables:
@@ -281,8 +285,8 @@ interpretation and even computational content.
 }
 
 We can even be more restrictive on translations if we want to show that the new
-principles are not adding new \emph{truths}, essentially saying that the
-extension is more convenient while not really changing the logic.
+principles of \(\cT\) are not adding new \emph{truths}, essentially saying that
+no new theorems in \(\cS\) become provable when we use the tools of \(\cT\).
 There is an appropriate notion that is not specific to translations or even
 type theory which is that of \emph{conservative extension}.
 
@@ -369,3 +373,10 @@ sums. In that sense, a translation can---and perhaps should---be seen as
   It is conservative because the translation behaves as the identity on the
   target.
 }
+Indeed compilation transforms a typically complex program into something more
+primitive, usually closer to a machine language like assembly. In the example
+above, we went from a system supporting booleans to a simpler one without them.
+
+In the next part, I am going to expose a translation from \acrshort{ETT} to
+\acrshort{ITT} and \acrshort{WTT} that is not syntactic but which is
+conservative.
