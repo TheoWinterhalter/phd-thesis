@@ -27,10 +27,10 @@ by humans. In particular experimental features are dangerous in there.
   where a list of critical bugs of \Coq is maintained.
 }
 Unfortunately, \Coq's kernel is not free of mistakes, and one critical bug has
-been found roughly every year for the last two decades. Even then the kernel
+been found roughly every year for the last two decades. Even then, the kernel
 presentation offers some damage control as it usually requires minor changes to
 fix the problem.
-In fact, those bugs are always related to the implementation rather than beeing
+In fact, those bugs are always related to the implementation rather than being
 consistency issues of \acrshort{PCUIC}.
 
 \acrshort{PCUIC} on the other hand seems more worthy of trust. The idea of our
@@ -82,5 +82,5 @@ importantly we do not feature modules and template polymorphism.
 The implementation also provides efficient universe constraint checking and
 guard condition checking, we chose to remain abstract over those and simply
 assume the existence of those in the specification: any implementation
-satisfaying the specification can thus be plugged in. We use a rather naive
+satisfying the specification can thus be plugged in. We use a rather naive
 universe checker for now and do not provide any guard checking at all.
