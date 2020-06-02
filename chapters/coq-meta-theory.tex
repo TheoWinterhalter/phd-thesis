@@ -167,9 +167,10 @@ be typed in a universe) or a well-formed arity.
 
 \paradot{Subject reduction}
 
-At the time of writing, subject reduction is not entierly proven.
+Subject was not proven at the time of the article~\sidecite{sozeau2019coq} but
+is now proven.
 \begin{minted}{coq}
-Conjecture subject_reduction :
+Theorem subject_reduction :
   forall Σ Γ t A B,
     wf Σ ->
     Σ ;;; Γ |- t : A ->
@@ -182,7 +183,7 @@ Conjecture subject_reduction :
 Because of cumulativity, \acrshort{PCUIC} cannot have uniqueness of type, it
 however has principal types which we express as follows.
 \begin{minted}{coq}
-Conjecture principal_typing :
+Theorem principal_typing :
   forall Σ Γ u A B,
     Σ ;;; Γ |- u : A ->
     Σ ;;; Γ |- u : B ->
@@ -192,13 +193,12 @@ Conjecture principal_typing :
       Σ ;;; Γ |- u : C.
 \end{minted}
 If a term \(u\) has two types, then there is a smaller type typing \(u\).
-That property is also work-in-progress.
+Similarly, this property is now proven.
 
 \paradot{Strong normalisation}
 
-Unlike for principality and subject reduction, there is no hope of proving
-strong normalisation of \acrshort{PCUIC} inside \Coq. As such it will not be
-stated as a conjecture but rather as an axiom.
+There is no hope of proving strong normalisation of \acrshort{PCUIC} inside
+\Coq. As such it will be stated as an axiom.
 
 \marginnote[1cm]{
   An infinite decreasing sequence for the opposite of reduction is simply an
