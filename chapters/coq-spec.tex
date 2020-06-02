@@ -64,7 +64,7 @@ Type@{i} : Type@{j}
 \end{minted}
 holds in \Coq as long as the constraint \(i < j\) is satisfied but neither \(i\)
 nor \(j\) correspond to natural numbers. Satisfying the constraints means that
-there exist a valuation in the natural numbers preserving the constraints.
+there exists a valuation in the natural numbers preserving the constraints.
 We also have local universes and constraints for polymorphic definitions;
 universe instances (of type \mintinline{coq}{Instance.t}) are there to
 substitute those for other universes.
@@ -91,7 +91,7 @@ be universe polymorphic.
 \paradot{Inductive types}
 
 \mintinline{coq}{tInd ind ui} represents an inductive type defined in the global
-context. The type inductive is
+context. The type \mintinline{coq}{inductive} is
 \begin{minted}{coq}
 Record inductive : Set := mkInd {
   inductive_mind : kername ;
@@ -123,7 +123,7 @@ parameters in the form of a context and the universe declarations.
 \mintinline{coq}{ind_variance} deals with variance of universes in the case
 of cumulative inductive types.
 The \mintinline{coq}{recursivity_kind} determines what kind of inductive type
-we are building, this in fact include the usual inductive types, but also
+we are building, this in fact includes the usual inductive types, but also
 record types and coinductive types.
 Finally, \mintinline{coq}{ind_bodies} is a list of declarations for each of
 the inductive types in the mutual block.
@@ -621,10 +621,10 @@ type_Prod na A B s1 s2 :
   Σ ;;; Γ |- tProd na A B : tSort (sort_of_product s1 s2)
 \end{minted}
 \(\Pi (x:A).B\) is well-typed if \(A\) and \(B\) are well-typed too.
-The \(\Pi\)-types lives in another universe computed from the universes of
+The \(\Pi\)-type lives in another universe computed from the universes of
 \(A\) and \(B\), if those are \(\Type_i\) and \(\Type_j\) this will be
 \(\Type_{\max\ i\ j}\) but if the second is \(\Prop\), then the \(\Pi\)-type
-lives in \(\Prop\) too thanks to impredicativity.
+lives in \(\Prop\) as well thanks to impredicativity.
 
 \paradot{\(\lambda\)-abstractions}
 \begin{minted}{coq}
@@ -791,7 +791,7 @@ conditions. We will probably change this at some point in the future.
 \paradot{Cofixed-points}
 \begin{minted}{coq}
 type_CoFix mfix n decl :
-  allow_cofix ->
+  cofix_guard mfix ->
   nth_error mfix n = Some decl ->
   wf_local Σ Γ ->
   All (fun d => {s & Σ ;;; Γ |- d.(dtype) :  tSort s}) mfix ->
@@ -807,8 +807,8 @@ Similarly to fixed-points, not all cofixed-points are valid. Instead of
 termination we talk about \emph{productivity} which essentially means that each
 observation---for instance accessing the head of a stream---on the cofixed-point
 should terminate.
-For now we do not perform any productivity check and that is left as future
-work.
+This is the purpose of \mintinline{coq}{cofix_guard} that is defined using
+axioms, similarly to \mintinline{coq}{fix_guard}.
 
 \paradot{Cumulativity}
 \begin{minted}{coq}
