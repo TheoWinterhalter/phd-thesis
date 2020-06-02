@@ -16,7 +16,7 @@ we define two theories, namely \acrshort{ETT} and \acrshort{ITT}
 sugar by having things such as transport, heterogeneous equality and packing as
 part of the syntax. The operations regarding these constructors---in particular
 the tedious ones---are written in \Coq and then quoted to finally be
-\emph{realised} in the translation from \acrshort{ITT} to \MetaCoq.
+\emph{realised} in a translation from \acrshort{ITT} to \MetaCoq.
 \marginnote[1cm]{
   Some work for the future\dots
 }
@@ -192,7 +192,7 @@ We also require some measure of decidable equality and injectivity on those.
 From this we ensure the \acrshort{PTS} is \emph{functional} (in particular
 without cumulativity) so that we have unique typing.
 
-we are using classes here because they come with some automation in \Coq which
+We are using classes here because they come with some automation in \Coq which
 allows us to assume globally a notion of sort without having to specify it at
 each use.
 
@@ -213,7 +213,7 @@ and the inconsistent typing rule $\Type : \Type$.
 \section{ETT-flavoured \Coq: Examples}
 \labsec{ett-flavoured}
 
-In this section we demonstrate how our translation can bring extensionality to
+In this section I demonstrate how our translation can bring extensionality to
 the world of \Coq in action. The examples can be found in
 \rpath{plugin\_demo.v}.
 Again, since we do not have \emph{weak} \Coq or \MetaCoq, these are in the case
@@ -221,9 +221,9 @@ of the translation to \acrshort{ITT} only.
 
 \paragraph{First, a pedestrian approach.}
 %
-We would like to begin by showing how one can write an example step by step
+I would like to begin by showing how one can write an example step by step
 before we show how it can be instrumented and automated as a plugin.
-For this we use a self-contained example without any inductive
+For this I use a self-contained example without any inductive
 types or recursion, illustrating a very simple case of reflection.
 The term we want to translate is the identity coercion:
 \[
@@ -243,6 +243,10 @@ Fail Definition pseudoid (A B : Type) (e : A = B) (x : A) : B
 %
 However, we still want to be able to write it \emph{in some way}, in order to
 avoid manipulating de Bruijn indices directly.
+\marginnote[0.1cm]{
+  When I say ill-typed term, I mean a subterm that is typed but of the wrong
+  type.
+}%
 For this, we use a little trick by first defining a \Coq axiom to represent
 an ill-typed term:
 %
@@ -424,8 +428,9 @@ The command \mintinline{coq}|TranslateConstant| enriches the current
 translation context with the types of the inductive type and of its
 constructors. The translation context then also contains associative
 tables between our own representation of constants and those of \Coq.
-Unsurprisingly, the translated \Coq term is the same as the original
-term.
+Unsurprisingly\sidenote{It is thanks to all the effort that has gone into
+optimising the translation}, the translated \Coq term is the same as the
+original term.
 
 \paragraph{Reversal of vectors.}
 %
@@ -495,6 +500,9 @@ in a sense that is really close to our formalisation. Aside from a concise
 nucleus consisting in a very basic type theory, \Andromeda features an interface
 in which the user can declare constants with given types. Definitions and
 computational behaviour are defined using constants which inhabit equalities.
+
+Here is for instance the definition of natural numbers and their eliminator
+with computation rules.
 \begin{minted}{text}
 constant nat : Type
 constant O : nat
