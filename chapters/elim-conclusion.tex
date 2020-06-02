@@ -71,17 +71,17 @@ In particular, the work of Hofmann provides a categorical answer to
 the question of consistency and conservativity of \acrshort{ETT} over
 \acrshort{ITT} with \acrshort{UIP} and \acrshort{funext}.
 %
-Ten years later, \sidecite[1.6cm]{oury2005extensionality,Oury2006} provided
-a translation from \acrshort{ETT} to \acrshort{ITT} with
+Ten years later, Oury~\sidecite[1.6cm]{oury2005extensionality,Oury2006}
+provided a translation from \acrshort{ETT} to \acrshort{ITT} with
 \acrshort{UIP} and \acrshort{funext} and other axioms (mainly due to
 technical difficulties).
 %
 Although a first step towards a move from categorical semantics to a
 syntactic translation, his work does not stress any constructive
 aspect of the proof and shows that there merely exist translations in
-\acrshort{ITT} to a typed term in \acrshort{ETT}.
+\acrshort{ITT} of a typed term in \acrshort{ETT}.
 
-\sidecite[0.5cm]{van2013explicit} have later proposed and
+Door \emph{et al.}~\sidecite[0.5cm]{van2013explicit} have later proposed and
 formalised a similar translation between a \acrshort{PTS} with and without
 explicit conversion. This does not entail anything about \acrshort{ETT} to
 \acrshort{ITT} but we can find similarities in that there is a witness of
@@ -97,8 +97,8 @@ as general as the present translation from \acrshort{ETT} to \acrshort{ITT}
 which can insert transports in any context.
 
 
-In both formalisations I implemented type-checkers for the theories involved.
-In \acrshort{WTT}, since the meta-theory is so simple---I was able to prove the
+In both formalisations, I implemented type-checkers for the theories involved.
+In \acrshort{WTT}, since the meta-theory is so simple, I was able to prove the
 type-checker to be sound and complete. I do not detail them in this thesis as
 I will dedicate \arefpart{coq-in-coq} to the implemtation and verification of
 a full-fledged type-checker of \Coq in \Coq.
