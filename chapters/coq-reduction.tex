@@ -62,7 +62,7 @@ on, we can characterise weak head neutral (\(\whne\)) and normal forms \(\whnf\)
 with the following mutual judgements:
 \marginnote[1cm]{
   The first rule is there to make sure that the variable does not correspond to
-  local definition because those reduce.
+  a local definition because local definitions reduce by unfolding.
 }
 \begin{mathpar}
   \infer
@@ -254,9 +254,9 @@ a redex at the top-level, we reduce it, and when we reach a term potentially
 stuck (say an application), we focus on a subterm and reduce it to see if we
 reach another redex.
 
-This is often achived by taking a list of arguments, \ie a \emph{stack}, besides
-the term. When considering an application, the argument is \emph{pushed} on top
-of the stack and we \emph{focus} on the left-hand term.
+This is often achieved by taking a list of arguments, \ie a \emph{stack},
+besides the term. When considering an application, the argument is \emph{pushed}
+on top of the stack and we \emph{focus} on the left-hand term.
 I will write \(\dpair{t \mid \pi}\) for term \(t\) \emph{against} stack \(\pi\).
 We want to define weak head reduction \(\red_\WM\) as something like this:
 \marginnote[1cm]{
@@ -299,14 +299,14 @@ subterm relation is also well-founded. Taking a lexicographical order on both
 these orders seems like a good option.
 
 Remember that lexicographical orders operate on pairs and that the first
-components mus be \emph{equal} when using the order on the second components.
-Thus we must produce a pair from the data \(\dpair{t \mid \pi}\), coreduction is
-to be taken on the whole term (\(t\) applied to \(\pi\)), while the subterm
+components must be \emph{equal} when using the order on the second components.
+Thus, we must produce a pair from the data \(\dpair{t \mid \pi}\), coreduction
+is to be taken on the whole term (\(t\) applied to \(\pi\)), while the subterm
 relation only looks at \(t\).
 This forces us to consider coreduction before the subterm relation, indeed if we
-were to consider the pair \((t, \zip\ \dpair{t \mid \pi})\) we would indeed
-satisfy the first inequality as \(t\) is a subterm of \(t\ u\), but in the
-second inequality the first components would not be equal.
+were to consider the pair \((t, \zip\ \dpair{t \mid \pi})\) we would satisfy the
+first inequality as \(t\) is a subterm of \(t\ u\), but in the second inequality
+the first components would not be equal.
 We will thus consider the following pair:
 \[
   (\zip\ \dpair{t \mid \pi},\ t)
@@ -314,7 +314,7 @@ We will thus consider the following pair:
 with the corresponding lexicographical order of coreduction and subterm
 relation. This one works because \(\dpair{t \mid u :: \pi}\) and
 \(\dpair{t\ u \mid \pi}\) represent the same term so that the first components
-are indeed equal when consdering the subterm order.
+are indeed equal when considering the subterm order.
 \marginnote[1cm]{
   I write \(x \sqsubset y\) to mean that \(x\) is a subterm of \(y\).
 }
@@ -461,8 +461,7 @@ The idea is that we fetch the \(n\)-th argument on the stack (assuming it
 exists) and we reduce it (while remembering that it was indeed the argument of a
 fixed-point). If this argument reduces to a constructor\sidenote{%
   In full generality, it would have to reduce to an \emph{applied} constructor.
-}%
-then the fixed-point can safely be unfolded and reduced.
+} then the fixed-point can safely be unfolded and reduced.
 For the recursive call to be valid we need:
 \[
   (\zip\ \vscmd{u_n}{\rho},\ u_n) \prec
@@ -483,7 +482,7 @@ to replace it with a more flexible order. For this we will use \emph{positions}.
 \marginnote[0.2cm]{
   This was presented in \nrefch{coq-positions}.
 }
-The order we define is on pairs term versus stack \(\dpair{t \mid \pi}\).
+The order we define is on pairs of terms versus stacks \(\dpair{t \mid \pi}\).
 We map them to dependent pairs consisting of the full term that
 \(\dpair{t \mid \pi}\) represents (\ie \(\zip\ \dpair{t \mid \pi}\)),
 and the position corresponding to the stack \(\pi\).
@@ -548,7 +547,7 @@ Now that we have an order and a clear idea of what we want, we can write down
 the machine as a \Coq function. I briefly pointed at one last issue however:
 in some cases, the argument to a recursive call is only smaller assuming that
 the result of another recursive call is indeed a reduct.
-I will repeat myself and focus again on the recursive calls for projections:
+Let us focus again on the recursive calls for projections:
 \[
   \infer
     {
@@ -564,6 +563,11 @@ The second recursive call, made on \(u\), is only valid because \(u\)
 is a reduct of \(p.1\), an information that we get from the correction of
 the first recursive call.
 
+\marginnote[0.2cm]{
+  When I say correctness, I do not include the fact that the machine indeed
+  yields weak head normal forms. This is left as future work, as it will be
+  important to the proof of completeness of the conversion algorithm.
+}
 The solution to this is to define the function and prove its correctness
 all at once.
 \begin{minted}{coq}
