@@ -2,20 +2,22 @@
 \chapter{Reflection and homotopy}
 \labch{elim-hott}
 
-\marginnote[0.5cm]{
-  Refer to \nrefch{flavours} for more on this.
+\marginnote[2cm]{
+  Refer to \nrefch{flavours} for more on \acrshortpl{2TT}.
 }
 Homotopy and reflection seem contradictory at first since \acrshort{UIP}
-kind of comes with reflection and is negated by univalence, but as I have
-exposed earlier, using \acrlongpl{2TT} we can make two equalities---one with
-\acrshort{UIP} and one which is homotopic---cohabit consistently.
+often comes with reflection\sidenote{\acrshort{UIP} can be proved from
+reflection and the \(\mathsf{J}\) eliminator of equality.} and is negated by
+univalence, but as I have exposed earlier, using \acrlongpl{2TT} we can make two
+equalities---one with \acrshort{UIP} and one which is homotopic---cohabit
+consistently.
 
 Now, in \nrefch{elim-reflection-framework} I showed how the proof was
 (almost) agnostic with respect to universes, thanks to abstract universe
 constructors, one of which was (crucially) the sort of an identity type.
 
 This is the key to instantiate our translation into one going from
-\acrshort{HTS} to \acrshort{2TT} or \acrshort{2WTT}.
+\acrshort{HTS} to \acrshort{2TT} or \acrfull{2WTT}.
 We can recover those theories in our setting by taking $\F{i}$ and $\Un{i}$ as
 respectively the fibrant and strict universes
 (for $i \in \mathbb{N}$), along with the following \acrshort{PTS} rules:
@@ -46,7 +48,7 @@ of being type-based, fibration is sometimes dealt with using a specific
 judgment and this is not covered by our formalisation.
 \marginnote[-1cm]{
   Type-based approaches are usually much better suited to translations
-  (because they are type-preserving).
+  (because translations are type-preserving).
 }
 
 In short, the translation from \acrshort{HTS} to \acrshort{2TT} or
