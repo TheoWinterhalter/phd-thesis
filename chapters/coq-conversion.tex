@@ -53,7 +53,7 @@ the requirements for termination.
 
 \subsection{\mintinline{coq}{Reduction}}
 
-The first phase takes two pairs of term and stack and reduce both using the
+The first phase takes two pairs of a term and a stack and reduce both using the
 weak head reduction machine of \nrefch{coq-reduction}.
 In order to avoid unfolding definitions unnecessarily, we disable the
 \(\delta\)-reduction.
@@ -99,8 +99,8 @@ where \(\const\ k\ u\) refers to the constant of name \(k\) and universe
 instance \(u\).
 Here we first compare the universe instances to check that they are equal
 (which is a bit more general that syntactic equality), and if so we compare
-the stacks, or more specifically the arguments on those. I will explain this
-part when presenting the corresponding function.
+the stacks, or more specifically the arguments on those stacks. I will explain
+this part when presenting the corresponding function.
 \marginnote[0.1cm]{
   One or the two of them might refer to axioms and in that case, we only unfold
   those that can be, and if we compare two axioms, we know they are distinct.
@@ -159,10 +159,10 @@ This may seem like a simple case of recursing in the subterms but there is a
 subtlety: the context when comparing the bodies is still \(\Ga\) and not
 \(\Ga, x:A_1\) or \(\Ga, x:A_2\).
 \marginnote[0.1cm]{
-  A \emph{good} things that helps us complete proofs.
+  A \emph{good} thing that helps us complete proofs.
 }
-This is actually a good thing that we do not have to pick one of them and remain
-symmetric.
+This is actually a good thing that we do not have to pick one of them so that we
+can retain a symmetric presentation.
 We are saved by the stacks once more. Indeed, in
 \(\stack{\lambda (x:A_1).\ \shole}\) we have the information corresponding to
 \(x : A_1\). More generally, stacks do not only yield positions but also
@@ -175,7 +175,7 @@ contexts. In the expression
 
 Other than those, we also deal with \(\Pi\)-types, pattern-matching,
 projections, fixed- and cofixed-points.
-The case of two applications is imposibble because the arguments would have been
+The case of two applications is imposible because the arguments would have been
 pushed on the stacks.
 If the terms do not fall in this diagonal, we instead call the fallback
 function recursively.
@@ -189,7 +189,7 @@ function recursively.
 \subsection{\mintinline{coq}{Args}}
 
 When the two terms are convertible, it is time to move on the comparison of the
-stacks, or rather the comparision of the leading arguments on said stacks.
+stacks, or rather the comparison of the leading arguments on said stacks.
 
 A stack \(\pi\) can be decomposed into a list of arguments \(u_1, \dots, u_n\)
 and a remaining stack \(\rho\) that does not start with some \(\coapp{u}\),
@@ -250,7 +250,7 @@ It tries to make progress on each side before resorting to plain and simple
 syntactic equality.
 \marginnote[1cm]{
   I use \(\red_\WM \not =\) to mean that the reduction produced a different term.
-  In the formalisation its a different process that checks that the term is
+  In the formalisation it is a different process that checks that the term is
   indeed stuck because of \(\delta\).
 }
 \marginnote[4.4cm]{
