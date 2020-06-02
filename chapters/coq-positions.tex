@@ -6,6 +6,9 @@ As we will see in \nrefch{coq-reduction} and \nrefch{coq-conversion}, when
 manipulating terms we sometimes have to go deep withing subterms.
 Positions point you to a specific subterm of a term while stacks operate as
 some sort of terms with a hole or equivalently some evaluation environments.
+These notions are studied
+in~\sidecite[-1.8cm]{danvy2008equivalence,biernacka2009towards,danvy2009towards}
+for instance.
 
 \section{Positions}
 
@@ -16,7 +19,7 @@ branching you have to say which branch you want to take.
 \marginnote[1cm]{
   Sequences such as \(0.1.0\) are read from left to right, and correspond to
   directions starting from the root.
-  In black is the subtree as the given position.
+  In black is the subtree at the given position.
 }
 \begin{figure}[hb]
   \includegraphics[width=0.9\textwidth]{tree-position.pdf}
