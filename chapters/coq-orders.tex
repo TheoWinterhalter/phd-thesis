@@ -2,9 +2,10 @@
 \chapter{Well-founded induction and well-orders}
 \labch{coq-orders}
 
-This chapter is perhaps a bit off-track compared to the others in this chapter
-as it is a bit general but I have it here because I am going to rely on it in
-the next chapters.
+Before devling into the definiton of the type checker which will rely on strong
+normalisation, we need to study well-founded induction and orders in more
+detail (remember that strong normalisation is defined in terms of
+well-foundedness of coreduction).
 
 \section{General setting}
 
@@ -50,7 +51,7 @@ the negative formulation.
 \section{Constructive setting}
 
 In an intuitionistic or even constructive setting, the notion of
-well-foundedness is stated in a positive way: instead of saying the there is no
+well-foundedness is stated in a positive way: instead of saying that there is no
 infinitely decreasing sequence, we say that every element---for instance every
 natural number---is \emph{reachable} in a finite number of steps from the base
 case(s).
@@ -60,8 +61,8 @@ case(s).
   when all smaller elements for \(\prec\) are also accessible.
 \end{definition}
 \marginnote[-1.3cm]{
-  In particular, a minimal element---in the sense that there are no \(u\) such
-  that \(u \prec t\)---is always accessible.
+  In particular, a minimal element \(t\)---in the sense that there are no \(u\)
+  such that \(u \prec t\)---is always accessible.
 }
 
 For instance, to show that \(2\) is accessible for \(<\) we would need to show
@@ -96,7 +97,6 @@ well-founded induction.
 Acc_ind :
   forall (A : Type) (R : A -> A -> Prop) (P : A -> Prop),
     (forall x : A,
-      (forall y : A, R y x -> Acc R y) ->
       (forall y : A, R y x -> P y) ->
       P x
     ) ->
@@ -176,7 +176,7 @@ Definition fib n :=
   Also \mintinline{coq}{n < m} is just a notation for
   \mintinline{coq}{lt n m}.
 }
-The \mintinline{coq}{fib} function we try to define earlier is barely
+The \mintinline{coq}{fib} function we tried to define earlier is barely
 recognisable here. Fortunately for us there are tools to write well-founded
 inductions in a nicer way. One such tool is \Equations.
 \begin{minted}{coq}
@@ -242,7 +242,22 @@ well-foundedness.
   order they induce is also well-founded.
 \end{lemma}
 
-\todo{Some example of program?}
+With lexicographic orders we can define the Ackermann function for instance.
+\marginnote[1cm]{
+  \mintinline{coq}{lexprod} is the lexicographic order in \Coq as provided by
+  \Equations itself.
+}
+\begin{minted}{coq}
+Equations ack (x : nat * nat) : nat
+  by wf x (lexprod _ _ lt lt) :=
+
+  ack (0,   n)   := S n ;
+  ack (S m, 0)   := ack (m, 1) ;
+  ack (S m, S n) := ack (m, ack (S m, n)).
+\end{minted}
+Once again, \Equations saves the day by providing us with a readable version of
+the function, while hiding the well-foundedness proof: the definition is
+accepted as-is with no more input required of the user.
 
 In the context of dependent types, these might not prove sufficient, hence the
 need for dependent lexicographic orders.
@@ -250,16 +265,13 @@ need for dependent lexicographic orders.
 \subsection{Dependent lexicographic orders}
 
 In the same way that simple products \(A \times B\) can be extended to their
-dependent counterpart \(\Sigma\)-types: \(\Sigma (x:A). B\), lexicographic
-orders have a dependent version.
+dependent counterpart, namely \(\Sigma\)-types: \(\Sigma (x:A). B\),
+lexicographic orders have a dependent version.
 As before, we take an order \(\prec_A\) on \(A\), but as \(B\) depends on
 \(x : A\), we need the second order to also depend on \(x\). Fortunately for us,
 the only times we are interested in \(\prec_B\) is when the first two components
 are the same (\(a = a'\)), meaning the same type \(B[x \sto a]\).
 
-\marginnote[2.6cm]{
-  Notice in the second case that there is no \(a'\), it is twice \(a\).
-}
 \begin{definition}[Dependent lexicographic order]
   Given a type \(A\) and a type \(B\) dependent on \(A\), as well as an order
   \(\prec_A\) on \(A\) and an order \(\prec_B\) on \(B\), dependent on \(A\),
@@ -274,6 +286,9 @@ are the same (\(a = a'\)), meaning the same type \(B[x \sto a]\).
     \end{array}
   \]
 \end{definition}
+\marginnote[-1cm]{
+  Notice in the second case that there is no \(a'\), it is twice \(a\).
+}
 
 I find the \Coq definition can shed more light than the paper one in this case.
 In it the dependencies appear in a more explicit manner so it can lift some
@@ -325,8 +340,6 @@ Lemma dlexprod_Acc :
       Acc leA x ->
       Acc (@dlexprod A B leA leB) (x;y).
 \end{minted}
-
-\todo{Maybe an example of usage?}
 
 \subsection{Lexicographic order modulo a bisimulation}
 
@@ -428,7 +441,10 @@ Then I list several properties that I require, I shall list them one by one:
   \item if you have a coercion of the right of \mintinline{coq}{leB} you can
   instead put its symmetric on the left.
 \end{enumerate}
-\todo{This looks like an order isomorphism.}
+\marginnote[-2cm]{
+  There is probably a hidden notion here like an order isomorphism but this
+  would require a more thorough investigation.
+}
 
 All these should feel natural if you have equality in mind.
 I did mention bisimulations however and did not even talk about it.
@@ -465,7 +481,6 @@ does look like \ref{item:dlexmod-sim} but it would conclude
 \mintinline{coq}{leA y x}. Also, there is no reason for a bisimulation to
 be an equivalence relation and even less for the existence of a well-behaved
 coercion function for the second order.
-\todo{This can probably be relaxed actually.}
 
 If we go back to the simple---\ie not dependent---case for a bit, a bisimulation
 that is also an equivalence relation is sufficient.
@@ -513,7 +528,7 @@ Lemma lexmod_Acc :
 Regarding the requirement of the simulation to also be an equivalence relation,
 we can actually use the notion of bisimilarity, a special kind of bisimulation.
 
-\begin{definition}[Bisimularity]
+\begin{definition}[Bisimilarity]
   Given a relation \(\red\) on type \(A\), two terms \(p\) and \(q\) in \(A\)
   are called \emph{bisimilar} when there exist a bisimulation \(\sim\) for
   \(\red\) such that \(p \sim q\).
@@ -526,5 +541,5 @@ it to quotient simple lexicographic orders.
   In the simple case, the coercion function is always the indentity, so all
   its properties follow trivially.
 }
-Again, in the dependent case this is not enough but I still kept the same
+Again, in the dependent case this is not enough but I still kept the name
 because it is roughly a generalisation of the simple case.

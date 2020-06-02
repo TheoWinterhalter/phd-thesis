@@ -53,6 +53,16 @@ Equations fib (n : nat) : nat
   fib 1 := 1 ;
   fib (S (S n)) := fib (S n) + fib n.
 
+Import Subterm.
+
+(* Ackermann *)
+Equations ack (x : nat * nat) : nat
+  by wf x (lexprod _ _ lt lt) :=
+
+  ack (0,   n)   := S n ;
+  ack (S m, 0)   := ack (m, 1) ;
+  ack (S m, S n) := ack (m, ack (S m, n)).
+
 (* Simple lexicographic order modulo another relation *)
 Inductive lexmod {A B}
     (leA : A -> A -> Prop)
