@@ -23,8 +23,8 @@ The idea is that this set describes all the possible translations that
 lead to the expected property. When
 $\isterm{\Gb}{\tb}{\Ab} \in \transl{\xisterm{\Ga}{t}{A}}$, we say that
 $\isterm{\Gb}{\tb}{\Ab}$ realises $\xisterm{\Ga}{t}{A}$. The
-translation will be given by showing that this set is inhabited by
-induction on the derivation.
+translation will be given by showing that this set is inhabited whenever the
+judgment in \acrshort{ETT} is derivable, by induction on the derivation.
 
 \begin{definition}[Characterisation of possible translations]
   \leavevmode
@@ -39,7 +39,7 @@ induction on the derivation.
 \end{definition}
 
 In order to better master the shape of the produced realiser, we state the
-following lemma which states that we can chose the translated term such that
+following lemma which says that we can chose the translated term such that
 the type has the same head type constructor as the type it realises.
 %
 This is important for instance for the case of an application, where we
@@ -173,7 +173,9 @@ This also holds for \acrshort{WTT}.
 The reason I did not differentiate the two target theories is simply because
 there was no need. The proof is exactly the same, indeed, the proof never uses
 the conversion in the target since every conversion from \acrshort{ETT} is
-translated to an equality.
+translated to an equality, without ever relying on conversion (other than to
+produce equalities corresponding to computation rules in \acrshort{ITT}, which
+are axiomatised in \acrshort{WTT}).
 The two formalisations are proof enough of this.
 
 \begin{corollary}[Conservativity]
