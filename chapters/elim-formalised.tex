@@ -325,8 +325,7 @@ Definition ty_pseudoid :=
 respectively to the \acrshort{ETT} representation of \mintinline{coq}|pseudoid|
 and its type.
 We then produce, using our home-brewed \ltac type-checking tactic, the
-corresponding \acrshort{ETT} typing derivation (notice the use of reflection to
-typecheck).
+corresponding \acrshort{ETT} typing derivation.
 %
 \begin{minted}{coq}
 Lemma type_pseudoid : Σi ;;; [] |-x tm_pseudoid : ty_pseudoid.
@@ -338,6 +337,15 @@ Proof.
 Defined.
 \end{minted}
 %
+Notice the use of \mintinline{coq}{reflection} which is a constructor of the
+inductive type of typing derivations in \acrshort{ETT}. Its type is given by
+\begin{minted}{coq}
+reflection :
+  forall A u v e,
+    Σ ;;; Γ |-x e : sEq A u v ->
+    Σ ;;; Γ |-x u ≡ v : A
+\end{minted}
+and corresponds to a use of the reflection rule.
 We can then translate this derivation, obtain the translated term and then
 convert it to \MetaCoq.
 %
