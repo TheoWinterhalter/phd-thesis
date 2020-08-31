@@ -39,8 +39,11 @@ This happens for instance after a \(\beta\)-reduction.
     (\lambda (x:A). t)\ u \red_\beta t[x \sto u]
   \]
 }
+Whereas we substituted one term for one variable for the \(\beta\)-reduction,
+we can consider substitutions that map several variables to as many terms.
 Substitutions are typed using two contexts: \(\sigma : \Ga \to \D\) basically
-states that \(\sigma\) maps variables of \(\D\) to terms typed in \(\Ga\).
+states that the substitution \(\sigma\) maps variables of \(\D\) to terms typed
+in \(\Ga\).
 \begin{mathpar}
   \infer
     {\forall (x : A) \in \D,\ \Ga \vdash \sigma(x) : A\sigma}
