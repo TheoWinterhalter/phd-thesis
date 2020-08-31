@@ -790,3 +790,30 @@ heterogeneous equality (\(\cong\)) in the typing rules. If you would indulge me,
 you can imagine that the definition for heterogeneous equality is \emph{inlined}
 in the typing rules. That way it is a much more convenient read (and it is
 already a bit rough).
+
+\begin{remark}
+  Most of these rules have to do with congruence of heterogeneous equality
+  under binders. We can in fact deduce more comprehensive congruence rules.
+  For instance, for application we can inhabit the type
+  \[
+    \Heq
+      {B_1[x \sto v_1]}
+      {\app{u_1}{x:A_1}{B_1}{v_1}}
+      {B_2[x \sto v_2]}
+      {\app{u_2}{x:A_2}{B_2}{v_2}}
+  \]
+  from
+  \[
+    \begin{array}{l}
+      \Ga \vdash e_A : A_1 = A_2 \\
+      \Ga, p : \Pack{A_1}{A_2} \vdash
+      e_B : B_1[x \sto \pi_1\ p] = B_2[x \sto \pi_1\ \pi_2\ p] \\
+      \Ga \vdash e_u : \Heq{\Pi(x:A_1).B_1}{u_1}{\Pi(x:A_2).B_2}{u_2} \\
+      \Ga \vdash e_v : \Heq{A_1}{v_1}{A_2}{v_2}.
+    \end{array}
+  \]
+  This is achieved by relying on the definition of heterogeneous equality and
+  the \(\mathsf{J}\) eliminator.
+\end{remark}
+
+We can now dive into the proof itself.
