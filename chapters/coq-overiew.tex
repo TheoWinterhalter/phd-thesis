@@ -43,8 +43,8 @@ replace the \acrshort{TCB} by a \acrfull{TTB}.
 This time the idea is to rely on \MetaCoq which contains a specification of
 \acrshort{PCUIC} to implement a verified kernel, assuming that the theory is
 correct (hence the \acrshort{TTB}).
-This \acrshort{TTB} is also kept to a minimum, only a few lemmata are part of it
-now, and in time it should only consist in assuming strong normalisation.
+This \acrshort{TTB} is also kept to a minimum, it only consists in assuming
+strong normalisation.
 The new kernel can be extracted to \Coq using its extraction
 mechanism~\sidecite{Let2008} and it no longer has to be trusted. Of course this
 requires trusting the extraction mechanism and even \Coq itself in which
@@ -84,3 +84,5 @@ guard condition checking, we chose to remain abstract over those and simply
 assume the existence of those in the specification: any implementation
 satisfying the specification can thus be plugged in. We use a rather naive
 universe checker for now and do not provide any guard checking at all.
+Finally, we do not handle \(\eta\)-equalities yet as I will explain in the next
+chapter where I present our specification of \acrshort{PCUIC}.
