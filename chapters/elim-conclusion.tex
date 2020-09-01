@@ -60,6 +60,11 @@ The translated term will never make us of it and one can always check if a
 term is relying on unsafe assumptions thanks to the
 \mintinline{coq}|Print Assumptions| command.
 
+Finally, it is important to note that, while this work does provide a
+way to translate from \acrshort{ITT} to \acrshort{WTT}, one must still assume
+\acrshort{UIP}, \acrshort{funext} and several equality axioms even though they
+are not necessary in \acrshort{ITT} itself.
+
 \section{Related Works}
 \label{sec:related-works}
 
