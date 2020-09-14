@@ -5,12 +5,12 @@
 We want to implement a correct conversion checker that is close enough to the
 actual implementation that is rather efficient, instead of the naive solution
 of reducing both terms to normal forms and then comparing them syntactically.
-We also have to take care of universes and cumulativity which complicates matter
-a little bit.
+We also have to take care of universes and cumulativity which complicates
+matters a little bit.
 
 \section{High level description}
 
-I will present our approach at the high level.
+I will present our approach at a high level.
 \begin{enumerate}[label=(\arabic*)]
   \item \label{itm:convred} First we weak head reduce the two terms without
   \(\delta\)-reduction (\ie without unfolding definitions);
@@ -288,7 +288,7 @@ syntactic equality.
 In the (partial) definitions above I sometimes refer to syntactic equality of
 terms or equality of universes. When I write \(t_1 = t_2\) I mean syntactic
 equality of terms up to universes. This implicitly refers to universe
-constraints, which is the reason I do not simply unify them, the way I unified
+constraints, which is the reason I do not simply unify them the way I unified
 \(k_1\) and \(k_2\) into \(k\) when considering constants.
 
 Another important point is that we actually define conversion and cumulativity
@@ -332,10 +332,10 @@ where \(\pi_1\) and \(\pi_2\) are decomposed as
   \end{array}
 \]
 This might come as surprising that we only conclude on applications at the head
-of the stakcs and not about the whole stacks themselves.
+of the stacks and not about the whole stacks themselves.
 If we were asking for
 \[
-  \Ga \vdash \zip\ \vscmd{t_1}{\pi_1} \equiv \vscmd{t_2}{\pi_2}
+  \Ga \vdash \zip\ \vscmd{t_1}{\pi_1} \equiv \zip\ \vscmd{t_2}{\pi_2}
 \]
 instead, it would be too strong a requirement. Indeed, in the case of
 \(\lambda\)-abstractions, we consider the recursive call on the domains
