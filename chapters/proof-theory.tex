@@ -7,7 +7,7 @@ interested in the way to prove things, in the `proof' object itself, \eg we
 might want to check that a proof uses some specific rules of deduction.
 We may also want to prove that a system is not contradictory, \ie that it does
 not entail both an assertion and its negation.
-This allows us to understand more about proof reuse, about transposition of a
+This allows us to understand more about proof reuse, about transfer of a
 property to another system, or about some intrinsinc properties of the proof
 itself. The study of proofs also makes it possible to define clear systems
 outlining formally what a proof is and when it is valid. This leads to the
@@ -21,7 +21,7 @@ one needs to put within every proof, to the system which validates them all.
 
 Before we start proving something, we must know precisely what it is we want to
 prove. In informal mathematics, the statement will be a sentence, involving
-concepts that the writer and reader agree on. The proof then consists in a
+concepts that the writer and reader agree on. The proof then consists of a
 sequence of sentences and argument that convince the same readers.
 
 For instance, the Pythagorean theorem states that
@@ -140,6 +140,9 @@ proposition \(A \wedge B\) (read `\(A\) \emph{and} \(B\)').
 % }
 This is called a \emph{judgement}: \(A, B, C \vdash D\) means that,
 \emph{assuming} \(A\), \(B\) \emph{and} \(C\), then \(D\) holds.
+\marginnote[1.2cm]{
+  \(\mathcal{J}\) here stands for \emph{judgement}.
+}
 \[
   \begin{array}{rcl}
     \Ga, \D &\bnf& \ctxempty \bnfor \Ga, P \\
@@ -171,7 +174,7 @@ or more generally
     {\Ga \vdash A}
 \]
 The line separates one judgement below, the conclusion, to one, several or
-possibly no judgements above. They represent requirements to conclude the below
+possibly no judgements above. They represent requirements to conclude the lower
 part. In this case, one does not need to assume anything to conclude that \(A\)
 entails \(A\). The condition \(A \in \Ga\) is not a judgement itself but really
 a side condition.
@@ -301,7 +304,7 @@ but I will present the most relevant ones to the rest of my work.
 
 \subsection{Intuitionistic logic}
 
-Intuitionistic logic correspond to the general logical setting of my work.
+Intuitionistic logic corresponds to the general logical setting of my work.
 Gentzen describes it using a natural deduction system called
 \NJ~\sidecite{gentzen1935untersuchungen}.
 
@@ -316,9 +319,9 @@ The syntax is given by
 \]
 which corresponds to \emph{propositional logic}.
 
-I will give the rules in two separate bundle.
-We first have the logical rules---\ie that pertain to the logical constructors
-of propositional logic:
+I will give the rules in two separate bundles.
+We first have the logical rules---\ie those that pertain to the logical
+constructors of propositional logic:
 \marginnote[1cm]{
   Next to the rules I write their name in parentheses.
   \(ax\) stands for `axiom'.
@@ -427,15 +430,15 @@ a new, unused hypothesis in the context), reorder them, and remove duplicates.
   (P)
 \end{mathpar}
 
-This logic is \emph{constructive} in that, from every proof derivation one can
-extract a proof where the last rule is an introduction rule.
+This logic is \emph{constructive} in that, from every proof derivation from no
+hypotheses one can extract a proof where the last rule is an introduction rule.
 \marginnote[0.1cm]{
   Notice that these are proofs in the empty context.
 }%
 For instance, every proof of \(\vdash A \vee B\) must contain either a proof of
 \(\vdash A\) or a proof of \(\vdash B\).
 This is obtained by a process known as \emph{cut-elimination} which removes all
-eliminations rule that would be the last rule.
+elimination rules that would be the last rule.
 For instance the modus ponens (\(\to E\)) can be removed when it follows an
 introduction of implication (\(\to I\)) rule, I will show an example for which
 we set \(P \coloneqq A \to \neg \neg A\) and prove \(\vdash P \wedge P\).
@@ -760,6 +763,11 @@ The next introductory chapters will focus on this notion of proof framework.
 
 When you have a proof framework or logic, there are two main things you want to
 know about it:
+\marginnote[1.5cm]{
+  Completeness is not to be confused with the \acrshort{LEM} which gives a proof
+  of \(P \vee \neg P\) for each \(P\) but not a proof of either \(P\) or
+  \(\neg P\) for every \(P\).
+}
 \begin{itemize}
   \item Is it \emph{consistent}? An inconsistent system is one in which we can
   prove an assertion and its negation.
@@ -768,10 +776,7 @@ know about it:
 \end{itemize}
 
 Consistency can be reformulated equivalently as the absence of proof of false
-\(\bot\).
-Completeness is not to be confused with the \acrshort{LEM} which gives a proof
-of \(P \vee \neg P\) for each \(P\) but not a proof of either \(P\) or
-\(\neg P\) for every \(P\).
+(\(\bot\)).
 
 Ideally we would want our favourite system to enjoy \emph{both} of these
 properties, the proof of which would be conducted in the very same system.
@@ -836,6 +841,14 @@ another natural number, this means that every natural number is a succession of
   \end{array}
 \]
 
+This requirement of arithmetic is linked to the fact natural numbers can be used
+to encode statements---think how, for instance, this document is represented
+using binary code, \ie numbers comprised of \(0\)s and \(1\)s. A process know as
+`arithmetisation' allows us to use arithmetic properties on natural numbers to
+talk about the properties of the statement they represent. The `trick' is then
+to produce a statement \(n\) that is equivalent to `\(n\) is not provable' thus
+leading to a contradiction.
+
 I have not made the statements of Gödel's incompleteness theorems very precise
 as it is beyond the scope of my work. It is very easy to find references that
 are not in German on the subject, like the well-written Wikipedia page dedicated
@@ -845,3 +858,9 @@ to the subject.
 % type theory is still an open problem, but it is so mainly for technical reasons
 % and it is widely believed that the same---or very similar restrictions---apply
 % to it.
+
+These theorems do not prevent us from using formal systems of reasoning as long
+as one embraces the fact that some statements will inevitably be
+independent---neither provable nor disprovable---from the theory.
+We must develop other means to increase the trust we have in those systems so
+that we can use them, as we shall see later.

@@ -111,7 +111,7 @@ Using this as a return type, we can write a dependent version of the
 \]
 The idea is that in the branch where \(b\) is \(\ttrue\), we have to provide
 a boolean, here \(\ttrue\), and in the branch where \(b\) is \(\ffalse\), we
-have to provide a nautral number, I picked \(0\).
+have to provide a natural number, I picked \(0\).
 
 The \(\mathsf{if}\) is actually just a notation for a more generic construction
 called \emph{pattern-matching}. \(\tif{b}{x.P}{u}{v}\) is in fact the term
@@ -159,9 +159,11 @@ Once again, pattern-matching allows us to inspect a proof of \(\unit\):
     }
     {
       \Ga \vdash
+      \left(
       \pmatch{u}{x.P}{
         \branch{\tunit}{v}
       }
+      \right)
       : P[x \sto u]
     }
   %
@@ -210,7 +212,7 @@ such terms.
       \Ga \vdash t : \bot \\
       \Ga, x:\bot \vdash P
     }
-    {\Ga \vdash \pmatch{t}{x.P}{} : P[x \sto t]}
+    {\Ga \vdash \left(\pmatch{t}{x.P}{}\right) : P[x \sto t]}
   %
 \end{mathpar}
 This is the essence of the \emph{principle of explosion}:
@@ -270,10 +272,12 @@ respectively representing \(0\), \(1\), \(2\), \dots
     }
     {
       \Ga \vdash
+      \left(
       \pmatch{n}{x.P}{
         \branch{\zero}{u_\zero} \\
         \branch{\natsucc\ m}{u_\natsucc}
       }
+      \right)
       : P[x \sto n]
     }
   %
@@ -348,17 +352,17 @@ There are two main ways of achieving this.
   \[
     \infer
       {
-        \Ga \vdash \Pi \Delta. T \\
-        \Ga, f : \Pi \Delta. T, \D \vdash t : T \\
+        \Ga \vdash \Pi \D. T \\
+        \Ga, f : \Pi \D. T \vdash t : \Pi \D. T \\
         \highlight{f \vdash_n t \text{ termination checks}}
       }
-      {\Ga \vdash \fixp_n (f : \Pi \Delta. T).\ t : \Pi \Delta. T}
+      {\Ga \vdash \fixp_n (f : \Pi \D. T).\ t : \Pi \D. T}
     %
   \]
   As you can see there is an extra condition I called `termination checking'.
   If we were not to restrict the definition of fixed-points to terminating
   functions we would end up with an inconsistent theory. Indeed, one could
-  inhabit the empty with the following trivial fixed-point which just calls
+  inhabit the empty type with the following trivial fixed-point which just calls
   itself directly:
   \[
     \fixp (f : \bot).\ f
@@ -400,7 +404,7 @@ There are two main ways of achieving this.
   of its definition.
   \[
     \fixp_n (f : \Pi \D.T).\ t \red
-    \lambda \D.\ t[f \sto \fixp_n (f : \Pi \D.T).\ t]
+    t[f \sto \fixp_n (f : \Pi \D.T).\ t]
   \]
   Of course, doing this would defeat the purpose of the termination checker:
   ensuring that the obtained definition terminates. As you can see you can
@@ -415,7 +419,7 @@ There are two main ways of achieving this.
       (\fixp_n (f : \Pi \D.T).\ t)\
       u_1\ \dots\ u_{n-1}\ (\mathbf{C}\ v_1\ \dots\ v_m)
       &\red \\
-      (\lambda \D.\ t[f \sto \fixp_n (f : \Pi \D.T).\ t])\
+      t[f \sto \fixp_n (f : \Pi \D.T).\ t]\
       u_1\ \dots\ u_{n-1}\ (\mathbf{C}\ v_1\ \dots\ v_m)
     \end{array}
   \]
@@ -508,7 +512,7 @@ the induction principle on lists of type
 
 \paradot{Options}
 
-\(\option\ A\) represents a potential data of type \(A\) but it could also not
+\(\option\ A\) represents a potential datum of type \(A\) but it could also not
 be present. It is optional.
 \begin{mathpar}
   \infer
@@ -755,7 +759,7 @@ Vectors are length-indexed lists: \(\tvec_A\ n\) is type of lists of length
       \Ga \vdash n : \nat \\
       \Ga \vdash v : \tvec_A\ n
     }
-    {\Ga \vdash \vcons\ a\ n\ v : \tvec_A\ \highlight{\natsucc\ n}}
+    {\Ga \vdash \vcons\ a\ n\ v : \tvec_A\ \highlight{(\natsucc\ n)}}
   %
 
   \infer
@@ -907,7 +911,7 @@ To deal with them you need mutual fixed-points.
 }
 Pushing even further in that direction, come inductive inductive
 types~\sidecite[1.3cm]{forsberg2010inductive} where the type of inductive types
-can also depend on the other inductive types.
+can also depend on the mutually defined inductive types.
 Induction recursion~\sidecite[1.2cm]{dybjer2000general} allows you to define
 inductive types mutually with functions acting on them.
 
@@ -1214,8 +1218,9 @@ reflexivity proof, this is Streicher's axiom K:
 \]
 This can be very useful to deal with higher-level equalities.
 This principle can be assumed in \Coq but is not provable. In \Agda however this
-principle holds and has to be deactivated with an
-option~\sidecite{cockx2016eliminating}.
+principle holds---it can proven by pattern-matching on the equality---and has to
+be deactivated with an option~\sidecite{cockx2016eliminating} which restricts
+pattern-matching.
 
 \paradot{\Acrfull{funext}}
 

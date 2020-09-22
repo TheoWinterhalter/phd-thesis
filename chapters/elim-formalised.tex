@@ -45,7 +45,7 @@ We also provide a translation from \MetaCoq (and thus \Coq!) to \acrshort{ETT}
 that we will describe more extensively with the examples in
 \nrefsec{ett-flavoured}.
 
-\section{Quick Overview of the Formalisation}
+\section{Quick overview of the formalisation}
 
 The formalisation can be found at
 \href{https://github.com/TheoWinterhalter/ett-to-itt}{github.com/TheoWinterhalter/ett-to-itt}
@@ -166,7 +166,7 @@ compute a translated term and type out of a derivation in \acrshort{ETT}.
 % does not break the guard condition of fixed points, and we are instead relying on
 % a more type-based approach.
 
-\section{About Universes}
+\section{About universes}
 \labsec{elim-trans-sorts}
 
 As I mentioned earlier in \nrefch{elim-reflection-framework}, sorts are treated
@@ -210,7 +210,7 @@ universe polymorphism and cumulativity) by interacting with \Coq (thanks to
 \MetaCoq), one of the instances we provide comes with only one universe $\Type$
 and the inconsistent typing rule $\Type : \Type$.
 
-\section{ETT-flavoured \Coq: Examples}
+\section{ETT-flavoured \Coq: examples}
 \labsec{ett-flavoured}
 
 In this section I demonstrate how our translation can bring extensionality to
@@ -501,7 +501,7 @@ vec_rect A
 : forall A n m, vec A n -> vec A m -> vec A (n + m)
 \end{minted}
 
-\section{Towards an Interfacing between \Andromeda and \Coq}
+\section{Towards an interfacing between \Andromeda and \Coq}
 
 \Andromeda~\sidecite{andromeda} is a proof assistant implementing \acrshort{ETT}
 in a sense that is really close to our formalisation. Aside from a concise
@@ -538,7 +538,7 @@ All in all, it should be possible in the future to use our translation
 particularly interesting because \Andromeda's system is much more practical
 than the small type-checker I wrote in \Coq.
 
-\section{Composition with other Translations}
+\section{Composition with other translations}
 
 This translation also enables the formalisation of translations that
 target \acrshort{ETT} rather than \acrshort{ITT} and still get mechanised proofs

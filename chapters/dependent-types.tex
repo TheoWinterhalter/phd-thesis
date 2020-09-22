@@ -2,7 +2,7 @@
 \chapter{Dependent types}
 \labch{dependent-types}
 
-The idea behind dependent types is that they now can \emph{depend} on terms,
+The idea behind dependent types is that types now can \emph{depend} on terms,
 \ie terms can appear in types.
 \marginnote[1cm]{
   Thus, \(x = y\) becomes a type depending on \(x\) and \(y\), and whose
@@ -57,7 +57,7 @@ and it has type
 \[
   \Pi (A : \Type).\ \Pi (a : A).\ A
 \]
-a fact that we can write
+a fact that we can write as
 \[
   \lambda\ (A : \Type)\ (a : A).\ a
   : \Pi\ (A : \Type)\ (a : A).\ A
@@ -254,7 +254,7 @@ repeating myself.
   \infer
     {
       \Ga, x :A \vdash t : B \\
-      \Ga \vdash \Pi (x:A).\ B : \Type
+      \Ga \vdash A : \Type
     }
     {\Ga \vdash \lambda (x:A).t : \Pi (x:A).\ B}
   %
@@ -276,10 +276,10 @@ repeating myself.
     {\Ga \vdash t : B}
   %
 \end{mathpar}
-\marginnote[-4.5cm]{
+\marginnote[-3.5cm]{
   Here I changed a bit the typing rule for \(\lambda\)-abstraction to also ask
-  for its type to be well-formed. This is necessary to ensure we put legitimate
-  types in the context.
+  for the domain to be well-formed. This is necessary to ensure we put
+  legitimate types in the context.
 }%
 \marginnote[-1.5cm]{
   Similarly, I ask that the type \(B\) is well-typed in the conversion rule.
