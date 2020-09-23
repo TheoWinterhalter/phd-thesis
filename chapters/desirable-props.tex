@@ -35,7 +35,7 @@ The version of weakening I present here is one amongst many and is sometimes
 called different names like `thinning', but I will stick to `weakening' in the
 remainder of this document.
 
-Susbstitutions are the way to instantiate the variables that are bound.
+Substitutions are the way to instantiate the variables that are bound.
 This happens for instance after a \(\beta\)-reduction.
 \reminder[-0.9cm]{\(\beta\)-reduction}{
   \[
@@ -53,7 +53,7 @@ in \(\Ga\).
     {\sigma : \Ga \to \D}
 \end{mathpar}
 This is sometimes written \(\Ga \vdash \sigma : \D\) instead, and typing
-definitons vary a little depending on the definition of substitution but this
+definitions vary a little depending on the definition of substitution but this
 is the basic idea.
 
 \begin{definition}[Substitutivity]
@@ -257,7 +257,7 @@ Confluence is often summarised with the following diagram.
 \begin{definition}[Weak normalisation]
   Weak normalisation of reduction means that for every well-typed term \(t\)
   there exists a term \(n\) such that \(t \reds n \not\red\).
-  \(n\) is called a \emph{normal form} of \(t\).
+  In such a case, \(n\) is called a \emph{normal form} of \(t\).
 \end{definition}
 
 A normal form is a term that cannot reduce any further as illustrated by the
@@ -406,7 +406,7 @@ Decidability of type-checking is an important property because it crystalises
 the fact that a term is indeed a \emph{proof}, it is a good enough certificate
 that people can check independently.
 However, in a system that does not feature decidable type-checking, you can still
-provide certificates: for one you could simply store the full-derivation as a
+provide certificates: for one you could simply store the full derivation as a
 proof; it is however possible to translate the proof to another system with
 decidable checking, like I will present in \arefpart{elim-reflection}.
 

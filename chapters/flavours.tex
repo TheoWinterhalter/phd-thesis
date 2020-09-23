@@ -11,7 +11,7 @@ early to grasp the concept fully.
 
 \section{Computation and type theory}
 
-The first prism in which to see type theory through can be that of computation.
+The first prism through which to see type theory through can be that of computation.
 Indeed, not all type theories feature it to the same extent. Though for some
 people in computation resides the essence of type theory, it is still worth
 it to investigate theories where conversion is defined differently.
@@ -162,7 +162,7 @@ an equality type.
 As you can see, this time I opted for a typed conversion, I think it makes more
 sense since the conversion is more semantical than syntactical.
 Also, you can note the little \(\exmark\) subscript, its purpose is to mark
-the judgement as beeing \emph{ex}tensional.
+the judgement as being \emph{ex}tensional.
 \Andromeda and \NuPRL implement variants of
 \acrlongpl{ETT}~\sidecite{andromeda,nuprl}.
 To see its usefulness, we are going to look at the definition of reversal of
@@ -237,7 +237,8 @@ simpler, an even more attractive fact once combined with a translation from
 Another point worth mentioning is that it really crystallises the notion that
 proofs are really just terms and do not require extra machinery to make sure
 they are indeed proofs (even when conversion is decidable, it might takes
-eons before you get this knowlegde)~\sidecite{de1991plea}.
+eons before two types are verified to be
+convertible)~\sidecite[-0.3cm]{de1991plea}.
 
 One might also be tempted to call it minimal, but in order to simulate the
 congruence aspect of conversion, we have to extend the theory with principles
@@ -269,7 +270,7 @@ shows it is inconsistent to have \(\Type : \Type\).
   paradox~\sidecite[1.7cm]{hurkens1995simplification}.
 }
 The \Coq user however does not usually have to deal with those and
-instead rely on the so-called
+instead relies on the so-called
 % \emph{typical ambiguity}~\sidecite[1.5cm]{harper1991type,feferman2004typical,specker1966typical}:
 \emph{typical ambiguity}~\sidecite[1.5cm]{harper1991type}:
 in the \Coq proof assistant one will simply write \(\Type\) and \Coq will infer
@@ -384,7 +385,10 @@ of this document, another technology is used in place:
 \emph{template polymorphism}. It is a heuristic orthogonal to universe
 polymorphism to define constants both at the \(\Type\)-level and at the
 \(\Prop\)-level at the same time. However, this seems to be the source of many
-bugs and should be removed from \Coq's kernel at some point in the relatively
+bugs\sidenote{%
+  They can be found at
+  \url{https://github.com/coq/coq/blob/bb6e78ef2c/dev/doc/critical-bugs\#L98}.
+} and should be removed from \Coq's kernel at some point in the relatively
 near future.
 
 \subsection{Inductive types}
@@ -437,18 +441,19 @@ will be equivalent to
 \end{minted}
 as both will evaluate \mintinline{ocaml}{u} before substituting it for
 \mintinline{ocaml}{x} in \mintinline{ocaml}{t}. This works mainly because
-\ocaml is a \acrshort{CbV} language.
+\ocaml is a \acrfull{CbV} language.
 In \Coq, replacing the first by the second will not always yield a well-typed
 expression.
 \marginnote[0.5cm]{
   In \ocaml we have \(x : A \vdash t\).
 }
-In the \Coq expression \mintinline{coq}{let x := u in t}, \mintinline{coq}{t}
-actually lives in an extended context with \mintinline{coq}{x := u}, meaning
-that the definition is also stored, not just its type and name. This information
-can be used to \emph{recall} that \mintinline{coq}{x} is convertible to
-\mintinline{coq}{u}. The example below illustrates a case where the
-transformation yields an ill-typed term.
+In the \Coq expression \mintinline{coq}{let x := u in t}, the term
+\mintinline{coq}{t} actually lives in an extended context with
+\mintinline{coq}{x := u}, meaning that the definition is also stored, not just
+its type and name. This information can be used to \emph{recall} that
+\mintinline{coq}{x} is convertible to \mintinline{coq}{u}.
+The example below illustrates a case where the transformation yields an
+ill-typed term.
 \marginnote[4.5cm]{
   \mintinline{coq}{Fail} is just there to attest that the following definition
   will fail.

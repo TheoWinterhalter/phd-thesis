@@ -26,11 +26,11 @@ interpretation to judgments in such a way that the interpretation is coherent.
 
 I already briefly mentioned this but the main point of models is to prove
 consistency of a theory, relying on the already \emph{known} consistency of the
-theory in which lives the model... At least in principle. It is however very
+theory in which the model lives... At least in principle. It is however very
 rare\sidenote{This may work with very simple theories that cannot express
 arithmetic, as explained in \nrefsec{limit-godel} of \refch{proof-theory}} to
 \emph{know} that a theory is consistent, instead we should see it as a theory we
-\emph{trust}, typically a theory that is widely accepted as beeing consistent by
+\emph{trust}, typically a theory that is widely accepted as being consistent by
 the community of mathematicians.
 In this case we talk about \emph{relative consistency}: the theory is
 consistent, relative to the consistency of the theory of its model.
@@ -63,7 +63,8 @@ can come as surprising for some, especially in a classical mindset.
 Gödel's incompleteness theorems have to do with this.
 
 Models can also be useful to prove other properties like normalisation and even
-subject reduction, but such models are usually built for that purpose.
+subject reduction.
+%, but such models are usually built for that purpose.
 
 \section{Set-theoretic models}
 
@@ -332,7 +333,7 @@ A \acrshort{CwF} is given by%
 The two first have to give the structure of category, this in particular means
 that there is an identity substitution, and associative composition of those.
 
-The category \(\Set\) of sets is a \acrshort{CwF}:
+The category \(\Set\) of sets is a \acrshort{CwF}~\sidecite{hofmann1997syntax}:
 \marginnote[3.8cm]{
   \ref{item:term-subst} holds because for every \(\gamma \in \Ga\),
   \[
@@ -348,16 +349,18 @@ The category \(\Set\) of sets is a \acrshort{CwF}:
   \item terms of \(\CTm\ \Ga\ A\) are choice functions
   \(t \in \setfun{\Ga}{\bigcup_{\gamma \in \Ga} A_\gamma}\) such that
   \(t(\gamma) \in A_\gamma\) for every \(\gamma \in \Ga\);
-  \item given \(\sigma : \Ga \to \D\) and \(A : \CTy\ \D\), \(A[\sigma]\)
-  is defined as the \(\Ga\)-indexed family \((A_{\sigma(\gamma)})_\gamma\);
-  \item given \(\sigma : \Ga \to \D\) and \(t : \CTm\ \D\ A\), \(t[\sigma]\)
-  is defined as the choice function \(t \circ \sigma\);
+  \item given \(\sigma : \Ga \to \D\) and \(A : \CTy\ \D\), the type
+  \(A[\sigma]\) is defined as the \(\Ga\)-indexed family
+  \((A_{\sigma(\gamma)})_\gamma\);
+  \item given \(\sigma : \Ga \to \D\) and \(t : \CTm\ \D\ A\), the term
+  \(t[\sigma]\) is defined as the choice function \(t \circ \sigma\);
   \item the empty context is given as the singleton \(\{ \emptyset \}\);
-  \item given \(\Ga : \Con\) and \(A : \CTy\ \Ga\), \(\Ga, A\) is defined as
-  the disjoint union \(\amalg_{\gamma \in \Ga} A_\gamma\), \(\pp\) and \(\pq\)
+  \item given \(\Ga : \Con\) and \(A : \CTy\ \Ga\), the extended context
+  \(\Ga, A\) is defined as the disjoint union
+  \(\amalg_{\gamma \in \Ga} A_\gamma\), the morphism \(\pp\) and term \(\pq\)
   are defined as the first and second projection respectively;
   \item given \(\sigma : \Ga \to \D\) and \(a : \CTm\ \Ga\ A[\sigma]\),
-  \(\sigma, a\) is defined as the function
+  the substitution \(\sigma, a\) is defined as the function
   \(\gamma \mapsto (\sigma(\gamma), a(\gamma))\) which verifies the conditions.
 \end{enumerate}
 
@@ -436,20 +439,24 @@ A \acrshort{CwF} has identity types---another name for the equality type---when:
   \item for \(A : \CTy\ \Ga\) and \(u, v : \CTm\ \Ga\ A\) there exists
   \(\CId_A\ u\ v : \CTy\ \Ga\);
   \item for \(A : \CTy\ \Ga\) and \(u : \CTm\ \Ga\ A\) there exists
-  \(\crefl_u : \CTm\ \Ga\ (\CId_A\ u\ u)\)
+  \(\crefl_u : \CTm\ \Ga\ (\CId_A\ u\ u)\);
+  \item for \(A : \CTy\ \Ga\) and \(u : \CTm\ \Ga\ A\) and
+  \(C : \CTm\ (\Ga, A, \CId_{A[\pp]}\ u[\pp]\ \pq)\) and
+  \(f : \CTm\ \Ga\ C[\cid, u, \crefl_u]\)
+  and \(v : \CTm\ \Ga\ A\) and \(e : \CTm\ \Ga\ (\CId_A\ u\ v)\) there exists
+  \(\cJ_A\ u\ C\ f\ v\ e : \CTm\ \Ga\ C[\cid, v, e]\)
 \end{itemize}
 such that
 \[
   \begin{array}{rcl}
     (\CId_A\ u\ v)[\sigma] &=& \CId_{A[\sigma]}\ u[\sigma]\ v[\sigma] \\
-    (\crefl_a)[\sigma] &=& \crefl_{a[\sigma]}
+    (\crefl_a)[\sigma] &=& \crefl_{a[\sigma]} \\
+    (\cJ_A\ u\ C\ f\ v\ e)[\sigma] &=&
+    \cJ_{A[\sigma]}\ u[\sigma]\ C[(\sigma \circ \pp, \pq) \circ \pp, \pq]\ f[\sigma]\ v[\sigma]\ e[\sigma]
   \end{array}
 \]
-In a lot of models, equality ends up being interpreted as the equality of the
-model meaning they validate something stronger than the eliminator. As such,
-I will not specify any requirements for the eliminator as they can greatly vary.
-Models that deal with equality differently are of course interesting but I
-will keep things simple in this chapter.
+% Several eliminators are possible for equality but \(\cJ\) is the most standard
+% one.
 
 \paradot{Booleans}
 
@@ -458,7 +465,7 @@ A \acrshort{CwF} has booleans when for any \(\Ga : \Con\) it has
   \item \(\bool : \CTy\ \Ga\);
   \item \(\ttrue : \CTm\ \Ga\ \bool\);
   \item \(\ffalse : \CTm\ \Ga\ \bool\);
-  \item given \(b : \CTm\ \Ga\ \bool\), \(C : \CTy\ (\Ga, \bool)\),
+  \item given \(b : \CTm\ \Ga\ \bool\) and \(C : \CTy\ (\Ga, \bool)\) and
   \(t : \CTm\ \Ga\ C[\cid, \ttrue]\) and \(f : \CTm\ \Ga\ C[\cid, \ffalse]\),
   some \(\tif{b}{C}{t}{f} : \CTm\ \Ga\ C[\cid, b]\)
 \end{itemize}
@@ -481,8 +488,8 @@ A \acrshort{CwF} has natural numbers when, given \(\Ga : \Con\), it has
 \begin{itemize}
   \item \(\nat : \CTy\ \Ga\);
   \item \(\czero : \CTm\ \Ga\ \nat\);
-  \item for \(n : \CTm\ \Ga\ \nat\), \(\csucc\ n : \CTm\ \Ga\ \nat\);
-  \item for \(n : \CTm\ \Ga\ \nat\), \(C : \CTy\ (\Ga, \nat)\),
+  \item for \(n : \CTm\ \Ga\ \nat\), there exists \(\csucc\ n : \CTm\ \Ga\ \nat\);
+  \item for \(n : \CTm\ \Ga\ \nat\) and \(C : \CTy\ (\Ga, \nat)\) and
   \(z : \CTm\ \Ga\ C[\cid, \czero]\) and
   \(s : \CTm\ \Ga\ (\Pi\ \nat\ \Pi\ C\ C[(\pp, \csucc\ \pq) \circ \pp])\),
   there exists \(\natrec_C\ n\ z\ s : \CTm\ \Ga\ C[\cid, n]\)
@@ -562,13 +569,14 @@ The \(\Card\) \acrshort{CwF} is defined very similarly to \(\Set\):
   \item given \(\sigma : \Ga \to \D\) and \(t : \CTm\ \D\ A\), \(t[\sigma]\)
   is defined as the choice function \(t \circ \sigma\);
   \item the empty context is given as the cardinal \(1\);
-  \item given \(\Ga : \Con\) and \(A : \CTy\ \Ga\), \(\Ga, A\) is defined as
-  the cardinal of the disjoint union
-  \(\card{\amalg_{\gamma \in \Ga} A_\gamma}\), \(\pp\) is defined as
-  \(\pi_1 \circ \beta^{-1}\) where \(\pi_1\) is the first projection of the
-  disjoint union, \(\pq\) is defined as \(\pi_2 \circ \beta^{-1}\);
-  \item given \(\sigma : \Ga \to \D\) and \(a : \CTm\ \Ga\ A[\sigma]\),
-  \(\sigma, a\) is defined as the function
+  \item given \(\Ga : \Con\) and \(A : \CTy\ \Ga\), the extended context
+  \(\Ga, A\) is defined as the cardinal of the disjoint union
+  \(\card{\amalg_{\gamma \in \Ga} A_\gamma}\), the substitution \(\pp\) is
+  defined as \(\pi_1 \circ \beta^{-1}\) where \(\pi_1\) is the first projection
+  of the disjoint union, the term \(\pq\) is defined as
+  \(\pi_2 \circ \beta^{-1}\);
+  \item given \(\sigma : \Ga \to \D\) and \(a : \CTm\ \Ga\ A[\sigma]\), the
+  substitution \(\sigma, a\) is defined as the function
   \(\gamma \mapsto \beta(\sigma(\gamma), a(\gamma))\).
 \end{enumerate}
 
@@ -775,15 +783,30 @@ Thus, we define \(\crefl_u : \CTm\ \Ga\ (\CId_A\ u\ u)\) as
   (\crefl_u)(\gamma) \coloneqq 0
 \]
 which is the only possible function.
+Finally, given \(A : \CTy\ \Ga\) and \(u : \CTm\ \Ga\ A\) and
+\(C : \CTm\ (\Ga, A, \CId_{A[\pp]}\ u[\pp]\ \pq)\) and
+\(f : \CTm\ \Ga\ C[\cid, u, \crefl_u]\)
+and \(v : \CTm\ \Ga\ A\) and \(e : \CTm\ \Ga\ (\CId_A\ u\ v)\)
+we can build \(\cJ\) by first remarking that for any \(\gamma \in \Ga\)
+we have \(e(\gamma) \in (\CId_A\ u\ v)(\gamma)\) meaning that \(e(\gamma) = 0\)
+and that \(u(\gamma) = v(\gamma)\). As such we define it as
+\[
+  (\cJ_A\ u\ C\ f\ v\ e)(\gamma) \coloneqq f(\gamma)
+\]
 
 We check
 \[
   \begin{array}{rcl}
     (\CId_A\ u\ v)[\sigma] &=& \CId_{A[\sigma]}\ u[\sigma]\ v[\sigma] \\
-    (\crefl_a)[\sigma] &=& \crefl_{a[\sigma]}
+    (\crefl_a)[\sigma] &=& \crefl_{a[\sigma]} \\
+    (\cJ_A\ u\ C\ f\ v\ e)[\sigma] &=&
+    \cJ_{A[\sigma]}\ u[\sigma]\ C[(\sigma \circ \pp, \pq) \circ \pp, \pq]\ f[\sigma]\ v[\sigma]\ e[\sigma]
   \end{array}
 \]
 
+\marginnote[0.6cm]{
+  The equality for \(\cJ\) is proven by going through \(f[\sigma](\gamma)\).
+}
 \[
   \begin{array}{rcl}
     \CId_{A[\sigma]}\ u[\sigma]\ v[\sigma]
@@ -823,7 +846,7 @@ particular case.
   \(u(\gamma) = v(\gamma)\).
 \end{proof}
 
-The cardinal model is even stronger than that in that it validates isomorphism
+The cardinal model is even stronger than that because it validates isomorphism
 reflection.
 An isomorphism \(A \cong B\) is given by two functions \(f : A \to B\)
 and \(g : B \to A\) that are inverses of each other (for the type-theoretic
@@ -853,10 +876,10 @@ cannot be distinguished. Univalence is another invariance principle.
   are mutual inverses:
   \[
     \begin{array}{l}
-      p :
+      e_1 :
       \CTm\ \Ga\
       (\Pi\ A\ \CId_{A[\pp]}\ \capp(g[\pp], \capp(f[\pp], \pq))\ \pq) \\
-      q :
+      e_2 :
       \CTm\ \Ga\
       (\Pi\ B\ \CId_{B[\pp]}\ \capp(f[\pp], \capp(g[\pp], \pq))\ \pq)
     \end{array}
@@ -1022,7 +1045,7 @@ The equalities are fairly straightforward.
 
 \paradot{Tarski universes}
 
-\sidedef[-0.7cm]{Inaccessible cardianl}{
+\sidedef[-0.7cm]{Inaccessible cardinal}{
   A cardinal \(\kappa\) is inaccessible if it is uncountable, it is not a sum
   of fewer than \(\kappa\) cardinals that are smaller than \(\kappa\), and is
   closed under exponentials (or power sets).
@@ -1037,9 +1060,15 @@ If \(\kappa\) is an inaccessible cardinal then we get a universe by taking
   \end{array}
 \]
 
-\marginnote[2cm]{
-  This definition works because inaccessible cardinals are fixed-points of
-  the \(\aleph\) function.
+\sidedef[-0.7cm]{Aleph number}{
+  The aleph numbers are cardinals starting from \(\aleph_0\) the cardinal of
+  natural numbers, \(\aleph_1\) being the next larger cardinal and so on\dots
+  \(\aleph_\alpha\) is actually defined for any ordinal \(\alpha\) but it is
+  beyond the scope of this thesis.
+}
+\marginnote[3.3cm]{
+  This definition of universe works because inaccessible cardinals are
+  fixed-points of the \(\aleph\) function.
 }
 A perhaps more interesting universe is given by using the \(\aleph\) function:
 \[
@@ -1116,7 +1145,7 @@ where we simplified the expression \(\beta^{-1} \circ \beta\) to the identity
 function. As usual, I left the subscripts implicit, but that is where the error
 is coming from: we actually have
 \[
-  \beta_{2^\aleph_0}^{-1} \circ \beta_{{\aleph_0}^{\aleph_0}}
+  \beta_{2^{\aleph_0}}^{-1} \circ \beta_{{\aleph_0}^{\aleph_0}}
 \]
 which do not cancel each other out.
 
