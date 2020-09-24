@@ -155,7 +155,7 @@ Another interesting case is the comparison of \(\lambda\)-abstractions.
   %
 \]
 First we compare the two domains and then we compare the two bodies.
-This may seem like a simple case of recursing in the subterms but there is a
+This may seem like a simple case of recursing on the subterms but there is a
 subtlety: the context when comparing the bodies is still \(\Ga\) and not
 \(\Ga, x:A_1\) or \(\Ga, x:A_2\).
 \marginnote[0.1cm]{
@@ -175,7 +175,7 @@ contexts. In the expression
 
 Other than those, we also deal with \(\Pi\)-types, pattern-matching,
 projections, fixed- and cofixed-points.
-The case of two applications is imposible because the arguments would have been
+The case of two applications is impossible because the arguments would have been
 pushed on the stacks.
 If the terms do not fall in this diagonal, we instead call the fallback
 function recursively.

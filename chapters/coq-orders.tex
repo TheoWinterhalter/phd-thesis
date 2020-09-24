@@ -2,7 +2,7 @@
 \chapter{Well-founded induction and well-orders}
 \labch{coq-orders}
 
-Before devling into the definiton of the type checker which will rely on strong
+Before delving into the definiton of the type checker which will rely on strong
 normalisation, we need to study well-founded induction and orders in more
 detail (remember that strong normalisation is defined in terms of
 well-foundedness of coreduction).
@@ -169,7 +169,11 @@ Definition fib n :=
     )
     (wf_nat n).
 \end{minted}
-\marginnote[-9.8cm]{
+\marginnote[-10.6cm]{
+  The first line loads the \mintinline{coq}{lia} tactic which solves arithmetic
+  goals.
+}
+\marginnote[-9.6cm]{
   \mintinline{coq}{well_founded R} is defined as
   \mintinline{coq}{forall x : A, Acc R x} for
   \mintinline{coq}{R : A -> A -> Prop}.
@@ -197,7 +201,7 @@ Then it generates some proof obligations saying that the recursive calls are
 indeed made on smaller arguments for \mintinline{coq}{lt}, but as they are
 pretty simple, it solves them for us.
 Moreover it uses the type-class mechanism to automatically find a proof that
-the order is indeed well-founed.
+the order is indeed well-founded.
 Thanks to \Equations, well-founded recursion is not too painful and pretty
 useful.
 
@@ -238,7 +242,7 @@ This is pretty convenient, especially since lexicographic orders preserve
 well-foundedness.
 
 \begin{lemma}[Well-founded lexicographic orders]
-  If \(\prec_A\) and \(\prec_B\) are both well-founed, then the lexicographic
+  If \(\prec_A\) and \(\prec_B\) are both well-founded, then the lexicographic
   order they induce is also well-founded.
 \end{lemma}
 
@@ -392,7 +396,7 @@ have it explicitly in the notation \mintinline{coq}{x ⊨ e \ R1 by coe ⨷ R2}.
 
 As you probably have guessed, dependent lexicographic order modulo a relation
 can also be shown to be well-founded, provided it involves well-orders and that
-the coercion funciton is well-behaved.
+the coercion function is well-behaved.
 Here is the lemma---whose statement is longer than its proof so I will break it
 down right after---in \Coq.
 \begin{minted}{coq}
@@ -450,7 +454,7 @@ All these should feel natural if you have equality in mind.
 I did mention bisimulations however and did not even talk about it.
 Let me now address this point.
 
-\begin{definition}{Simulation}
+\begin{definition}[Simulation]
   Given a relation \(\red\) on \(A\), a relation \(\sim\) on \(A\) is called a
   simulation if whenever \(p \red q\) and \(p \sim p'\) there exists \(q'\)
   such that \(q \sim q'\) and \(p' \red q'\).

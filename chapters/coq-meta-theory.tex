@@ -69,10 +69,14 @@ Inductive subslet {cf:checker_flags} Σ (Γ : context)
 Substitution typing needs to account for local definitions (\ie let-bindings) in
 the environment.
 In a more understable language this becomes
-\marginnote[1cm]{
+\marginnote[0.9cm]{
   This time I write \(\Ga \vdash \sigma : \D\) were earlier I wrote
   \(\sigma : \Ga \to \D\). This is because in this case \(\sigma\) is a list
   of terms.
+}
+\marginnote[2.2cm]{
+  It can help to think that \(\D \vdash A\) holds for the last two rules
+  and that \(\D \vdash t : A\) holds for the last one.
 }
 \begin{mathpar}
   \infer
@@ -167,8 +171,8 @@ be typed in a universe) or a well-formed arity.
 
 \paradot{Subject reduction}
 
-Subject was not proven at the time of the article~\sidecite{sozeau2019coq} but
-is now proven.
+Subject reduction was not proven at the time of the
+article~\sidecite{sozeau2019coq} but is now proven.
 \begin{minted}{coq}
 Theorem subject_reduction :
   forall Σ Γ t A B,
@@ -180,7 +184,7 @@ Theorem subject_reduction :
 
 \paradot{Principality}
 
-Because of cumulativity, \acrshort{PCUIC} cannot have uniqueness of type, it
+Because of cumulativity, \acrshort{PCUIC} cannot have uniqueness of types, it
 however has principal types which we express as follows.
 \begin{minted}{coq}
 Theorem principal_typing :
