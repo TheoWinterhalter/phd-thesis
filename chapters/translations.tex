@@ -2,19 +2,19 @@
 \chapter{Translations}
 \labch{translations}
 
-Syntactical translations are a special case of program transformations suited
+Syntactic translations are a special case of program transformations suited
 for type theory, as well as a method of choice to get models of type theories.
 This is better studied in Simon Boulier's
 thesis~\sidecite{boulier17:next-syntac-model-type-theor,boulier2018extending}
 but in order to keep this document self contained, I will do my best to give a
 meaningful excerpt here.
 
-\section{Syntactical translations}
+\section{Syntactic translations}
 
 \subsection{Definition}
 \labsubsec{syn-trans-def}
 
-A \emph{syntactical} translation, as the name suggests, operates on the syntax
+A \emph{syntactic} translation, as the name suggests, operates on the syntax
 of terms. It has a source theory \cS and a target theory \cT with possibly
 different syntax and typing rules---though usually \cS is an extension of \cT
 (more on that later).
@@ -219,7 +219,7 @@ The translation is defined as follows:
 \]
 \marginnote[-0.6cm]{Notice how \(\transl{.}\) is just defined as \([.]\).}
 
-I actually did not provide the full translation here since I \emph{forgot}
+I actually did not provide the full translation here since I omitted
 the definition of \([\notfunext]\).
 Writing down the term is rather tedious and boring, so instead I will give an
 argument as to why it exists: you can provide any type for \(A\) and \(B\), for

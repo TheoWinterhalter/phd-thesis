@@ -25,11 +25,11 @@ However, with Simon Boulier we worked on another version translating directly to
 
 \section{Nature of the translation}
 
-\subsection{Syntactical translations are not possible}
+\subsection{Syntactic translations are not possible}
 
 First of all we have to wonder about what kind of translation is possible.
-I presented in \nrefch{translations} the notion of syntactical translation.
-Unfortunately it is not possible to devise a syntactical translation to
+I presented in \nrefch{translations} the notion of syntactic translation.
+Unfortunately it is not possible to devise a syntactic translation to
 eliminate reflection from type theory.
 
 Assume we have such a translation given by \(\transl{.}\) and \([.]\) such that
@@ -105,7 +105,7 @@ This is actually related to the fact that type-checking is undecidable in
 \subsection{Our translation(s)}
 
 If we go back to the notion of proof, it becomes apparent that
-syntactical translations do not work because we would not be translating proofs
+syntactic translations do not work because we would not be translating proofs
 but only partial ones; in other words, terms in \acrshort{ETT} are not proofs
 because they are insufficient to recover a typing derivation\sidenote{Because
 type-checking is undecidable.}.
@@ -296,12 +296,12 @@ consisting of two variables plus a witness that they are in the
 parametric relation: \(x : A\) is (roughly) sent to
 \(x_1 : A_1, x_2 : A_2, x_\varepsilon : A_\varepsilon\ x_1\ x_2\).
 %
-In our setting, this amounts to considering telescope of triples
+In our setting, this amounts to considering telescopes of triples
 consisting of two variables plus a witness that they are
 heterogeneously equal. We can express this by considering the
 following dependent sums:
 \[
-\Pack{A_1}{A_2} := \Sum{x:A_1} \Sum{y:A_2} \Heq{A_1}{x}{A_2}{y}.
+\Pack{A_1}{A_2} := \Sum{x_1:A_1} \Sum{x_2:A_2} \Heq{A_1}{x_1}{A_2}{x_2}.
 \]
 
 This presentation inspired by the parametricity translation is crucial

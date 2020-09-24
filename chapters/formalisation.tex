@@ -23,9 +23,9 @@ The first important choice being how to represent variables.
 
 When writing programs or expressions with binders on paper or on the computer
 we will usually use \emph{names}, identifiers for variables like in
-\(\lambda x. \lambda y. x\ y\), \(x\) refers to the variable bound by the
-outermost \(\lambda\), while \(y\) refers to the variable bound by the
-innermost one.
+\(\lambda x. \lambda y. x\ y\), the subexpression \(x\) refers to the variable
+bound by the outermost \(\lambda\), while \(y\) refers to the variable bound by
+the innermost one.
 The names are not fundamental in what the term represents:
 \(\lambda z. \lambda w. z\ w\) represents \emph{exactly} the same term.
 \marginnote[0cm]{
@@ -152,7 +152,7 @@ evaluation of substitutions come as reduction rules:
 \[
   x[\sigma] \red \sigma(x)
 \]
-The question of how you represent substitutions is more curcial in this case,
+The question of how you represent substitutions is more crucial in this case,
 and there are several ways to do so, the first being introduced in
 \sidecite{abadi1991explicit}.
 
@@ -778,8 +778,8 @@ with conv (Γ : context) : term -> term -> term -> Type :=
 
 (* ... *).
 \end{minted}
-While in \MetaCoq where conversion is untyped, we first define conversion
-and then typing on top of it.
+In constrast, in \MetaCoq where conversion is untyped, we first define
+conversion and then typing on top of it.
 
 We can push things even further and define syntax at the same time as typing
 as well. This is called well-typed syntax, and is presented
@@ -804,16 +804,16 @@ for (explicit) substitutions.
 \begin{minted}{agda}
 data Ty where
   _[_]T : ∀ {Γ Δ} → Ty Δ → Tms Γ Δ → Ty Γ
-  Π     : ∀ {Γ} → (A : Ty Γ) (B : Ty (Γ, A)) → Ty Γ
+  Π     : ∀ {Γ} → (A : Ty Γ) (B : Ty (Γ , A)) → Ty Γ
 \end{minted}
 Substitutions which are given like so.
 \begin{minted}{agda}
 data Tms where
   ε   : ∀ {Γ} → Tms Γ •
-  _,_ : ∀ {Γ Δ A} → (δ : Tms Γ Δ) → Tm Γ (A[δ]T) → Tms Γ (Δ, A)
+  _,_ : ∀ {Γ Δ A} → (δ : Tms Γ Δ) → Tm Γ (A[δ]T) → Tms Γ (Δ , A)
   id  : ∀ {Γ} → Tms Γ Γ
   _∘_ : ∀ {Γ Δ Ξ} → Tms Δ Ξ → Tms Γ Δ → Tms Γ Ξ
-  π₁  : ∀ {Γ Δ A} → Tms Γ (Δ, A) → Tms Γ Δ
+  π₁  : ∀ {Γ A} → Tms (Γ , A) Γ
 \end{minted}
 Finally for terms we have something like this, pretty standard except the
 application is not the usual\sidenote{
@@ -827,9 +827,9 @@ application is not the usual\sidenote{
 \begin{minted}{agda}
 data Tm where
   _[_]t : ∀ {Γ Δ A} → Tm Δ A → (δ : Tms Γ Δ) → Tm Γ (A[δ]T)
-  π₂    : ∀ {Γ Δ A} → Tms Γ (Δ, A) → Tm Γ (A[π₁ δ]T)
-  app   : ∀ {Γ A B} → Tm Γ (Π A B) → Tm (Γ, A) B
-  lam   : ∀ {Γ A B} → Tm (Γ, A) B → Tm Γ (Π A B)
+  π₂    : ∀ {Γ A} → Tm (Γ , A) (A[π₁]T)
+  app   : ∀ {Γ A B} → Tm Γ (Π A B) → Tm (Γ , A) B
+  lam   : ∀ {Γ A B} → Tm (Γ , A) B → Tm Γ (Π A B)
 \end{minted}
 
 Now for this to work we need to have conversion rules as well. There are two
@@ -872,14 +872,17 @@ Note that \acrshortpl{QIT} are not yet available in \Agda.
 
 I think however that well-typed \emph{syntax} is a misnomer because the data we
 are constructing represents derivations rather than terms.
-It is very interesting but does not supersedes the good old syntax and
-derivation above it combination.
+It is very interesting but does not supersede the good old syntax with a
+separate typing derivation construction.
 For one, it allows us to manipulate syntax in an untyped way, and later show
 that this manipulation is type-preserving. It is important in order to have
 program translations compute relatively efficiently as we will see in
 \nrefch{translations} and becomes crucial when derivations are
 \emph{big}\sidenote{This is the case in the translation I show
 in \arefpart{elim-reflection}} since terms (as in untyped syntax) are usually
-much smaller. Another point is that it does not really make sense to write a
+much smaller.
+\marginnote[0.7cm]{It could however make sense for a type-checker to produce
+well-typed syntax.}
+Another point is that it does not really make sense to write a
 type-checker for a well-typed syntax, something that I expose in
 \avrefpart{coq-in-coq}.

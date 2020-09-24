@@ -381,13 +381,12 @@ $\Pack{\Ga_1}{\Ga_2}$.
 Implicitly, whenever we use the notation $\Pack{\Ga_1}{\Ga_2}$ it means that
 the two contexts are of the same length and well-formed with the same
 sorts.
+Note that I will also use \(\vdash\) by opposition to \(\vdash_\exmark\) in
+judgements to indicate that these judgements are in the target,
+\ie \acrshort{ITT} or \acrshort{WTT}.
 %
 We can now tackle the fundamental lemma.
 
-\marginnote[1cm]{
-  I use \(\vdash\) and not \(\vdash_\exmark\) in the judgements to indicate that
-  these judgements are in the target, \ie \acrshort{ITT} or \acrshort{WTT}.
-}
 \begin{lemma}[Fundamental lemma]
   \lablemma{sim-cong}
   Let $t_1$ and $t_2$ be two terms such that \(t_1 \sim t_2\).
@@ -432,7 +431,10 @@ We can now tackle the fundamental lemma.
     \]
     We have $\isterm{\Ga, \Ga_1}{\app{t_1}{x:A_1}{B_1}{u_1}}{T_1}$ and
     $\isterm{\Ga, \Ga_2}{\app{t_2}{x:A_2}{B_2}{u_2}}{T_2}$ which means by
-    inversion that the subterms are well-typed.
+    inversion\sidenote{It is important to note that we are not
+    doing induction on any typing derivation here so we do not have to argue
+    that inversion indeed produces smaller derivations.} that the subterms are
+    well-typed.
     We apply the induction hypothesis and then conclude.
   \item \textsc{TransportLeft}
     \[
@@ -443,7 +445,9 @@ We can now tackle the fundamental lemma.
     \]
     We have $\isterm{\Ga, \Ga_1}{\transpo{p}\ t_1}{T_1}$ and
     $\isterm{\Ga, \Ga_2}{t_2}{T_2}$.
-    By inversion we have
+    By inversion\sidenote{Inversion gives us some \(T_1'\) and \(T_1''\) such
+    that \(p : T_1' = T_1''\) and \(t : T_1'\) and \(T_1'' \equiv T_1\) meaning
+    we can give the type \(T_1' = T_1\) to \(p\) by conversion.} we have
     $\isterm{\Ga, \Ga_1}{p}{\Eq{}{T_1'}{T_1}}$ and
     $\isterm{\Ga, \Ga_1}{t_1}{T_1'}$.
     By induction hypothesis we have $e$ such that

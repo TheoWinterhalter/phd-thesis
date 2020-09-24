@@ -16,7 +16,12 @@ Before defining the translation, we define a set
 $\transl{\xisterm{\Ga}{t}{A}}$ of typing judgments in the target associated to a
 typing judgment $\xisterm{\Ga}{t}{A}$ in \acrshort{ETT}.
 \marginnote[-0.5cm]{
-  This is rather a predicate. The formalisation is clearer on that fact.
+  This is a predicate rather than a set.
+  The formalisation is clearer on that fact.
+}
+\marginnote[0.5cm]{
+  Note that \(\tb\) is just a variant like \(t'\), the bar is not an
+  operation.
 }
 %
 The idea is that this set describes all the possible translations that
@@ -122,7 +127,8 @@ equality.
 
 \begin{proof}
   We prove the theorem by induction on the derivation in \acrshort{ETT}.
-  We only show the two most interesting cases of application and conversion.
+  We only show the two most interesting cases of application and conversion
+  besides the reflection case.
 
   \begin{itemize}
     \item \textsc{Application}
@@ -158,6 +164,18 @@ equality.
     inversion, thus, from \reflemma{change-type}
     and IH we get $\isterm{\Gb}{\ub}{\Ab}$, yielding
     $\isterm{\Gb}{\transpo{\eb}\ \ub}{\Bb} \in \transl{\xisterm{\Ga}{u}{B}}$.
+
+    \item \textsc{Reflection}
+    \[
+      \infer[]
+        {\xisterm{\Ga}{e}{\Eq{A}{u}{v}}}
+        {\xeqterm{\Ga}{u}{v}{A}}
+      %
+    \]
+    By IH and \reflemma{choose} we have $\isterm{\Gb}{\eb}{\Eq{\Ab}{\ub}{\vb}}$
+    which is almost what we want as a conclusion: we have an homogenous equality
+    when we want an heterogeneous one. We conclude by taking reflexivity for
+    the types and \(\eb\) for the equality between terms.
   \end{itemize}
 
 \end{proof}
@@ -180,18 +198,18 @@ The two formalisations are proof enough of this.
 
 \begin{corollary}[Conservativity]
   \labcor{preservation}
-  If $\xisterm{}{t}{T}$ and $\istype{}{T}$ then there exist $\tb$ such that
-    $\isterm{}{\tb}{T} \in \transl{\xisterm{}{t}{T}}$.
+  If $\xisterm{}{t}{\iota(T)}$ and $\istype{}{T}$ then there exist $\tb$ such
+  that $\isterm{}{\tb}{T} \in \transl{\xisterm{}{t}{\iota(T)}}$.
 \end{corollary}
 
 \begin{proof}
   Since $\isctx{\ctxempty} \in \transl{\xisctx{\ctxempty}}$, by
   \refthm{translation}, there exists $\tb$ and $\Tb$ such that
-  $\isterm{}{\tb}{\Tb} \in \transl{\xisterm{}{t}{T}}$
+  $\isterm{}{\tb}{\Tb} \in \transl{\xisterm{}{t}{\iota(T)}}$
   But as $\istype{}{T}$, we have
-  $\istype{}{T} \in \transl{\xistype{}{T}}$, and,
+  $\istype{}{T} \in \transl{\xistype{}{\iota(T)}}$, and,
   using \reflemma{change-type}, we obtain
-  $\isterm{}{\tb}{T} \in \transl{\xisterm{}{t}{T}}$.
+  $\isterm{}{\tb}{T} \in \transl{\xisterm{}{t}{\iota(T)}}$.
 \end{proof}
 
 \begin{corollary}[Relative consistency]

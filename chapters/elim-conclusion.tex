@@ -11,7 +11,7 @@
 }
 Currently, the representation of terms and derivations and the
 computational content of the proof only allow us to deal with the
-translation of relatively small terms but I hope to improve that in
+translation of relatively small terms but I hope to improve this in
 the future. As we have seen, the actual translation involves the
 computational content of lemmata of inversion, substitution, weakening
 and equational reasoning and thus cannot be presented as a simple
@@ -23,10 +23,15 @@ necessary in \acrshort{ITT} if we want the translation to be conservative as
 they are provable in \acrshort{ETT}~\sidecite{hofmann1995conservativity}.
 However, one might still be concerned about having axioms
 as they can for instance hinder canonicity of the system.
-In that respect, K is not really a restriction since it preserves canonicity.
+In that respect, K is not really a restriction since it preserves canonicity,
+when taken as a definition rather than as an axiom.
 The best proof of that is probably \Agda itself which natively features K---in
-fact, one needs to explicitly deactivate it with a flag if they wish to work
-without.
+fact, one needs to explicitly deactivate it with a flag if one wishes to work
+without. In \Agda one writes K as follows:
+\begin{minted}{agda}
+K : {A : Set} {x : A} (p : x ≡ x) → p ≡ refl
+K refl = refl
+\end{minted}
 
 The case of \acrshort{funext} is trickier. It should be possible to realise
 the axiom by composing our translation with a setoid
@@ -86,7 +91,7 @@ syntactic translation, his work does not stress any constructive
 aspect of the proof and shows that there merely exist translations in
 \acrshort{ITT} of a typed term in \acrshort{ETT}.
 
-Door \emph{et al.}~\sidecite[0.5cm]{van2013explicit} have later proposed and
+Doorn \emph{et al.}~\sidecite[0.5cm]{van2013explicit} have later proposed and
 formalised a similar translation between a \acrshort{PTS} with and without
 explicit conversion. This does not entail anything about \acrshort{ETT} to
 \acrshort{ITT} but we can find similarities in that there is a witness of

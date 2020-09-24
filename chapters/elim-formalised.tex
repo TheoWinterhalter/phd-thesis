@@ -501,7 +501,7 @@ vec_rect A
 : forall A n m, vec A n -> vec A m -> vec A (n + m)
 \end{minted}
 
-\section{Towards an interfacing between \Andromeda and \Coq}
+\section{Towards an interface between \Andromeda and \Coq}
 
 \Andromeda~\sidecite{andromeda} is a proof assistant implementing \acrshort{ETT}
 in a sense that is really close to our formalisation. Aside from a concise
@@ -552,7 +552,7 @@ and provide an automatic translation of well-typed terms into witnesses in
 \Coq. This would make it possible to extend conversion with the theory
 of lists for example.
 
-This would provide a simple way to justify the consistency of
-\acrshort{CoqMT}~\sidecite{DBLP:conf/lpar/JouannaudS17} for example, seeing it
-as an extensional type theory where reflection is restricted to equalities on a
-specific domain whose theory is decidable.
+The ability to chain translations would provide a simple way to justify the
+consistency of \acrshort{CoqMT}~\sidecite{DBLP:conf/lpar/JouannaudS17} for
+example, seeing it as an extensional type theory where reflection is restricted
+to equalities on a specific domain whose theory is decidable.

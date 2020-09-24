@@ -104,8 +104,8 @@ we can prove this congruence rule for applications.
 \paragraph{Axioms.}
 
 Another interesting bit is the presence of the \(\ax{n}\) term, as well as
-that of the \(\Sigma\) context. Indeed, in order for our \acrshort{ETT} to be
-a bit extensible, we add a context \(\Sigma\) of axioms \(n : A\) that can be
+that of the signature \(\Sigma\). Indeed, in order for our \acrshort{ETT} to be
+a bit extensible, we add a signature \(\Sigma\) of axioms \(n : A\) that can be
 referenced using \(\ax{n}\) but cannot be bound (they are global).
 For a theory like \Coq, having just axioms is a bit weak, but in \acrshort{ETT}
 this is enough to simulate constants and even things such as inductive types:
@@ -116,7 +116,7 @@ For instance to simulate the constant
 \[
   n : A \coloneqq t
 \]
-we can use the following context
+we can use the following signature
 \[
   n : A,\ n_{\mathit{def}} : n = t
 \]
@@ -212,7 +212,7 @@ that \(\vdash_\exmark t : \iota(A)\), there exists a term \(t'\) such that
 Similarly to the syntax I will present first the common rules of all involved
 theories and then detail the specificities of each.
 
-Note that I will differenciate \acrshort{ETT} judgements from those of the
+Note that I will differentiate \acrshort{ETT} judgements from those of the
 target by using \(\exmark\) as a subscript to the turnstile: \(\vdash_\exmark\).
 
 \subsection{Common typing rules}
@@ -261,7 +261,7 @@ terms in \acrshort{ITT} and \acrshort{WTT} of course.
       \isterm{\Ga,x:A}{B}{s_2}
     }
     {\isterm{\Ga}{\Sum{x:A} B}{\sumsort{s_1}{s_2}}}
-  (s,s',s'')
+  %
 
   \infer[]
     {\isterm{\Ga}{A}{s} \\
@@ -346,10 +346,10 @@ terms in \acrshort{ITT} and \acrshort{WTT} of course.
 
 \paradot{Axioms}
 
-Although I will omit the global context \(\Sigma\) most of the time (it is
-global after all), you can still imagine that it is present. The axiom typing
-rule is the only interaction with it. In particular we assume that it is
-well-formed.
+Although I will omit the global context (or signature) \(\Sigma\) most of the
+time (it is global after all), you can still imagine that it is present.
+The axiom typing rule is the only interaction with it. In particular we assume
+that it is well-formed.
 \marginnote[-0.6cm]{
   Well-formedness of global context \(\Sigma\) is defined similarly to that of
   regular contexts.
@@ -524,15 +524,18 @@ different to account for the untyped style of conversion.
   Notice that in the typed conversion for \(\mathsf{J}\), \(v\) and \(u'\) were
   both \(u\), and \(A'\) was \(A\). This will still be the case for well-typed
   terms, but the reduction rule should not have to decide conversion to apply.
+  I do something similar for the other computation rules, including
+  \(\beta\)-reduction which only has to be blocked by annotations in
+  \acrshort{ETT}.
 }
 \begin{mathpar}
-  \app{(\lam{x:A}{B} t)}{x:A}{B}{u} \red t[x \sto u]
+  \app{(\lam{x:A}{B} t)}{x:A'}{B'}{u} \red t[x \sto u]
 
   \J{A}{u}{x.e.P}{w}{v}{\refl{A'} u'} \red w
 
-  \pio{x:A}{B}{\pair{x:A}{B}{u}{v}} \red u
+  \pio{x:A}{B}{\pair{x:A'}{B'}{u}{v}} \red u
 
-  \pit{x:A}{B}{\pair{x:A}{B}{u}{v}} \red v
+  \pit{x:A}{B}{\pair{x:A'}{B'}{u}{v}} \red v
 \end{mathpar}
 
 \(\red\) is also extended to reduce in subterms with rules like
@@ -545,7 +548,7 @@ different to account for the untyped style of conversion.
 
 \paradot{Conversion}
 
-As I said, conversion is symply the reflexive symmetric transitive closure of
+As I said, conversion is simply the reflexive symmetric transitive closure of
 reduction.
 
 \marginnote[0.8cm]{
@@ -673,12 +676,12 @@ for clarity.
       \Ga, x:A \vdash e_t : \Heq{B_1}{t_1}{B_2}{t_2}
     }
     {
-      \lamb{x:A}{e_B} e_t :
+      \Ga \vdash \lamb{x:A}{e_B} e_t :
       \Heq
         {\Pi (x:A). B_1}
-        {\lambda (x:A).B_1\ t_1}
+        {\lambda (x:A).B_1.\ t_1}
         {\Pi (x:A). B_2}
-        {\lambda (x:A).B_2\ t_2}
+        {\lambda (x:A).B_2.\ t_2}
     }
   %
 
