@@ -6,8 +6,8 @@
 \label{sec:axioms}
 
 \marginnote[0.2cm]{
-  I would like to use a minimal representation of derivations that does not contain
-  everything that can be inferred automatically for one.
+  I would like to use a minimal representation of derivations that does not
+  contain everything that can be inferred automatically for one.
 }
 Currently, the representation of terms and derivations and the
 computational content of the proof only allow us to deal with the
@@ -48,10 +48,10 @@ The translation itself only relies on one axiom, called
 of \acrshort{ITT} is transitive.
 The translation to \acrshort{WTT} is totally axiom-free however!
 
-The proof of transivity in \acrshort{ITT} basically sums up to the confluence of
-the reduction rules which is out of scope for this thesis and has
-recently been formalised in Agda~\sidecite{Abel:2017:DCT:3177123.3158111} (in a
-simpler setting with only one universe).
+The proof of transitivity in \acrshort{ITT} basically sums up to the confluence
+of the reduction rules which is out of scope for this thesis and has recently
+been formalised in Agda~\sidecite{Abel:2017:DCT:3177123.3158111} (in a simpler
+setting with only one universe).
 \MetaCoq also features a proof of confluence for
 \Coq~\sidecite[0.7cm]{sozeau2019coq}.
 Regardless, this axiom inhabits a proposition (the type of conversion is in
@@ -110,5 +110,5 @@ which can insert transports in any context.
 In both formalisations, I implemented type-checkers for the theories involved.
 In \acrshort{WTT}, since the meta-theory is so simple, I was able to prove the
 type-checker to be sound and complete. I do not detail them in this thesis as
-I will dedicate \arefpart{coq-in-coq} to the implemtation and verification of
+I will dedicate \arefpart{coq-in-coq} to the implementation and verification of
 a full-fledged type-checker of \Coq in \Coq.

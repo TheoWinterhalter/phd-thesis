@@ -275,7 +275,7 @@ term.
 
 These properties are related to typing in that they require the term to be
 well-typed in order to be applicable. That is because it is too easy to break
-termination with non-sensical terms.
+termination with nonsensical terms.
 There is however a reduction property that is much more linked to typing:
 subject reduction, sometimes called type safety or type preservation.
 
@@ -402,12 +402,12 @@ such that \(\Ga \vdash t : A\) or an error stating that \(t\) is ill-typed.
 Decidability of conversion is crucial in getting decidability of type
 checking, and can sometimes derive from confluence and strong normalisation.
 
-Decidability of type-checking is an important property because it crystalises
+Decidability of type-checking is an important property because it crystallises
 the fact that a term is indeed a \emph{proof}, it is a good enough certificate
 that people can check independently.
-However, in a system that does not feature decidable type-checking, you can still
-provide certificates: for one you could simply store the full derivation as a
-proof; it is however possible to translate the proof to another system with
+However, in a system that does not feature decidable type-checking, you can
+still provide certificates: for one you could simply store the full derivation
+as a proof; it is however possible to translate the proof to another system with
 decidable checking, like I will present in \arefpart{elim-reflection}.
 
 \subsection{Consistency}

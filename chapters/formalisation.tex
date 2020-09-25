@@ -261,8 +261,8 @@ in that plays a determinant role in uniqueness of type.
 Indeed one cannot hope to have uniqueness of type given that
 \(\lambda x.\ x\) has type \(A \to A\) for any \(A\).
 The domain annotation is the minimal information required to get uniqueness of
-type for \(\lambda\)-abstractions. This miminal information is equivalent to the
-minimal information required for infering the type.
+type for \(\lambda\)-abstractions. This minimal information is equivalent to the
+minimal information required for inferring the type.
 This information is minimal in the sense that any more annotations can be
 recovered from a theory without them.
 
@@ -591,7 +591,7 @@ This time, the question can be whether the context \(\Ga\) itself makes sense.
 \end{mathpar}
 
 With Andrej Bauer and Philipp Haselwarter in~\sidecite{formaltypetheory} we
-desribe the two ends of this spectrum as either \emph{economic} or
+describe the two ends of this spectrum as either \emph{economic} or
 \emph{paranoid} versions of the same typing rule.
 There is a real question as to which should be chosen. When building derivations
 it is nicer to be in an economic setting to avoid big and redundant derivations,
@@ -640,8 +640,8 @@ the second rule:
     {\Ga \vdash \refl{A} u : u =_A u}
   %
 \end{mathpar}
-It is also easy to see how proving \(\Ga \vdash u =_A u\) will be direct from the
-hypotheses.
+It is also easy to see how proving \(\Ga \vdash u =_A u\) will be direct from
+the hypotheses.
 
 \subsection{Conversion}
 
@@ -778,7 +778,7 @@ with conv (Γ : context) : term -> term -> term -> Type :=
 
 (* ... *).
 \end{minted}
-In constrast, in \MetaCoq where conversion is untyped, we first define
+In contrast, in \MetaCoq where conversion is untyped, we first define
 conversion and then typing on top of it.
 
 We can push things even further and define syntax at the same time as typing

@@ -183,7 +183,7 @@ The recursive call of \mintinline{coq}{vrev} returns a vector of length
 convertible, and thus the definition is not accepted, even though it feels like
 it is the right definition. \acrshort{ETT} solves this problem by exploiting
 the fact that \mintinline{coq}|n + S m = S n + m| is provable.
-You can still define it in \Coq, but you have to explicitely transport along
+You can still define it in \Coq, but you have to explicitly transport along
 the above-mentioned equality which can result in some problems while reasoning
 on the resulting function and inconveniences overall.
 
@@ -319,7 +319,7 @@ formalisations (for now).
 
 When I introduced the typing rules for \(\Prop\) and \(\Type\) I showed that
 each universe can be typed in several other universes (actually in each case
-there are an infinite number of possiblities). The reality is even more
+there are an infinite number of possibilities). The reality is even more
 intricate than that and it has to do with the word `\emph{cumulative}' found in
 the name of the system.
 \Coq features a notion of subtyping that is limited to universes and that is

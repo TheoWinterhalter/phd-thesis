@@ -61,7 +61,7 @@ In a term (the expressions of \(\lambda\)-calculus), the variable names are
 considered irrelevant, for instance, the \(\lambda\)-terms \(\lambda x.\ x\)
 and \(\lambda y.\ y\) are deemed equivalent, because they both define the
 identity function.
-% Of course, it only works, if all occurences of \(x\) are replaced consistently
+% Of course, it only works, if all occurrences of \(x\) are replaced consistently
 % with \(y\).
 The operation replacing \(x\) for \(y\) in the term is called
 \(\alpha\)-renaming; we thus talk about \(\alpha\)-equality:
@@ -70,7 +70,7 @@ The operation replacing \(x\) for \(y\) in the term is called
 \]
 
 Of course, that alone is not sufficient to describe a programming language,
-it is missing a key compenent: evaluation of programs.
+it is missing a key component: evaluation of programs.
 Indeed, without it, variables are meaningless.
 
 We want to say that the application of a function should always yield some
@@ -106,7 +106,7 @@ We will write
 \[
   t[x \sto u]
 \]
-to mean the term \(t\) were all \emph{free} occurences of the variable \(x\)
+to mean the term \(t\) were all \emph{free} occurrences of the variable \(x\)
 are replaced by the term \(u\).
 
 For example,
@@ -330,5 +330,5 @@ of \(A\) into a proof of \(B\).
 All this is very useful and was exciting for me. However, simple types are quite
 limited~\sidecite{zakrzewski2007definable} and do not allow for a proper
 handling of things like quantifiers (\(\forall\) and \(\exists\)).
-Hence the need for \emph{polymorphsim} and \emph{dependent} types.
+Hence the need for \emph{polymorphism} and \emph{dependent} types.
 The latter will be the subject of the next chapter.

@@ -137,7 +137,7 @@ Record one_inductive_body := {
 }.
 \end{minted}
 Each of those comes with its name and type.
-\mintinline{coq}{ind_kelim} states in which univeres the definition can be
+\mintinline{coq}{ind_kelim} states in which universes the definition can be
 eliminated (in most cases inductive types living in \mintinline{coq}{Prop}
 cannot be scrutinised to build terms in \mintinline{coq}{Type}).
 Then we either have a list of constructors for (co)inductive types, or a list
@@ -208,7 +208,7 @@ Fixpoint map {A B : Type} (f : A -> B) (l : list A) {struct l}
   end.
 \end{minted}
 the \mintinline{coq}{{struct l}} means that \mintinline{coq}{l} is the recursive
-argument. That is all recursive calls must be structually decreasing on
+argument. That is all recursive calls must be structurally decreasing on
 \mintinline{coq}{l}. It is part of the syntax because \Coq uses it as a
 syntactic guard to avoid unfolding fixed-points indefinitely: only when the
 recursive argument is a constructor can the fixed-point be unfolded.

@@ -93,9 +93,9 @@ behaviour of \(\mathsf{if}\).
   \end{array}
 \end{mathpar}
 It is still the same as the well-known \(\mathsf{if}\), except that we are more
-liberal in the types given to the two branches: they do not have to match as they
-can now depend on the boolean. The \(x.P\) notation means that \(P\) lives in a
-context extended by \(x\) (of type \(\bool\)).
+liberal in the types given to the two branches: they do not have to match as
+they can now depend on the boolean. The \(x.P\) notation means that \(P\) lives
+in a context extended by \(x\) (of type \(\bool\)).
 
 One can for instance write the following definition where the return type does
 \emph{not} depend on the boolean:
@@ -227,7 +227,7 @@ hypotheses of the shape \(\neg P\).
 
 \subsection{Recursive types}
 
-% Inductive types are morally types of trees. For now I only prensented types
+% Inductive types are morally types of trees. For now I only presented types
 % consisting only of leaves. To allow for nodes with subtrees, constructors can
 % take subtrees (or subterms) as arguments.
 % \todo{Not talk about trees, or later?}
@@ -412,7 +412,7 @@ There are two main ways of achieving this.
   The way we prevent that is by using a syntactical guard on the reduction rule.
   It is instead the following.
   \marginnote[0.6cm]{
-    \(\mathbf{C}\) stands for a constuctor like \(\zero\) or \(\natsucc\).
+    \(\mathbf{C}\) stands for a constructor like \(\zero\) or \(\natsucc\).
   }
   \[
     \begin{array}{lc}
@@ -451,9 +451,9 @@ There are two main ways of achieving this.
 I will not go into that much detail for other inductive types as they will all
 follow more or less the same schema.
 
-\subsection{Parameterised inductive types}
+\subsection{Parametrised inductive types}
 
-Parameterised inductive types, as the name suggests, can take parameters.
+Parametrised inductive types, as the name suggests, can take parameters.
 In \ocaml, parameters are necessarily types, in \Coq they are often types but
 they can be natural numbers or a term of any other type.
 For instance, in the type \(\tlist\ A\), \(A\) is a parameter that specifies the
@@ -970,8 +970,8 @@ Definition pair A B (a : A) (b : B) : prod A B :=
 \end{minted}
 The data is accessed using the projections \mintinline{coq}{fst} and
 \mintinline{coq}{snd}. They are \emph{destructors} in that they correspond to
-ways to observe pairs, by opposition to the construtors of pairs of the positive
-version: \mintinline{coq}{pair}.
+ways to observe pairs, by opposition to the constructors of pairs of the
+positive version: \mintinline{coq}{pair}.
 
 I will now give the typing rules of negative \(\Sigma\)-types.
 \begin{mathpar}

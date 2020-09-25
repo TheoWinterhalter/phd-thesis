@@ -554,9 +554,10 @@ cumulativity or conversion.
 \section{Future work: \(\eta\)-conversion}
 
 In the \Coq implementation, \(\eta\)-expansion is handled even though the
-conversion is untyped. The way this is achieved is by only expanding a term
-(which is not a \(\lambda\)-abstraction) when it is compared to a
-\(\lambda\)-abstraction.
+conversion is untyped. This method is described
+in~\sidecite{coquand1991algorithm,goguen2005justifying}.
+The way this is achieved is by only expanding a term (which is not a
+\(\lambda\)-abstraction) when it is compared to a \(\lambda\)-abstraction.
 \[
   \infer
     {\convterm{\Ga}{\lambda (x:A).\ t_1\ x}{\pi_1}{\lambda (x:A).\ u}{\pi_2}{A}}
@@ -584,8 +585,6 @@ For termination purposes this step is actually skipped and we directly do
     {\convterm{\Ga}{t_1}{\pi_1}{\lambda (x:A).\ u}{\pi_2}{A}}
   %
 \]
-This method is described
-in~\sidecite{coquand1991algorithm,goguen2005justifying}.
 
 In our setting however, we would need to have the order not only modulo
 universes but also modulo \(\eta\), and I have not yet managed to find a way

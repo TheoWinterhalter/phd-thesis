@@ -50,7 +50,7 @@ MetaCoq SafeCheck nat.
 \end{minted}
 
 Because we do not deal with template polymorphism, the module system and
-\(\eta\)-expansion, we are not yet able to typecheck the standard library
+\(\eta\)-expansion, we are not yet able to type-check the standard library
 or the formalisation itself (as it relies on the standard library).
 We were however able to test it on reasonable proof terms coming from
 the \acrshort{HoTT} library~\sidecite{bauer2017hott}.
@@ -59,11 +59,11 @@ the \acrshort{HoTT} library~\sidecite{bauer2017hott}.
   can be found in the file
   \href{https://github.com/MetaCoq/metacoq/blob/popl-artifact-eval/test-suite/safechecker_test.v}{test-suite/safechecker\_test.v}.
 }%
-For instance, we have been able to typecheck the proof that an isomorphism can
+For instance, we have been able to type-check the proof that an isomorphism can
 be turned into an equivalence.
 It currently is about one order of magnitude slower than the \Coq
 implementation (0.015s vs 0.002s averaged over 10 runs for each checking).
-This can in particular be attributed to our very ineficient representation of
+This can in particular be attributed to our very inefficient representation of
 global environments as association lists indexed by character lists, where \Coq
 uses efficient hash-maps on strings.
 

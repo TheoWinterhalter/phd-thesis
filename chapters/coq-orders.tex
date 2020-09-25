@@ -2,7 +2,7 @@
 \chapter{Well-founded induction and well-orders}
 \labch{coq-orders}
 
-Before delving into the definiton of the type checker which will rely on strong
+Before delving into the definition of the type checker which will rely on strong
 normalisation, we need to study well-founded induction and orders in more
 detail (remember that strong normalisation is defined in terms of
 well-foundedness of coreduction).
@@ -103,7 +103,7 @@ Acc_ind :
     forall x : A, Acc R x -> P x
 \end{minted}
 It says that if for any given \(x : A\) such that all \(y : A\) smaller than
-\(x\) are accesible and verify the predicate \(P\), \(x\) also verifies \(P\),
+\(x\) are accessible and verify the predicate \(P\), \(x\) also verifies \(P\),
 then all accessible elements verify \(P\).
 
 \reminder[-0.7cm]{Fibonacci sequence}{

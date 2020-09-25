@@ -68,7 +68,7 @@ Inductive subslet {cf:checker_flags} Σ (Γ : context)
 \end{minted}
 Substitution typing needs to account for local definitions (\ie let-bindings) in
 the environment.
-In a more understable language this becomes
+In a more understandable language this becomes
 \marginnote[0.9cm]{
   This time I write \(\Ga \vdash \sigma : \D\) were earlier I wrote
   \(\sigma : \Ga \to \D\). This is because in this case \(\sigma\) is a list
@@ -227,7 +227,7 @@ Inductive cored Σ Γ : term -> term -> Prop :=
 \end{minted}
 It is the transitive closure of the symmetric of \(1\)-step reduction.
 
-As I will explain in more depth in \nrefch{coq-orders}, we use accessiblity
+As I will explain in more depth in \nrefch{coq-orders}, we use accessibility
 predicates to state that a relation is well-founded constructively.
 As such the axiom of strong normalisation is
 \begin{minted}{coq}
