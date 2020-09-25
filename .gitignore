@@ -3,6 +3,9 @@
 # Releases
 releases/*
 
+# vscode config
+.vscode/*
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
