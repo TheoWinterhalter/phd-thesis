@@ -246,6 +246,11 @@ We now have a clearer idea of what we wish to implement. As I already said, this
 is still not as straightforward as one would hope.
 As it is a bit more complex than an evaluation function taking a term and
 returning its weak head normal form, we talk about an \emph{abstract machine}.
+This idea is of course not novel, even in the case of \Coq which featured its
+own abstract machine called the constructive
+engine~\sidecite{huet1989constructive}. Abstract machines have been extensively
+studied
+since~\sidecite[0.3cm]{accattoli2017negligible,accattoli2017environments}.
 
 \subsection{Idea behind the machine}
 
@@ -258,7 +263,7 @@ This is often achieved by taking a list of arguments, \ie a \emph{stack},
 besides the term. When considering an application, the argument is \emph{pushed}
 on top of the stack and we \emph{focus} on the left-hand term.
 I will write \(\dpair{t \mid \pi}\) for term \(t\) \emph{against} stack \(\pi\).
-We want to define weak head reduction \(\red_\WM\) as something like this:
+We want to define weak head evaluation \(\red_\WM\) as something like this:
 \marginnote[1cm]{
   Here \(\dpair{t \mid \pi}\) is the data of a term \(t\) versus a list of
   arguments \(\pi\). \(\zip\) takes the term and apply it to the stack.
@@ -344,6 +349,14 @@ Problems arise however when considering other syntactic constructions of
 I will identify two such problems before finally moving on to the next section
 where I introduce the order we will actually use.
 
+\marginnote[0.3cm]{%
+  To understand where I am coming from here: stacks in the actual kernel are
+  indeed just lists of arguments. It introduces an asymmetry with respect to
+  the other computation rules. This behaviour is justified by my trying to stay
+  as close as possible to the implementation (in particular when considering
+  the extracted program) but can also be interpreted as a legacy design choice
+  and might not be the most appropriate.
+}%
 \paragraph{Problem 1:}
 List of arguments as stacks will prove to be a problem when focusing on
 something else than a function. This is the case when reducing pattern-matching

@@ -383,7 +383,7 @@ before introducing it.
 
 The first rule I presented involves putting both terms in weak head normal
 form before recursing on them. As we know from the correctness of weak head
-reduction, the terms it yields are reducts of the orginal terms, and some
+reduction, the terms it yields are reducts of the original terms, and some
 focusing potentially happened. As such, the order used by reduction seems like
 a good option, save for one problem: in some cases---when the term is already
 in weak head normal form---the weak reduction returns the original term.
@@ -584,9 +584,11 @@ For termination purposes this step is actually skipped and we directly do
     {\convterm{\Ga}{t_1}{\pi_1}{\lambda (x:A).\ u}{\pi_2}{A}}
   %
 \]
+This method is described
+in~\sidecite{coquand1991algorithm,goguen2005justifying}.
 
 In our setting however, we would need to have the order not only modulo
 universes but also modulo \(\eta\), and I have not yet managed to find a way
 to account for \(\eta\) in a way that preserves well-foundedness.
-As unfortunate as it is---it gets in the way of actually using our typechecker
+As unfortunate as it is---it gets in the way of actually using our type-checker
 on real-life examples---it will have to be future work for us.

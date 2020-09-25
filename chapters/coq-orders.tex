@@ -528,6 +528,12 @@ Lemma lexmod_Acc :
       Acc leA x ->
       Acc (eA \ leA ⊕ leB) (x, y).
 \end{minted}
+\marginnote[-4cm]{
+  Here it might not seem obvious that I am indeed requiring \mintinline{coq}{eA}
+  to be an equivalence relation but if you read carefully the expression
+  \mintinline{coq}{eA a c -> eA b c -> eA a b} does not state transitivity but
+  a mix between transitivity and symmetry (assuming reflexivity).
+}
 
 Regarding the requirement of the simulation to also be an equivalence relation,
 we can actually use the notion of bisimilarity, a special kind of bisimulation.
