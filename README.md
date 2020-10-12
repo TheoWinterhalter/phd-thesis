@@ -1,4 +1,8 @@
-# phd-thesis
+# Théo Winterhalter's PhD thesis
+
+Have a look at the [latest release] to get the PDF version (there is no point in building the PDF yourself).
+
+[latest release]: https://github.com/TheoWinterhalter/phd-thesis/releases/latest
 
 ## Prerequisites
 
