@@ -1,8 +1,10 @@
 # Théo Winterhalter's PhD thesis
 
 Have a look at the [latest release] to get the PDF version (there is no point in building the PDF yourself).
+You can also watch the [video of the defence].
 
 [latest release]: https://github.com/TheoWinterhalter/phd-thesis/releases/latest
+[video of the defence]: https://www.youtube.com/watch?v=sEr7sz1sOAk
 
 ## Prerequisites
 
